@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<html data-wf-page="5f63084502eae17b2c804200" data-wf-site="5f600218af4814e3759ffa69">
+<head>
+  <meta charset="utf-8">
+  <title>Tutor Profile</title>
+  <meta content="Tutor Profile" property="og:title">
+  <meta content="Tutor Profile" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="student/css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="student/css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="student/css/student-main.webflow.css" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Poppins:regular"]  }});</script>
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href="student/images/favicon.jpg" rel="shortcut icon" type="image/x-icon">
+</head>
+<body class="body-5">
+  <div class="div-block-55">
+    <div class="section"><a href="/" aria-current="page" class="link-block w-inline-block w--current"><img src="student/images/logo.jpg" loading="lazy" width="200" srcset="student/images/logo-p-500.jpeg 500w, student/images/logo-p-800.jpeg 800w, student/images/logo-p-1080.jpeg 1080w, student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></a>
+      <div class="div-block-4">
+        <form action="{% url 'search_results'%}" class="stuff w-form"><img src="student/images/search-1.png" loading="lazy" width="25" height="25" srcset="student/images/search-1-p-500.png 500w, student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
+      </div>
+    </div>
+  </div>
+  <div class="div-block-70">
+    <div class="div-block-71"><img src="{{tutor.user.profile_pic.url}}" loading="lazy" width="74" height="74" srcset="{{tutor.user.profile_pic.url}} 500w, {{tutor.user.profile_pic.url}} 512w" sizes="74px" alt="">
+      <div class="div-block-72">
+        <h1 class="heading-3">Subject: {{tutor.subjects}}</h1>
+        <div class="div-block-68">
+          <div class="text-block-32"><strong class="bold-text-8">{{tutor.user.first_name}} {{tutor.user.last_name}} </strong></div>
+        </div>
+      </div>
+    </div>
+    <p style="padding-top: 20px;"class="paragraph-8"><strong>Degree:</strong> {{tutor.education}}<br><strong>Birthdate: </strong>{{tutor.birth_date}}<br><strong>Qualification Description: </strong>{{tutor.qualifications}}<br><strong>Education: </strong>{{tutor.major}} at {{tutor.school}}, GPA of {{tutor.gpa}}<br><strong>Working/Subject Experience:</strong> {{tutor.prof_exp}} years<br><strong>Teaching Experience: </strong>{{tutor.teach_exp}} years<br><strong>Average Review:</strong> {{tutor.average}}<br><strong>Number of classes taught:</strong> {{tutor.classes_taught}}<br><strong>Occupation:</strong> {{tutor.occupation}}<br><strong>Gender:</strong> {{tutor.gender}}<br><strong>Price: </strong>${{tutor.rates}} hourly <br><strong>Bio: </strong> {{tutor.bio}}<br><strong>Course Description: </strong>{{tutor.what_you_teach}}<br><a href="{{tutor.linkedIn}}" target="_blank"><strong>Linkedin Account:</strong> </a></p></div>
+  <div class="div-block-56">
+    <h1 class="heading-11">Reviews</h1>
+    {% for review in reviews %}
+        <div class="review_bundle">
+          <div class="review_item"><img src="{{review.student.user.profile_pic.url}}" loading="lazy" width="40" srcset="{{review.student.user.profile_pic.url}} 500w, {{review.student.user.profile_pic.url}} 512w" sizes="40px" alt="" class="image-12">
+            <div class="text-block-33">{{review.student.user.first_name}} {{review.student.user.last_name}}</div>
+            <div class="text-block-34">Review: <strong>{{review.stars}}</strong></div>
+          </div>
+          <p class="paragraph-9">{{review.description}}</p>
+        </div>
+      </div>
+    {% endfor %}
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=5f600218af4814e3759ffa69" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="student/js/webflow.js" type="text/javascript"></script>
+</body>
+</html>

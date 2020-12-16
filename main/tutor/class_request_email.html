@@ -1,0 +1,9 @@
+{% autoescape off %}
+Hi {{ tutor.user.first_name }} {{ tutor.user.last_name }},
+
+You have recieved a tutoring request from {{student.user.first_name}} {{student.user.last_name}}.  Please check your requests.
+
+{% endautoescape %}
+
+Sincerely,
+The TutorPal Team
