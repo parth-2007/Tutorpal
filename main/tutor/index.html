@@ -15,10 +15,10 @@
 </head>
 <body class="body">
   <div>
-    <div class="section"><a href="/" aria-current="page" class="link-block w-inline-block w--current"><img src="tutor/images/logo.jpg" loading="lazy" width="260" srcset="tutor/images/logo-p-500.jpeg 500w, tutor/images/logo-p-800.jpeg 800w, tutor/images/logo-p-1080.jpeg 1080w, tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></a>
+    <div class="section"><a href="index.html" aria-current="page" class="link-block w-inline-block w--current"><img src="tutor/images/logo.jpg" loading="lazy" width="260" srcset="tutor/images/logo-p-500.jpeg 500w, tutor/images/logo-p-800.jpeg 800w, tutor/images/logo-p-1080.jpeg 1080w, tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></a>
       <div class="div-block-4">
         <div class="div-block-43">
-          <div class="name_profile_pic"><img src="{{user.profile_pic.url}}" width="60" height="55" srcset="{{user.profile_pic.url}} 500w, {{user.profile_pic.url}} 512w" sizes="60px" alt="" class="image-7">
+          <div class="name_profile_pic"><img src="tutor/images/user-2.png" width="60" height="60" srcset="tutor/images/user-2.png 500w, tutor/images/user-2.png 512w" sizes="60px" alt="" class="image-7">
             <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
               <div class="dropdown-toggle-2-copy w-dropdown-toggle">
                 <div class="text-block-18">{{user.first_name}} {{user.last_name}}</div>
@@ -27,12 +27,12 @@
               <nav class="navigation-dropdown-2 w-dropdown-list">
                 <div class="dropdown-pointer-2">
                   <div style="width: 300px;" class="dropdown-wrapper-2">
-                    <a href="/logout" class="dropdown-link-2 w-inline-block">
+                    <a href="#" class="dropdown-link-2 w-inline-block">
                       <div class="nav-content-wrap-2">
                         <div class="dropdown-title-2">Logout</div>
                       </div>
                     </a>
-                    <a href="/account" class="dropdown-link-2 w-inline-block">
+                    <a href="account.html" class="dropdown-link-2 w-inline-block">
                       <div class="nav-content-wrap-2">
                         <div class="dropdown-title-2">Account</div>
                       </div>
@@ -48,7 +48,7 @@
     <div class="div-block-6">
       <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
         <div class="container-2 w-container">
-          <nav role="navigation" class="nav-menu-3 w-nav-menu"><a href="/" aria-current="page" class="nav-link-4 w-nav-link w--current">Requests</a><a href="/inbox" class="nav-link-4 w-nav-link">Messages</a><a href="/payments" class="nav-link-4 w-nav-link">Payments</a></nav>
+          <nav role="navigation" class="nav-menu-3 w-nav-menu"><a href="index.html" aria-current="page" class="nav-link-4 w-nav-link w--current">Requests</a><a href="inbox_tutor.html" class="nav-link-4 w-nav-link">Messages</a><a href="payments.html" class="nav-link-4 w-nav-link">Payments</a></nav>
           <div class="menu-button-2 w-nav-button">
             <div class="icon-2 w-icon-nav-menu"></div>
           </div>
@@ -66,7 +66,6 @@
           <p class="paragraph">Please accept or deny these requests based off of your comfort ability.</p>
         </div>
         <div class="loop">
-          {% for x in incoming %}
             <div class="item">
               <div class="div-block-51"><img src="{{x.student.user.profile_pic.url}}" loading="lazy"  width="60" srcset="{{x.student.user.profile_pic.url}} 500w, {{x.student.user.profile_pic.url}} 512w" sizes="64px" alt="" class="image-9">
               </div>
@@ -76,7 +75,6 @@
               <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
               <div class="div-block-52"><a href="/" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a href="/" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
             </div>
-          {% endfor %}
         </div>
       </div>
     </div>
@@ -84,19 +82,15 @@
       <div style="  margin-bottom: 20px;" class="div-block-53">
         <h1 class="heading-2">Starting:</h1>
         <div class="upcoming_loop">
-          {% for y in started %}
             <div class="upcoming_item">
-              <p class="paragraph-3">Date: {{y.date}}<br>Time: {{y.time_start}} - {{y.time_end}}<br>Student: {{y.student.user.first_name}} {{y.student.user.last_name}}<br>Subject: {{y.tutor.subjects}}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p><a href="/session/{{y.id}}" class="button-4 w-button">Join Meeting</a></div>
-          {% endfor %}
+              <p class="paragraph-3">Date: {{y.date}}<br>Time: {{y.time_start}} - {{y.time_end}}<br>Student: {{y.student.user.first_name}} {{y.student.user.last_name}}<br>Subject: {{y.tutor.subjects}}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p><a href="tutor_workspace.html" class="button-4 w-button">Join Meeting</a></div>
         </div>
       </div>
       <div style="height: 300px; margin-bottom: 20px;" class="div-block-53">
         <h1 class="heading-2">Upcoming Classes:</h1>
         <div class="upcoming_loop">
-          {% for z in upcoming %}
             <div class="upcoming_item">
               <p class="paragraph-3">Date: {{z.date}}<br>Time: {{z.time_start}} - {{z.time_end}}<br>Student: {{z.student.user.first_name}} {{z.student.user.last_name}}<br>Subject: {{z.tutor.subjects}}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p><div>
-          {% endfor %}
         </div>
       </div>
     </div>
