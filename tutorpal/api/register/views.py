@@ -8,15 +8,14 @@ from dry_rest_permissions.generics import DRYPermissions
 from django_auto_prefetching import AutoPrefetchViewSetMixin
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from django.contrib.postgres.search import SearchVector
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserViewingSerializer
-    # permission_classes = [CanMakeUser, IsUserOrReadOnly]
     permission_classes = [DRYPermissions]
-
-    # Add change password method
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -31,49 +30,11 @@ class UserViewSet(viewsets.ModelViewSet):
             return UserViewingSerializer
         return UserOwnerSerializer
 
-    # def list(self, request):
-    #     # disable later
-    #     queryset = User.objects.all()
-    #     serializer_class = UserViewingSerializer(queryset, many=True)
-    #     permission_classes = [DRYPermissions]
-    #     return Response(serializer_class.data)
-    #     # return Response(data="Listing for users not available", status=status.HTTP_403_FORBIDDEN)
-
-    # def retrieve(self, request, pk=None):
-    #     queryset = User.objects.all()
-    #     user = get_object_or_404(queryset, pk=pk)
-    #     permission_classes = [DRYPermissions]
-    #     if request.user == user:
-    #         serializer_class = UserOwnerSerializer(user)
-    #         return Response(serializer_class.data)
-    #     else:
-    #         serializer_class = UserViewingSerializer(user)
-    #         return Response(serializer_class.data)
-
 
 class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     queryset = Tutor.objects.all()
     serializer_class = TutorViewingSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly, CanMakeObj]
     permission_classes = [DRYPermissions]
-
-    # def list(self, request):
-    #     # Keep for search
-    #     queryset = Tutor.objects.all()
-    #     serializer_class = TutorViewingSerializer(queryset, many=True)
-    #     permission_classes = [DRYPermissions]
-    #     return Response(serializer_class.data)
-
-    # def retrieve(self, request, pk=None):
-    #     queryset = Tutor.objects.all()
-    #     tutor = get_object_or_404(queryset, pk=pk)
-    #     permission_classes = [DRYPermissions]
-    #     if request.user == tutor.user:
-    #         serializer_class = TutorOwnerSerializer(tutor)
-    #         return Response(serializer_class.data)
-    #     else:
-    #         serializer_class = TutorViewingSerializer(tutor)
-    #         return Response(serializer_class.data)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -88,6 +49,21 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
             return TutorViewingSerializer
         return TutorOwnerSerializer
 
+    @action(detail=False)
+    def search(self, request):
+        query = request.GET.get('q')
+        tutor_query = Tutor.objects.annotate(
+            search=SearchVector('user__first_name', 'user__last_name', 'occupation',
+                                'rates', 'qualifications', 'subjects', 'what_you_teach', 'education')
+        ).filter(search=query)
+        page = self.paginate_queryset(tutor_query)
+        if page is not None:
+            serializer_class = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        serializer_class = self.get_serializer(tutor_query, many=True)
+        return Response(serializer_class.data)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -95,26 +71,7 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentViewingSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly, CanMakeObj]
     permission_classes = [DRYPermissions]
-
-    # def list(self, request):
-    #     # disable
-    #     queryset = Student.objects.all()
-    #     serializer_class = StudentViewingSerializer(queryset, many=True)
-    #     permission_classes = [DRYPermissions]
-    #     return Response(serializer_class.data)
-
-    # def retrieve(self, request, pk=None):
-    #     queryset = Student.objects.all()
-    #     student = get_object_or_404(queryset, pk=pk)
-    #     permission_classes = [DRYPermissions]
-    #     if request.user == student.user:
-    #         serializer_class = StudentOwnerSerializer(student)
-    #         return Response(serializer_class.data)
-    #     else:
-    #         serializer_class = StudentViewingSerializer(student)
-    #         return Response(serializer_class.data)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -138,9 +95,6 @@ class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, CanMakeReview]
 
-    # def list(self, request):
-    # return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data="Listing not available")
-
     def create(self, request):
         tutor = Tutor.objects.get(pk=request.data.get('tutor'))
         student = request.user.student
@@ -156,15 +110,8 @@ class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")
 
-    # def perform_create(self, serializer):
-    # 	student = self.request.user.student
-    # 	serializer.save(student=self.request.user.student)
-
 
 class ChangePasswordView(generics.UpdateAPIView):
-    """
-    An endpoint for changing password.
-    """
     serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = (IsAuthenticated, DRYPermissions)
