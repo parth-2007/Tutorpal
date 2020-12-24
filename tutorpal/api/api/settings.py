@@ -69,6 +69,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFToken',
     'HTTP_X_CSRFTOKEN',
     'Access-Control-Allow-Origin',
+    'Bearer',
+    'bearer',
 ]
 
 CORS_ORIGIN_WHITELIST = [
@@ -201,8 +203,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        # 'api.auth.DRFSessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }

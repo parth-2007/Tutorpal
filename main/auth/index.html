@@ -5,10 +5,26 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Auth Testing</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script> -->
+    <script src='tokens.js'></script>
     <script src='test.js'></script>
 </head>
 <body>
+    <script>
+        /*
+        First: create the inital access token with a user's email and password
+        createToken(email, password)
+        this creates the access and refresh token
+        Second: call refresh token frequently to refresh a user's access token, or else they can't login
+        refreshToken();
+        if refreshToken isn't called within 24 hours, the user is logged out
+        Third:
+        this is to get the refresh tokens
+        const myAccessToken = localStorage.getItem("access");
+        const myRefreshToken = localStorage.getItem("refresh");
+        this is a test that takes in a user's access token and returns their data from the api
+        getMyData(myAccessToken);
+        */
+    </script>
     <div id="root">
     </div>
 </body>
