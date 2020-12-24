@@ -10,6 +10,33 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.contrib.postgres.search import SearchVector
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+import json
+from django.contrib.auth import authenticate, login, logout
+
+
+@ensure_csrf_cookie
+def set_csrf_token(request):
+    return Response(status=status.HTTP_200_OK, data="Set CSRF Token")
+
+
+def logout(request):
+    logout(request)
+    return Response(status=status.HTTP_200_OK, data="Logged out")
+
+
+def login_view(request):
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
+    if email is None or password is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="Please add a valid username and password")
+    user = authenticate(email=email, password=password)
+    if user is not None:
+        login(request, user)
+        return Response(status=status.HTTP_200_OK, data="Logged in")
+    return Response(status=status.HTTP_400_BAD_REQUEST, data="Bad Request")
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -29,6 +56,13 @@ class UserViewSet(viewsets.ModelViewSet):
                 return UserViewingSerializer
             return UserViewingSerializer
         return UserOwnerSerializer
+
+    @action(detail=False)
+    def me(self, request):
+        if request.user.is_authenticated:
+            return Response(data=UserOwnerSerializer(request.user).data, status=status.HTTP_200_OK)
+        else:
+            return Response(data="You are not authenticated", status=status.HTTP_400_BAD_REQUEST)
 
 
 class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
