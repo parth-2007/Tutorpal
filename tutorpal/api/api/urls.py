@@ -21,6 +21,7 @@ urlpatterns = [
     path('', include('register.urls')),
     path('', include('session.urls')),
     path('', include('chat.urls')),
+    path('', include('main.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api-auth/token/', jwt_views.TokenObtainPairView.as_view(),
