@@ -26,7 +26,7 @@ const getMyData = (acessToken) => {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'X-CSRFToken': csrftoken,
-            'Authorization': 'Bearer ' + acessToken,
+            'Authorization': 'Bearer ' + acessToken, // This is important for identifying user
         },
     }).then((resp) => {
         console.log(resp)
