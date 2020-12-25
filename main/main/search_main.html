@@ -30,7 +30,7 @@
   key = current_url.slice(51);
   
   console.log(key)
-  var url = "127.0.0.1:8000/tutors/search/?q="+key;
+  var url = "127.0.0.1:8000/tutors/search/?q="+key+"/";
   function getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
@@ -46,7 +46,6 @@
       return cookieValue;
   }
   const csrftoken = getCookie('csrftoken');
-
   var wrapper = document.getElementById('posts');
   fetch(url, {
       method: "GET",
@@ -73,7 +72,6 @@
               reviews = value.average_reviews;
               occupation = value.occupation;
               linkedin = value.linkedIn;
-              console.log(linkedin)
               if (value.linkedIn != ""){
                 var item = `
                   <a href="http://127.0.0.1:5500/main/main/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
