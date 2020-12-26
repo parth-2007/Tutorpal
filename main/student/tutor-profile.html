@@ -97,8 +97,8 @@
         </div>
       </div>
     </div>
-    <p style="padding-top: 20px;"class="paragraph-8"><strong>Degree: </strong><small style="font-size: 14px;"id="degree"></small><br><strong>Birthdate: </strong><small style="font-size: 14px;" id="birthdate"></small><br><strong>Qualification Description: </strong><small id="qualifications"style="font-size: 14px;"></small><br><strong>Education: </strong><small style="font-size: 14px;"id="education"></small><br><strong>Professional Experience:</strong> <small style="font-size: 14px;" id="professional_exp"></small> years<br><strong>Teaching Experience: </strong><small style="font-size: 14px;" id="teaching_exp"></small> years<br><strong>Average Review:</strong> <small style="font-size: 14px;" id="average_reviews"></small> Stars<br><strong>Time taught: </strong><small style="font-size: 14px;" id="hours_taught"></small><br><strong>Occupation: </strong><small style="font-size: 14px" id="occupation"></small><br><strong>Gender: </strong><small style="font-size: 14px;" id="gender"></small><br><strong>Price: </strong><small style="font-size: 14px;" id="price"></small> hourly <br><strong>Bio: </strong><small style="font-size: 14px;" id="bio"></small><br><strong>Course Description: </strong><small style="font-size: 14px;" id="course"></small><br>
-    <div id="linkedin"></div></p>
+    <p style="padding-top: 20px;"class="paragraph-8"><strong>Degree: </strong><small style="font-size: 14px;"id="degree"></small><br><strong>Birthdate: </strong><small style="font-size: 14px;" id="birthdate"></small><br><strong>Qualification Description: </strong><small id="qualifications"style="font-size: 14px;"></small><br><strong>Education: </strong><small style="font-size: 14px;"id="education"></small><br><strong>Professional Experience:</strong> <small style="font-size: 14px;" id="professional_exp"></small> years<br><strong>Teaching Experience: </strong><small style="font-size: 14px;" id="teaching_exp"></small> years<br><strong>Average Review:</strong> <small style="font-size: 14px;" id="average_reviews"></small> Stars<br><strong>Time taught: </strong><small style="font-size: 14px;" id="hours_taught"></small><br><strong>Occupation: </strong><small style="font-size: 14px" id="occupation"></small><br><strong>Gender: </strong><small style="font-size: 14px;" id="gender"></small><br><strong>Price: </strong><small style="font-size: 14px;" id="price"></small> hourly <br><strong>Bio: </strong><small style="font-size: 14px;" id="bio"></small><br><strong>Course Description: </strong><small style="font-size: 14px;" id="course"></small><br><strong>Availability: </strong><small style="font-size: 14px;"id="availability"></small>
+      <div id="linkedin"></div></p>
   </div>  
   <div class="div-block-56">
     <div class="div-block-73">
@@ -184,6 +184,7 @@
         document.getElementById("price").innerHTML = "$" + data.rates;
         document.getElementById("bio").innerHTML = data.bio;
         document.getElementById("course").innerHTML = data.what_you_teach;
+        document.getElementById("availability").innerHTML = data.availability;
         var div = document.createElement('div');
         var linkedin = data.linkedIn;
         div.innerHTML = `
