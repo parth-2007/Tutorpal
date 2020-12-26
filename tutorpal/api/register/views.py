@@ -16,6 +16,11 @@ import json
 from django.contrib.auth import authenticate, login, logout
 
 
+def get_trending():
+    tutors = Tutor.objects.order_by('num_classes', 'average_reviews')
+    return tutors
+
+
 @ensure_csrf_cookie
 def set_csrf_token(request):
     return Response(status=status.HTTP_200_OK, data="Set CSRF Token")
@@ -90,6 +95,17 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
             search=SearchVector('user__first_name', 'user__last_name', 'occupation',
                                 'rates', 'qualifications', 'subjects', 'what_you_teach', 'education')
         ).filter(search=query)
+        page = self.paginate_queryset(tutor_query)
+        if page is not None:
+            serializer_class = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        serializer_class = self.get_serializer(tutor_query, many=True)
+        return Response(serializer_class.data)
+
+    @action(detail=False)
+    def trending(self, request):
+        tutor_query = get_trending()
         page = self.paginate_queryset(tutor_query)
         if page is not None:
             serializer_class = self.get_serializer(page, many=True)
