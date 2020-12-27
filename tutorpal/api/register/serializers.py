@@ -1,23 +1,58 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers, status
 from django_restql.mixins import DynamicFieldsMixin
+# from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+    student = serializers.SerializerMethodField('get_tutor_pk')
+    tutor = serializers.SerializerMethodField('get_student_pk')
+
+    def get_tutor_pk(self, user):
+        try:
+            tutor = user.tutor.pk
+        except:
+            tutor = None
+        return tutor
+
+    def get_student_pk(self, user):
+        try:
+            student = user.student.pk
+        except:
+            student = None
+        return student
+
     class Meta:
         model = User
         fields = [
-            'id', 'first_name', 'last_name', 'profile_pic',
+            'id', 'first_name', 'last_name', 'profile_pic', 'student', 'tutor'
         ]
 
 
 class UserOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+    student = serializers.SerializerMethodField('get_tutor_pk')
+    tutor = serializers.SerializerMethodField('get_student_pk')
+
+    def get_tutor_pk(self, user):
+        try:
+            tutor = user.tutor.pk
+        except:
+            tutor = None
+        return tutor
+
+    def get_student_pk(self, user):
+        try:
+            student = user.student.pk
+        except:
+            student = None
+        return student
+
     class Meta:
         model = User
         fields = [
             'id', 'email', 'password', 'is_student', 'is_tutor',
-            'first_name', 'last_name', 'profile_pic'
-            #'student', 'tutor',
+            'first_name', 'last_name', 'profile_pic',
+            'student', 'tutor',
         ]
         extra_kwargs = {'password': {'write_only': True}, 'is_student': {
             'write_only': True}, 'is_tutor': {'write_only': True}}

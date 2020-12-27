@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Auth Testing</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='tokens.js'></script>
+    <script src='register.js'></script>
+
+</head>
+
+<body>
+    <script>
+        // createToken(email, password);
+        // refreshToken();
+        // const myAccessToken = localStorage.getItem("access");
+        // const myRefreshToken = localStorage.getItem("refresh");
+        // getMyData(myAccessToken);
+        const csrfToken = getCSRF();
+        console.log(csrfToken);
+    </script>
+    <div id="root">
+    </div>
+</body>
+
+</html>

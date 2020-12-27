@@ -8,7 +8,7 @@ from dry_rest_permissions.generics import DRYPermissions
 from django_auto_prefetching import AutoPrefetchViewSetMixin
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from django.contrib.postgres.search import SearchVector
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
@@ -21,6 +21,7 @@ def get_trending():
     return tutors
 
 
+@api_view(('GET', ))
 @ensure_csrf_cookie
 def set_csrf_token(request):
     return Response(status=status.HTTP_200_OK, data="Set CSRF Token")
