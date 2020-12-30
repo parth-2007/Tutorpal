@@ -95,7 +95,8 @@
                         try {
                             resp.json().then((data) => {
                                 localStorage.setItem("access", data.access);
-                                accessToken = localStorage.getItem("access");
+                                const accessToken = localStorage.getItem("access");
+                                
                                 fetch("http://127.0.0.1:8000/users/me/", {
                                     method: "GET",
                                     credentials: 'same-origin',
@@ -109,29 +110,9 @@
                                     resp.json().then((data) => {
                                         console.log(data)
                                         if(data.tutor !=null){
-                                            const id = data.tutor;
-                                            const type = "student";
-                                            var email = data.email;
-                                            var fullname = data.first_name + " " + data.last_name;
-                                            var pfp = data.profile_pic;
-                                            localStorage.setItem("id", id);
-                                            localStorage.setItem("email", email);
-                                            localStorage.setItem("name", fullname);
-                                            localStorage.setItem("pfp", pfp);
-                                            localStorage.setItem("type", type);
                                             window.location = 'http://127.0.0.1:5500/main/student/index.html'; 
                                         }
                                         else if(data.student !=null){
-                                            var id = data.student;
-                                            var type = "tutor";
-                                            var email = data.email;
-                                            var fullname = data.first_name + " " + data.last_name;
-                                            var pfp = data.profile_pic;
-                                            localStorage.setItem("id", id);
-                                            localStorage.setItem("email", email);
-                                            localStorage.setItem("name", fullname);
-                                            localStorage.setItem("pfp", pfp);
-                                            localStorage.setItem("type", type);
                                             window.location = 'http://127.0.0.1:5500/main/tutor/index.html'; 
                                         }
                                         console.log(type)
