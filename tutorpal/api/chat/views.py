@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from dry_rest_permissions.generics import DRYPermissions
 from django_auto_prefetching import AutoPrefetchViewSetMixin
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 
 # Create your views here.
 
@@ -22,6 +23,24 @@ class RoomViewSet(viewsets.ModelViewSet):
             return Room.objects.filter(tutor=self.request.user.tutor)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You are not authenticated")
+
+    @action(detail=False)
+    def inbox(self, request):
+        if hasattr(request.user, 'student'):
+            room_queryset = Room.objects.filter(
+                student=request.user.student)
+        elif hasattr(request.user, 'tutor'):
+            room_queryset = Room.objects.filter(tutor=request.user.tutor)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN, data="You cannot view your rooms")
+
+        page = self.paginate_queryset(room_queryset)
+        if page is not None:
+            serializer_class = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        serializer_class = self.get_serializer(session_queryset, many=True)
+        return Response(serializer_class.data)
 
 
 # class MessageViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
