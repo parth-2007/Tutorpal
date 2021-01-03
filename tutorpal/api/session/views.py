@@ -71,10 +71,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     def pending_on_student_payment(self, request):
         if hasattr(request.user, 'student'):
             my_sessions = Session.objects.filter(
-                student=request.user.student, student_paid=False, canceled=False)
+                student=request.user.student, student_paid=False, canceled=False, accepted=True)
         elif hasattr(request.user, 'tutor'):
             my_sessions = Session.objects.filter(
-                tutor=request.user.tutor, student_paid=False, canceled=False)
+                tutor=request.user.tutor, student_paid=False, canceled=False, accepted=True)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You cannot view your sessions")
 

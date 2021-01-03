@@ -16,4 +16,6 @@ urlpatterns = [
     path('api/set-csrf/', v.set_csrf_token),
     # path('api/login/', csrf_exempt(v.login_view)),
     path('api/login/', v.login_view),
+    path('api/logout/', v.logout_view),
+    path('test/', v.test)
 ]

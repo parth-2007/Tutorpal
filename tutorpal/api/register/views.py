@@ -10,10 +10,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action, api_view
 from django.contrib.postgres.search import SearchVector
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect, requires_csrf_token
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+
+
+def test(request):
+    return render(request, 'register/index.html')
 
 
 def get_trending():
@@ -27,22 +33,42 @@ def set_csrf_token(request):
     return Response(status=status.HTTP_200_OK, data="Set CSRF Token")
 
 
+@api_view(('GET', ))
 def logout(request):
     logout(request)
     return Response(status=status.HTTP_200_OK, data="Logged out")
 
 
+# @csrf_protect
+@api_view(('POST', ))
 def login_view(request):
-    data = json.loads(request.body)
-    email = data.get('email')
-    password = data.get('password')
+    email = request.data.get('email')
+    password = request.data.get('password')
     if email is None or password is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="Please add a valid username and password")
+        return Response(status=status.HTTP_400_BAD_REQUEST, data='Please add a valid username and password')
+        # return JsonResponse('Invalid username or password')
     user = authenticate(email=email, password=password)
     if user is not None:
         login(request, user)
-        return Response(status=status.HTTP_200_OK, data="Logged in")
-    return Response(status=status.HTTP_400_BAD_REQUEST, data="Bad Request")
+        response = Response(status=status.HTTP_200_OK, data='Logged in')
+        # response.set_cookie()
+        return response
+        # return JsonResponse('Loggged in')
+    return Response(status=status.HTTP_400_BAD_REQUEST, data='Bad Request')
+    # return JsonResponse('Baf')
+
+
+# @csrf_protect
+@api_view(('GET', ))
+def logout_view(request):
+    if reqest.user is not None:
+        logout(request, request.user)
+        response = Response(status=status.HTTP_200_OK, data='Logged out')
+        # response.set_cookie()
+        return response
+        # return JsonResponse('Loggged in')
+    return Response(status=status.HTTP_400_BAD_REQUEST, data="You aren't logged in")
+    # return JsonResponse('Baf')
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -65,10 +91,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def me(self, request):
+        print(request.user)
         if request.user.is_authenticated:
             return Response(data=UserOwnerSerializer(request.user).data, status=status.HTTP_200_OK)
         else:
             return Response(data="You are not authenticated", status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_create(self, serilaizer):
+        login(self.request, self.request.user)
 
 
 class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
@@ -117,6 +147,7 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        logout(self.request, self.request.user)
 
 
 class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
@@ -139,6 +170,7 @@ class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        logout(self.request, self.request.user)
 
 
 class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):

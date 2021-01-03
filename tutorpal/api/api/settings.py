@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from corsheaders.defaults import default_headers
+# from datetime import timedelta
+# from rest_framework.settings import api_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'dry_rest_permissions',
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +65,7 @@ MIDDLEWARE = [
 
 # CSRF_HEADER_NAME = 'X-CSRFToken'
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True  # change later
 # CORS_ALLOW_CREDENTIALS = False
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
@@ -79,6 +82,16 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:5500',
     'http://127.0.0.1:5500',
 ]
+
+# REST_KNOX = {
+#     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+#     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+#     'TOKEN_TTL': timedelta(hours=48),
+#     'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+#     'TOKEN_LIMIT_PER_USER': 1,
+#     'AUTO_REFRESH': True,
+#     # 'EXPIRY_DATETIME_FORMAT': api_settings.DATETME_FORMAT,
+# }
 
 ROOT_URLCONF = 'api.urls'
 
@@ -199,12 +212,15 @@ CACHES = {
     }
 }
 
+CSRF_USE_SESSIONS = False
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'knox.auth.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }

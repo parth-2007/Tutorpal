@@ -13,13 +13,25 @@
 
 <body>
     <script>
-        // createToken(email, password);
+        // Get CSRF Token
+        const csrfToken = getCSRF();
+        // Create a user and get token
+        userData = {
+            email: "", 
+            password: "", 
+            is_student: true, 
+            is_tutor: false, 
+            first_name: "", 
+            last_name: "", 
+            // profile_pic
+        }
+        createUser(userData);
+        createToken(email, password);
+        // Create tutor/student
         // refreshToken();
         // const myAccessToken = localStorage.getItem("access");
         // const myRefreshToken = localStorage.getItem("refresh");
         // getMyData(myAccessToken);
-        const csrfToken = getCSRF();
-        console.log(csrfToken);
     </script>
     <div id="root">
     </div>
