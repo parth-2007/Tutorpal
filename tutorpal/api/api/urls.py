@@ -26,10 +26,10 @@ urlpatterns = [
     path('', include('main.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    # path('api-auth/token/', jwt_views.TokenObtainPairView.as_view(),
-    #      name='token_obtain_pair'),
-    # path('api-auth/token/refresh/', jwt_views.TokenRefreshView.as_view(),
-    #      name='token_refresh'),
+    path('api-auth/token/', jwt_views.TokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('api-auth/token/refresh/', jwt_views.TokenRefreshView.as_view(),
+         name='token_refresh'),
     # re_path(r'api/token-auth/', include('knox.urls'))
 ]
 
