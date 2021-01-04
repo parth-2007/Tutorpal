@@ -124,25 +124,62 @@
                 document.write("<h1><strong>404 Not Found<strong></h1>")
             } 
             else{
-                const fullname = data.first_name + " " + data.last_name;
-                document.getElementById("name").innerHTML = fullname;
-                var i = 0;
-                while (i < 3) {
-                  var div = document.createElement('div');
-                  div.innerHTML = `
-                  <div class="i">
-                    <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                      <div class="text-block-26">Tutor: {{x.tutor.user.first_name}} {{x.tutor.user.last_name}}</div>
-                      <p class="paragraph-2"><strong class="bold-text">Schedule
-                        <br></strong>First Session: {{x.date}}<br>Tutor: {{x.tutor.user.first_name}} {{x.tutor.user.last_name}}<br>Duration: {{x.time_start}} - {{x.time_end}}<br>Amount: {{x.price}}<br>Trial: {{x.trial}}</p>
-                    </div>
-                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{x.description}}</p>
-                    <div class="text-block-27">This tutor has not accepted your request yet.</div>
-                  </div>
-                  `;
-                  document.getElementById('requests').appendChild(div);
-                  i++;
-                }  
+              const fullname = data.first_name + " " + data.last_name;
+              document.getElementById("name").innerHTML = fullname;
+              fetch("http://127.0.0.1:8000/sessions/pending_on_tutor/", {
+                  method: "GET",
+                  credentials: 'same-origin',
+                  headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                      'X-CSRFToken': csrftoken,
+                      'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                  },
+              }).then((resp) => {
+                  resp.json().then((data) => {
+                    const requests = data.results;
+                    requests_wrapper = document.getElementById('requests');
+                    requests.forEach(function(value) {  
+                      const date = value.date;
+                      const tutorid = value.tutor;
+                      const duration = value.time_start + " - " + value.time_end;
+                      const amount = value.price;
+                      const trial = value.free;
+                      const description = value.description;
+                      const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
+                      fetch(url, {
+                          method: "GET",
+                          credentials: 'same-origin',
+                          headers: {
+                              "Access-Control-Allow-Origin": "*",
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                              'X-CSRFToken': csrftoken,
+                          },
+                      }).then((resp) => {
+                          resp.json().then((data) => {
+                              const user = data.user;
+                              const tutorname = user.first_name + " " + user.last_name;
+                              var item = `
+                              <div class="i">
+                                <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+                                  <div class="text-block-26">Tutor: {{x.tutor.user.first_name}} {{x.tutor.user.last_name}}</div>
+                                  <p class="paragraph-2"><strong class="bold-text">Schedule
+                                    <br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: $${amount}<br>Trial: ${trial}</p>
+                                </div>
+                                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                                <div class="text-block-27">This tutor has not accepted your request yet.</div>
+                              </div>
+                              `;
+                              requests_wrapper.innerHTML +=item
+                          })
+                      })
+                      
+                    })
+                  })
+                })
+            
             } 
         })
     });

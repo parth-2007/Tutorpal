@@ -103,6 +103,7 @@
                 document.write("<h1><strong>404 Not Found<strong></h1>")
             } 
             else{
+              const fullname = data.first_name + " " + data.last_name;
               document.getElementById("name").innerHTML = fullname;
               var container = document.querySelector('#jitsi-container');
               var api = null;
