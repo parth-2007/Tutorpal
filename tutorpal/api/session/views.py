@@ -162,5 +162,24 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         serializer_class = self.get_serializer(session_queryset, many=True)
         return Response(serializer_class.data)
 
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def started_sessions(self, request):
+        if hasattr(request.user, 'student'):
+            session_queryset = Session.objects.filter(
+                student=request.user.student, started=True)
+        elif hasattr(request.user, 'tutor'):
+            session_queryset = Session.objects.filter(
+                tutor=request.user.tutor, started=True)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN, data="You cannot view your sessions")
+
+        page = self.paginate_queryset(session_queryset)
+        if page is not None:
+            serializer_class = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        serializer_class = self.get_serializer(session_queryset, many=True)
+        return Response(serializer_class.data)
+
     def perform_create(self, serializer):
         serializer.save(student=self.request.user.student)

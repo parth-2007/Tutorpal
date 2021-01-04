@@ -25,7 +25,7 @@ const login = (email, password) => {
     fetch('http://127.0.0.1:8000/api/login/', {
         method: 'POST',
         // mode: 'cors',
-        // credentials: 'same-origin', // in prod
+        credentials: 'same-origin', // in prod
         // credentials: 'include',
         withCredentials: true,
         headers: {
@@ -38,7 +38,7 @@ const login = (email, password) => {
             password,
         })
     }).then((resp)=> {
-        console.log(resp.headers)
+        console.log(resp)
         try {
             resp.json().then((data) => {
                 console.log(data);
