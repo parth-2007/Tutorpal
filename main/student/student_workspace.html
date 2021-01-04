@@ -52,36 +52,76 @@
   </div>
   <script src='https://meet.jit.si/external_api.js'></script>
   <script>
-    var id = localStorage.getItem("id");
-    var email = localStorage.getItem("email");
-    var fullname = localStorage.getItem("name");
-    var pfp = localStorage.getItem("pfp");
-    var type = localStorage.getItem("type");
-    console.log(type)
-    if(type != "student"){
-      document.getElementById("main").innerHTML = "";
-      document.getElementById("body").style.backgroundColor = "white";
-      document.write("<h1><strong>404 Not Found<strong></h1>")
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
-    else{
-      document.getElementById("name").innerHTML = fullname;
-      var container = document.querySelector('#jitsi-container');
-      var api = null;
-      
-          var domain = "meet.jit.si";
-          var options = {
-              "roomName": "{{call_url}}",
-              "parentNode": container,
-              "width": window.innerWidth -20,
-              "height": window.innerHeight -20 ,
-              userInfo: {
-              displayName: '{{user.first_name}} {{user.last_name}}'
+    const csrftoken = getCookie('csrftoken');
+    const refreshToken = localStorage.getItem("refresh")
+    fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
+        method: "POST",
+        headers: {
+          'Content-type':'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({"refresh": refreshToken})
+    }).then((resp)=> {
+          try{
+              resp.json().then((data) => {
+                localStorage.setItem("access", data.access);
+              });
+          } catch (e) {
+              console.log(e)
           }
-      
-          };
-          api = new JitsiMeetExternalAPI(domain, options);
-    }
-  
+    });
+    const accessToken = localStorage.getItem("access")
+    fetch("http://127.0.0.1:8000/users/me/", {
+        method: "GET",
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRFToken': csrftoken,
+            'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+        },
+    }).then((resp) => {
+        resp.json().then((data) => {
+            if(data.tutor ==null){
+                document.getElementById("main").innerHTML = "";
+                document.getElementById("body").style.backgroundColor = "white";
+                document.write("<h1><strong>404 Not Found<strong></h1>")
+            } 
+            else{
+              document.getElementById("name").innerHTML = fullname;
+              var container = document.querySelector('#jitsi-container');
+              var api = null;
+          
+              var domain = "meet.jit.si";
+              var options = {
+                  "roomName": "{{call_url}}",
+                  "parentNode": container,
+                  "width": window.innerWidth -20,
+                  "height": window.innerHeight -20 ,
+                  userInfo: {
+                  displayName: '{{user.first_name}} {{user.last_name}}'
+              }
+          
+              };
+              api = new JitsiMeetExternalAPI(domain, options);
+            }
+        })
+    })
   
   </script>
 </body>

@@ -133,6 +133,7 @@
     var current_url = window.location.href;
     key = current_url.slice(62);
     console.log(key)
+    
     function schedule(){
       var durations = document.getElementById('duration').value;
       var classdescription = document.getElementById('classdescription').value;
@@ -145,7 +146,6 @@
     }
 
     var url = "http://127.0.0.1:8000/tutors/" + key +"/";
-    console.log(url)
     function getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
