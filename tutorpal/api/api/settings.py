@@ -219,8 +219,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'knox.auth.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
