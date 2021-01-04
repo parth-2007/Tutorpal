@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'dry_rest_permissions',
-    'knox',
+    # 'knox',
 ]
 
 MIDDLEWARE = [
