@@ -81,7 +81,7 @@
       <div class="div-block-6">
         <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
           <div class="container-2 w-container">
-            <nav role="navigation" class="nav-menu-3 w-nav-menu"><a href="index.html" aria-current="page" class="nav-link-4 w-nav-link w--current">Explore</a><a href="/inbox" class="nav-link-4 w-nav-link">Messages</a><a href="requests.html" class="nav-link-4 w-nav-link">Requests</a><a href="payments.html" class="nav-link-4 w-nav-link">Payments</a></nav>
+            <nav role="navigation" class="nav-menu-3 w-nav-menu"><a href="index.html" aria-current="page" class="nav-link-4 w-nav-link w--current">Explore</a><a href="inbox_student.html" class="nav-link-4 w-nav-link">Messages</a><a href="requests.html" class="nav-link-4 w-nav-link">Requests</a><a href="payments.html" class="nav-link-4 w-nav-link">Payments</a></nav>
             <div class="menu-button-2 w-nav-button">
               <div class="icon-2 w-icon-nav-menu"></div>
             </div>
@@ -152,162 +152,161 @@
     }).then((resp)=> {
           try{
               resp.json().then((data) => {
-                localStorage.setItem("access", data.access);
+                const accessToken = data.access;
+                fetch("http://127.0.0.1:8000/users/me/", {
+                    method: "GET",
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                    },
+                }).then((resp) => {
+                    resp.json().then((data) => {
+                        if(data.tutor ==null){
+                            document.getElementById("main").innerHTML = "";
+                            document.getElementById("body").style.backgroundColor = "white";
+                            document.write("<h1><strong>404 Not Found<strong></h1>")
+                        } 
+                        else{
+                          const fullname = data.first_name + " " + data.last_name;
+                          const student = data.tutor;
+                          window.stud = student;
+                          document.getElementById("name").innerHTML = fullname;
+
+                          var form = document.getElementById('form-wrapper');
+                          form.addEventListener('submit',function(e){
+                            e.preventDefault()
+                            console.log("Form Submitted")
+                            var durations = document.getElementById('duration').value;
+                            var classdescription = document.getElementById('classdescription').value;
+                            var date_time = document.getElementById('date-time').value;
+                            var seconds = durations * 60;
+
+                            var student = stud;
+                            var tutor = parseInt(key); 
+
+                            var date = date_time.substring(0, 10);
+                            var time_start = date_time.slice(11) + ":00";  
+                            var duration = new Date(seconds * 1000).toISOString().substr(11, 8);
+
+                            var hours1 = parseInt(time_start.substring(0,2));
+                            var minutes1 = parseInt(time_start.substr(3,2));
+                            var hours2 = parseInt(duration.substring(0,2));
+                            var minutes2 = parseInt(duration.substr(3,2));
+                            var hours = hours1 + hours2;
+                            var minutes = minutes1 + minutes2;
+
+                            var time_end = hours + ":" + minutes + ":00";
+
+                            var price = rate;
+                            var free = trial;
+                            var description = classdescription
+                            
+                            if(trial == true){
+                              price = "00.00";
+                            }
+                            console.log(tutor)
+                            fetch("http://127.0.0.1:8000/sessions/", {
+                                method: "POST",
+                                headers: {
+                                    "Access-Control-Allow-Origin": "*",
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRFToken': csrftoken,
+                                    'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+
+                                },
+                                body:JSON.stringify({
+                                  "student":student, 
+                                  "tutor":tutor, 
+                                  "date":date, 
+                                  "time_start":time_start, 
+                                  "time_end": time_end, 
+                                  "duration": duration, 
+                                  "price":price, 
+                                  "free":trial, 
+                                  "description":description,
+                                  "call_url": "",
+                                  "accepted": false,
+                                  "rejected": false,
+                                  "started": false,
+                                  "finished": false,
+                                  "accessable": false,
+                                  "canceled": false
+                                })
+                              })
+                          })
+                        
+                          var url = "http://127.0.0.1:8000/tutors/" + key +"/";
+                          
+                          fetch(url, {
+                              method: "GET",
+                              credentials: 'same-origin',
+                              headers: {
+                                  "Access-Control-Allow-Origin": "*",
+                                  'Content-Type': 'application/json',
+                                  'Accept': 'application/json',
+                                  'X-CSRFToken': csrftoken,
+                              },
+                          }).then((resp) => {
+                              resp.json().then((data) => {
+                                document.getElementById("subjects").innerHTML = "Subjects: " + data.subjects;
+                                user = data.user;
+                                reviews = data.reviews;
+                                document.getElementById("degree").innerHTML = data.education;
+                                document.getElementById("fullname").innerHTML = user.first_name + " "+ user.last_name;
+                                document.getElementById("birthdate").innerHTML = data.birth_date;
+                                document.getElementById("qualifications").innerHTML = data.qualifications;
+                                document.getElementById("education").innerHTML = data.major + " at "+ data.school + ", GPA of " + data.gpa;
+                                document.getElementById("professional_exp").innerHTML = data.prof_exp;
+                                document.getElementById("teaching_exp").innerHTML = data.teach_exp;
+                                document.getElementById("hours_taught").innerHTML = data.free_tutoring_given;
+                                document.getElementById("occupation").innerHTML = data.occupation;
+                                document.getElementById("average_reviews").innerHTML = data.average_reviews;
+                                document.getElementById("gender").innerHTML = data.gender;
+                                document.getElementById("price").innerHTML = "$" + data.rates;
+                                const cost = data.rates;
+                                window.rate = cost;
+                                document.getElementById("bio").innerHTML = data.bio;
+                                document.getElementById("course").innerHTML = data.what_you_teach;
+                                document.getElementById("availability").innerHTML = data.availability;
+                                var div = document.createElement('div');
+                                var linkedin = data.linkedIn;
+                                div.innerHTML = `
+                                  <a style="font-family: Poppins;"href="${linkedin}" target="_blank"><strong>Linkedin Account:</strong></a>
+                                `;
+                                document.getElementById('linkedin').appendChild(div);
+                                var div1 = document.createElement('div');
+                                review_wrapper = document.getElementById('posts');
+                                reviews.forEach(function(value) {  
+                                  var description = value.description;      
+                                  var stars = value.stars;  
+                                  var student = value.student;
+                                  var student_user = student.user;
+                                  var fullname = student_user.first_name + " " + student_user.last_name;
+                                  var item = `
+                                  <div class="review_bundle">
+                                      <div class="review_item"><img src="tutor/images/user-2.png" loading="lazy" width="40" srcset="tutor/images/user-2.png 500w, tutor/images/user-2.png 512w" sizes="40px" alt="" class="image-12">
+                                        <div class="text-block-33">${fullname}</div>
+                                        <div class="text-block-34">Review: <strong>${stars} Stars</strong></div>
+                                      </div>
+                                      <p class="paragraph-9">${description}</p>
+                                    </div>
+                                  `;
+                                  review_wrapper.innerHTML +=item
+                                })
+                              });
+                          })
+                        }  
+                    })
+                });  
               });
           } catch (e) {
               console.log(e)
           }
     });
-    const accessToken = localStorage.getItem("access")
-    fetch("http://127.0.0.1:8000/users/me/", {
-        method: "GET",
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRFToken': csrftoken,
-            'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-        },
-    }).then((resp) => {
-        resp.json().then((data) => {
-            if(data.tutor ==null){
-                document.getElementById("main").innerHTML = "";
-                document.getElementById("body").style.backgroundColor = "white";
-                document.write("<h1><strong>404 Not Found<strong></h1>")
-            } 
-            else{
-              const fullname = data.first_name + " " + data.last_name;
-              const student = data.tutor;
-              window.stud = student;
-              document.getElementById("name").innerHTML = fullname;
-
-              var form = document.getElementById('form-wrapper');
-              form.addEventListener('submit',function(e){
-                e.preventDefault()
-                console.log("Form Submitted")
-                var durations = document.getElementById('duration').value;
-                var classdescription = document.getElementById('classdescription').value;
-                var date_time = document.getElementById('date-time').value;
-                var seconds = durations * 60;
-
-                var student = stud;
-                var tutor = parseInt(key); 
-
-                var date = date_time.substring(0, 10);
-                var time_start = date_time.slice(11) + ":00";  
-                var duration = new Date(seconds * 1000).toISOString().substr(11, 8);
-
-                var hours1 = parseInt(time_start.substring(0,2));
-                var minutes1 = parseInt(time_start.substr(3,2));
-                var hours2 = parseInt(duration.substring(0,2));
-                var minutes2 = parseInt(duration.substr(3,2));
-                var hours = hours1 + hours2;
-                var minutes = minutes1 + minutes2;
-
-                var time_end = hours + ":" + minutes + ":00";
-
-                var price = rate;
-                var free = trial;
-                var description = classdescription
-                
-                if(trial == true){
-                  price = "00.00";
-                }
-
-                fetch("http://127.0.0.1:8000/sessions/", {
-                    method: "POST",
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRFToken': csrftoken,
-                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-
-                    },
-                    body:JSON.stringify({
-                      "student":student, 
-                      "tutor":tutor, 
-                      "date":date, 
-                      "time_start":time_start, 
-                      "time_end": time_end, 
-                      "duration": duration, 
-                      "price":price, 
-                      "free":trial, 
-                      "description":description,
-                      "call_url": "",
-                      "accepted": false,
-                      "rejected": false,
-                      "started": false,
-                      "finished": false,
-                      "accessable": false,
-                      "canceled": false
-                    })
-                  })
-              })
-            
-              var url = "http://127.0.0.1:8000/tutors/" + key +"/";
-              
-              fetch(url, {
-                  method: "GET",
-                  credentials: 'same-origin',
-                  headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'X-CSRFToken': csrftoken,
-                  },
-              }).then((resp) => {
-                  resp.json().then((data) => {
-                    document.getElementById("subjects").innerHTML = "Subjects: " + data.subjects;
-                    user = data.user;
-                    reviews = data.reviews;
-                    document.getElementById("degree").innerHTML = data.education;
-                    document.getElementById("fullname").innerHTML = user.first_name + " "+ user.last_name;
-                    document.getElementById("birthdate").innerHTML = data.birth_date;
-                    document.getElementById("qualifications").innerHTML = data.qualifications;
-                    document.getElementById("education").innerHTML = data.major + " at "+ data.school + ", GPA of " + data.gpa;
-                    document.getElementById("professional_exp").innerHTML = data.prof_exp;
-                    document.getElementById("teaching_exp").innerHTML = data.teach_exp;
-                    document.getElementById("hours_taught").innerHTML = data.free_tutoring_given;
-                    document.getElementById("occupation").innerHTML = data.occupation;
-                    document.getElementById("average_reviews").innerHTML = data.average_reviews;
-                    document.getElementById("gender").innerHTML = data.gender;
-                    document.getElementById("price").innerHTML = "$" + data.rates;
-                    const cost = data.rates;
-                    window.rate = cost;
-                    document.getElementById("bio").innerHTML = data.bio;
-                    document.getElementById("course").innerHTML = data.what_you_teach;
-                    document.getElementById("availability").innerHTML = data.availability;
-                    var div = document.createElement('div');
-                    var linkedin = data.linkedIn;
-                    div.innerHTML = `
-                      <a style="font-family: Poppins;"href="${linkedin}" target="_blank"><strong>Linkedin Account:</strong></a>
-                    `;
-                    document.getElementById('linkedin').appendChild(div);
-                    var div1 = document.createElement('div');
-                    review_wrapper = document.getElementById('posts');
-                    reviews.forEach(function(value) {  
-                      var description = value.description;      
-                      var stars = value.stars;  
-                      var student = value.student;
-                      var student_user = student.user;
-                      var fullname = student_user.first_name + " " + student_user.last_name;
-                      var item = `
-                      <div class="review_bundle">
-                          <div class="review_item"><img src="tutor/images/user-2.png" loading="lazy" width="40" srcset="tutor/images/user-2.png 500w, tutor/images/user-2.png 512w" sizes="40px" alt="" class="image-12">
-                            <div class="text-block-33">${fullname}</div>
-                            <div class="text-block-34">Review: <strong>${stars} Stars</strong></div>
-                          </div>
-                          <p class="paragraph-9">${description}</p>
-                        </div>
-                      `;
-                      review_wrapper.innerHTML +=item
-                    })
-                  });
-              })
-            }  
-        })
-    });  
               var check_count = 0;
               var trial = false;
               function trial_function(){

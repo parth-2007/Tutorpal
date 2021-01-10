@@ -107,138 +107,137 @@
     }).then((resp)=> {
           try{
               resp.json().then((data) => {
-                localStorage.setItem("access", data.access);
+                const accessToken = data.access;
+                fetch("http://127.0.0.1:8000/users/me/", {
+                    method: "GET",
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                    },
+                }).then((resp) => {
+                    resp.json().then((data) => {
+                      if(data.tutor ==null){
+                          document.getElementById("main").innerHTML = "";
+                          document.getElementById("body").style.backgroundColor = "white";
+                          document.write("<h1><strong>404 Not Found<strong></h1>")
+                      }      
+                      else{
+                        const fullname = data.first_name + " " + data.last_name;
+                        document.getElementById("name").innerHTML = fullname;
+                        fetch("http://127.0.0.1:8000/sessions/pending_on_student_payment/", {
+                              method: "GET",
+                              credentials: 'same-origin',
+                              headers: {
+                                  "Access-Control-Allow-Origin": "*",
+                                  'Content-Type': 'application/json',
+                                  'Accept': 'application/json',
+                                  'X-CSRFToken': csrftoken,
+                                  'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                              },
+                          }).then((resp) => {
+                              resp.json().then((data) => {
+                                const payments = data.results;
+                                paypending_wrapper = document.getElementById('paypending');
+                                payments.forEach(function(value) {  
+                                  const date = value.date;
+                                  const tutorid = value.tutor;
+                                  const duration = value.time_start + " - " + value.time_end;
+                                  const amount = value.price;
+                                  const trial = value.free;
+                                  const description = value.description;
+                                  const sessionid = value.id;
+                                  const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
+                                  fetch(url, {
+                                      method: "GET",
+                                      credentials: 'same-origin',
+                                      headers: {
+                                          "Access-Control-Allow-Origin": "*",
+                                          'Content-Type': 'application/json',
+                                          'Accept': 'application/json',
+                                          'X-CSRFToken': csrftoken,
+                                      },
+                                  }).then((resp) => {
+                                      resp.json().then((data) => {
+                                          const user = data.user;
+                                          const tutorname = user.first_name + " " + user.last_name;
+                                          var item = `
+                                          <div class="i">
+                                            <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+                                              <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
+                                            </div>
+                                            <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                                            <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><a href="http://127.0.0.1:5500/main/student/pay.html?session=${sessionid}" class="button-10 w-button">Pay Now</a>
+                                          </div>
+                                          `;
+                                          paypending_wrapper.innerHTML +=item
+                                      })
+                                  })
+                                  
+                                })
+                              })
+                            })
+                            fetch("http://127.0.0.1:8000/sessions/upcoming/", {
+                              method: "GET",
+                              credentials: 'same-origin',
+                              headers: {
+                                  "Access-Control-Allow-Origin": "*",
+                                  'Content-Type': 'application/json',
+                                  'Accept': 'application/json',
+                                  'X-CSRFToken': csrftoken,
+                                  'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                              },
+                          }).then((resp) => {
+                              resp.json().then((data) => {
+                                const paid = data.results;
+                                paid_wrapper = document.getElementById('paid');
+                                paid.forEach(function(value) {  
+                                  const date = value.date;
+                                  const tutorid = value.tutor;
+                                  const duration = value.time_start + " - " + value.time_end;
+                                  const amount = value.price;
+                                  const trial = value.free;
+                                  const description = value.description;
+                                  const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
+                                  fetch(url, {
+                                      method: "GET",
+                                      credentials: 'same-origin',
+                                      headers: {
+                                          "Access-Control-Allow-Origin": "*",
+                                          'Content-Type': 'application/json',
+                                          'Accept': 'application/json',
+                                          'X-CSRFToken': csrftoken,
+                                      },
+                                  }).then((resp) => {
+                                      resp.json().then((data) => {
+                                          const user = data.user;
+                                          const tutorname = user.first_name + " " + user.last_name;
+                                          var item = `
+                                          <div class="item-copy">
+                                            <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+                                              <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
+                                            </div>
+                                            <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                                            <div class="text-block-27-copy">Thank you for paying for your session!</div>
+                                          </div>
+                                          `;
+                                          paid_wrapper.innerHTML +=item
+                                      })
+                                  })
+                                  
+                                })
+                              })
+                            }) 
+                      }                                  
+                    })
+                })
               });
           } catch (e) {
               console.log(e)
           }
     });
-    const accessToken = localStorage.getItem("access")
-    fetch("http://127.0.0.1:8000/users/me/", {
-        method: "GET",
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRFToken': csrftoken,
-            'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-        },
-    }).then((resp) => {
-        resp.json().then((data) => {
-          if(data.tutor ==null){
-              document.getElementById("main").innerHTML = "";
-              document.getElementById("body").style.backgroundColor = "white";
-              document.write("<h1><strong>404 Not Found<strong></h1>")
-          }      
-          else{
-            const fullname = data.first_name + " " + data.last_name;
-            document.getElementById("name").innerHTML = fullname;
-            fetch("http://127.0.0.1:8000/sessions/pending_on_student_payment/", {
-                  method: "GET",
-                  credentials: 'same-origin',
-                  headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'X-CSRFToken': csrftoken,
-                      'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                  },
-              }).then((resp) => {
-                  resp.json().then((data) => {
-                    const payments = data.results;
-                    paypending_wrapper = document.getElementById('paypending');
-                    payments.forEach(function(value) {  
-                      const date = value.date;
-                      const tutorid = value.tutor;
-                      const duration = value.time_start + " - " + value.time_end;
-                      const amount = value.price;
-                      const trial = value.free;
-                      const description = value.description;
-                      const sessionid = value.id;
-                      const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
-                      fetch(url, {
-                          method: "GET",
-                          credentials: 'same-origin',
-                          headers: {
-                              "Access-Control-Allow-Origin": "*",
-                              'Content-Type': 'application/json',
-                              'Accept': 'application/json',
-                              'X-CSRFToken': csrftoken,
-                          },
-                      }).then((resp) => {
-                          resp.json().then((data) => {
-                              const user = data.user;
-                              const tutorname = user.first_name + " " + user.last_name;
-                              var item = `
-                              <div class="i">
-                                <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                                  <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
-                                </div>
-                                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
-                                <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><a href="http://127.0.0.1:5500/main/student/pay.html?session=${sessionid}" class="button-10 w-button">Pay Now</a>
-                              </div>
-                              `;
-                              paypending_wrapper.innerHTML +=item
-                          })
-                      })
-                      
-                    })
-                  })
-                })
-                fetch("http://127.0.0.1:8000/sessions/upcoming/", {
-                  method: "GET",
-                  credentials: 'same-origin',
-                  headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'X-CSRFToken': csrftoken,
-                      'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                  },
-              }).then((resp) => {
-                  resp.json().then((data) => {
-                    const paid = data.results;
-                    paid_wrapper = document.getElementById('paid');
-                    paid.forEach(function(value) {  
-                      const date = value.date;
-                      const tutorid = value.tutor;
-                      const duration = value.time_start + " - " + value.time_end;
-                      const amount = value.price;
-                      const trial = value.free;
-                      const description = value.description;
-                      const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
-                      fetch(url, {
-                          method: "GET",
-                          credentials: 'same-origin',
-                          headers: {
-                              "Access-Control-Allow-Origin": "*",
-                              'Content-Type': 'application/json',
-                              'Accept': 'application/json',
-                              'X-CSRFToken': csrftoken,
-                          },
-                      }).then((resp) => {
-                          resp.json().then((data) => {
-                              const user = data.user;
-                              const tutorname = user.first_name + " " + user.last_name;
-                              var item = `
-                              <div class="item-copy">
-                                <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                                  <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
-                                </div>
-                                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
-                                <div class="text-block-27-copy">Thank you for paying for your session!</div>
-                              </div>
-                              `;
-                              paid_wrapper.innerHTML +=item
-                          })
-                      })
-                      
-                    })
-                  })
-                }) 
-          }                                  
-        })
-    })
   </script>
 </body>
 </html>
