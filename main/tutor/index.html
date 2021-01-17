@@ -131,26 +131,6 @@
                     else{
                       const fullname = data.first_name + " " + data.last_name;
                       document.getElementById("name").innerHTML = fullname;
-                    }
-                  })
-                })
-                      var y = 0;
-                      while (y < 3) {
-                        var div = document.createElement('div');
-                        div.innerHTML = `
-                        <div class="item">
-                          <div class="div-block-51"><img src="{{x.student.user.profile_pic.url}}" loading="lazy"  width="60" srcset="{{x.student.user.profile_pic.url}} 500w, {{x.student.user.profile_pic.url}} 512w" sizes="64px" alt="" class="image-9">
-                          </div>
-                          <p style="font-size: 20px; margin-bottom: 15px;"class="paragraph-2">{{x.student.user.first_name}} {{x.student.user.last_name}}</p>
-                          <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{x.date}}<br>Duration: {{x.time_start}}  - {{x.time_end}}<br>Trial: {{x.trial}}<br>Amount: {{x.price}}</p>
-                          <p class="paragraph-2"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{x.description}}</p>
-                          <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
-                          <div class="div-block-52"><a href="index.html" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a href="index.html" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
-                        </div>
-                        `;
-                        document.getElementById('inbox').appendChild(div);
-                        y++;
-                      }
                       fetch("http://127.0.0.1:8000/sessions/started_sessions/", {
                             method: "GET",
                             credentials: 'same-origin',
@@ -167,13 +147,14 @@
                               started_wrapper = document.getElementById('started');
                               started.forEach(function(value) {  
                                 const date = value.date;
+                                const studentid = value.student;
                                 const tutorid = value.tutor;
                                 const duration = value.time_start + " - " + value.time_end;
                                 const amount = value.price;
                                 const trial = value.free;
                                 const description = value.description;
                                 const sessionid = value.id;
-                                const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
+                                const url = "http://127.0.0.1:8000/students/" + studentid + "/";
                                 fetch(url, {
                                     method: "GET",
                                     credentials: 'same-origin',
@@ -184,14 +165,13 @@
                                         'X-CSRFToken': csrftoken,
                                     },
                                 }).then((resp) => {
-                                    resp.json().then((data) => {
-                                        const user = data.user;
-                                        const tutorname = user.first_name + " " + user.last_name;
-                                        const subject = user.subjects;
+                                    resp.json().then((val) => {
+                                        const user = val.user;
+                                        const studentname = user.first_name + " " + user.last_name;
                                         var item = `
-                                        <div class="upcoming_item">
-                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><a href="<a href="http://127.0.0.1:5500/main/student/student_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
-                                        </div>
+                                          <div class="upcoming_item">
+                                            <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Student: ${studentname}</p><a href="http://127.0.0.1:5500/main/tutor/tutor_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
+                                          </div>
                                         `;
                                         started_wrapper.innerHTML +=item
                                     })
@@ -235,10 +215,9 @@
                                     resp.json().then((data) => {
                                         const user = data.user;
                                         const tutorname = user.first_name + " " + user.last_name;
-                                        const subject = user.subjects;
                                         var item = `
                                         <div class="upcoming_item">
-                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p></div>
+                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p></div>
                                         </div>
                                         `;
                                         upcoming_wrapper.innerHTML +=item
@@ -248,6 +227,26 @@
                               })
                             })
                           })
+                    }
+                  })
+                })
+                      var y = 0;
+                      while (y < 3) {
+                        var div = document.createElement('div');
+                        div.innerHTML = `
+                        <div class="item">
+                          <div class="div-block-51"><img src="{{x.student.user.profile_pic.url}}" loading="lazy"  width="60" srcset="{{x.student.user.profile_pic.url}} 500w, {{x.student.user.profile_pic.url}} 512w" sizes="64px" alt="" class="image-9">
+                          </div>
+                          <p style="font-size: 20px; margin-bottom: 15px;"class="paragraph-2">{{x.student.user.first_name}} {{x.student.user.last_name}}</p>
+                          <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{x.date}}<br>Duration: {{x.time_start}}  - {{x.time_end}}<br>Trial: {{x.trial}}<br>Amount: {{x.price}}</p>
+                          <p class="paragraph-2"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{x.description}}</p>
+                          <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
+                          <div class="div-block-52"><a href="index.html" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a href="index.html" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
+                        </div>
+                        `;
+                        document.getElementById('inbox').appendChild(div);
+                        y++;
+                      }
                         
             });
         } catch (e) {

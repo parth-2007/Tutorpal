@@ -249,10 +249,25 @@
                                     resp.json().then((data) => {
                                         const user = data.user;
                                         const tutorname = user.first_name + " " + user.last_name;
-                                        const subject = user.subjects;
+                                        const tutorid = user.student;
+                                        const tutorurl = "http://127.0.0.1:8000/tutors/" + tutorid;
+                                        fetch(tutorurl, {
+                                            method: "GET",
+                                            credentials: 'same-origin',
+                                            headers: {
+                                                "Access-Control-Allow-Origin": "*",
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'application/json',
+                                                'X-CSRFToken': csrftoken,
+                                            },
+                                        }).then((resp) => {
+                                            resp.json().then((val) => {
+                                              const subject = val.subjects;
+                                            })
+                                        })
                                         var item = `
                                         <div class="upcoming_item">
-                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><a href="<a href="http://127.0.0.1:5500/main/student/student_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
+                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><a href="http://127.0.0.1:5500/main/student/student_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
                                         </div>
                                         `;
                                         started_wrapper.innerHTML +=item
