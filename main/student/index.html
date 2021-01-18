@@ -116,134 +116,224 @@
   }).then((resp)=> {
         try{
             resp.json().then((data) => {
-              localStorage.setItem("access", data.access);
-            });
+              const accessToken = data.access;
+              fetch("http://127.0.0.1:8000/users/me/", {
+                method: "GET",
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                    'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                },
+            }).then((resp) => {
+                resp.json().then((data) => {
+                  if(data.tutor ==null){
+                      document.getElementById("main").innerHTML = "";
+                      document.getElementById("body").style.backgroundColor = "white";
+                      document.write("<h1><strong>404 Not Found<strong></h1>")
+                  }   
+                  else{
+                    const fullname = data.first_name + " " + data.last_name;
+                    document.getElementById("name").innerHTML = fullname;
+                      function getCookie(name) {
+                          let cookieValue = null;
+                          if (document.cookie && document.cookie !== '') {
+                              const cookies = document.cookie.split(';');
+                              for (let i = 0; i < cookies.length; i++) {
+                                  const cookie = cookies[i].trim();
+                                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                      break;
+                                  }
+                              }
+                          }
+                          return cookieValue;
+                      }
+                      const csrftoken = getCookie('csrftoken');
+                      var wrapper = document.getElementById('trending');
+                      fetch("http://127.0.0.1:8000/tutors/trending/", {
+                          method: "GET",
+                          credentials: 'same-origin',
+                          headers: {
+                              "Access-Control-Allow-Origin": "*",
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                              'X-CSRFToken': csrftoken,
+                          },
+                      }).then((resp) => {
+                          resp.json().then((data) => {
+                              var list = data.results;
+                              list.forEach(function(value) {
+                                  user = value.user;
+                                  full_name = user.first_name + " " + user.last_name
+                                  id = value.id;
+                                  subject = value.subjects;
+                                  price = value.rates;
+                                  education = value.education
+                                  major = value.major;
+                                  school = value.school;
+                                  gpa = value.gpa;
+                                  reviews = value.average_reviews;
+                                  occupation = value.occupation;
+                                  linkedin = value.linkedIn;
+                                  if (value.linkedIn != ""){
+                                    var item = `
+                                      <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
+                                        <div style="line-height: 14px;"class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
+                                          <div class="text-block-21"><strong class="bold-text-3">${full_name}</strong></div>
+                                              <div class="text-block-21-copy">Subject: ${subject}</div>
+                                              <div class="text-block-21-copy-2">Price: ${price} hourly</div>
+                                              <div class="text-block-21-copy-2">Degree: ${education}</div>
+                                              <div class="text-block-21-copy-2">Education: ${major} at ${school}, GPA of ${gpa}</div>
+                                              <div class="text-block-21-copy-2">Reviews: ${reviews} Stars</div>
+                                              <div class="text-block-21-copy-2">Occupation: ${occupation}</div>
+                                              <div style="color: green; font-size: 24px;"class="text-block-21-copy-2"><strong>✓</strong></div>
+                                        </div>
+                                      </a>
+                                    `
+                                    wrapper.innerHTML+=item
+                                  }
+                                  else{
+                                    var item = `
+                                      <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
+                                        <div style="line-height: 14px;" class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
+                                          <div class="text-block-21"><strong class="bold-text-3">${full_name}</strong></div>
+                                              <div class="text-block-21-copy">Subject: ${subject}</div>
+                                              <div class="text-block-21-copy-2">Price: ${price} hourly</div>
+                                              <div class="text-block-21-copy-2">Degree: ${education}</div>
+                                              <div class="text-block-21-copy-2">Education: ${major} at ${school}, GPA of ${gpa}</div>
+                                              <div class="text-block-21-copy-2">Reviews: ${reviews} Stars</div>
+                                              <div class="text-block-21-copy-2">Occupation: ${occupation}</div>
+                                        </div>
+                                      </a>
+                                    `
+                                    wrapper.innerHTML+=item
+                                  }
+                              });        
+                          })
+                      })
+                        fetch("http://127.0.0.1:8000/sessions/started_sessions/", {
+                            method: "GET",
+                            credentials: 'same-origin',
+                            headers: {
+                                "Access-Control-Allow-Origin": "*",
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRFToken': csrftoken,
+                                'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                            },
+                        }).then((resp) => {
+                            resp.json().then((data) => {
+                              const started = data.results;
+                              started_wrapper = document.getElementById('started');
+                              started.forEach(function(value) {  
+                                const date = value.date;
+                                const tutorid = value.tutor;
+                                const duration = value.time_start + " - " + value.time_end;
+                                const amount = value.price;
+                                const trial = value.free;
+                                const description = value.description;
+                                const sessionid = value.id;
+                                const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
+                                fetch(url, {
+                                    method: "GET",
+                                    credentials: 'same-origin',
+                                    headers: {
+                                        "Access-Control-Allow-Origin": "*",
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRFToken': csrftoken,
+                                    },
+                                }).then((resp) => {
+                                    resp.json().then((data) => {
+                                        const user = data.user;
+                                        const tutorname = user.first_name + " " + user.last_name;
+                                        const tutorid = user.student;
+                                        const tutorurl = "http://127.0.0.1:8000/tutors/" + tutorid;
+                                        fetch(tutorurl, {
+                                            method: "GET",
+                                            credentials: 'same-origin',
+                                            headers: {
+                                                "Access-Control-Allow-Origin": "*",
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'application/json',
+                                                'X-CSRFToken': csrftoken,
+                                            },
+                                        }).then((resp) => {
+                                            resp.json().then((val) => {
+                                              const subject = val.subjects;
+                                            })
+                                        })
+                                        var item = `
+                                        <div class="upcoming_item">
+                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><a href="http://127.0.0.1:5500/main/student/student_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
+                                        </div>
+                                        `;
+                                        started_wrapper.innerHTML +=item
+                                    })
+                                })
+                                
+                              })
+                            })
+                          })
+                          fetch("http://127.0.0.1:8000/sessions/upcoming/", {
+                            method: "GET",
+                            credentials: 'same-origin',
+                            headers: {
+                                "Access-Control-Allow-Origin": "*",
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRFToken': csrftoken,
+                                'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                            },
+                          }).then((resp) => {
+                            resp.json().then((data) => {
+                              const upcoming = data.results;
+                              upcoming_wrapper = document.getElementById('upcoming');
+                              upcoming.forEach(function(value) {  
+                                const date = value.date;
+                                const tutorid = value.tutor;
+                                const duration = value.time_start + " - " + value.time_end;
+                                const amount = value.price;
+                                const trial = value.free;
+                                const description = value.description;
+                                const url = "http://127.0.0.1:8000/tutors/" + tutorid + "/";
+                                fetch(url, {
+                                    method: "GET",
+                                    credentials: 'same-origin',
+                                    headers: {
+                                        "Access-Control-Allow-Origin": "*",
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRFToken': csrftoken,
+                                    },
+                                }).then((resp) => {
+                                    resp.json().then((data) => {
+                                        const user = data.user;
+                                        const tutorname = user.first_name + " " + user.last_name;
+                                        const subject = user.subjects;
+                                        var item = `
+                                        <div class="upcoming_item">
+                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p></div>
+                                        </div>
+                                        `;
+                                        upcoming_wrapper.innerHTML +=item
+                                    })
+                                })
+                                
+                              })
+                            })
+                          })
+                        
+                        }                                     
+                    })
+                })       
+      });
         } catch (e) {
             console.log(e)
         }
   });
-  const accessToken = localStorage.getItem("access")
-  fetch("http://127.0.0.1:8000/users/me/", {
-      method: "GET",
-      credentials: 'same-origin',
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRFToken': csrftoken,
-          'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-      },
-  }).then((resp) => {
-      resp.json().then((data) => {
-        if(data.tutor ==null){
-            document.getElementById("main").innerHTML = "";
-            document.getElementById("body").style.backgroundColor = "white";
-            document.write("<h1><strong>404 Not Found<strong></h1>")
-        }   
-        else{
-          const fullname = data.first_name + " " + data.last_name;
-          document.getElementById("name").innerHTML = fullname;
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            const csrftoken = getCookie('csrftoken');
-            var wrapper = document.getElementById('trending');
-            fetch("http://127.0.0.1:8000/tutors/trending/", {
-                method: "GET",
-                credentials: 'same-origin',
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                },
-            }).then((resp) => {
-                resp.json().then((data) => {
-                    var list = data.results;
-                    list.forEach(function(value) {
-                        user = value.user;
-                        full_name = user.first_name + " " + user.last_name
-                        id = value.id;
-                        subject = value.subjects;
-                        price = value.rates;
-                        education = value.education
-                        major = value.major;
-                        school = value.school;
-                        gpa = value.gpa;
-                        reviews = value.average_reviews;
-                        occupation = value.occupation;
-                        linkedin = value.linkedIn;
-                        if (value.linkedIn != ""){
-                          var item = `
-                            <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
-                              <div style="line-height: 14px;"class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
-                                <div class="text-block-21"><strong class="bold-text-3">${full_name}</strong></div>
-                                    <div class="text-block-21-copy">Subject: ${subject}</div>
-                                    <div class="text-block-21-copy-2">Price: ${price} hourly</div>
-                                    <div class="text-block-21-copy-2">Degree: ${education}</div>
-                                    <div class="text-block-21-copy-2">Education: ${major} at ${school}, GPA of ${gpa}</div>
-                                    <div class="text-block-21-copy-2">Reviews: ${reviews} Stars</div>
-                                    <div class="text-block-21-copy-2">Occupation: ${occupation}</div>
-                                    <div style="color: green; font-size: 24px;"class="text-block-21-copy-2"><strong>✓</strong></div>
-                              </div>
-                            </a>
-                          `
-                          wrapper.innerHTML+=item
-                        }
-                        else{
-                          var item = `
-                            <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
-                              <div style="line-height: 14px;" class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
-                                <div class="text-block-21"><strong class="bold-text-3">${full_name}</strong></div>
-                                    <div class="text-block-21-copy">Subject: ${subject}</div>
-                                    <div class="text-block-21-copy-2">Price: ${price} hourly</div>
-                                    <div class="text-block-21-copy-2">Degree: ${education}</div>
-                                    <div class="text-block-21-copy-2">Education: ${major} at ${school}, GPA of ${gpa}</div>
-                                    <div class="text-block-21-copy-2">Reviews: ${reviews} Stars</div>
-                                    <div class="text-block-21-copy-2">Occupation: ${occupation}</div>
-                              </div>
-                            </a>
-                          `
-                          wrapper.innerHTML+=item
-                        }
-                    });        
-                })
-            })
-            var x = 0;
-            while (x < 3) {
-              var div = document.createElement('div');
-              div.innerHTML = `
-                    <div class="upcoming_item">
-                      <p class="paragraph-3">Date: {{y.date}}<br>Time: {{y.time_start}} - {{y.time_end}}<br>Tutor: {{y.tutor.user.first_name}} {{y.tutor.user.last_name}}<br>Subject: {{y.tutor.subjects}}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p><a href="student_workspace.html" class="button-4 w-button">Join Meeting</a>
-                    </div>
-              `;
-              document.getElementById('started').appendChild(div);
-              x++;
-            }
-            var y = 0;
-            while (y < 3) {
-              var div = document.createElement('div');
-              div.innerHTML = `
-                    <div class="upcoming_item">
-                      <p class="paragraph-3">Date: {{x.date}}<br>Time: {{x.time_start}} - {{x.time_end}}<br>Tutor: {{x.tutor.user.first_name}} {{x.tutor.user.last_name}}<br>Subject: {{x.tutor.subjects}}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p></div>
-                    </div>
-              `;
-              document.getElementById('upcoming').appendChild(div);
-              y++;
-            }
-          }                                     
-      })
-  })
   </script>
 </body>
 </html>

@@ -106,34 +106,34 @@
   }).then((resp)=> {
         try{
             resp.json().then((data) => {
-              localStorage.setItem("access", data.access);
+              const accessToken = data.access;
+              fetch("http://127.0.0.1:8000/users/me/", {
+                  method: "GET",
+                  credentials: 'same-origin',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                      'X-CSRFToken': csrftoken,
+                      'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                  },
+              }).then((resp) => {
+                  resp.json().then((data) => {
+                    if(data.tutor ==null){
+                        document.getElementById("main").innerHTML = "";
+                        document.getElementById("body").style.backgroundColor = "white";
+                        document.write("<h1><strong>404 Not Found<strong></h1>")
+                    }    
+                    else{
+                      const fullname = data.first_name + " " + data.last_name;
+                      document.getElementById("name").innerHTML = fullname;
+                    }                                    
+                  })
+              })
             });
         } catch (e) {
             console.log(e)
         }
   });
-  const accessToken = localStorage.getItem("access")
-  fetch("http://127.0.0.1:8000/users/me/", {
-      method: "GET",
-      credentials: 'same-origin',
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRFToken': csrftoken,
-          'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-      },
-  }).then((resp) => {
-      resp.json().then((data) => {
-        if(data.tutor ==null){
-            document.getElementById("main").innerHTML = "";
-            document.getElementById("body").style.backgroundColor = "white";
-            document.write("<h1><strong>404 Not Found<strong></h1>")
-        }    
-        else{
-          const fullname = data.first_name + " " + data.last_name;
-        }                                    
-      })
-  })
   </script>
 </body>
 </html>
