@@ -62,7 +62,7 @@
     <div class="text-block-23">Payments</div>
     <p class="paragraph">12 hours after your class is completed, you will be paid through your registered email using PayPal. All of your payments will be recorded here.</p>
   </div>
-    <div id="pending"></div>
+    <div id="paid"></div>
   <div class="div-block-48-copy">
     <div class="text-block-23">Unpaid Classes (student)</div>
     <p class="paragraph">You are not required to start the class until your student has paid for it.</p>
@@ -117,38 +117,104 @@
                     }   
                     else{
                       const fullname = data.first_name + " " + data.last_name;
+                      const tutoremail = data.email;
                       document.getElementById("name").innerHTML = fullname;
-                      var y = 0;
-                      while (y < 3) {
-                        var div = document.createElement('div');
-                        div.innerHTML = `
-                          <div class="div-block-64">
-                            <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Paid</div>
-                            <div class="text-block-43"><strong class="bold-text-8">Amount:</strong> {{y.price}}</div>
-                            <div class="text-block-43"><strong class="bold-text-9">Date:</strong> {{y.date}}</div>
-                            <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{y.student.user.first_name}} {{y.student.user.last_name}}</div>
-                            <div class="text-block-43"><strong class="bold-text-11">Payment Sent To: </strong>{{user.email}}</div>
-                          </div>
-                        `;
-                        document.getElementById('pending').appendChild(div);
-                        y++;
-                      }
-
-                      var i = 0;
-                      while (i < 3) {
-                        var div = document.createElement('div');
-                        div.innerHTML = `
-                        <div class="div-block-64">
-                          <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
-                          <div class="text-block-43"><strong class="bold-text-8">Amount:</strong> {{z.price}}</div>
-                          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{z.student.user.first_name}} {{z.student.user.last_name}}</div>
-                          <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{z.date}}</div>
-                          <div class="text-block-43"><strong class="bold-text-10">Time:</strong> {{z.time_start}} - {{z.time_end}}</div>
-                        </div>
-                        `;
-                        document.getElementById('unpaid').appendChild(div);
-                        i++;
-                      }
+                      unpaid_wrapper = document.getElementById('unpaid');
+                      fetch("http://127.0.0.1:8000/sessions/pending_on_student_payment/", {
+                                    method: "GET",
+                                    credentials: 'same-origin',
+                                    headers: {
+                                        "Access-Control-Allow-Origin": "*",
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRFToken': csrftoken,
+                                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                                    },
+                      }).then((resp) => {
+                                    resp.json().then((val) => {
+                                        const sessionval = val.results;
+                                        sessionval.forEach(function(value) { 
+                                          const amount = value.price;
+                                          const duration = value.time_start + " - " + value.time_end;
+                                          const date = value.date;
+                                          const studentid = value.student;
+                                          const url = "http://127.0.0.1:8000/students/" + studentid + "/";
+                                          fetch(url, {
+                                              method: "GET",
+                                              credentials: 'same-origin',
+                                              headers: {
+                                                  "Access-Control-Allow-Origin": "*",
+                                                  'Content-Type': 'application/json',
+                                                  'Accept': 'application/json',
+                                                  'X-CSRFToken': csrftoken,
+                                              },
+                                          }).then((resp) => {
+                                              resp.json().then((data) => {
+                                                const user = data.user;
+                                                const studentname = user.first_name + " " + user.last_name;
+                                                var item = `
+                                                  <div class="div-block-64">
+                                                    <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
+                                                    <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
+                                                    <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
+                                                    <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
+                                                    <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
+                                                  </div>
+                                                `;
+                                                unpaid_wrapper.innerHTML +=item 
+                                              })
+                                            })
+                                        })
+                                    })
+                                })
+                      paid_wrapper = document.getElementById('paid');
+                      fetch("http://127.0.0.1:8000/sessions/finished_sessions/", {
+                                    method: "GET",
+                                    credentials: 'same-origin',
+                                    headers: {
+                                        "Access-Control-Allow-Origin": "*",
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRFToken': csrftoken,
+                                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                                    },
+                      }).then((resp) => {
+                                    resp.json().then((val) => {
+                                        const sessionval = val.results;
+                                        sessionval.forEach(function(value) { 
+                                          const amount = value.price;
+                                          const duration = value.time_start + " - " + value.time_end;
+                                          const date = value.date;
+                                          const studentid = value.student;
+                                          const url = "http://127.0.0.1:8000/students/" + studentid + "/";
+                                          fetch(url, {
+                                              method: "GET",
+                                              credentials: 'same-origin',
+                                              headers: {
+                                                  "Access-Control-Allow-Origin": "*",
+                                                  'Content-Type': 'application/json',
+                                                  'Accept': 'application/json',
+                                                  'X-CSRFToken': csrftoken,
+                                              },
+                                          }).then((resp) => {
+                                              resp.json().then((data) => {
+                                                const user = data.user;
+                                                const studentname = user.first_name + " " + user.last_name;
+                                                var item = `
+                                                  <div class="div-block-64">
+                                                    <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
+                                                    <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
+                                                    <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
+                                                    <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
+                                                    <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
+                                                  </div>
+                                                `;
+                                                paid_wrapper.innerHTML +=item 
+                                              })
+                                            })
+                                        })
+                                    })
+                                })
                     }
                   })
                 })

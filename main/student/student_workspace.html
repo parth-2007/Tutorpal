@@ -134,7 +134,7 @@
                               minutes = "0" + minutes
                             }
                             var time = today.getHours() + ":" + minutes + ":00" ;
-                            if(data.tutor ==null || data.tutor != session_student_id){
+                            if(data.tutor ==null || data.tutor != session_student_id || val.started != true){
                                 document.getElementById("main").innerHTML = "";
                                 document.write("<h1><strong>404 Not Found<strong></h1>")
                             } 

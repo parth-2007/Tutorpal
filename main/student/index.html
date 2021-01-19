@@ -20,7 +20,7 @@
           <div class="div-block-4">
             <form action="search_student.html" class="stuff w-form"><img src="student/images/search-1.png" loading="lazy" width="25" height="25" srcset="student/images/search-1-p-500.png 500w, student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
             <div class="div-block-43">
-              <div class="name_profile_pic"><img src="student/images/user-2.png" width="60" height="60" srcset="student/images/user-2.png 500w, {{user.profile_pic.url}} 512w" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+              <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                 <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                   <div class="dropdown-toggle-2-copy w-dropdown-toggle">
                     <div class="text-block-18" id="name"></div>
@@ -136,6 +136,7 @@
                   else{
                     const fullname = data.first_name + " " + data.last_name;
                     document.getElementById("name").innerHTML = fullname;
+                    document.getElementById('image').src = "http://127.0.0.1:8000" +data.profile_pic;
                       function getCookie(name) {
                           let cookieValue = null;
                           if (document.cookie && document.cookie !== '') {
@@ -177,7 +178,6 @@
                                   reviews = value.average_reviews;
                                   occupation = value.occupation;
                                   linkedin = value.linkedIn;
-                                  if (value.linkedIn != ""){
                                     var item = `
                                       <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
                                         <div style="line-height: 14px;"class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
@@ -188,28 +188,10 @@
                                               <div class="text-block-21-copy-2">Education: ${major} at ${school}, GPA of ${gpa}</div>
                                               <div class="text-block-21-copy-2">Reviews: ${reviews} Stars</div>
                                               <div class="text-block-21-copy-2">Occupation: ${occupation}</div>
-                                              <div style="color: green; font-size: 24px;"class="text-block-21-copy-2"><strong>✓</strong></div>
                                         </div>
                                       </a>
                                     `
-                                    wrapper.innerHTML+=item
-                                  }
-                                  else{
-                                    var item = `
-                                      <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
-                                        <div style="line-height: 14px;" class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
-                                          <div class="text-block-21"><strong class="bold-text-3">${full_name}</strong></div>
-                                              <div class="text-block-21-copy">Subject: ${subject}</div>
-                                              <div class="text-block-21-copy-2">Price: ${price} hourly</div>
-                                              <div class="text-block-21-copy-2">Degree: ${education}</div>
-                                              <div class="text-block-21-copy-2">Education: ${major} at ${school}, GPA of ${gpa}</div>
-                                              <div class="text-block-21-copy-2">Reviews: ${reviews} Stars</div>
-                                              <div class="text-block-21-copy-2">Occupation: ${occupation}</div>
-                                        </div>
-                                      </a>
-                                    `
-                                    wrapper.innerHTML+=item
-                                  }
+                                    wrapper.innerHTML+=item  
                               });        
                           })
                       })
@@ -262,15 +244,15 @@
                                             },
                                         }).then((resp) => {
                                             resp.json().then((val) => {
-                                              const subject = val.subjects;
+                                              const subject = val.subjects
+                                              var s_item = `
+                                              <div class="upcoming_item">
+                                                <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><a href="http://127.0.0.1:5500/main/student/student_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
+                                              </div>
+                                              `;
+                                              started_wrapper.innerHTML +=s_item
                                             })
                                         })
-                                        var item = `
-                                        <div class="upcoming_item">
-                                          <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><a href="http://127.0.0.1:5500/main/student/student_workspace.html?session=${sessionid}"class="button-4 w-button">Join Meeting</a>
-                                        </div>
-                                        `;
-                                        started_wrapper.innerHTML +=item
                                     })
                                 })
                                 
@@ -312,13 +294,13 @@
                                     resp.json().then((data) => {
                                         const user = data.user;
                                         const tutorname = user.first_name + " " + user.last_name;
-                                        const subject = user.subjects;
-                                        var item = `
+                                        const subject = data.subjects;
+                                        var u_item = `
                                         <div class="upcoming_item">
                                           <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p></div>
                                         </div>
                                         `;
-                                        upcoming_wrapper.innerHTML +=item
+                                        upcoming_wrapper.innerHTML +=u_item
                                     })
                                 })
                                 

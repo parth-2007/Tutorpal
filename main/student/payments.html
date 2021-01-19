@@ -106,8 +106,8 @@
         body: JSON.stringify({"refresh": refreshToken})
     }).then((resp)=> {
           try{
-              resp.json().then((data) => {
-                const accessToken = data.access;
+              resp.json().then((tokendata) => {
+                const accessToken = tokendata.access;
                 fetch("http://127.0.0.1:8000/users/me/", {
                     method: "GET",
                     credentials: 'same-origin',
