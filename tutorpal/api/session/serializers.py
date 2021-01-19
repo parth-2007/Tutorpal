@@ -16,10 +16,10 @@ class SessionSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
             'tutor_emailed', 'student_emailed', 'parent_emailed',
         ]
 
-    def update(self, instance, validated_data):
-        instance.canceled = validated_data.get('canceled', instance.canceled)
-        instance.save()
-        return instance
+    # def update(self, instance, validated_data):
+    #     instance.canceled = validated_data.get('canceled', instance.canceled)
+    #     instance.save()
+    #     return instance
 
 
 class ReservedSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
