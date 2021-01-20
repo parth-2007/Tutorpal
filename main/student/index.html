@@ -137,21 +137,6 @@
                     const fullname = data.first_name + " " + data.last_name;
                     document.getElementById("name").innerHTML = fullname;
                     document.getElementById('image').src = "http://127.0.0.1:8000" +data.profile_pic;
-                      function getCookie(name) {
-                          let cookieValue = null;
-                          if (document.cookie && document.cookie !== '') {
-                              const cookies = document.cookie.split(';');
-                              for (let i = 0; i < cookies.length; i++) {
-                                  const cookie = cookies[i].trim();
-                                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                      break;
-                                  }
-                              }
-                          }
-                          return cookieValue;
-                      }
-                      const csrftoken = getCookie('csrftoken');
                       var wrapper = document.getElementById('trending');
                       fetch("http://127.0.0.1:8000/tutors/trending/", {
                           method: "GET",
@@ -180,7 +165,7 @@
                                   linkedin = value.linkedIn;
                                     var item = `
                                       <a href="http://127.0.0.1:5500/main/student/tutor-profile.html?profile=${id}" class="link-block-2 w-inline-block">
-                                        <div style="line-height: 14px;"class="div-block-54"><img src="student/images/user-2.png" loading="lazy" width="38" height="38" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="38px" alt="" class="image-5">
+                                        <div style="line-height: 14px;"class="div-block-54"><img id="tutorpfp${id}" loading="lazy" width="38" height="38" sizes="38px" alt="" class="image-5">
                                           <div class="text-block-21"><strong class="bold-text-3">${full_name}</strong></div>
                                               <div class="text-block-21-copy">Subject: ${subject}</div>
                                               <div class="text-block-21-copy-2">Price: ${price} hourly</div>
@@ -192,6 +177,8 @@
                                       </a>
                                     `
                                     wrapper.innerHTML+=item  
+                                    document.getElementById(`tutorpfp${id}`).src = user.profile_pic;
+
                               });        
                           })
                       })
