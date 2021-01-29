@@ -16,6 +16,11 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from django.utils.timezone import now
+from .jwt import MyTokenObtainPairSerializer
+# from knox.views import LoginView as KnoxLoginView
+# from knox.models import AuthToken
 
 
 def test(request):
@@ -33,10 +38,10 @@ def set_csrf_token(request):
     return Response(status=status.HTTP_200_OK, data="Set CSRF Token")
 
 
-@api_view(('GET', ))
-def logout(request):
-    logout(request)
-    return Response(status=status.HTTP_200_OK, data="Logged out")
+# @api_view(('GET', ))
+# def logout(request):
+#     logout(request)
+#     return Response(status=status.HTTP_200_OK, data="Logged out")
 
 
 # @csrf_protect
@@ -51,11 +56,53 @@ def login_view(request):
     if user is not None:
         login(request, user)
         response = Response(status=status.HTTP_200_OK, data='Logged in')
-        # response.set_cookie()
-        return response
-        # return JsonResponse('Loggged in')
+        # response['Access-Control-Allow-Credentials'] = 'true'
+        # response['Access-Control-Allow-Origin'] = '127.0.0.1:5500'
+        # response['Access-Control-Allow-Headers'] = 'true'
+        # response['Access-Control-Expose-Headers'] = 'Set-Cookie'
+        # return response
+        return Response(status=status.HTTP_200_OK, data='Logged in')
     return Response(status=status.HTTP_400_BAD_REQUEST, data='Bad Request')
     # return JsonResponse('Baf')
+
+
+# class LoginView(KnoxLoginView):
+#     permission_classes = (permissions.AllowAny,)
+
+#     def post(self, request, format=None):
+#         request_data = request.data
+#         print(request_data)
+#         request_data['username'] = request.data['email']
+#         serializer = AuthTokenSerializer(data=request_data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
+#         login(request, user)
+#         return super(LoginView, self).post(request, format=None)
+
+
+# class LoginAPIView(generics.GenericAPIView):
+#     permission_classes = (permissions.AllowAny,)
+
+#     # @csrf_protect
+#     def post(self, request, format=None):
+#         user = authenticate(email=request.data.get(
+#             'email'), password=request.data.get('password'))
+#         return Response({
+#             "user": UserOwnerSerializer(user).data,
+#             "token": AuthToken.objects.create(user)[1]
+#         })
+
+
+@csrf_protect
+@api_view(('POST',))
+def login(request):
+    if request.method == "POST":
+        user = authenticate(email=request.data.get(
+            'email'), password=request.data.get('password'))
+        return Response({
+            "user": UserOwnerSerializer(user).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
 
 
 # @csrf_protect
@@ -97,8 +144,23 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return Response(data="You are not authenticated", status=status.HTTP_400_BAD_REQUEST)
 
-    def perform_create(self, serilaizer):
-        login(self.request, self.request.user)
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # token_serializer = MyTokenObtainPairSerializer(
+        #     data={'email': request.data.get('email'), 'password': request.data.get('password')})
+        # token_serializer.is_valid(raise_exception=True)
+        response = Response(data={
+            "user": UserOwnerSerializer(user, context=self.get_serializer_context()).data,
+            # "access": token_serializer.data.get('access'),
+        }, headers={'Access-Control-Allow-Origin': '*'})
+        # response.set_cookie(
+        #     'refresh', token_serializer.data.get('refresh'))
+        return response
+
+    # def perform_create(self, serilaizer):
+    #     login(self.request, self.request.user)
 
 
 class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
@@ -147,7 +209,6 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        logout(self.request, self.request.user)
 
 
 class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
@@ -170,7 +231,6 @@ class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        logout(self.request, self.request.user)
 
 
 class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
@@ -213,6 +273,7 @@ class ChangePasswordView(generics.UpdateAPIView):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
+            self.object.last_reset = now()
             self.object.save()
             response = {
                 'status': 'success',

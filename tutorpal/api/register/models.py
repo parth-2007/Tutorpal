@@ -76,6 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     timestamp = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(
         default='person.png', upload_to='profile_pics/')
+    last_reset = models.DateTimeField(auto_now_add=True)
     # notice the absence of a "Password field", that is built in.
 
     USERNAME_FIELD = 'email'
