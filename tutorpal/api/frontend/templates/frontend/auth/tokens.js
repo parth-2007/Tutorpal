@@ -38,6 +38,22 @@ const refreshToken = () => {
     });
 };
 
+const logout = () => {
+    fetch('http://127.0.0.1:8000/api-auth/token/logout/').then((resp)=> 
+    {
+        try {
+            resp.json().then((data) => {
+                console.log(data);
+                return data
+            })
+        } catch (e) {
+            console.warn(e)
+            return e
+        }
+    });
+};
+
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

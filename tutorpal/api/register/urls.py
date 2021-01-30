@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from . import views as v
 from django.views.decorators.csrf import csrf_exempt
 # from knox import views as knox_views
-from .jwt import jwt_test, MyTokenObtainPairView, MyTokenRefreshView, refresh_token_from_cookie, loginproxyurl
+from .jwt import jwt_test, MyTokenObtainPairView, MyTokenRefreshView, refresh_token_from_cookie, cookie_logout
 from rest_framework_simplejwt import views as jwt_views
 
 router = DefaultRouter()
@@ -26,8 +26,8 @@ urlpatterns = [
          name='token_obtain_pair'),
     # path('api-auth/token/refresh/', jwt_views.TokenRefreshView.as_view(),
     #      name='token_refresh'),
-    path('api-auth/token/refresh/', MyTokenRefreshView.as_view(),
-         name='token_refresh'),
-    path('api-auth/token/cookie-refresh/', refresh_token_from_cookie),
-    path('loginproxyurl/', loginproxyurl)
+    #     path('api-auth/token/refresh/', MyTokenRefreshView.as_view(),
+    #          name='token_refresh'),
+    path('api-auth/token/refresh/', refresh_token_from_cookie),
+    path('api-auth/token/logout/', cookie_logout)
 ]

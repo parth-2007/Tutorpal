@@ -128,14 +128,15 @@ class MyTokenRefreshView(TokenViewBase):
 def refresh_token_from_cookie(request):
     refresh_token = request.COOKIES.get('refresh')
     serializer = MyTokenRefreshSerializer(data={"refresh": refresh_token})
-    user_data = UserOwnerSerializer(
-        User.objects.get(pk=RefreshToken(refresh_token)['user_id'])).data
     try:
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
+        user_data = UserOwnerSerializer(
+            User.objects.get(pk=RefreshToken(refresh_token)['user_id'])).data
         data['user'] = user_data
     except TokenError as e:
-        raise InvalidToken(e.args[0])
+        # raise InvalidToken(e.args[0])
+        data = {'error': e.args[0]}
     if "error" in data:
         response = Response(data=data, status=status.HTTP_403_FORBIDDEN)
         return response
@@ -144,10 +145,17 @@ def refresh_token_from_cookie(request):
         return response
 
 
-myTokens = {
-    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYxMTUyNDEzMCwianRpIjoiODRhNWNkMTc3NmIyNGEwZWJhZDgwOGI0ZGZkZjZiMjciLCJ1c2VyX2lkIjo1LCJpc3N1ZWQiOiIyMDIxLTAxLTIzIDIxOjM1OjMwLjc0MzY1OCswMDowMCJ9.v4YQDbDVm3oh_bNgHUaUT7SUR4uReQmFSTIIvKUNVwE",
-    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjExNDM4MDMwLCJqdGkiOiJmNjc5Njc1ODZjZTI0MTE1YTkyOGM4OTUxN2ExZWIxYiIsInVzZXJfaWQiOjUsImlzc3VlZCI6IjIwMjEtMDEtMjMgMjE6MzU6MzAuNzQzNjU4KzAwOjAwIn0.t1Voc9CSnsm9-fpsGKTPFia1Fo2iW2wRCB0X8I1PNpI"
-}
+@api_view()
+def cookie_logout(request):
+    try:
+        refresh_token = RefreshToken(request.COOKIES.get('refresh'))
+        refresh_token.blacklist()
+        response = Response(data="Successfully logged out",
+                            status=status.HTTP_200_OK)
+        response.delete_cookie('refresh')
+        return response
+    except TokenError as e:
+        return Response(data=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view()
@@ -166,8 +174,3 @@ def jwt_test(request):
     if user.last_reset < issued:
         print("\nduifhasdfdsjfuasjfk\n")
     return Response(data={"id": str(user_id)})
-
-
-@api_view()
-def loginproxyurl(request):
-    return Response(data={'hi': 'my target proxy'}, status=status.HTTP_200_OK)
