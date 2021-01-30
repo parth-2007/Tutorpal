@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+    path('', include('frontend.urls'))
     # re_path(r'api/token-auth/', include('knox.urls'))
 ]
 

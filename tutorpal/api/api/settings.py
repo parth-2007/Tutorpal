@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'register.apps.RegisterConfig',
     'chat',
     'session',
+    'frontend',
     'corsheaders',
     'channels',
     'rest_framework',
@@ -52,6 +53,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     # 'knox',
 ]
+
+REST_PROXY = {
+    'HOST': 'http://127.0.0.1:8000/loginproxyurl'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

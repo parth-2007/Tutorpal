@@ -14,6 +14,7 @@ import json
 from rest_framework import serializers
 from datetime import datetime
 from django.conf import settings
+from .serializers import UserOwnerSerializer
 
 
 def get_token_data_from_token(token):
@@ -127,9 +128,12 @@ class MyTokenRefreshView(TokenViewBase):
 def refresh_token_from_cookie(request):
     refresh_token = request.COOKIES.get('refresh')
     serializer = MyTokenRefreshSerializer(data={"refresh": refresh_token})
+    user_data = UserOwnerSerializer(
+        User.objects.get(pk=RefreshToken(refresh_token)['user_id'])).data
     try:
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
+        data['user'] = user_data
     except TokenError as e:
         raise InvalidToken(e.args[0])
     if "error" in data:
