@@ -81,7 +81,7 @@ class MyTokenViewBase(TokenViewBase):
             return response
         elif "refresh" and "access" in data:
             response = Response(data=data, status=status.HTTP_200_OK)
-            response.set_cookie('refresh', data.get('refresh'))
+            response.set_cookie('refresh', data.get('refresh'), httponly=True)
             return response
         else:
             response = Response(data=data, status=status.HTTP_200_OK)
