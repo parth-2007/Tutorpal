@@ -21,6 +21,8 @@ from django.utils.timezone import now
 from .jwt import MyTokenObtainPairSerializer
 # from knox.views import LoginView as KnoxLoginView
 # from knox.models import AuthToken
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 def test(request):
@@ -123,6 +125,10 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserViewingSerializer
     permission_classes = [DRYPermissions]
 
+    @method_decorator(cache_page(60*15))  # may want to edit this
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_serializer_class(self):
         if self.action == "list":
             return UserViewingSerializer
@@ -154,7 +160,7 @@ class UserViewSet(viewsets.ModelViewSet):
         response = Response(data={
             "user": UserOwnerSerializer(user, context=self.get_serializer_context()).data,
             # "access": token_serializer.data.get('access'),
-        }, headers={'Access-Control-Allow-Origin': '*'})
+        })
         # response.set_cookie(
         #     'refresh', token_serializer.data.get('refresh'))
         return response
@@ -167,6 +173,10 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     queryset = Tutor.objects.all()
     serializer_class = TutorViewingSerializer
     permission_classes = [DRYPermissions]
+
+    @method_decorator(cache_page(60*15))  # may want to edit this
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -215,6 +225,10 @@ class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentViewingSerializer
     permission_classes = [DRYPermissions]
+
+    @method_decorator(cache_page(60*15))  # may want to edit this
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action == "list":

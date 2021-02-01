@@ -1,6 +1,7 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers, status
 from django_restql.mixins import DynamicFieldsMixin
+from django_auto_prefetching import AutoPrefetchViewSetMixin
 # from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -65,7 +66,7 @@ class UserOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         return user
 
 
-class StudentOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class StudentOwnerSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
 
     class Meta:
@@ -76,7 +77,7 @@ class StudentOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         #depth = 1
 
 
-class StudentViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class StudentViewingSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
 
     class Meta:
@@ -85,7 +86,7 @@ class StudentViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         #depth = 1
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class ReviewSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     student = StudentViewingSerializer(read_only=True)
     # tutor = TutorSerializer(read_only=True)
 
@@ -96,7 +97,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
 
 
-class TutorOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class TutorOwnerSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
     reviews = serializers.SerializerMethodField('get_reviews')
 
@@ -114,7 +115,7 @@ class TutorOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         ]
 
 
-class TutorViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class TutorViewingSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
     reviews = serializers.SerializerMethodField('get_reviews')
 

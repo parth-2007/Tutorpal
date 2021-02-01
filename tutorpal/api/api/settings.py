@@ -28,8 +28,7 @@ SECRET_KEY = '$e3o-ktfsfbnk_5z5(gboe+8&@8o%*5y5)5!p^!i3ocb*f@$rr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1',
-                 '127.0.0.1:5500']  # remove star, fix this
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # remove star, fix this
 
 
 # Application definition
@@ -72,7 +71,7 @@ MIDDLEWARE = [
 
 # CSRF_HEADER_NAME = 'X-CSRFToken'
 
-CORS_ORIGIN_ALLOW_ALL = True  # change later
+CORS_ORIGIN_ALLOW_ALL = False  # change later
 # CORS_ALLOW_CREDENTIALS = False
 
 # CORS_ALLOW_HEADERS = list(default_headers) + [
@@ -86,8 +85,6 @@ CORS_ORIGIN_ALLOW_ALL = True  # change later
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'http://localhost:5500',
-    'http://127.0.0.1:5500',
 ]
 
 SIMPLE_JWT = {
@@ -242,8 +239,8 @@ EMAIL_USE_TLS = True
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cache_table',
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
 
