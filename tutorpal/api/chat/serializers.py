@@ -12,7 +12,7 @@ class RoomSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = [
-            'tutor', 'student', 'tutor_connected', 'student_connected',
+            'id', 'tutor', 'student', 'tutor_connected', 'student_connected',
             'tutor_unread_msgs', 'student_unread_msgs', 'messages',
         ]
         # extra_kwargs = {'tutor': {'read_only': True},
@@ -25,7 +25,7 @@ class MessageSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = [
-            'room', 'author', 'message', 'timestamp', 'read',
+            'id', 'room', 'author', 'message', 'timestamp', 'read',
         ]
         # extra_kwargs = {'room': {'write_only': True}, 'author': {
         #     'write_only': True}, 'message': {'write_only': True}}

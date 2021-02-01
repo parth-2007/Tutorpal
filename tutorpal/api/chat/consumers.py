@@ -11,20 +11,19 @@ from asgiref.sync import sync_to_async
 import datetime
 import pytz
 import json
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 
 class ChatConsumer(AsyncConsumer):
     async def websocket_connect(self, event):
         print('Connected', event)
-
-        other_user = self.scope['url_route']['kwargs']['user_id']
-        me = self.scope['user']
-        self.me_user_obj = await self.get_user(email=me)
-        room_obj = await self.get_room(other_user=other_user, email=me)
+        # get my user obj and room obj
+        room_id = self.scope['url_route']['kwargs']['room_id']
+        room_obj = await self.get_room(room_id)
         self.room_obj = room_obj
-        chat_room = f"room_{room_obj.id}"
+        chat_room = f"room_{room_id}"
         self.chat_room = chat_room
-        self.last_ts = await self.get_last_ts()
         await self.channel_layer.group_add(
             chat_room,
             self.channel_name
@@ -34,64 +33,62 @@ class ChatConsumer(AsyncConsumer):
             "type": "websocket.accept"
         })
 
-        await self.connect_save_user()
-
     async def websocket_receive(self, event):
         print('Received', event)
         front_text = event.get("text", None)
         front_dict = json.loads(front_text)
         message = front_dict.get("message")
         tzname = front_dict.get("tzname")
-        if len(message.replace(" ", "")) > 0:
+        token = front_dict.get("authentication")
+        if message != None and len(message.replace(" ", "")) > 0 and token != None:
             loaded_dict_data = json.loads(front_text)
             msg = loaded_dict_data.get('message')
-            timestamp = self.last_ts
-            user_email = self.scope['user']
-            me_user_obj = self.me_user_obj
-            diff = timezone.now() - timestamp
-            if diff.seconds >= 1:
-                if tzname != "None":
-                    tzone = pytz.timezone(tzname)
-                    local_time = timezone.now().astimezone(tzone)
-                else:
-                    local_time = timezone.now()
-                myResponse = {
-                    'message': msg,
-                    'full_name': me_user_obj.first_name + " " + me_user_obj.last_name,
-                    'year': local_time.year,
-                    'month': local_time.month,
-                    'day': local_time.day,
-                    'hour': local_time.hour,
-                    'minute': local_time.minute,
-                    'cooldown': False,
-                    'student': me_user_obj.is_student,
-                    'tutor': me_user_obj.is_tutor,
-                }
-                await self.create_chat_message(msg)
-                #other_user_obj = User.objects.get(id=self.scope['url_route']['kwargs']['user_id'])
-                room = self.room_obj
-                # self.last_msg = created_msg
-
-                await self.channel_layer.group_send(
-                    self.chat_room,
-                    {
-                        "type": "chat_message",
-                        "text": json.dumps(myResponse)
+            try:
+                self.me_user_obj = await self.get_user_from_token(token)
+                await self.connect_save_user()
+                me_user_obj = self.me_user_obj
+                room_obj = self.room_obj
+                if await self.check_user_in_room(me_user_obj, room_obj):
+                    if tzname != "None" and tzname != None:
+                        tzone = pytz.timezone(tzname)
+                        local_time = timezone.now().astimezone(tzone)
+                    else:
+                        local_time = timezone.now()
+                    myResponse = {
+                        'message': msg,
+                        'full_name': me_user_obj.first_name + " " + me_user_obj.last_name,
+                        'year': local_time.year,
+                        'month': local_time.month,
+                        'day': local_time.day,
+                        'hour': local_time.hour,
+                        'minute': local_time.minute,
+                        'student': me_user_obj.is_student,
+                        'tutor': me_user_obj.is_tutor,
                     }
-                )
-                self.last_ts = await self.get_last_ts()
-            else:
+                    await self.create_chat_message(msg)
+                    room = self.room_obj
+                    await self.channel_layer.group_send(
+                        self.chat_room,
+                        {
+                            "type": "chat_message",
+                            "text": json.dumps(myResponse)
+                        }
+                    )
+                else:
+                    myResponse = {
+                        'error': 'not ur room lol'
+                    }
+                    await self.channel_layer.group_send(
+                        self.chat_room,
+                        {
+                            "type": "chat_message",
+                            "text": json.dumps(myResponse)
+                        }
+                    )
+
+            except TokenError as e:
                 myResponse = {
-                    'message': msg,
-                    'full_name': me_user_obj.first_name + " " + me_user_obj.last_name,
-                    'year': timezone.now().year,
-                    'month': timezone.now().month,
-                    'day': timezone.now().day,
-                    'hour': timezone.now().hour,
-                    'minute': timezone.now().minute,
-                    'cooldown': True,
-                    'student': me_user_obj.is_student,
-                    'tutor': me_user_obj.is_tutor,
+                    'error': 'Invalid Token bruh'
                 }
                 await self.channel_layer.group_send(
                     self.chat_room,
@@ -108,21 +105,16 @@ class ChatConsumer(AsyncConsumer):
         })
 
     async def websocket_disconnect(self, event):
-        await self.disconnect_save_user()
+        try:
+            await self.disconnect_save_user()
+        except:
+            pass
         print('Disconnected', event)
         raise exceptions.StopConsumer()
 
     @database_sync_to_async
-    def get_room(self, other_user, email):
-        me = User.objects.get(email=email)
-        if me.is_tutor:
-            me_obj = Tutor.objects.get(user=me)
-            other_user_obj = Student.objects.get(id=other_user)
-            return Room.objects.get(student=other_user_obj, tutor=me_obj)
-        elif me.is_student:
-            me_obj = Student.objects.get(user=me)
-            other_user_obj = Tutor.objects.get(id=other_user)
-            return Room.objects.get(tutor=other_user_obj, student=me_obj)
+    def get_room(self, id):
+        return Room.objects.get(pk=id)
 
     @database_sync_to_async
     def get_user(self, email):
@@ -160,19 +152,8 @@ class ChatConsumer(AsyncConsumer):
         return Message.objects.create(author=me_user_obj, room=room_obj, message=msg, read=read)
 
     @database_sync_to_async
-    def get_last_ts(self):
-        room_obj = self.room_obj
-        try:
-            msg = Message.objects.filter(room=room_obj).order_by('-id')[0]
-            ts = msg.timestamp
-        except:
-            ts = datetime.datetime.now() - datetime.timedelta(minutes=1)
-            ts = timezone.utc.localize(ts)
-        return ts
-
-    @database_sync_to_async
     def connect_save_user(self):
-        room_obj = Room.objects.get(id=self.room_obj.id)
+        room_obj = self.room_obj
         user_obj = self.me_user_obj
         print("connected: ", user_obj, " in ", room_obj)
         if user_obj.is_student:
@@ -208,3 +189,16 @@ class ChatConsumer(AsyncConsumer):
             print("disconnected tutor!")
             room_obj.tutor_connected = False
             room_obj.save()
+
+    @database_sync_to_async
+    def get_user_from_token(self, token: str):
+        validated_token = AccessToken(token)
+        user = User.objects.get(pk=validated_token['user_id'])
+        return user
+
+    @database_sync_to_async
+    def check_user_in_room(self, user: User, room: Room):
+        if room.student.user == user or room.tutor.user == user:
+            return True
+        else:
+            return False

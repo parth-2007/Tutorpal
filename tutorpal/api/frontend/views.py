@@ -7,6 +7,10 @@ def auth(request: HttpRequest):
     return render(request, 'frontend/auth/index.html')
 
 
+def chat(request: HttpRequest):
+    return render(request, 'frontend/chat/chat.html')
+
+
 '''
 def exampleview(request: HttpRequest):
     return render(request, 'frontend/dir_of_html_file/actualt_html_file.html')
