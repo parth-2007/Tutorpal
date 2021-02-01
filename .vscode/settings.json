@@ -1,9 +1,9 @@
 {
     "python.pythonPath": "tutorpal/env/bin/python",
     "liveServer.settings.proxy":{
-        "enable": true,
+        "enable": false,
         "baseUri": "/",
-        "proxyUri": "http://127.0.0.1:8000/loginproxyurl/",
+        "proxyUri": "http://127.0.0.1:8000/",
     },
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
