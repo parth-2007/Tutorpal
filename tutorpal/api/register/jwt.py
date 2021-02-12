@@ -110,7 +110,7 @@ class MyTokenRefreshSerializer(TokenRefreshSerializer):
         # print("\nIssued date and time: ", issued)
         # print("\nUser id:", user_id)
         user = User.objects.get(pk=user_id)
-        if issued >= user.last_reset:
+        if issued >= user.last_reset or user.last_reset is None:
             # print("\nValid token\n")
             data = super().validate(attrs)
         else:

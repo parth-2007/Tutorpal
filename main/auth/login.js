@@ -1,3 +1,4 @@
+// DO NOT USE THIS IS OUTDATED
 const login = async (email, password) => {
     await fetch('http://127.0.0.1:8000/login/', {
         method: 'POST',

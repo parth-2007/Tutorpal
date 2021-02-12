@@ -47,7 +47,7 @@ const logout = () => {
                 return data
             })
         } catch (e) {
-            console.warn(e)
+            console.log(e)
             return e
         }
     });

@@ -1,3 +1,4 @@
+// DO NOT USE THIS IS OUTDATED
 const createUser = ({email, password, is_student, is_tutor, first_name, last_name, profile_pic}) => {
     fetch('http://127.0.0.1:8000/users/', {
         method: "POST",

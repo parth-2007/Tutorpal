@@ -1,5 +1,5 @@
 from .models import User, Tutor, Student, Review
-from .serializers import UserOwnerSerializer, UserViewingSerializer, TutorOwnerSerializer, TutorViewingSerializer, StudentOwnerSerializer, StudentViewingSerializer, ReviewSerializer, ChangePasswordSerializer
+from .serializers import UserOwnerSerializer, UserViewingSerializer, TutorOwnerSerializer, TutorViewingSerializer, StudentOwnerSerializer, StudentViewingSerializer, ReviewSerializer
 from rest_framework import permissions, viewsets, status, generics
 from .permissions import IsOwnerOrReadOnly, CanMakeObj, CanMakeUser, CanMakeReview, IsUserOrReadOnly
 from rest_framework.response import Response
@@ -19,8 +19,6 @@ from django.shortcuts import render
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.utils.timezone import now
 from .jwt import MyTokenObtainPairSerializer
-# from knox.views import LoginView as KnoxLoginView
-# from knox.models import AuthToken
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
@@ -58,11 +56,6 @@ def login_view(request):
     if user is not None:
         login(request, user)
         response = Response(status=status.HTTP_200_OK, data='Logged in')
-        # response['Access-Control-Allow-Credentials'] = 'true'
-        # response['Access-Control-Allow-Origin'] = '127.0.0.1:5500'
-        # response['Access-Control-Allow-Headers'] = 'true'
-        # response['Access-Control-Expose-Headers'] = 'Set-Cookie'
-        # return response
         return Response(status=status.HTTP_200_OK, data='Logged in')
     return Response(status=status.HTTP_400_BAD_REQUEST, data='Bad Request')
     # return JsonResponse('Baf')
@@ -95,29 +88,29 @@ def login_view(request):
 #         })
 
 
-@csrf_protect
-@api_view(('POST',))
-def login(request):
-    if request.method == "POST":
-        user = authenticate(email=request.data.get(
-            'email'), password=request.data.get('password'))
-        return Response({
-            "user": UserOwnerSerializer(user).data,
-            "token": AuthToken.objects.create(user)[1]
-        })
-
-
 # @csrf_protect
-@api_view(('GET', ))
-def logout_view(request):
-    if reqest.user is not None:
-        logout(request, request.user)
-        response = Response(status=status.HTTP_200_OK, data='Logged out')
-        # response.set_cookie()
-        return response
-        # return JsonResponse('Loggged in')
-    return Response(status=status.HTTP_400_BAD_REQUEST, data="You aren't logged in")
-    # return JsonResponse('Baf')
+# @api_view(('POST',))
+# def login(request):
+#     if request.method == "POST":
+#         user = authenticate(email=request.data.get(
+#             'email'), password=request.data.get('password'))
+#         return Response({
+#             "user": UserOwnerSerializer(user).data,
+#             "token": AuthToken.objects.create(user)[1]
+#         })
+
+
+# # @csrf_protect
+# @api_view(('GET', ))
+# def logout_view(request):
+#     if reqest.user is not None:
+#         logout(request, request.user)
+#         response = Response(status=status.HTTP_200_OK, data='Logged out')
+#         # response.set_cookie()
+#         return response
+#         # return JsonResponse('Loggged in')
+#     return Response(status=status.HTTP_400_BAD_REQUEST, data="You aren't logged in")
+#     # return JsonResponse('Baf')
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -268,34 +261,29 @@ class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
             return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")
 
 
-class ChangePasswordView(generics.UpdateAPIView):
-    serializer_class = ChangePasswordSerializer
-    model = User
-    permission_classes = (IsAuthenticated, DRYPermissions)
+@api_view(('POST',))
+def register_student(request):
+    print("Got it!")
+    if request.method == "POST":
+        user_serializer = UserOwnerSerializer(data=request.data.get('user'))
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        student_serializer = StudentOwnerSerializer(
+            data=request.data.get('student'))
+        student_serializer.is_valid(raise_exception=True)
+        student = student_serializer.save(user=user)
+        return Response(data=StudentOwnerSerializer(student).data)
 
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
 
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            # Check old password
-            if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
-            # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.last_reset = now()
-            self.object.save()
-            response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'Password updated successfully',
-                'data': []
-            }
-
-            return Response(response)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(('POST',))
+def register_tutor(request):
+    print("Got it!")
+    if request.method == "POST":
+        user_serializer = UserOwnerSerializer(data=request.POST.get('user'))
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        tutor_serializer = TutorOwnerSerializer(
+            data=request.POST.get('tutor'))
+        tutor_serializer.is_valid(raise_exception=True)
+        tutor = tutor_serializer.save(user=user)
+        return Response(data=TutorOwnerSerializer(tutor).data)

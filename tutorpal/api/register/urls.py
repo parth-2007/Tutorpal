@@ -15,9 +15,9 @@ router.register(r'reviews', v.ReviewViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     # path('jwt/test/', jwt_test),
-    path('api/change-password/', v.ChangePasswordView.as_view(),
-         name='change-password'),
-    path('api/set-csrf/', v.set_csrf_token),
+    #     path('api/change-password/', v.ChangePasswordView.as_view(),
+    #          name='change-password'),
+    #     path('api/set-csrf/', v.set_csrf_token),
     # path('api/login/', csrf_exempt(v.login_view)),
     # path('api/login/', v.login_view),
     # path('api/logout/', v.logout_view),
@@ -29,5 +29,7 @@ urlpatterns = [
     #     path('api-auth/token/refresh/', MyTokenRefreshView.as_view(),
     #          name='token_refresh'),
     path('api-auth/token/refresh/', refresh_token_from_cookie),
-    path('api-auth/token/logout/', cookie_logout)
+    path('api-auth/token/logout/', cookie_logout),
+    path('register-student/', v.register_student),
+    path('register-tutor/', v.register_tutor),
 ]

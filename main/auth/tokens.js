@@ -1,3 +1,4 @@
+// DO NOT USE THIS IS OUTDATED
 const createToken = (email, password) => {
     fetch('http://127.0.0.1:8000/api-auth/token/', {
         method: "POST",
