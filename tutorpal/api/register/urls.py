@@ -30,6 +30,11 @@ urlpatterns = [
     #          name='token_refresh'),
     path('api-auth/token/refresh/', refresh_token_from_cookie),
     path('api-auth/token/logout/', cookie_logout),
-    path('register-student/', v.register_student),
-    path('register-tutor/', v.register_tutor),
+    path('api/register-student/', v.register_student),
+    path('api/register-tutor/', v.register_tutor),
+    path('api/activate-account/<uidb64>/<token>/',
+         v.activate_account, name="activate"),
+    path('api/reset-password/', v.reset_password),
+    path('api/password-reset/<uidb64>/<token>/',
+         v.password_reset, name="reset"),
 ]

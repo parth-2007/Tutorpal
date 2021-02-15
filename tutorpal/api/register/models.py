@@ -62,7 +62,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_student = models.BooleanField(default=False)
     first_name = models.CharField(max_length=50, verbose_name="First Name")
     last_name = models.CharField(max_length=50, verbose_name="Last Name")
-    email_authenticated = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(
         default='person.png', upload_to='profile_pics/')

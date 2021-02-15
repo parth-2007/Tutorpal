@@ -1,7 +1,9 @@
 from .models import User, Tutor, Student, Review
 from .serializers import UserOwnerSerializer, UserViewingSerializer, TutorOwnerSerializer, TutorViewingSerializer, StudentOwnerSerializer, StudentViewingSerializer, ReviewSerializer
-from rest_framework import permissions, viewsets, status, generics
 from .permissions import IsOwnerOrReadOnly, CanMakeObj, CanMakeUser, CanMakeReview, IsUserOrReadOnly
+from .jwt import MyTokenObtainPairSerializer
+
+from rest_framework import permissions, viewsets, status, generics
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from dry_rest_permissions.generics import DRYPermissions
@@ -12,15 +14,140 @@ from rest_framework.decorators import action, api_view
 from django.contrib.postgres.search import SearchVector
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect, requires_csrf_token
 from django.http import JsonResponse
-import json
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.utils.timezone import now
-from .jwt import MyTokenObtainPairSerializer
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+import json
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from .tokens import account_activation_token, password_reset_token
+from django.utils.encoding import force_text
+from django.core.mail import send_mail
+
+
+@api_view(('POST',))
+def register_student(request):
+    # try:
+    user_serializer = UserOwnerSerializer(data=request.data.get('user'))
+    user_serializer.is_valid(raise_exception=True)
+    user = user_serializer.save()
+    user.is_active = False
+    user.save()
+    student_serializer = StudentOwnerSerializer(
+        data=request.data.get('student'))
+    student_serializer.is_valid(raise_exception=True)
+    student = student_serializer.save(user=user)
+    # except:
+    #     return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
+
+    email = user.email
+    current_site = get_current_site(request)
+    subject = 'Confirm Your Email for TutorPal'
+    message = render_to_string('register/emails/confirm_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user)
+    })
+    send_mail(subject, message, None, [email])
+
+    return Response(data=StudentOwnerSerializer(student).data, status=status.HTTP_201_CREATED)
+
+
+@api_view(('POST',))
+def register_tutor(request):
+    try:
+        user_serializer = UserOwnerSerializer(data=request.POST.get('user'))
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer
+        user.is_active = False
+        user.save()
+        tutor_serializer = TutorOwnerSerializer(
+            data=request.POST.get('tutor'))
+        tutor_serializer.is_valid(raise_exception=True)
+        tutor = tutor_serializer.save(user=user)
+    except:
+        return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
+
+    email = user.email
+    current_site = get_current_site(request)
+    subject = 'Confirm Your Email for TutorPal'
+    message = render_to_string('register/emails/confirm-email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user)
+    })
+    send_mail(subject, message, None, [email])
+
+    return Response(data=TutorOwnerSerializer(tutor).data, status=status.HTTP_201_CREATED)
+
+
+@api_view()
+def activate_account(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
+
+    if account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return Response(data="Successfully activated account", status=status.HTTP_200_OK)
+    else:
+        return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(('POST',))
+def reset_password(request):
+    try:
+        email = request.data.get("email")
+        print(email)
+        user = User.objects.get(email=email)
+    except (AttributeError, User.DoesNotExist):
+        return Response(data="Invalid email", status=status.HTTP_400_BAD_REQUEST)
+
+    current_site = get_current_site(request)
+    subject = 'Confirm Your Email for TutorPal'
+    message = render_to_string('register/emails/reset_password.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': password_reset_token.make_token(user)
+    })
+    send_mail(subject, message, None, [email])
+
+    return Response('Sent email', status.HTTP_200_OK)
+
+
+@api_view(('POST',))
+def password_reset(request, uidb64, token):
+    try:
+        password = request.data.get('password')
+    except AttributeError:
+        return Response(data="New password not provided", status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
+
+    if user is not None and password_reset_token.check_token(user, token):
+        user.set_password(password)
+        user.last_reset = now()
+        user.save()
+        return Response(data="Successfully changed password", status=status.HTTP_200_OK)
+    else:
+        return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
 
 
 def test(request):
@@ -259,31 +386,3 @@ class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
             return Response(status=status.HTTP_201_CREATED, data=serializer_class(review).data)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")
-
-
-@api_view(('POST',))
-def register_student(request):
-    print("Got it!")
-    if request.method == "POST":
-        user_serializer = UserOwnerSerializer(data=request.data.get('user'))
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer.save()
-        student_serializer = StudentOwnerSerializer(
-            data=request.data.get('student'))
-        student_serializer.is_valid(raise_exception=True)
-        student = student_serializer.save(user=user)
-        return Response(data=StudentOwnerSerializer(student).data)
-
-
-@api_view(('POST',))
-def register_tutor(request):
-    print("Got it!")
-    if request.method == "POST":
-        user_serializer = UserOwnerSerializer(data=request.POST.get('user'))
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer.save()
-        tutor_serializer = TutorOwnerSerializer(
-            data=request.POST.get('tutor'))
-        tutor_serializer.is_valid(raise_exception=True)
-        tutor = tutor_serializer.save(user=user)
-        return Response(data=TutorOwnerSerializer(tutor).data)

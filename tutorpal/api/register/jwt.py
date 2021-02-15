@@ -67,15 +67,15 @@ class MyTokenViewBase(TokenViewBase):
     #     print(refresh_token)
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
+        # print(request.data)
         serializer = self.get_serializer(data=request.data)
-        print(serializer)
+        # print(serializer)
         try:
             serializer.is_valid(raise_exception=True)
             data = serializer.validated_data
         except TokenError as e:
             raise InvalidToken(e.args[0])
-        print("\nrequest data: ", data)
+        # print("\nrequest data: ", data)
         if "error" in data:
             response = Response(data=data, status=status.HTTP_403_FORBIDDEN)
             return response
