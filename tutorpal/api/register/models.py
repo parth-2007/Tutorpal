@@ -1,13 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User, PermissionsMixin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-import os
-from django.conf import settings
+from django.contrib.auth.models import User, PermissionsMixin, BaseUserManager, AbstractBaseUser
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# import os
+# from django.conf import settings
 from PIL import Image
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from datetime import timedelta
-from dry_rest_permissions.generics import authenticated_users
+# from dry_rest_permissions.generics import authenticated_users
 
 
 class UserManager(BaseUserManager):
@@ -111,7 +110,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @staticmethod
     def has_create_permission(request):
-        return request.user.is_anonymous
+        # return request.user.is_anonymous
+        return False
 
 
 # Create your models here.
@@ -135,12 +135,13 @@ class Student(models.Model):
         return self.user == request.user
 
     @staticmethod
-    @authenticated_users
+    # @authenticated_users
     def has_create_permission(request):
-        if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
-            return False
-        else:
-            return True
+        return False
+        # if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
+        #     return False
+        # else:
+        #     return True
 
 
 class Tutor(models.Model):
@@ -191,12 +192,13 @@ class Tutor(models.Model):
         return self.user == request.user
 
     @staticmethod
-    @authenticated_users
+    # @authenticated_users
     def has_create_permission(request):
-        if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
-            return False
-        else:
-            return True
+        return False
+        # if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
+        #     return False
+        # else:
+        #     return True
 
 
 class Review(models.Model):

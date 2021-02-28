@@ -1,18 +1,15 @@
-import asyncio
 import json
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
-from register.models import User, Student, Tutor
+from register.models import User  # , Student, Tutor
 from .models import Room, Message
 from channels import exceptions
 from django.utils import timezone
-from asgiref.sync import sync_to_async
-import datetime
 import pytz
-import json
+# from asgiref.sync import sync_to_async
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.exceptions import TokenError  # , InvalidToken
 
 
 class ChatConsumer(AsyncConsumer):
@@ -40,7 +37,7 @@ class ChatConsumer(AsyncConsumer):
         message = front_dict.get("message")
         tzname = front_dict.get("tzname")
         token = front_dict.get("authentication")
-        if message != None and len(message.replace(" ", "")) > 0 and token != None:
+        if message is not None and len(message.replace(" ", "")) > 0 and token is not None:
             loaded_dict_data = json.loads(front_text)
             msg = loaded_dict_data.get('message')
             try:
@@ -66,7 +63,7 @@ class ChatConsumer(AsyncConsumer):
                         'tutor': me_user_obj.is_tutor,
                     }
                     await self.create_chat_message(msg)
-                    room = self.room_obj
+                    # room = self.room_obj
                     await self.channel_layer.group_send(
                         self.chat_room,
                         {
@@ -86,9 +83,9 @@ class ChatConsumer(AsyncConsumer):
                         }
                     )
 
-            except TokenError as e:
+            except TokenError:
                 myResponse = {
-                    'error': 'Invalid Token bruh'
+                    'error': 'Invalid Token'
                 }
                 await self.channel_layer.group_send(
                     self.chat_room,
@@ -107,7 +104,7 @@ class ChatConsumer(AsyncConsumer):
     async def websocket_disconnect(self, event):
         try:
             await self.disconnect_save_user()
-        except:
+        except Exception:
             pass
         print('Disconnected', event)
         raise exceptions.StopConsumer()

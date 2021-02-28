@@ -1,27 +1,18 @@
 from .models import User, Tutor, Student, Review
 from .serializers import UserOwnerSerializer, UserViewingSerializer, TutorOwnerSerializer, TutorViewingSerializer, StudentOwnerSerializer, StudentViewingSerializer, ReviewSerializer
-from .permissions import IsOwnerOrReadOnly, CanMakeObj, CanMakeUser, CanMakeReview, IsUserOrReadOnly
-from .jwt import MyTokenObtainPairSerializer
+from .permissions import CanMakeReview
 
-from rest_framework import permissions, viewsets, status, generics
+from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from dry_rest_permissions.generics import DRYPermissions
 from django_auto_prefetching import AutoPrefetchViewSetMixin
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.permissions import IsAuthenticated
+# from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action, api_view
 from django.contrib.postgres.search import SearchVector
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect, requires_csrf_token
-from django.http import JsonResponse
-from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.utils.timezone import now
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-import json
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -30,64 +21,73 @@ from django.utils.encoding import force_bytes
 from .tokens import account_activation_token, password_reset_token
 from django.utils.encoding import force_text
 from django.core.mail import send_mail
+# from django.http import HttpRequest
 
 
 @api_view(('POST',))
 def register_student(request):
-    # try:
-    user_serializer = UserOwnerSerializer(data=request.data.get('user'))
-    user_serializer.is_valid(raise_exception=True)
-    user = user_serializer.save()
-    user.is_active = False
-    user.save()
-    student_serializer = StudentOwnerSerializer(
-        data=request.data.get('student'))
-    student_serializer.is_valid(raise_exception=True)
-    student = student_serializer.save(user=user)
-    # except:
-    #     return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
+    if not request.user.is_authenticated:
+        try:
+            user_serializer = UserOwnerSerializer(
+                data=request.data.get('user'))
+            user_serializer.is_valid(raise_exception=True)
+            user = user_serializer.save()
+            user.is_active = False
+            user.save()
+            student_serializer = StudentOwnerSerializer(
+                data=request.data.get('student'))
+            student_serializer.is_valid(raise_exception=True)
+            student = student_serializer.save(user=user)
+        except Exception:
+            return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
 
-    email = user.email
-    current_site = get_current_site(request)
-    subject = 'Confirm Your Email for TutorPal'
-    message = render_to_string('register/emails/confirm_email.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user)
-    })
-    send_mail(subject, message, None, [email])
+        email = user.email
+        current_site = get_current_site(request)
+        subject = 'Confirm Your Email for TutorPal'
+        message = render_to_string('register/emails/confirm_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user)
+        })
+        send_mail(subject, message, None, [email])
 
-    return Response(data=StudentOwnerSerializer(student).data, status=status.HTTP_201_CREATED)
+        return Response(data=StudentOwnerSerializer(student).data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(('POST',))
 def register_tutor(request):
-    try:
-        user_serializer = UserOwnerSerializer(data=request.POST.get('user'))
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer
-        user.is_active = False
-        user.save()
-        tutor_serializer = TutorOwnerSerializer(
-            data=request.POST.get('tutor'))
-        tutor_serializer.is_valid(raise_exception=True)
-        tutor = tutor_serializer.save(user=user)
-    except:
-        return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
+    if not request.user.is_authenticated:
+        try:
+            user_serializer = UserOwnerSerializer(
+                data=request.POST.get('user'))
+            user_serializer.is_valid(raise_exception=True)
+            user = user_serializer
+            user.is_active = False
+            user.save()
+            tutor_serializer = TutorOwnerSerializer(
+                data=request.POST.get('tutor'))
+            tutor_serializer.is_valid(raise_exception=True)
+            tutor = tutor_serializer.save(user=user)
+        except Exception:
+            return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
 
-    email = user.email
-    current_site = get_current_site(request)
-    subject = 'Confirm Your Email for TutorPal'
-    message = render_to_string('register/emails/confirm-email.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user)
-    })
-    send_mail(subject, message, None, [email])
+        email = user.email
+        current_site = get_current_site(request)
+        subject = 'Confirm Your Email for TutorPal'
+        message = render_to_string('register/emails/confirm-email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user)
+        })
+        send_mail(subject, message, None, [email])
 
-    return Response(data=TutorOwnerSerializer(tutor).data, status=status.HTTP_201_CREATED)
+        return Response(data=TutorOwnerSerializer(tutor).data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view()
@@ -159,87 +159,6 @@ def get_trending():
     return tutors
 
 
-@api_view(('GET', ))
-@ensure_csrf_cookie
-def set_csrf_token(request):
-    return Response(status=status.HTTP_200_OK, data="Set CSRF Token")
-
-
-# @api_view(('GET', ))
-# def logout(request):
-#     logout(request)
-#     return Response(status=status.HTTP_200_OK, data="Logged out")
-
-
-# @csrf_protect
-@api_view(('POST', ))
-def login_view(request):
-    email = request.data.get('email')
-    password = request.data.get('password')
-    if email is None or password is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data='Please add a valid username and password')
-        # return JsonResponse('Invalid username or password')
-    user = authenticate(email=email, password=password)
-    if user is not None:
-        login(request, user)
-        response = Response(status=status.HTTP_200_OK, data='Logged in')
-        return Response(status=status.HTTP_200_OK, data='Logged in')
-    return Response(status=status.HTTP_400_BAD_REQUEST, data='Bad Request')
-    # return JsonResponse('Baf')
-
-
-# class LoginView(KnoxLoginView):
-#     permission_classes = (permissions.AllowAny,)
-
-#     def post(self, request, format=None):
-#         request_data = request.data
-#         print(request_data)
-#         request_data['username'] = request.data['email']
-#         serializer = AuthTokenSerializer(data=request_data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         login(request, user)
-#         return super(LoginView, self).post(request, format=None)
-
-
-# class LoginAPIView(generics.GenericAPIView):
-#     permission_classes = (permissions.AllowAny,)
-
-#     # @csrf_protect
-#     def post(self, request, format=None):
-#         user = authenticate(email=request.data.get(
-#             'email'), password=request.data.get('password'))
-#         return Response({
-#             "user": UserOwnerSerializer(user).data,
-#             "token": AuthToken.objects.create(user)[1]
-#         })
-
-
-# @csrf_protect
-# @api_view(('POST',))
-# def login(request):
-#     if request.method == "POST":
-#         user = authenticate(email=request.data.get(
-#             'email'), password=request.data.get('password'))
-#         return Response({
-#             "user": UserOwnerSerializer(user).data,
-#             "token": AuthToken.objects.create(user)[1]
-#         })
-
-
-# # @csrf_protect
-# @api_view(('GET', ))
-# def logout_view(request):
-#     if reqest.user is not None:
-#         logout(request, request.user)
-#         response = Response(status=status.HTTP_200_OK, data='Logged out')
-#         # response.set_cookie()
-#         return response
-#         # return JsonResponse('Loggged in')
-#     return Response(status=status.HTTP_400_BAD_REQUEST, data="You aren't logged in")
-#     # return JsonResponse('Baf')
-
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserViewingSerializer
@@ -249,26 +168,46 @@ class UserViewSet(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return UserViewingSerializer
-        elif self.action == "retrieve":
-            pk = self.request.META.get("PATH_INFO")[7:-1]
-            try:
-                if User.objects.get(pk=pk) == self.request.user:
-                    return UserOwnerSerializer
-            except ObjectDoesNotExist:
-                return UserViewingSerializer
-            return UserViewingSerializer
-        return UserOwnerSerializer
-
-    @action(detail=False)
-    def me(self, request):
-        print(request.user)
-        if request.user.is_authenticated:
-            return Response(data=UserOwnerSerializer(request.user).data, status=status.HTTP_200_OK)
+    def get_object(self):
+        pk = self.kwargs['pk']
+        if pk == "me" and self.request.user.is_authenticated:
+            return self.request.user
         else:
-            return Response(data="You are not authenticated", status=status.HTTP_400_BAD_REQUEST)
+            return super().get_object()
+
+    def get_serializer_class(self):
+        if 'pk' in self.kwargs and self.kwargs['pk'] == "me":
+            return UserOwnerSerializer
+        else:
+            return UserViewingSerializer
+        # elif self.action == "list":
+        #     print("list called")
+        #     return UserViewingSerializer
+        # elif self.action == "retrieve":
+        #     print("retrieve called")
+        #     pk = self.request.META.get("PATH_INFO")[7:-1]
+        #     try:
+        #         if User.objects.get(pk=pk) == self.request.user:
+        #             return UserOwnerSerializer
+        #     except ObjectDoesNotExist:
+        #         return UserViewingSerializer
+        #     return UserViewingSerializer
+        # return UserOwnerSerializer
+
+    # @action(detail=False, methods=['get', 'patch', 'delete', 'put'])
+    # def me(self, request):
+    #     self.kwargs['pk'] = request.user.pk
+    #     if request.user.is_authenticated:
+    #         if request.method == "GET":
+    #             return self.retrieve(request)
+    #         elif request.method == "PATCH":
+    #             return self.partial_update(request)
+    #         elif request.method == "PUT":
+    #             return self.perform_update(request)
+    #         elif request.method == "DELETE":
+    #             return self.perform_destroy(request)
+    #     else:
+    #         return Response(data="You must be authenticated to use this endpoint", status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -298,18 +237,56 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    def get_object(self):
+        pk = self.kwargs['pk']
+        if pk == "me" and hasattr(self.request.user, 'tutor'):
+            return self.request.user.tutor
+        else:
+            return super().get_object()
+
     def get_serializer_class(self):
-        if self.action == "list":
+        if 'pk' in self.kwargs and self.kwargs['pk'] == "me":
+            return TutorOwnerSerializer
+        else:
             return TutorViewingSerializer
-        elif self.action == "retrieve":
-            pk = self.request.META.get("PATH_INFO")[8:-1]
-            try:
-                if Tutor.objects.get(pk=pk).user == self.request.user:
-                    return TutorOwnerSerializer
-            except ObjectDoesNotExist:
-                return TutorViewingSerializer
-            return TutorViewingSerializer
-        return TutorOwnerSerializer
+        # if self.action == "list":
+        #     return TutorViewingSerializer
+        # elif self.action == "retrieve":
+        #     pk = self.kwargs.get('pk')
+        #     try:
+        #         if Tutor.objects.get(pk=pk).user == self.request.user:
+        #             return TutorOwnerSerializer
+        #     except ObjectDoesNotExist:
+        #         return TutorViewingSerializer
+        #     return TutorViewingSerializer
+        # return TutorOwnerSerializer
+
+    @action(detail=False, methods=['get', 'patch', 'delete', 'put'])
+    def me(self, request):
+        self.kwargs['pk'] = request.user.pk
+        if request.user.is_authenticated:
+            if request.method == "GET":
+                return self.retrieve(request)
+            elif request.method == "PATCH":
+                print("Got here")
+                serializer = self.get_serializer(
+                    request.user, data=request.data, partial=True)
+                print(serializer)
+                serializer.is_valid(raise_exception=True)
+                return self.perform_update(serializer)
+            elif request.method == "PUT":
+                print("Got here")
+                serializer = self.get_serializer(
+                    request.user, data=request.data, partial=False)
+                print("Got here")
+                print(serializer)
+                serializer.is_valid(raise_exception=True)
+                print("Got here")
+                return self.perform_update(serializer)
+            elif request.method == "DELETE":
+                return self.perform_destroy(request.user)
+        else:
+            return Response(data="You must be authenticated to use this endpoint", status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False)
     def search(self, request):
@@ -337,6 +314,17 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         serializer_class = self.get_serializer(tutor_query, many=True)
         return Response(serializer_class.data)
 
+    @action(detail=True)
+    def reviews(self, request, pk):
+        review_query = Review.objects.filter(tutor=pk)
+        page = self.paginate_queryset(review_query)
+        if page is not None:
+            serializer_class = ReviewSerializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        serializer_class = ReviewSerializer(review_query, many=True)
+        return Response(serializer_class.data)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -350,18 +338,29 @@ class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    def get_object(self):
+        pk = self.kwargs['pk']
+        if pk == "me" and hasattr(self.request.user, 'student'):
+            return self.request.user.student
+        else:
+            return super().get_object()
+
     def get_serializer_class(self):
-        if self.action == "list":
+        if 'pk' in self.kwargs and self.kwargs['pk'] == "me":
+            return StudentOwnerSerializer
+        else:
             return StudentViewingSerializer
-        elif self.action == "retrieve":
-            pk = self.request.META.get("PATH_INFO")[10:-1]
-            try:
-                if Student.objects.get(pk=pk).user == self.request.user:
-                    return StudentOwnerSerializer
-            except ObjectDoesNotExist:
-                return StudentViewingSerializer
-            return StudentViewingSerializer
-        return StudentOwnerSerializer
+        # if self.action == "list":
+        #     return StudentViewingSerializer
+        # elif self.action == "retrieve":
+        #     pk = self.request.META.get("PATH_INFO")[10:-1]
+        #     try:
+        #         if Student.objects.get(pk=pk).user == self.request.user:
+        #             return StudentOwnerSerializer
+        #     except ObjectDoesNotExist:
+        #         return StudentViewingSerializer
+        #     return StudentViewingSerializer
+        # return StudentOwnerSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -383,6 +382,6 @@ class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
             review.save()
             tutor.average_reviews = (
                 float(tutor.average_reviews) + float(stars)) / (float(tutor.num_reviews) + 1)
-            return Response(status=status.HTTP_201_CREATED, data=serializer_class(review).data)
+            return Response(status=status.HTTP_201_CREATED, data=self.serializer_class(review).data)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")

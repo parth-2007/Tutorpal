@@ -3,7 +3,6 @@ from .models import Student, Tutor, Review
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from rest_framework.authtoken.models import Token
 from .models import User
 # Register your models here.
 

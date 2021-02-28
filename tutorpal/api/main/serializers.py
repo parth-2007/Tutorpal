@@ -1,15 +1,14 @@
 from .models import Bugs, Feedback
-from rest_framework import serializers, status
-from django_restql.mixins import DynamicFieldsMixin
+from rest_framework import serializers
 
 
-class BugSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class BugSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bugs
         fields = ['bug', 'level']
 
 
-class FeedbackSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['text']

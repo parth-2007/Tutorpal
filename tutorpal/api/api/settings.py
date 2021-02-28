@@ -50,12 +50,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'dry_rest_permissions',
     'rest_framework_simplejwt.token_blacklist',
-    # 'knox',
+    'drf_yasg',
 ]
 
-REST_PROXY = {
-    'HOST': 'http://127.0.0.1:8000/loginproxyurl'
-}
+# REST_PROXY = {
+#     'HOST': 'http://127.0.0.1:8000/loginproxyurl'
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -172,15 +172,18 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': os.environ.get("DB_NAME"),
+        'NAME': 'tutor_pal',
+        # 'NAME': 'posgtres',
 
-        'USER': os.environ.get("DB_USER"),
+        'USER': '',
+        # 'USER': 'postgres',
 
-        'PASSWORD': os.environ.get("DB_PASS"),
+        'PASSWORD': '',
+        # 'PASSWORD': 'postgres',
 
         'HOST': 'localhost',
 
-        'PORT': '5432',
+        'PORT': 5432,
 
     }
 

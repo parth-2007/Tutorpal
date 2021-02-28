@@ -1,10 +1,9 @@
 from .models import Room, Message
 from rest_framework import serializers
-from django_restql.mixins import DynamicFieldsMixin
 from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
-class RoomSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class RoomSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     # messages = serializers.SerializerMethodField('get_messages')
 
     # def get_messages(self, room):
@@ -20,7 +19,7 @@ class RoomSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.M
         #                 'student': {'read_only': True}}
 
 
-class MessageSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class MessageSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     room = RoomSerializer(read_only=True)
 
     class Meta:

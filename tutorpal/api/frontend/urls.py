@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from .views import auth, chat
-from django.conf.urls.static import static
+# from django.conf.urls.static import static
 from django.views.static import serve
 import os
 

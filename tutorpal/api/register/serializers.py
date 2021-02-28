@@ -1,25 +1,25 @@
 from .models import User, Student, Tutor, Review
-from rest_framework import serializers, status
-from django_restql.mixins import DynamicFieldsMixin
+from rest_framework import serializers
 from django_auto_prefetching import AutoPrefetchViewSetMixin
-# from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
+from typing import Union
 
 
-class UserViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class UserViewingSerializer(serializers.ModelSerializer):
     student = serializers.SerializerMethodField('get_tutor_pk')
     tutor = serializers.SerializerMethodField('get_student_pk')
 
-    def get_tutor_pk(self, user):
+    def get_tutor_pk(self, user: User) -> Union[int, None]:
         try:
             tutor = user.tutor.pk
-        except:
+        except ObjectDoesNotExist:
             tutor = None
         return tutor
 
-    def get_student_pk(self, user):
+    def get_student_pk(self, user: User) -> Union[int, None]:
         try:
             student = user.student.pk
-        except:
+        except ObjectDoesNotExist:
             student = None
         return student
 
@@ -30,33 +30,33 @@ class UserViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         ]
 
 
-class UserOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class UserOwnerSerializer(serializers.ModelSerializer):
     student = serializers.SerializerMethodField('get_tutor_pk')
     tutor = serializers.SerializerMethodField('get_student_pk')
 
-    def get_tutor_pk(self, user):
+    def get_tutor_pk(self, user: User) -> Union[int, None]:
         try:
             tutor = user.tutor.pk
-        except:
+        except ObjectDoesNotExist:
             tutor = None
         return tutor
 
-    def get_student_pk(self, user):
+    def get_student_pk(self, user: User) -> Union[int, None]:
         try:
             student = user.student.pk
-        except:
+        except ObjectDoesNotExist:
             student = None
         return student
 
     class Meta:
         model = User
         fields = [
-            'id', 'email', 'password', 'is_student', 'is_tutor',
+            'id', 'email', 'is_student', 'is_tutor',
             'first_name', 'last_name', 'profile_pic',
             'student', 'tutor',
         ]
-        extra_kwargs = {'password': {'write_only': True}, 'is_student': {
-            'write_only': True}, 'is_tutor': {'write_only': True}}
+        # extra_kwargs = {'is_student': {'write_only': True},
+        #                 'is_tutor': {'write_only': True}}
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -67,7 +67,7 @@ class UserOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         return user
 
 
-class StudentOwnerSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class StudentOwnerSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
 
     class Meta:
@@ -75,16 +75,16 @@ class StudentOwnerSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, seria
         fields = [
             'id', 'user', 'parent_email', 'birth_date'
         ]
-        #depth = 1
+        # depth = 1
 
 
-class StudentViewingSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class StudentViewingSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
 
     class Meta:
         model = Student
         fields = ['id', 'user']
-        #depth = 1
+        # depth = 1
 
 
 class ReviewSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
@@ -98,12 +98,12 @@ class ReviewSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
         ]
 
 
-class TutorOwnerSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class TutorOwnerSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
-    reviews = serializers.SerializerMethodField('get_reviews')
+    # reviews = serializers.SerializerMethodField('get_reviews')
 
-    def get_reviews(self, tutor):
-        return ReviewSerializer(instance=Review.objects.filter(tutor=tutor), many=True).data
+    # def get_reviews(self, tutor):
+    #     return ReviewSerializer(instance=Review.objects.filter(tutor=tutor), many=True).data
 
     class Meta:
         model = Tutor
@@ -112,16 +112,19 @@ class TutorOwnerSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, seriali
             'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews',
-            'free_tutoring_given', 'paypal_email', 'reviews'
+            'free_tutoring_given', 'paypal_email',  # 'reviews'
         ]
 
+    extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
+        'read_only': True}, 'free_tutoring_given': {'read_only': True}}
 
-class TutorViewingSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+
+class TutorViewingSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
-    reviews = serializers.SerializerMethodField('get_reviews')
+    # reviews = serializers.SerializerMethodField('get_reviews')
 
-    def get_reviews(self, tutor):
-        return ReviewSerializer(instance=Review.objects.filter(tutor=tutor)[:50], many=True).data
+    # def get_reviews(self, tutor):
+    #     return ReviewSerializer(instance=Review.objects.filter(tutor=tutor)[:50], many=True).data
 
     class Meta:
         model = Tutor
@@ -129,7 +132,7 @@ class TutorViewingSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, seria
             'id', 'user', 'qualifications', 'what_you_teach',
             'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
-            'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given', 'reviews'
+            'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given',  # 'reviews'
         ]
     extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
         'read_only': True}, 'free_tutoring_given': {'read_only': True}}

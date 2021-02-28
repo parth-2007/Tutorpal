@@ -2,7 +2,6 @@ from .models import Session
 from .serializers import SessionSerializer, ReservedSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from dry_rest_permissions.generics import DRYPermissions
 from django.core.exceptions import ObjectDoesNotExist
 from django_auto_prefetching import AutoPrefetchViewSetMixin
@@ -102,7 +101,7 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
             serializer_class = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer_class.data)
 
-        serializer_class = self.get_serializer(my_sessions, many=True)
+        serializer_class = self.get_serializer(session_queryset, many=True)
         return Response(serializer_class.data)
 
     @action(detail=False, permission_classes=[IsAuthenticated])

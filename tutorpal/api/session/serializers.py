@@ -1,10 +1,9 @@
 from .models import Session
-from rest_framework import serializers, status
-from django_restql.mixins import DynamicFieldsMixin
+from rest_framework import serializers
 from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
-class SessionSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class SessionSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
@@ -23,7 +22,7 @@ class SessionSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializer
     #     return instance
 
 
-class ReservedSerializer(AutoPrefetchViewSetMixin, DynamicFieldsMixin, serializers.ModelSerializer):
+class ReservedSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [

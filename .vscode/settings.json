@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "tutorpal/env/bin/python",
+    "python.pythonPath": "tutorpal/venv/bin/python",
     "liveServer.settings.proxy":{
         "enable": false,
         "baseUri": "/",
@@ -7,6 +7,11 @@
     },
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.linting.flake8Enabled": false,
-    "python.linting.pylamaEnabled": false
+    "python.linting.pylamaEnabled": true,
+    "python.linting.pycodestyleArgs": [
+        "--ignore=E501"
+    ],
+    "python.linting.pylamaArgs": [
+        "--ignore=E501",
+    ]
 }

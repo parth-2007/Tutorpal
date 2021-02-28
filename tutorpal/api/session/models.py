@@ -1,7 +1,5 @@
 from django.db import models
 from register.models import Tutor, Student
-import datetime
-from django.utils.timezone import now
 from dry_rest_permissions.generics import authenticated_users
 
 # Create your models here.
