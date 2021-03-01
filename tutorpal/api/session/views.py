@@ -20,13 +20,15 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         if self.action == "list":
             return ReservedSerializer
         elif self.action == "retrieve":
-            pk = self.request.META.get("PATH_INFO")[10:-1]
+            pk = self.kwargs.get('pk')
             try:
                 if Session.objects.get(pk=pk).tutor.user == self.request.user or Session.objects.get(pk=pk).student.user == self.request.user:
                     return SessionSerializer
             except ObjectDoesNotExist:
                 return ReservedSerializer
             return ReservedSerializer
+        # elif self.action in ["my_sessions", "pending_on_tutor", "pending_on_student_payment", "upcoming", "tutor_not_paid", "finished_sessions", "canceled_sessions", "started_sessions"]:
+        #     return SessionSerializer
         return SessionSerializer
 
     @action(detail=False, permission_classes=[IsAuthenticated])
@@ -179,6 +181,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
         serializer_class = self.get_serializer(session_queryset, many=True)
         return Response(serializer_class.data)
+
+    # @action(detail=True)
+    # def pay_tutor(self, request):
+    #     if hasattr(request.user, 'tutor'):
 
     def perform_create(self, serializer):
         serializer.save(student=self.request.user.student)

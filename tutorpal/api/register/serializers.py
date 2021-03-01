@@ -1,38 +1,45 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
-from django_auto_prefetching import AutoPrefetchViewSetMixin
 from django.core.exceptions import ObjectDoesNotExist
 from typing import Union
 
 
 class UserViewingSerializer(serializers.ModelSerializer):
-    student = serializers.SerializerMethodField('get_tutor_pk')
-    tutor = serializers.SerializerMethodField('get_student_pk')
+    # student = serializers.SerializerMethodField('get_tutor_pk')
+    # tutor = serializers.SerializerMethodField('get_student_pk')
 
     def get_tutor_pk(self, user: User) -> Union[int, None]:
-        try:
-            tutor = user.tutor.pk
-        except ObjectDoesNotExist:
-            tutor = None
-        return tutor
+        if hasattr(user, 'tutor'):
+            return user.tutor.pk
+        else:
+            return None
+        # try:
+        #     tutor = user.tutor.pk
+        # except ObjectDoesNotExist:
+        #     tutor = None
+        # return tutor
 
     def get_student_pk(self, user: User) -> Union[int, None]:
-        try:
-            student = user.student.pk
-        except ObjectDoesNotExist:
-            student = None
-        return student
+        if hasattr(user, 'student'):
+            return user.student.pk
+        else:
+            return None
+        # try:
+        #     student = user.student.pk
+        # except ObjectDoesNotExist:
+        #     student = None
+        # return student
 
     class Meta:
         model = User
         fields = [
-            'id', 'first_name', 'last_name', 'profile_pic', 'student', 'tutor'
+            'id', 'first_name', 'last_name', 'profile_pic',  # 'student', 'tutor'
         ]
 
 
 class UserOwnerSerializer(serializers.ModelSerializer):
-    student = serializers.SerializerMethodField('get_tutor_pk')
-    tutor = serializers.SerializerMethodField('get_student_pk')
+    # student = serializers.SerializerMethodField('get_tutor_pk')
+    # tutor = serializers.SerializerMethodField('get_student_pk')
 
     def get_tutor_pk(self, user: User) -> Union[int, None]:
         try:
@@ -53,7 +60,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'email', 'is_student', 'is_tutor',
             'first_name', 'last_name', 'profile_pic',
-            'student', 'tutor',
+            # 'student', 'tutor',
         ]
         # extra_kwargs = {'is_student': {'write_only': True},
         #                 'is_tutor': {'write_only': True}}
@@ -67,7 +74,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
         return user
 
 
-class StudentOwnerSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class StudentOwnerSerializer(serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
 
     class Meta:
@@ -78,7 +85,7 @@ class StudentOwnerSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializ
         # depth = 1
 
 
-class StudentViewingSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class StudentViewingSerializer(serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
 
     class Meta:
@@ -87,7 +94,7 @@ class StudentViewingSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerial
         # depth = 1
 
 
-class ReviewSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     student = StudentViewingSerializer(read_only=True)
     # tutor = TutorSerializer(read_only=True)
 
@@ -98,7 +105,7 @@ class ReviewSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
         ]
 
 
-class TutorOwnerSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class TutorOwnerSerializer(serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
     # reviews = serializers.SerializerMethodField('get_reviews')
 
@@ -119,7 +126,7 @@ class TutorOwnerSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer
         'read_only': True}, 'free_tutoring_given': {'read_only': True}}
 
 
-class TutorViewingSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class TutorViewingSerializer(serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
     # reviews = serializers.SerializerMethodField('get_reviews')
 

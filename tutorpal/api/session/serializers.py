@@ -1,9 +1,8 @@
 from .models import Session
 from rest_framework import serializers
-from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
-class SessionSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
@@ -22,7 +21,7 @@ class SessionSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     #     return instance
 
 
-class ReservedSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
+class ReservedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [

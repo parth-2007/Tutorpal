@@ -50,8 +50,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'dry_rest_permissions',
     'rest_framework_simplejwt.token_blacklist',
-    'drf_yasg',
+    'drf_yasg',  # remove in prod
+    'debug_toolbar',  # remove in prod
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 
 # REST_PROXY = {
 #     'HOST': 'http://127.0.0.1:8000/loginproxyurl'
@@ -67,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'session.middleware.timezonemiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 # CSRF_HEADER_NAME = 'X-CSRFToken'

@@ -160,7 +160,7 @@ def get_trending():
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().select_related('student', 'tutor')
     serializer_class = UserViewingSerializer
     permission_classes = [DRYPermissions]
 
@@ -169,9 +169,10 @@ class UserViewSet(viewsets.ModelViewSet):
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
-        pk = self.kwargs['pk']
-        if pk == "me" and self.request.user.is_authenticated:
-            return self.request.user
+        if self.action == "retrieve":
+            pk = self.kwargs['pk']
+            if pk == "me" and self.request.user.is_authenticated:
+                return self.request.user
         else:
             return super().get_object()
 
@@ -209,33 +210,60 @@ class UserViewSet(viewsets.ModelViewSet):
     #     else:
     #         return Response(data="You must be authenticated to use this endpoint", status=status.HTTP_400_BAD_REQUEST)
 
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        # token_serializer = MyTokenObtainPairSerializer(
-        #     data={'email': request.data.get('email'), 'password': request.data.get('password')})
-        # token_serializer.is_valid(raise_exception=True)
-        response = Response(data={
-            "user": UserOwnerSerializer(user, context=self.get_serializer_context()).data,
-            # "access": token_serializer.data.get('access'),
-        })
-        # response.set_cookie(
-        #     'refresh', token_serializer.data.get('refresh'))
-        return response
+    @action(detail=True)
+    def student(self, request, pk):
+        if hasattr(request.user, 'student'):
+            if pk == "me":
+                serializer = StudentOwnerSerializer(request.user.student)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                serializer = StudentViewingSerializer(request.user.student)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(data="User has no Student", status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True)
+    def tutor(self, request, pk):
+        if hasattr(request.user, 'tutor'):
+            if pk == "me":
+                serializer = TutorOwnerSerializer(request.user.tutor)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                serializer = TutorViewingSerializer(request.user.tutor)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(data="User has no Tutor", status=status.HTTP_404_NOT_FOUND)
+
+    # def create(self, request):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     user = serializer.save()
+    #     # token_serializer = MyTokenObtainPairSerializer(
+    #     #     data={'email': request.data.get('email'), 'password': request.data.get('password')})
+    #     # token_serializer.is_valid(raise_exception=True)
+    #     response = Response(data={
+    #         "user": UserOwnerSerializer(user, context=self.get_serializer_context()).data,
+    #         # "access": token_serializer.data.get('access'),
+    #     })
+    #     # response.set_cookie(
+    #     #     'refresh', token_serializer.data.get('refresh'))
+    #     return response
 
     # def perform_create(self, serilaizer):
     #     login(self.request, self.request.user)
 
 
-class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
-    queryset = Tutor.objects.all()
+class TutorViewSet(viewsets.ModelViewSet):
+    queryset = Tutor.objects.all().select_related('user')
     serializer_class = TutorViewingSerializer
     permission_classes = [DRYPermissions]
 
     @method_decorator(cache_page(60*15))  # may want to edit this
     def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+        response = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        print('# of Queries: {}'.format(len(connection.queries)))
+        return response
 
     def get_object(self):
         pk = self.kwargs['pk']
@@ -261,32 +289,28 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         #     return TutorViewingSerializer
         # return TutorOwnerSerializer
 
-    @action(detail=False, methods=['get', 'patch', 'delete', 'put'])
-    def me(self, request):
-        self.kwargs['pk'] = request.user.pk
-        if request.user.is_authenticated:
-            if request.method == "GET":
-                return self.retrieve(request)
-            elif request.method == "PATCH":
-                print("Got here")
-                serializer = self.get_serializer(
-                    request.user, data=request.data, partial=True)
-                print(serializer)
-                serializer.is_valid(raise_exception=True)
-                return self.perform_update(serializer)
-            elif request.method == "PUT":
-                print("Got here")
-                serializer = self.get_serializer(
-                    request.user, data=request.data, partial=False)
-                print("Got here")
-                print(serializer)
-                serializer.is_valid(raise_exception=True)
-                print("Got here")
-                return self.perform_update(serializer)
-            elif request.method == "DELETE":
-                return self.perform_destroy(request.user)
-        else:
-            return Response(data="You must be authenticated to use this endpoint", status=status.HTTP_400_BAD_REQUEST)
+    # @action(detail=False, methods=['get', 'patch', 'delete', 'put'])
+    # def me(self, request):
+    #     self.kwargs['pk'] = request.user.pk
+    #     if request.user.is_authenticated:
+    #         if request.method == "GET":
+    #             return self.retrieve(request)
+    #         elif request.method == "PATCH":
+    #             serializer = self.get_serializer(
+    #                 request.user, data=request.data, partial=True)
+    #             print(serializer)
+    #             serializer.is_valid(raise_exception=True)
+    #             return self.perform_update(serializer)
+    #         elif request.method == "PUT":
+    #             serializer = self.get_serializer(
+    #                 request.user, data=request.data, partial=False)
+    #             print(serializer)
+    #             serializer.is_valid(raise_exception=True)
+    #             return self.perform_update(serializer)
+    #         elif request.method == "DELETE":
+    #             return self.perform_destroy(request.user)
+    #     else:
+    #         return Response(data="You must be authenticated to use this endpoint", status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False)
     def search(self, request):
@@ -329,14 +353,17 @@ class TutorViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
-    queryset = Student.objects.all()
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all().select_related('user')
     serializer_class = StudentViewingSerializer
     permission_classes = [DRYPermissions]
 
     @method_decorator(cache_page(60*15))  # may want to edit this
     def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+        response = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        print('# of Queries: {}'.format(len(connection.queries)))
+        return response
 
     def get_object(self):
         pk = self.kwargs['pk']
@@ -366,8 +393,9 @@ class StudentViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class ReviewViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all().select_related(
+        'student', 'student__user', 'tutor')
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, CanMakeReview]
 
