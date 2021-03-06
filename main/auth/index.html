@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<!-- DO NOT USE THIS IS OUTDATED -->
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -7,36 +8,30 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <!-- <script src='tokens.js'></script>
     <script src='test.js'></script> -->
-    <script src="login.js"></script>
+    <script src="register.js"></script>
+    <script src="tokens.js"></script>
 </head>
+
 <body>
     <script>
-        /*
-        First: create the inital access token with a user's email and password
-        createToken(email, password)
-        this creates the access and refresh token
-        Second: call refresh token frequently to refresh a user's access token, or else they can't login
-        refreshToken();
-        if refreshToken isn't called within 24 hours, the user is logged out
-        Third:
-        this is to get the refresh tokens
-        const myAccessToken = localStorage.getItem("access");
-        const myRefreshToken = localStorage.getItem("refresh");
-        this is a test that takes in a user's access token and returns their data from the api
-        getMyData(myAccessToken);
-        go to test.js to see the function
-        */
-        // var csrfToken = getCSRF();
         // var csrfToken = getCookie('csrftoken');
         // console.log(getCookie('csrftoken'));
-        login("sarosh.thalappil@gmail.com", "7Ff7cVu2Rn5O");
-        console.log(document.cookie);
-        // const shown = document.cookie;
-        // document.getElementById("root").innerHTML = '<p>' + JSON.stringify(shown) + '</p>';
-        // getMyData();
-        
+        // login("sarosh.thalappil@gmail.com", "7Ff7cVu2Rn5O");
+        // const token = "d692b84f34e42ab3cf853a30c79e6d1b847a7035f05b2e48eedb8f039b1e7d54";
+        // getMyData(token);
+        user = {
+            email: "student@student.student",
+            password: "student",
+            is_student: true,
+            is_tutor: false,
+            first_name: 'Student',
+            last_name: 'Student',
+            profile_pic: null,
+        }
+        createUser(user)
     </script>
     <div id="root">
     </div>
 </body>
+
 </html>

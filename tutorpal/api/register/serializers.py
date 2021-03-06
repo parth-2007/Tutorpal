@@ -1,71 +1,80 @@
 from .models import User, Student, Tutor, Review
-from rest_framework import serializers, status
-from django_restql.mixins import DynamicFieldsMixin
-# from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import serializers
+from django.core.exceptions import ObjectDoesNotExist
+from typing import Union
 
 
-class UserViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
-    student = serializers.SerializerMethodField('get_tutor_pk')
-    tutor = serializers.SerializerMethodField('get_student_pk')
+class UserViewingSerializer(serializers.ModelSerializer):
+    # student = serializers.SerializerMethodField('get_tutor_pk')
+    # tutor = serializers.SerializerMethodField('get_student_pk')
 
-    def get_tutor_pk(self, user):
-        try:
-            tutor = user.tutor.pk
-        except:
-            tutor = None
-        return tutor
+    def get_tutor_pk(self, user: User) -> Union[int, None]:
+        if hasattr(user, 'tutor'):
+            return user.tutor.pk
+        else:
+            return None
+        # try:
+        #     tutor = user.tutor.pk
+        # except ObjectDoesNotExist:
+        #     tutor = None
+        # return tutor
 
-    def get_student_pk(self, user):
-        try:
-            student = user.student.pk
-        except:
-            student = None
-        return student
+    def get_student_pk(self, user: User) -> Union[int, None]:
+        if hasattr(user, 'student'):
+            return user.student.pk
+        else:
+            return None
+        # try:
+        #     student = user.student.pk
+        # except ObjectDoesNotExist:
+        #     student = None
+        # return student
 
     class Meta:
         model = User
         fields = [
-            'id', 'first_name', 'last_name', 'profile_pic', 'student', 'tutor'
+            'id', 'first_name', 'last_name', 'profile_pic',  # 'student', 'tutor'
         ]
 
 
-class UserOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
-    student = serializers.SerializerMethodField('get_tutor_pk')
-    tutor = serializers.SerializerMethodField('get_student_pk')
+class UserOwnerSerializer(serializers.ModelSerializer):
+    # student = serializers.SerializerMethodField('get_tutor_pk')
+    # tutor = serializers.SerializerMethodField('get_student_pk')
 
-    def get_tutor_pk(self, user):
+    def get_tutor_pk(self, user: User) -> Union[int, None]:
         try:
             tutor = user.tutor.pk
-        except:
+        except ObjectDoesNotExist:
             tutor = None
         return tutor
 
-    def get_student_pk(self, user):
+    def get_student_pk(self, user: User) -> Union[int, None]:
         try:
             student = user.student.pk
-        except:
+        except ObjectDoesNotExist:
             student = None
         return student
 
     class Meta:
         model = User
         fields = [
-            'id', 'email', 'password', 'is_student', 'is_tutor',
+            'id', 'email', 'is_student', 'is_tutor',
             'first_name', 'last_name', 'profile_pic',
-            'student', 'tutor',
+            # 'student', 'tutor',
         ]
-        extra_kwargs = {'password': {'write_only': True}, 'is_student': {
-            'write_only': True}, 'is_tutor': {'write_only': True}}
+        # extra_kwargs = {'is_student': {'write_only': True},
+        #                 'is_tutor': {'write_only': True}}
 
     def create(self, validated_data):
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
+        user.is_active = False
         user.save()
         return user
 
 
-class StudentOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class StudentOwnerSerializer(serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
 
     class Meta:
@@ -73,16 +82,16 @@ class StudentOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         fields = [
             'id', 'user', 'parent_email', 'birth_date'
         ]
-        #depth = 1
+        # depth = 1
 
 
-class StudentViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class StudentViewingSerializer(serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
 
     class Meta:
         model = Student
         fields = ['id', 'user']
-        #depth = 1
+        # depth = 1
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -96,12 +105,12 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
 
 
-class TutorOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class TutorOwnerSerializer(serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
-    reviews = serializers.SerializerMethodField('get_reviews')
+    # reviews = serializers.SerializerMethodField('get_reviews')
 
-    def get_reviews(self, tutor):
-        return ReviewSerializer(instance=Review.objects.filter(tutor=tutor), many=True).data
+    # def get_reviews(self, tutor):
+    #     return ReviewSerializer(instance=Review.objects.filter(tutor=tutor), many=True).data
 
     class Meta:
         model = Tutor
@@ -110,16 +119,19 @@ class TutorOwnerSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
             'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews',
-            'free_tutoring_given', 'paypal_email', 'reviews'
+            'free_tutoring_given', 'paypal_email',  # 'reviews'
         ]
 
+    extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
+        'read_only': True}, 'free_tutoring_given': {'read_only': True}}
 
-class TutorViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+
+class TutorViewingSerializer(serializers.ModelSerializer):
     user = UserViewingSerializer(read_only=True)
-    reviews = serializers.SerializerMethodField('get_reviews')
+    # reviews = serializers.SerializerMethodField('get_reviews')
 
-    def get_reviews(self, tutor):
-        return ReviewSerializer(instance=Review.objects.filter(tutor=tutor)[:50], many=True).data
+    # def get_reviews(self, tutor):
+    #     return ReviewSerializer(instance=Review.objects.filter(tutor=tutor)[:50], many=True).data
 
     class Meta:
         model = Tutor
@@ -127,7 +139,7 @@ class TutorViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
             'id', 'user', 'qualifications', 'what_you_teach',
             'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
-            'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given', 'reviews'
+            'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given',  # 'reviews'
         ]
     extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
         'read_only': True}, 'free_tutoring_given': {'read_only': True}}
@@ -160,10 +172,3 @@ class TutorViewingSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
             'availability', instance.availability)
         instance.save()
         return instance
-
-
-class ChangePasswordSerializer(serializers.Serializer):
-    model = User
-
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
