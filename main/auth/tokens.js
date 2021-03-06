@@ -1,46 +1,40 @@
+// DO NOT USE THIS IS OUTDATED
 const createToken = (email, password) => {
     fetch('http://127.0.0.1:8000/api-auth/token/', {
         method: "POST",
         headers: {
             'Content-type':'application/json',
+            'Access-Control-Allow-Origin': '*'
             // 'X-CSRFToken': csrftoken,
         },
         body: JSON.stringify({
-            email: email,
-            password: password,
+            email,
+            password,
         })
     }).then((resp)=> {
         try {
             resp.json().then((data) => {
                 console.log(data);
-                localStorage.setItem("refresh", data.refresh);
-                localStorage.setItem("access", data.access);
+                return data
             })
         } catch (e) {
-            console.log(e);
+            console.warn(e);
+            return e
         }
     });
 };
 
 const refreshToken = () => {
-    fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
-        method: "POST",
-        headers: {
-            'Content-type':'application/json',
-            // 'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({
-            refresh: localStorage.getItem("refresh")
-        })
-    }
-    ).then((resp)=> {
+    fetch('http://127.0.0.1:8000/api-auth/token/refresh/').then((resp)=> 
+    {
         try {
             resp.json().then((data) => {
                 console.log(data);
-                localStorage.setItem("access", data.access);
+                return data
             })
         } catch (e) {
-            console.log(e)
+            console.warn(e)
+            return e
         }
     });
 };
@@ -61,13 +55,14 @@ function getCookie(name) {
     return cookieValue;
 }
 
-const getCSRF = () => {
-    let csrfToken = getCookie('csrftoken');
-    if (csrfToken != null) {
-        return csrfToken
-    } else {
-        fetch('http://127.0.0.1:8000/api/set-csrf', {method: "GET"});
-        csrfToken = getCookie('csrftoken');
-        return csrfToken;
-    }
-}
+
+// const getCSRF = () => {
+//     let csrfToken = getCookie('csrftoken');
+//     if (csrfToken != null) {
+//         return csrfToken
+//     } else {
+//         fetch('http://127.0.0.1:8000/api/set-csrf', {method: "GET"});
+//         csrfToken = getCookie('csrftoken');
+//         return csrfToken;
+//     }
+// }

@@ -1,9 +1,8 @@
 from .models import Session
-from rest_framework import serializers, status
-from django_restql.mixins import DynamicFieldsMixin
+from rest_framework import serializers
 
 
-class SessionSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
@@ -22,7 +21,7 @@ class SessionSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     #     return instance
 
 
-class ReservedSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class ReservedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [

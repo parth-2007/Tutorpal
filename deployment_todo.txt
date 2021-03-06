@@ -1,0 +1,4 @@
+- Remove docs
+- Remove Django Debug Toolbar stuff
+- Add in proper email stuff
+- Make sure images go to S3 Bucket

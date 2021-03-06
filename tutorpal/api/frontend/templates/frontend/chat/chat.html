@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Chat Testing</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src=""></script> -->
+</head>
+
+<body>
+    <ul id="chat-items">
+    </ul>
+    <form id='form'>
+        <!-- <input type="text" id="id-message"> -->
+        <input type='submit' class='btn btn-primary' />
+    </form>
+    <script>
+        function escapeOutput(toOutput) {
+            return toOutput.replace(/\&/g, '&amp;')
+                .replace(/\</g, '&lt;')
+                .replace(/\>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/\'/g, '&#x27')
+                .replace(/\//g, '&#x2F');
+        }
+        var loc = window.location
+        var formData = $("#form")
+        // var msgInput = $("#id_message")
+        var chatHolder = $("#chat-items")
+        var full_name = "Baf Moment" // Put user data here
+        // where token would go
+        var auth_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjEyMTQxNzY0LCJqdGkiOiJjYjJjODI0MDcxYTI0ZGUwOTdiYzQ1MzBkMTBjOGFhYiIsInVzZXJfaWQiOjUsImlzc3VlZCI6IjIwMjEtMDItMDEgMDA6MTY6NTMuODI5MDEwKzAwOjAwIn0.aQN7GNCWXAxVBGB7HT2aP2K91BTMBajfhaR5iZOLQG4"
+        //var clean_msg = HtmlSanitizer.SanitizeHtml(msgInput);
+
+        var wsStart = 'ws://'
+        if (loc.protocol == 'https:') {
+            wsStart = 'wss://'
+        }
+        var endpoint = wsStart + loc.host + '/chat/5' // change this to the proper url
+
+        var socket = new ReconnectingWebSocket(endpoint)
+        // var socket = new WebSocket(endpoint)
+
+        socket.onmessage = function (e) {
+            console.log("message", e)
+            var chatDataMsg = JSON.parse(e.data)
+            if (chatDataMsg.error === undefined) {
+                var clean_msg = escapeOutput(chatDataMsg.message)
+                var clean_name = escapeOutput(chatDataMsg.full_name)
+                var timestamp = chatDataMsg.timestamp
+                formData[0].reset()
+                chatHolder.append("<li>" + clean_msg + " -  " + clean_name + "</li>") // you might want to fix this also
+            } else {
+                console.warn(chatDataMsg)
+            }
+        }
+        socket.onopen = function (e) {
+            console.log('open', e)
+            formData.submit(function (event) {
+                event.preventDefault()
+                // var msgText = msgInput.val()
+                // chatHolder.append("<li>" + msgText + " via " + full_name +"</li>")
+                // console.log(msgText)
+                var jsonData = JSON.stringify({ 'message': 'hi', 'authentication': auth_token })
+                socket.send(jsonData)
+                // formData[0].reset()
+            })
+        }
+        socket.onerror = function (e) {
+            console.log("error", e)
+        }
+        socket.onclose = function (e) {
+            console.log("close", e)
+        }
+    </script>
+</body>
+
+</html>

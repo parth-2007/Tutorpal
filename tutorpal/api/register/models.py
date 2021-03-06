@@ -1,20 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import User, PermissionsMixin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-import os
-from django.conf import settings
+from django.contrib.auth.models import User, PermissionsMixin, BaseUserManager, AbstractBaseUser
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# import os
+# from django.conf import settings
 from PIL import Image
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from datetime import timedelta
-from dry_rest_permissions.generics import authenticated_users
+# from dry_rest_permissions.generics import authenticated_users
 
 
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
-        """
-        Creates and saves a User with the given email and password.
-        """
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -29,9 +25,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_staffuser(self, email, first_name, last_name, password=None):
-        """
-        Creates and saves a staff user with the given email and password.
-        """
         user = self.create_user(
             email,
             password=password,
@@ -43,9 +36,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, first_name, last_name, password=None):
-        """
-        Creates and saves a superuser with the given email and password.
-        """
         user = self.create_user(
             email,
             password=password,
@@ -65,59 +55,35 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
     is_active = models.BooleanField(default=True)
-    # a admin user; non super-user
     is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)  # a superuser
+    is_admin = models.BooleanField(default=False)
     is_tutor = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     first_name = models.CharField(max_length=50, verbose_name="First Name")
     last_name = models.CharField(max_length=50, verbose_name="Last Name")
-    email_authenticated = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(
         default='person.png', upload_to='profile_pics/')
-    # notice the absence of a "Password field", that is built in.
+    last_reset = models.DateTimeField(null=True)
 
     USERNAME_FIELD = 'email'
-    # Email & Password are required by default.
     REQUIRED_FIELDS = ['first_name', 'last_name']
     objects = UserManager()
 
     def get_full_name(self):
-        # The user is identified by their email address
         return self.email
 
     def get_short_name(self):
-        # The user is identified by their email address
         return self.email
 
-    def __str__(self):              # __unicode__ on Python 2
+    def __str__(self):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        # Does the user have a specific permission?
-        # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        # Does the user have permissions to view the app `app_label`?
-        # Simplest possible answer: Yes, always
         return True
-
-    # @property
-    # def is_staff(self):
-    # 	#Is the user a member of staff?
-    # 	return self.staff
-
-    # @property
-    # def is_admin(self):
-    # 	#Is the user a admin member?
-    # 	return self.admin
-
-    # @property
-    # def is_active(self):
-    # 	#Is the user active?
-    # 	return self.active
 
     def save(self, *args, **kwargs):
         super().save()
@@ -144,7 +110,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @staticmethod
     def has_create_permission(request):
-        return request.user.is_anonymous
+        # return request.user.is_anonymous
+        return False
 
 
 # Create your models here.
@@ -168,12 +135,13 @@ class Student(models.Model):
         return self.user == request.user
 
     @staticmethod
-    @authenticated_users
+    # @authenticated_users
     def has_create_permission(request):
-        if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
-            return False
-        else:
-            return True
+        return False
+        # if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
+        #     return False
+        # else:
+        #     return True
 
 
 class Tutor(models.Model):
@@ -224,12 +192,13 @@ class Tutor(models.Model):
         return self.user == request.user
 
     @staticmethod
-    @authenticated_users
+    # @authenticated_users
     def has_create_permission(request):
-        if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
-            return False
-        else:
-            return True
+        return False
+        # if hasattr(request.user, "student") or hasattr(request.user, "tutor"):
+        #     return False
+        # else:
+        #     return True
 
 
 class Review(models.Model):

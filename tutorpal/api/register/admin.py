@@ -3,7 +3,6 @@ from .models import Student, Tutor, Review
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from rest_framework.authtoken.models import Token
 from .models import User
 # Register your models here.
 
@@ -52,7 +51,7 @@ class UserAdmin(BaseUserAdmin):
         ('Personal info', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_admin', 'is_staff')}),
         ('Account Info', {
-         'fields': ('is_active', 'profile_pic')}),
+         'fields': ('is_active', 'profile_pic', 'last_reset')}),
         ('Tutor/Student', {'fields': ('is_student', 'is_tutor')})
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin

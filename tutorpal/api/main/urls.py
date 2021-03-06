@@ -7,5 +7,5 @@ router.register(r'bugs', v.BugViewSet)
 router.register(r'feedback', v.FeedbackViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]

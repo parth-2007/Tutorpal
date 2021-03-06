@@ -1,9 +1,9 @@
 from .models import Room, Message
 from rest_framework import serializers
-from django_restql.mixins import DynamicFieldsMixin
+from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
-class RoomSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class RoomSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     # messages = serializers.SerializerMethodField('get_messages')
 
     # def get_messages(self, room):
@@ -12,20 +12,20 @@ class RoomSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = [
-            'tutor', 'student', 'tutor_connected', 'student_connected',
+            'id', 'tutor', 'student', 'tutor_connected', 'student_connected',
             'tutor_unread_msgs', 'student_unread_msgs', 'messages',
         ]
         # extra_kwargs = {'tutor': {'read_only': True},
         #                 'student': {'read_only': True}}
 
 
-class MessageSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class MessageSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
     room = RoomSerializer(read_only=True)
 
     class Meta:
         model = Message
         fields = [
-            'room', 'author', 'message', 'timestamp', 'read',
+            'id', 'room', 'author', 'message', 'timestamp', 'read',
         ]
         # extra_kwargs = {'room': {'write_only': True}, 'author': {
         #     'write_only': True}, 'message': {'write_only': True}}

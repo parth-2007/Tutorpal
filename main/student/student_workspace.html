@@ -39,7 +39,7 @@
     <div class="section"><a href="index.html" class="link-block w-inline-block"><img src="tutor/images/logo.jpg" loading="lazy" width="260" srcset="tutor/images/logo-p-500.jpeg 500w, tutor/images/logo-p-800.jpeg 800w, tutor/images/logo-p-1080.jpeg 1080w, tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></a>
       <div class="div-block-4">
         <div class="div-block-43">
-          <div class="name_profile_pic"><img src="student/images/user-2.png" width="60" height="60" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="60px" alt="" class="image-7">
+          <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
             <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
               <div class="dropdown-toggle-2-copy w-dropdown-toggle">
                 <div id="name" class="text-block-18"></div>
@@ -129,16 +129,32 @@
                             const sessionid = val.id;
                             const session_student_id = val.student;
                             var today = new Date();
+                            var dd = today.getDate();
+
+                            var mm = today.getMonth()+1; 
+                            var yyyy = today.getFullYear();
+                            if(dd<10) 
+                            {
+                                dd='0'+dd;
+                            } 
+
+                            if(mm<10) 
+                            {
+                                mm='0'+mm;
+                            } 
+                            var date = yyyy+'-'+mm+'-'+dd;
                             var minutes = today.getMinutes();
                             if (minutes<10){
                               minutes = "0" + minutes
                             }
                             var time = today.getHours() + ":" + minutes + ":00" ;
-                            if(data.tutor ==null || data.tutor != session_student_id){
+                            time = parseInt(time)
+                            var x = parseInt(val.time_start)
+                            if(data.tutor ==null || data.tutor != session_student_id || val.started != true){
                                 document.getElementById("main").innerHTML = "";
                                 document.write("<h1><strong>404 Not Found<strong></h1>")
                             } 
-                            else if(time!=val.time_start){
+                            else if(date != val.date){
                               document.getElementById("main").innerHTML = "";
                               main_wrapper = document.getElementById('body');
                               var item=`
@@ -149,6 +165,7 @@
                               main_wrapper.innerHTML +=item
                             }
                             else{
+                              document.getElementById('image').src = "http://127.0.0.1:8000" +data.profile_pic;
                               const fullname = data.first_name + " " + data.last_name;
                               document.getElementById("name").innerHTML = fullname;
                               var container = document.querySelector('#jitsi-container');
