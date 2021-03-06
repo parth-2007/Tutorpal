@@ -202,20 +202,44 @@ form {
       console.log(password, confirmpassword)
       console.log(pfp, parentemail, birthdate)
 
-      const url = 'http://127.0.0.1:8000/students/';
+    fetch('http://127.0.0.1:8000/users/', {
+        method: "POST",
+        headers: {
+            'Content-type':'multipart/form-data',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({"email": email,"password" : password, "first_name": firstname, "last_name": lastname, "profile_pic": "http://127.0.0.1:8000/media/person.png", "is_student": true, "is_tutor": null }
+)
+    }).then((resp)=> {
+        try {
+            resp.json().then((data) => {
+                console.log(data);
+                fetch('http://127.0.0.1:8000/students/', {
+                  method: "POST",
+                  headers: {
+                      'Content-type':'multipart/form-data',
+                      'X-CSRFToken': getCookie('csrftoken'),
+                  },
+                  body: JSON.stringify({parentemail, birthdate})
+              }).then((resp)=> {
+                  try {
+                      resp.json().then((data) => {
+                          console.log(data, "User Created");
+                      })
+                  } catch (e) {
+                      console.log(e);
+                  }
+                });
+            })
+        } catch (e) {
+            console.log(e);
+        }
+    });
 
-      fetch(url, {
-          method: "POST",
-          headers: {
-              "Access-Control-Allow-Origin": "*",
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'X-CSRFToken': csrftoken,
-          },
-          body:JSON.stringify({"first_name":firstname, "last_name":lastname, "email":email, "parentemail":parentemail, "birthdate": birthdate, "profile_pic": pfp})
-      })
 
-    }
+    
+}
+    
 
     var loadFile = function(event) {
       var image = document.getElementById('output');
