@@ -37,8 +37,8 @@ def register_student(request):
                 data=request.data.get('student'))
             student_serializer.is_valid(raise_exception=True)
             student = student_serializer.save(user=user)
-        except Exception:
-            return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
         email = user.email
         current_site = get_current_site(request)

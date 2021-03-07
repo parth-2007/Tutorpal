@@ -1,10 +1,7 @@
-from django.urls import path, include, re_path
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views as v
-from django.views.decorators.csrf import csrf_exempt
-# from knox import views as knox_views
-from .jwt import jwt_test, MyTokenObtainPairView, MyTokenRefreshView, refresh_token_from_cookie, cookie_logout
-from rest_framework_simplejwt import views as jwt_views
+from .jwt import MyTokenObtainPairView, refresh_token_from_cookie, cookie_logout
 
 router = DefaultRouter()
 router.register(r'users', v.UserViewSet)
@@ -30,11 +27,11 @@ urlpatterns = [
     #          name='token_refresh'),
     path('api-auth/token/refresh/', refresh_token_from_cookie),
     path('api-auth/token/logout/', cookie_logout),
-    path('api/register-student/', v.register_student),
-    path('api/register-tutor/', v.register_tutor),
-    path('api/activate-account/<uidb64>/<token>/',
+    path('api-auth/register-student/', v.register_student),
+    path('api-auth/register-tutor/', v.register_tutor),
+    path('api-auth/activate-account/<uidb64>/<token>/',
          v.activate_account, name="activate"),
-    path('api/reset-password/', v.reset_password),
-    path('api/password-reset/<uidb64>/<token>/',
+    path('api-auth/reset-password/', v.reset_password),
+    path('api-auth/password-reset/<uidb64>/<token>/',
          v.password_reset, name="reset"),
 ]
