@@ -66,10 +66,9 @@
     function getformvals(){
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
-      fetch("http://127.0.0.1:8000/api-auth/token/", {
+      fetch("http://127.0.0.1:5000/api/api-auth/token/", {
           method: "POST",
           headers: {
-              "Access-Control-Allow-Origin": "*",
               'Content-Type': 'application/json',
               'Accept': 'application/json',
               'X-CSRFToken': csrftoken,
@@ -83,21 +82,9 @@
                 resp.json().then((data) => {
                     localStorage.setItem("refresh", data.refresh);
                     localStorage.setItem("access", data.access);
-                    refreshToken = localStorage.getItem("refresh");
-                    fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
-                        method: "POST",
-                        headers: {
-                            'Content-type':'application/json',
-                            'X-CSRFToken': csrftoken,
-                        },
-                        body: JSON.stringify({"refresh": refreshToken})
-                    }).then((resp)=> {
-                        try {
-                            resp.json().then((data) => {
-                                localStorage.setItem("access", data.access);
-                                const accessToken = localStorage.getItem("access");
-                                
-                                fetch("http://127.0.0.1:8000/users/me/", {
+                    const refreshToken = localStorage.getItem("refresh");
+                    const accessToken = localStorage.getItem("access");
+                                fetch("http://127.0.0.1:5000/api/users/me/", {
                                     method: "GET",
                                     credentials: 'same-origin',
                                     headers: {
@@ -118,11 +105,7 @@
                                         console.log(type)
                                     })
                                 })
-                            })
-                        } catch (e) {
-                            console.log(e)
-                        }
-                    });
+                        
                 })
             } catch (e) {
                 console.log(e);
