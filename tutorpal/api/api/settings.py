@@ -28,7 +28,7 @@ SECRET_KEY = '$e3o-ktfsfbnk_5z5(gboe+8&@8o%*5y5)5!p^!i3ocb*f@$rr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # remove star, fix this
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']  # remove star, fix this
 
 
 # Application definition

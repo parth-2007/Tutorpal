@@ -13,6 +13,6 @@ urlpatterns = [
 urlpatterns += [
     # static('/frontend/',
     #        document_root=os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/frontend/templates/frontend'),
-    re_path(r'^frontend/(?P<path>.*)$', serve,
-            {'document_root': os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/frontend/templates/frontend'}),
+    # re_path(r'^frontend/(?P<path>.*)$', serve,
+    #         {'document_root': os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/frontend/templates/frontend'}),
 ]

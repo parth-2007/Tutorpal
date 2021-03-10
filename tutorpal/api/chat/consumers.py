@@ -42,10 +42,10 @@ class ChatConsumer(AsyncConsumer):
             msg = loaded_dict_data.get('message')
             try:
                 self.me_user_obj = await self.get_user_from_token(token)
-                await self.connect_save_user()
+                # await self.connect_save_user()
                 me_user_obj = self.me_user_obj
                 room_obj = self.room_obj
-                if await self.check_user_in_room(me_user_obj, room_obj):
+                if self.check_user_in_room(me_user_obj, room_obj):
                     if tzname != "None" and tzname != None:
                         tzone = pytz.timezone(tzname)
                         local_time = timezone.now().astimezone(tzone)
@@ -73,7 +73,7 @@ class ChatConsumer(AsyncConsumer):
                     )
                 else:
                     myResponse = {
-                        'error': 'not ur room lol'
+                        'error': 'user is not in room'
                     }
                     await self.channel_layer.group_send(
                         self.chat_room,
@@ -102,10 +102,10 @@ class ChatConsumer(AsyncConsumer):
         })
 
     async def websocket_disconnect(self, event):
-        try:
-            await self.disconnect_save_user()
-        except Exception:
-            pass
+        # try:
+        #     await self.disconnect_save_user()
+        # except Exception:
+        #     pass
         print('Disconnected', event)
         raise exceptions.StopConsumer()
 
@@ -122,70 +122,70 @@ class ChatConsumer(AsyncConsumer):
     def create_chat_message(self, msg):
         room_obj = Room.objects.get(id=self.room_obj.id)
         me_user_obj = self.me_user_obj
-        tutor_unread_msgs = room_obj.tutor_unread_msgs
-        student_unread_msgs = room_obj.student_unread_msgs
-        print("Tutor connection: ", room_obj.tutor_connected)
-        print("Student connection: ", room_obj.student_connected)
-        if me_user_obj.is_student:
-            print("Student sending...")
-            if room_obj.tutor_connected:
-                read = True
-                print("Message read!")
-            else:
-                read = False
-                tutor_unread_msgs += 1
-                room_obj.tutor_unread_msgs = tutor_unread_msgs
-                room_obj.save()
-        if me_user_obj.is_tutor:
-            print("Tutor sending...")
-            if room_obj.student_connected:
-                read = True
-                print("Message read!")
-            else:
-                read = False
-                student_unread_msgs += 1
-                room_obj.student_unread_msgs = student_unread_msgs
-                room_obj.save()
-        return Message.objects.create(author=me_user_obj, room=room_obj, message=msg, read=read)
+        # tutor_unread_msgs = room_obj.tutor_unread_msgs
+        # student_unread_msgs = room_obj.student_unread_msgs
+        # print("Tutor connection: ", room_obj.tutor_connected)
+        # print("Student connection: ", room_obj.student_connected)
+        # if me_user_obj.is_student:
+        #     print("Student sending...")
+        #     if room_obj.tutor_connected:
+        #         read = True
+        #         print("Message read!")
+        #     else:
+        #         read = False
+        #         tutor_unread_msgs += 1
+        #         room_obj.tutor_unread_msgs = tutor_unread_msgs
+        #         room_obj.save()
+        # if me_user_obj.is_tutor:
+        #     print("Tutor sending...")
+        #     if room_obj.student_connected:
+        #         read = True
+        #         print("Message read!")
+        #     else:
+        #         read = False
+        #         student_unread_msgs += 1
+        #         room_obj.student_unread_msgs = student_unread_msgs
+        #         room_obj.save()
+        return Message.objects.create(author=me_user_obj, room=room_obj, message=msg)
 
-    @database_sync_to_async
-    def connect_save_user(self):
-        room_obj = self.room_obj
-        user_obj = self.me_user_obj
-        print("connected: ", user_obj, " in ", room_obj)
-        if user_obj.is_student:
-            room_obj.student_connected = True
-            print("student connected")
-            for unread_msg in Message.objects.filter(read=False):
-                if unread_msg.author.is_tutor:
-                    print("read unreead messages!")
-                    unread_msg.read = True
-                    unread_msg.save()
-            room_obj.student_unread_msgs = 0
-        elif user_obj.is_tutor:
-            room_obj.tutor_connected = True
-            print("tutor connected")
-            for unread_msg in Message.objects.filter(read=False):
-                if unread_msg.author.is_student:
-                    print("read unread messages!")
-                    unread_msg.read = True
-                    unread_msg.save()
-            room_obj.tutor_unread_msgs = 0
-        room_obj.save()
+    # @database_sync_to_async
+    # def connect_save_user(self):
+    #     room_obj = self.room_obj
+    #     user_obj = self.me_user_obj
+    #     print("connected: ", user_obj, " in ", room_obj)
+    #     if user_obj.is_student:
+    #         room_obj.student_connected = True
+    #         print("student connected")
+    #         for unread_msg in Message.objects.filter(read=False):
+    #             if unread_msg.author.is_tutor:
+    #                 print("read unreead messages!")
+    #                 unread_msg.read = True
+    #                 unread_msg.save()
+    #         room_obj.student_unread_msgs = 0
+    #     elif user_obj.is_tutor:
+    #         room_obj.tutor_connected = True
+    #         print("tutor connected")
+    #         for unread_msg in Message.objects.filter(read=False):
+    #             if unread_msg.author.is_student:
+    #                 print("read unread messages!")
+    #                 unread_msg.read = True
+    #                 unread_msg.save()
+    #         room_obj.tutor_unread_msgs = 0
+    #     room_obj.save()
 
-    @database_sync_to_async
-    def disconnect_save_user(self):
-        room_obj = Room.objects.get(id=self.room_obj.id)
-        user_obj = self.me_user_obj
-        print("disconnected: ", user_obj, " in ", room_obj)
-        if user_obj.is_student:
-            print("disconnected student!")
-            room_obj.student_connected = False
-            room_obj.save()
-        elif user_obj.is_tutor:
-            print("disconnected tutor!")
-            room_obj.tutor_connected = False
-            room_obj.save()
+    # @database_sync_to_async
+    # def disconnect_save_user(self):
+    #     room_obj = Room.objects.get(id=self.room_obj.id)
+    #     user_obj = self.me_user_obj
+    #     print("disconnected: ", user_obj, " in ", room_obj)
+    #     if user_obj.is_student:
+    #         print("disconnected student!")
+    #         room_obj.student_connected = False
+    #         room_obj.save()
+    #     elif user_obj.is_tutor:
+    #         print("disconnected tutor!")
+    #         room_obj.tutor_connected = False
+    #         room_obj.save()
 
     @database_sync_to_async
     def get_user_from_token(self, token: str):
@@ -194,7 +194,7 @@ class ChatConsumer(AsyncConsumer):
         return user
 
     @database_sync_to_async
-    def check_user_in_room(self, user: User, room: Room):
+    def check_user_in_room(self, user: User, room: Room) -> bool:
         if room.student.user == user or room.tutor.user == user:
             return True
         else:

@@ -30,7 +30,7 @@ def get_token_data_from_token(token):
 
 def check_token_invalid(token):
     token = RefreshToken(token)
-    user_id, issued = get_user_from_token(token)
+    user_id, issued = get_token_data_from_token(token)
     user = User.objects.get(pk=user_id)
     if user.last_reset >= issued:
         token.blacklist()
@@ -95,6 +95,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['issued'] = str(now())
         return token
 
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user_data = UserOwnerSerializer(self.user).data
+        data['user'] = user_data
+        return data
+
 
 class MyTokenObtainPairView(MyTokenViewBase):
     serializer_class = MyTokenObtainPairSerializer
@@ -120,8 +126,8 @@ class MyTokenRefreshSerializer(TokenRefreshSerializer):
         return data
 
 
-class MyTokenRefreshView(TokenViewBase):
-    serializer_class = MyTokenRefreshSerializer
+# class MyTokenRefreshView(TokenViewBase):
+#     serializer_class = MyTokenRefreshSerializer
 
 
 @api_view()

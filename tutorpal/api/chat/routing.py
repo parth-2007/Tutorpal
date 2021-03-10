@@ -1,5 +1,4 @@
 from django.urls import re_path
-from djangochannelsrestframework.consumers import view_as_consumer
 from .views import RoomSockets
 
 websocket_urlpatterns = [
