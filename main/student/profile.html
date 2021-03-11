@@ -133,94 +133,66 @@
             }
         }
         return cookieValue;
-    }
-    const csrftoken = getCookie('csrftoken');
-    const refreshToken = localStorage.getItem("refresh")
-    fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
-        method: "POST",
-        headers: {
-          'Content-type':'application/json',
-          'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({"refresh": refreshToken})
-    }).then((resp)=> {
-          try{
-              resp.json().then((data) => {
-                const accessToken = data.access;
-                fetch("http://127.0.0.1:8000/users/me/", {
-                    method: "GET",
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRFToken': csrftoken,
-                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                    },
-                }).then((resp) => {
-                    resp.json().then((data) => {
-                        if(data.tutor ==null){
-                            document.getElementById("main").innerHTML = "";
-                            document.getElementById("body").style.backgroundColor = "white";
-                            document.write("<h1><strong>404 Not Found<strong></h1>")
-                        } 
-                        else{
-                          const fullname = data.first_name + " " + data.last_name;
-                          document.getElementById("name").innerHTML = fullname;
-                          document.getElementById("email").innerHTML = data.email;
-                          document.getElementById("fullname").innerHTML = fullname;
-                          const uid = data.tutor;
-                          const url = "http://127.0.0.1:8000/students/" +uid+"/";
-                          fetch(url, {
-                              method: "GET",
-                              credentials: 'same-origin',
-                              headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRFToken': csrftoken,
-                                'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                              },
-                            }).then((resp) => {
-                                resp.json().then((val) => {
-                                  const parentemail = val.parent_email;
-                                  const birthdate = val.birth_date;
-                                  document.getElementById('firstname').value = data.first_name;
-                                  document.getElementById('lastname').value = data.last_name;
-                                  document.getElementById("parent").innerHTML = parentemail;
-                                  document.getElementById("emailaddress").value = data.email;
-                                  document.getElementById("parentemail").value = parentemail;
-                                  document.getElementById("bday").innerHTML = birthdate;
-                                  document.getElementById('birthdate').value = birthdate;
-                                  var profile = "http://127.0.0.1:8000"+ data.profile_pic;
-                                  document.getElementById('output').src = profile;
-                                  document.getElementById('profile').src = profile;
-                                  document.getElementById('image').src = profile;
-                                })
-                              })
-                          function myfunc(){
-                            var firstname = document.getElementById('firstname').value;
-                            var lastname = document.getElementById('lastname').value;
-                            var email = document.getElementById('emailaddress').value;
-                            var parentemail = document.getElementById('parentemail').value;
-                            var birthdate = document.getElementById('birthdate').value;
-                            var pfp = document.getElementById("file").value;
-
-                            console.log(firstname,lastname)
-                            console.log(email)
-                            console.log(pfp, parentemail, birthdate)
-                          }
-
-                          var loadFile = function(event) {
-                            var image = document.getElementById('output');
-                            image.src = URL.createObjectURL(event.target.files[0]);
-                          };
-                        }                                       
-                    })
+  }
+  const csrftoken = getCookie('csrftoken');
+  const refreshToken = localStorage.getItem("refresh")
+  fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
+      resp.json().then((data) => {
+        const accessToken = data.access;
+        var user = data.user;
+        if(user.is_tutor ==true){
+            document.getElementById("main").innerHTML = "";
+            document.getElementById("body").style.backgroundColor = "white";
+            document.write("<h1><strong>404 Not Found<strong></h1>")
+        }   
+        else{
+          var fullname = user.first_name + " " + user.last_name;
+          document.getElementById("name").innerHTML = fullname;
+          document.getElementById("fullname").innerHTML = fullname;
+          fetch("http://127.0.0.1:5000/api/students/me/", {
+              method: "GET",
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRFToken': csrftoken,
+                'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+              },
+            }).then((resp) => {
+                resp.json().then((val) => {
+                  document.getElementById('firstname').value = user.first_name;
+                  document.getElementById('lastname').value = user.last_name;
+                  document.getElementById("parent").innerHTML = val.parent_email;
+                  document.getElementById("emailaddress").value = user.email;
+                  document.getElementById("parentemail").value = val.parent_email;
+                  document.getElementById("bday").innerHTML = val.birth_date;
+                  document.getElementById('birthdate').value = val.birth_date;
+                  var profile =  "http://127.0.0.1:5000" +user.profile_pic;
+                  document.getElementById('output').src = profile;
+                  document.getElementById('profile').src = profile;
+                  document.getElementById('image').src = profile;
                 })
-              });
-          } catch (e) {
-              console.log(e)
+              })
+          function myfunc(){
+            var firstname = document.getElementById('firstname').value;
+            var lastname = document.getElementById('lastname').value;
+            var email = document.getElementById('emailaddress').value;
+            var parentemail = document.getElementById('parentemail').value;
+            var birthdate = document.getElementById('birthdate').value;
+            var pfp = document.getElementById("file").value;
+
+            console.log(firstname,lastname)
+            console.log(email)
+            console.log(pfp, parentemail, birthdate)
           }
-    });
+
+          var loadFile = function(event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+          };
+        }
+      })
+    })
   </script>
 </body>
 </html>

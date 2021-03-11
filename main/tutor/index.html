@@ -326,6 +326,16 @@
                               })
                             })
                           })
+                          var to = new Date(2024, 11, 17, 0, 0, 0, 0);
+                          var from = new Date(2020, 11, 17, 0, 0, 0, 0);
+                          var check = new Date();
+                          if(check.getTime() <= to.getTime() && check.getTime() >= from.getTime()){
+                            console.log("inside")
+                          }
+                          else{
+                            console.log("outside")
+                          }
+
                         }
                   })
                 })

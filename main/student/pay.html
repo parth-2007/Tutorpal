@@ -124,7 +124,7 @@
                             },
                         }).then((resp) => {
                               resp.json().then((val) => {
-                                if(data.tutor ==null || val.price == "0.00" || val.free == true || data.tutor != val.student){
+                                if(data.tutor ==null || val.price == "0.00" || val.free == true || data.tutor != val.student ){
                                     document.getElementById("main").innerHTML = "";
                                     document.getElementById("body").style.backgroundColor = "white";
                                     document.write("<h1><strong>404 Not Found<strong></h1>")
