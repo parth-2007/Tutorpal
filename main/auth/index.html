@@ -8,27 +8,23 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <!-- <script src='tokens.js'></script>
     <script src='test.js'></script> -->
-    <script src="register.js"></script>
-    <script src="tokens.js"></script>
+    <script src="auth.js"></script>
+    <script src="user.js"></script>
 </head>
 
 <body>
     <script>
-        // var csrfToken = getCookie('csrftoken');
-        // console.log(getCookie('csrftoken'));
-        // login("sarosh.thalappil@gmail.com", "7Ff7cVu2Rn5O");
-        // const token = "d692b84f34e42ab3cf853a30c79e6d1b847a7035f05b2e48eedb8f039b1e7d54";
-        // getMyData(token);
-        user = {
-            email: "student@student.student",
-            password: "student",
-            is_student: true,
-            is_tutor: false,
-            first_name: 'Student',
-            last_name: 'Student',
-            profile_pic: null,
-        }
-        createUser(user)
+        const resp = createToken("sarosh.thalappil@gmail.com", "7Ff7cVu2Rn5O");
+        // user = {
+        //     email: "student@student.student",
+        //     password: "student",
+        //     is_student: true,
+        //     is_tutor: false,
+        //     first_name: 'Student',
+        //     last_name: 'Student',
+        //     profile_pic: null,
+        // }
+        // createUser(user)
     </script>
     <div id="root">
     </div>
