@@ -10,21 +10,33 @@
     <script src='test.js'></script> -->
     <script src="auth.js"></script>
     <script src="user.js"></script>
+    <script src="tz.js"></script>
 </head>
 
 <body>
     <script>
-        const resp = createToken("sarosh.thalappil@gmail.com", "7Ff7cVu2Rn5O");
+        // const resp = createToken("sarosh.thalappil@gmail.com", "7Ff7cVu2Rn5O");
+        // console.log(resp);
+        // document.cookie = 'tz_name="UTC";path=/;'
+        set_tz("UTC");
+        console.log(document.cookie)
+        fetch('http://127.0.0.1:5000/api/users/').then((resp) => resp.json().then((data) => console.log(data)))
         // user = {
-        //     email: "student@student.student",
-        //     password: "student",
+        //     email: "student11111@student.student",
+        //     password: "udhf78efiwl^&*ijn",
         //     is_student: true,
         //     is_tutor: false,
         //     first_name: 'Student',
         //     last_name: 'Student',
-        //     profile_pic: null,
+        //     // profile_pic: null,
         // }
-        // createUser(user)
+        // student = {
+        //     parent_email: "parent@parent.parent",
+        //     birth_date: "1969-04-20"
+        // }
+        // tz_name = "US/Pacific"
+        // createStudent(user, student, tz_name)
+        // set_tz('"US/Pacific"');
     </script>
     <div id="root">
     </div>

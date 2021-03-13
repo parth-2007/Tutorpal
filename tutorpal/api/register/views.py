@@ -21,24 +21,27 @@ from .tokens import account_activation_token, password_reset_token
 from django.utils.encoding import force_text
 from django.core.mail import send_mail
 # from django.http import HttpRequest
+# import pytz
 
 
 @api_view(('POST',))
 def register_student(request):
     if not request.user.is_authenticated:
-        try:
-            user_serializer = UserOwnerSerializer(
-                data=request.data.get('user'))
-            user_serializer.is_valid(raise_exception=True)
-            user = user_serializer.save()
-            user.is_active = False
-            user.save()
-            student_serializer = StudentOwnerSerializer(
-                data=request.data.get('student'))
-            student_serializer.is_valid(raise_exception=True)
-            student = student_serializer.save(user=user)
-        except Exception as e:
-            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+        # try:
+        print(request.data.get('user'))
+        user_serializer = UserOwnerSerializer(
+            data=request.data.get('user'))
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        user.is_active = False
+        user.save()
+        student_serializer = StudentOwnerSerializer(
+            data=request.data.get('student'))
+        student_serializer.is_valid(raise_exception=True)
+        student = student_serializer.save(user=user)
+        # except Exception as e:
+        #     print(e)
+        #     return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
         email = user.email
         current_site = get_current_site(request)
@@ -51,7 +54,12 @@ def register_student(request):
         })
         send_mail(subject, message, None, [email])
 
-        return Response(data=StudentOwnerSerializer(student).data, status=status.HTTP_201_CREATED)
+        response = Response(data=StudentOwnerSerializer(
+            student).data, status=status.HTTP_201_CREATED)
+        # tz_name = request.data.get('tz_name')
+        # if tz_name in pytz.all_timezones:
+        #     response.set_cookie('tz_name', tz_name)
+        return response
     else:
         return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
@@ -84,7 +92,12 @@ def register_tutor(request):
         })
         send_mail(subject, message, None, [email])
 
-        return Response(data=TutorOwnerSerializer(tutor).data, status=status.HTTP_201_CREATED)
+        response = Response(data=TutorOwnerSerializer(
+            tutor).data, status=status.HTTP_201_CREATED)
+        # tz_name = request.data.get('tz_name')
+        # if tz_name in pytz.all_timezones:
+        #     response.set_cookie('tz_name', tz_name)
+        return response
     else:
         return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 

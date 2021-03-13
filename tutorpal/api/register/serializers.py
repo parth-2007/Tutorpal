@@ -59,13 +59,14 @@ class UserOwnerSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'is_student', 'is_tutor',
-            'first_name', 'last_name', 'profile_pic',
+            'first_name', 'last_name', 'profile_pic', 'password'
             # 'student', 'tutor',
         ]
-        # extra_kwargs = {'is_student': {'write_only': True},
-        #                 'is_tutor': {'write_only': True}}
+        extra_kwargs = {'is_student': {'write_only': True},
+                        'is_tutor': {'write_only': True}, 'password': {'write_only': True}}
 
     def create(self, validated_data):
+        print(validated_data)
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)

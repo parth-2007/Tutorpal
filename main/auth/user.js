@@ -21,14 +21,14 @@
 // }
 
 const createTutor = (user, tutor) => {
-  fetch("http://127.0.0.1:8080/api/api-auth/register-tutor/", {
+  fetch("http://127.0.0.1:5000/api/api-auth/register-tutor/", {
     method: "POST",
     headers: {
       "Content-type": "multipart/form-data",
     },
     body: JSON.stringify({
-      user: user,
-      tutor: tutor,
+      user,
+      tutor,
     }),
   }).then((resp) => {
     try {
@@ -42,18 +42,7 @@ const createTutor = (user, tutor) => {
 };
 
 const createStudent = (user, student) => {
-  // fetch('http://127.0.0.1:8000/api/register-student/', {
-  //     method: "POST",
-  //     headers: {
-  //         'Accept': 'application/json',
-  //         'Content-type':'multipart/form-data',
-  //     },
-  //     body: JSON.stringify({
-  //         user,
-  //         student
-  //     })
-  // })
-  fetch("http://127.0.0.1:8080/api/api-auth/register-student/", {
+  fetch("http://127.0.0.1:5000/api/api-auth/register-student/", {
     method: "POST",
     headers: {
       Accept: "application/json",
