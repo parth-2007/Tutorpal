@@ -88,39 +88,85 @@
   }
   const csrftoken = getCookie('csrftoken');
   const refreshToken = localStorage.getItem("refresh")
-  fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
-      method: "POST",
-      headers: {
-        'Content-type':'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify({"refresh": refreshToken})
-  }).then((resp)=> {
-        try{
-            resp.json().then((data) => {
-              const accessToken = data.access;
-              fetch("http://127.0.0.1:8000/users/me/", {
-                  method: "GET",
-                  credentials: 'same-origin',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'X-CSRFToken': csrftoken,
-                      'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                  },
-              }).then((resp) => {
-                  resp.json().then((data) => {
-                    if(data.student ==null){
-                        document.getElementById("main").innerHTML = "";
-                        document.getElementById("body").style.backgroundColor = "white";
-                        document.write("<h1><strong>404 Not Found<strong></h1>")
-                    }   
-                    else{
-                      const fullname = data.first_name + " " + data.last_name;
-                      const tutoremail = data.email;
-                      document.getElementById("name").innerHTML = fullname;
-                      unpaid_wrapper = document.getElementById('unpaid');
-                      fetch("http://127.0.0.1:8000/sessions/pending_on_student_payment/", {
+  fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
+      resp.json().then((data) => {
+        const accessToken = data.access;
+        var user = data.user;
+        if(user.is_student ==true){
+            document.getElementById("main").innerHTML = "";
+            document.getElementById("body").style.backgroundColor = "white";
+            document.write("<h1><strong>404 Not Found<strong></h1>")
+        }   
+        else{
+          var fullname = user.first_name + " " + user.last_name;
+          document.getElementById("name").innerHTML = fullname;
+          document.getElementById('image').src = "http://127.0.0.1:5000" +user.profile_pic;
+          unpaid_wrapper = document.getElementById('unpaid');
+          fetch("http://127.0.0.1:5000/api/sessions/pending_on_student_payment/", {
+              method: "GET",
+              credentials: 'same-origin',
+              headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json',
+                  'X-CSRFToken': csrftoken,
+                  'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                        },
+          }).then((resp) => {
+              resp.json().then((val) => {
+                  const sessionval = val.results;
+                  sessionval.forEach(function(value) { 
+                    const amount = value.price;
+                    const duration = value.time_start + " - " + value.time_end;
+                    const date = value.date;
+                    const studentid = value.student;
+                    const url = "http://127.0.0.1:5000/api/students/" + studentid + "/";
+                    fetch(url, {
+                        method: "GET",
+                        credentials: 'same-origin',
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                    }).then((resp) => {
+                        resp.json().then((data) => {
+                          const user = data.user;
+                          const studentname = user.first_name + " " + user.last_name;
+                          var item = `
+                            <div class="div-block-64">
+                              <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
+                              <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
+                              <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
+                              <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
+                              <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
+                            </div>
+                          `;
+                          unpaid_wrapper.innerHTML +=item 
+                        })
+                      })
+                    paid_wrapper = document.getElementById('paid');
+                    fetch("http://127.0.0.1:5000/api/sessions/finished_sessions/", {
+                          method: "GET",
+                          credentials: 'same-origin',
+                          headers: {
+                              "Access-Control-Allow-Origin": "*",
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                              'X-CSRFToken': csrftoken,
+                              'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                          },
+                    }).then((resp) => {
+                          resp.json().then((val) => {
+                              const sessionval = val.results;
+                              sessionval.forEach(function(value) { 
+                                const amount = value.price;
+                                const duration = value.time_start + " - " + value.time_end;
+                                const date = value.date;
+                                const studentid = value.student;
+                                const url = "http://127.0.0.1:5000/api/students/" + studentid + "/";
+                                fetch(url, {
                                     method: "GET",
                                     credentials: 'same-origin',
                                     headers: {
@@ -128,101 +174,32 @@
                                         'Content-Type': 'application/json',
                                         'Accept': 'application/json',
                                         'X-CSRFToken': csrftoken,
-                                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
                                     },
-                      }).then((resp) => {
-                                    resp.json().then((val) => {
-                                        const sessionval = val.results;
-                                        sessionval.forEach(function(value) { 
-                                          const amount = value.price;
-                                          const duration = value.time_start + " - " + value.time_end;
-                                          const date = value.date;
-                                          const studentid = value.student;
-                                          const url = "http://127.0.0.1:8000/students/" + studentid + "/";
-                                          fetch(url, {
-                                              method: "GET",
-                                              credentials: 'same-origin',
-                                              headers: {
-                                                  "Access-Control-Allow-Origin": "*",
-                                                  'Content-Type': 'application/json',
-                                                  'Accept': 'application/json',
-                                                  'X-CSRFToken': csrftoken,
-                                              },
-                                          }).then((resp) => {
-                                              resp.json().then((data) => {
-                                                const user = data.user;
-                                                const studentname = user.first_name + " " + user.last_name;
-                                                var item = `
-                                                  <div class="div-block-64">
-                                                    <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
-                                                    <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
-                                                    <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
-                                                    <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
-                                                    <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
-                                                  </div>
-                                                `;
-                                                unpaid_wrapper.innerHTML +=item 
-                                              })
-                                            })
-                                        })
+                                }).then((resp) => {
+                                    resp.json().then((data) => {
+                                      const user = data.user;
+                                      const studentname = user.first_name + " " + user.last_name;
+                                      var item = `
+                                        <div class="div-block-64">
+                                          <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
+                                          <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
+                                          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
+                                          <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
+                                          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
+                                        </div>
+                                      `;
+                                      paid_wrapper.innerHTML +=item 
                                     })
-                                })
-                      paid_wrapper = document.getElementById('paid');
-                      fetch("http://127.0.0.1:8000/sessions/finished_sessions/", {
-                                    method: "GET",
-                                    credentials: 'same-origin',
-                                    headers: {
-                                        "Access-Control-Allow-Origin": "*",
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json',
-                                        'X-CSRFToken': csrftoken,
-                                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                                    },
-                      }).then((resp) => {
-                                    resp.json().then((val) => {
-                                        const sessionval = val.results;
-                                        sessionval.forEach(function(value) { 
-                                          const amount = value.price;
-                                          const duration = value.time_start + " - " + value.time_end;
-                                          const date = value.date;
-                                          const studentid = value.student;
-                                          const url = "http://127.0.0.1:8000/students/" + studentid + "/";
-                                          fetch(url, {
-                                              method: "GET",
-                                              credentials: 'same-origin',
-                                              headers: {
-                                                  "Access-Control-Allow-Origin": "*",
-                                                  'Content-Type': 'application/json',
-                                                  'Accept': 'application/json',
-                                                  'X-CSRFToken': csrftoken,
-                                              },
-                                          }).then((resp) => {
-                                              resp.json().then((data) => {
-                                                const user = data.user;
-                                                const studentname = user.first_name + " " + user.last_name;
-                                                var item = `
-                                                  <div class="div-block-64">
-                                                    <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
-                                                    <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
-                                                    <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
-                                                    <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
-                                                    <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
-                                                  </div>
-                                                `;
-                                                paid_wrapper.innerHTML +=item 
-                                              })
-                                            })
-                                        })
-                                    })
-                                })
-                    }
+                                  })
+                              })
+                          })
+                      })
                   })
-                })
-            });
-        } catch (e) {
-            console.log(e)
+              })
+          })
         }
-  });
+      })
+    })
   </script>
 </body>
 </html>

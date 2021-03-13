@@ -67,50 +67,33 @@
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
       fetch("http://127.0.0.1:5000/api/api-auth/token/", {
-          method: "POST",
-          headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'X-CSRFToken': csrftoken,
-          },
-          body:JSON.stringify({
-            email: email,
-            password: password,
-          })
-        }).then((resp)=> {
-            try {
-                resp.json().then((data) => {
-                    localStorage.setItem("refresh", data.refresh);
-                    localStorage.setItem("access", data.access);
-                    const refreshToken = localStorage.getItem("refresh");
-                    const accessToken = localStorage.getItem("access");
-                                fetch("http://127.0.0.1:5000/api/users/me/", {
-                                    method: "GET",
-                                    credentials: 'same-origin',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json',
-                                        'X-CSRFToken': csrftoken,
-                                        'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                                    },
-                                }).then((resp) => {
-                                    resp.json().then((data) => {
-                                        console.log(data)
-                                        if(data.tutor !=null){
-                                            window.location = 'http://127.0.0.1:5500/main/student/index.html'; 
-                                        }
-                                        else if(data.student !=null){
-                                            window.location = 'http://127.0.0.1:5500/main/tutor/index.html'; 
-                                        }
-                                        console.log(type)
-                                    })
-                                })
-                        
-                })
-            } catch (e) {
-                console.log(e);
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          // 'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }).then((resp) => {
+        try {
+          resp.json().then((data) => {
+            const user = data.user;
+            if(user.is_student == true){
+              window.location = "http://127.0.0.1:5000/main/student/index.html"
             }
-        }); 
+            else if(user.is_tutor == true){
+              window.location = "http://127.0.0.1:5000/main/tutor/index.html"
+            }
+          });
+        } catch (e) {
+          console.warn(e);
+          return e;
+        }
+      });
     }
     
   </script>

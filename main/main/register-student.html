@@ -108,7 +108,7 @@ form {
         <div class="text-block">Already have an account?</div><a href="login.html" class="link">Sign In</a></div>
       <div class="div-block-3" style="margin-top: 0px;">
         <div style="margin-top: 60px; "class="container">
-          <form>
+          <form method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="col">
                 <label for="firstname" class="form-label">First Name</label>
@@ -155,8 +155,8 @@ form {
                 I agree with the <a href="toc.html">Terms of Service</a>
               </label>
             </div>
-            <button style="margin-top: 40px; margin-bottom: 20px;" onclick="myfunc()" class="btn btn-primary">Register</button>
           </form>
+          <button style="margin-top: 40px; margin-bottom: 20px;" onclick="myfunc()" class="btn btn-primary">Register</button>
         </div>
       </div>
     </div>
@@ -192,52 +192,45 @@ form {
 
       var password = document.getElementById('password').value;
       var confirmpassword = document.getElementById('confirmpassword').value;
-      console.log(password,confirmpassword)
       if (password!=confirmpassword){
         alert("Password and Confirm Password are inequal.")
       }
+      
+      user = {
+        "email":"mukesham@gmail.com", 
+        "password":"1234", 
+        "is_student": true, 
+        "is_tutor": true, 
+        "first_name": "mukesh", 
+        "last_name": "ambani"
+      }
 
-      console.log(firstname,lastname)
-      console.log(email)
-      console.log(password, confirmpassword)
-      console.log(pfp, parentemail, birthdate)
-
-    fetch('http://127.0.0.1:8000/users/', {
-        method: "POST",
-        headers: {
-            'Content-type':'multipart/form-data',
-            'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({"email": email,"password" : password, "first_name": firstname, "last_name": lastname, "profile_pic": "http://127.0.0.1:8000/media/person.png", "is_student": true, "is_tutor": null }
-)
-    }).then((resp)=> {
-        try {
-            resp.json().then((data) => {
-                console.log(data);
-                fetch('http://127.0.0.1:8000/students/', {
-                  method: "POST",
-                  headers: {
-                      'Content-type':'multipart/form-data',
-                      'X-CSRFToken': getCookie('csrftoken'),
-                  },
-                  body: JSON.stringify({parentemail, birthdate})
-              }).then((resp)=> {
-                  try {
-                      resp.json().then((data) => {
-                          console.log(data, "User Created");
-                      })
-                  } catch (e) {
-                      console.log(e);
-                  }
-                });
-            })
-        } catch (e) {
-            console.log(e);
-        }
-    });
-
-
-    
+      student = {
+        
+      }
+      
+      const createStudent = (user, student) => {
+      fetch('http://127.0.0.1:8000/api/register-student/', {
+          method: "POST",
+          headers: {
+              'Accept': 'application/json',
+              'Content-type':'application/json', // Change to 'multipart/form-data' for images
+          },
+          body: JSON.stringify({
+              user,
+              student
+          })
+      })
+      .then((resp)=> {
+          try {
+              resp.json().then((data) => {
+                  console.log(data);
+              })
+          } catch (e) {
+              console.log(e);
+          }
+      });
+  }
 }
     
 

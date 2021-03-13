@@ -71,115 +71,200 @@
   </div>
   <script src='https://meet.jit.si/external_api.js'></script>
   <script>
-  var current_url = window.location.href;
-  key = current_url.slice(62);
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    const csrftoken = getCookie('csrftoken');
-    const sessionurl ="http://127.0.0.1:8000/sessions/" + key;
-    
-    const refreshToken = localStorage.getItem("refresh")
-    fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
-        method: "POST",
-        headers: {
-          'Content-type':'application/json',
-          'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({"refresh": refreshToken})
-    }).then((resp)=> {
-          try{
-              resp.json().then((data) => {
-                const accessToken = data.access;
-                fetch("http://127.0.0.1:8000/users/me/", {
-                  method: "GET",
-                  credentials: 'same-origin',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'X-CSRFToken': csrftoken,
-                      'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                  },
-              }).then((resp) => {
-                  resp.json().then((data) => {
-                    fetch(sessionurl, {
-                        method: "GET",
-                        credentials: 'same-origin',
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRFToken': csrftoken,
-                            'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-                        },
-                    }).then((resp) => {
-                          resp.json().then((val) => {
-                            const sessionid = val.id;
-                            const session_tutor_id = val.tutor;
-                            var today = new Date();
-                            var minutes = today.getMinutes();
-                            if (minutes<10){
-                              minutes = "0" + minutes
-                            }
-                            var time = today.getHours() + ":" + minutes + ":00" ;
-                            if(data.student ==null || data.student != session_tutor_id){
-                                document.getElementById("main").innerHTML = "";
-                                document.write("<h1><strong>404 Not Found<strong></h1>")
-                            } 
-                            else if(time!=val.time_start){
-                              document.getElementById("main").innerHTML = "";
-                              main_wrapper = document.getElementById('body');
-                              var item=`
-                                <div style="width: 80vw; height: 80vh; margin-top: 40px; background-color:white;border-width:0px;"class="div-block-80">
-                                  <h1 style="font-family: Poppins; ">We are very sorry but your class has not started yet.</h1>
-                                </div>
-                              `
-                              main_wrapper.innerHTML +=item
-                            }
-                            else{
-                              const fullname = data.first_name + " " + data.last_name;
-                              document.getElementById("name").innerHTML = fullname;
-                              var container = document.querySelector('#jitsi-container');
-                              var api = null;
-                              var roomurl = "tutorpalsession/"+sessionid;
-                              var domain = "meet.jit.si";
-                              var options = {
-                                  "roomName": roomurl,
-                                  "parentNode": container,
-                                  "width": window.innerWidth -20,
-                                  "height": window.innerHeight -20 ,
-                                  userInfo: {
-                                    displayName: fullname
-                                  }
-                              };
-                              api = new JitsiMeetExternalAPI(domain, options);
-                                const numberOfParticipants = api.getNumberOfParticipants();
-                                if(numberOfParticipants>2){
-                                  alert("There are not supposed to be greater than 2 participants in this meeting, one of you must leave")
-                                }
-                              
-                            }
-                          })
-                    })
-                    })
-              })
-              });
-          } catch (e) {
-              console.log(e)
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
           }
-    });
+      }
+      return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+  const refreshToken = localStorage.getItem("refresh")
+  fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
+      resp.json().then((data) => {
+        const accessToken = data.access;
+        var user = data.user;
+        var current_url = window.location.href;
+        key = current_url.slice(62);
+        fetch(sessionurl, {
+            method: "GET",
+            credentials: 'same-origin',
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRFToken': csrftoken,
+                'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+            },
+        }).then((resp) => {
+              resp.json().then((val) => {
+                const sessionid = val.id;
+                const session_tutor_id = val.tutor;
+                //need to change according to event based sessions funcs
+                var today = new Date();
+                var minutes = today.getMinutes();
+                if (minutes<10){
+                  minutes = "0" + minutes
+                }
+                var time = today.getHours() + ":" + minutes + ":00" ;
+                if(data.student ==null || data.student != session_tutor_id){
+                    document.getElementById("main").innerHTML = "";
+                    document.write("<h1><strong>404 Not Found<strong></h1>")
+                } 
+                else if(time!=val.time_start){
+                  document.getElementById("main").innerHTML = "";
+                  main_wrapper = document.getElementById('body');
+                  var item=`
+                    <div style="width: 80vw; height: 80vh; margin-top: 40px; background-color:white;border-width:0px;"class="div-block-80">
+                      <h1 style="font-family: Poppins; ">We are very sorry but your class has not started yet.</h1>
+                    </div>
+                  `
+                  main_wrapper.innerHTML +=item
+                }
+                else{
+                  const fullname = data.first_name + " " + data.last_name;
+                  document.getElementById("name").innerHTML = fullname;
+                  var container = document.querySelector('#jitsi-container');
+                  var api = null;
+                  var roomurl = "tutorpalsession/"+sessionid;
+                  var domain = "meet.jit.si";
+                  var options = {
+                      "roomName": roomurl,
+                      "parentNode": container,
+                      "width": window.innerWidth -20,
+                      "height": window.innerHeight -20 ,
+                      userInfo: {
+                        displayName: fullname
+                      }
+                  };
+                  api = new JitsiMeetExternalAPI(domain, options);
+                    const numberOfParticipants = api.getNumberOfParticipants();
+                    if(numberOfParticipants>2){
+                      alert("There are not supposed to be greater than 2 participants in this meeting, one of you must leave")
+                    }
+                  
+                }
+              })
+        })
+      })
+  })
+  // var current_url = window.location.href;
+  // key = current_url.slice(62);
+  //   function getCookie(name) {
+  //       let cookieValue = null;
+  //       if (document.cookie && document.cookie !== '') {
+  //           const cookies = document.cookie.split(';');
+  //           for (let i = 0; i < cookies.length; i++) {
+  //               const cookie = cookies[i].trim();
+  //               // Does this cookie string begin with the name we want?
+  //               if (cookie.substring(0, name.length + 1) === (name + '=')) {
+  //                   cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+  //                   break;
+  //               }
+  //           }
+  //       }
+  //       return cookieValue;
+  //   }
+  //   const csrftoken = getCookie('csrftoken');
+  //   const sessionurl ="http://127.0.0.1:8000/sessions/" + key;
+    
+  //   const refreshToken = localStorage.getItem("refresh")
+  //   fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
+  //       method: "POST",
+  //       headers: {
+  //         'Content-type':'application/json',
+  //         'X-CSRFToken': csrftoken,
+  //       },
+  //       body: JSON.stringify({"refresh": refreshToken})
+  //   }).then((resp)=> {
+  //         try{
+  //             resp.json().then((data) => {
+  //               const accessToken = data.access;
+  //               fetch("http://127.0.0.1:8000/users/me/", {
+  //                 method: "GET",
+  //                 credentials: 'same-origin',
+  //                 headers: {
+  //                     'Content-Type': 'application/json',
+  //                     'Accept': 'application/json',
+  //                     'X-CSRFToken': csrftoken,
+  //                     'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+  //                 },
+  //             }).then((resp) => {
+  //                 resp.json().then((data) => {
+  //                   fetch(sessionurl, {
+  //                       method: "GET",
+  //                       credentials: 'same-origin',
+  //                       headers: {
+  //                           "Access-Control-Allow-Origin": "*",
+  //                           'Content-Type': 'application/json',
+  //                           'Accept': 'application/json',
+  //                           'X-CSRFToken': csrftoken,
+  //                           'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+  //                       },
+  //                   }).then((resp) => {
+  //                         resp.json().then((val) => {
+  //                           const sessionid = val.id;
+  //                           const session_tutor_id = val.tutor;
+  //                           var today = new Date();
+  //                           var minutes = today.getMinutes();
+  //                           if (minutes<10){
+  //                             minutes = "0" + minutes
+  //                           }
+  //                           var time = today.getHours() + ":" + minutes + ":00" ;
+  //                           if(data.student ==null || data.student != session_tutor_id){
+  //                               document.getElementById("main").innerHTML = "";
+  //                               document.write("<h1><strong>404 Not Found<strong></h1>")
+  //                           } 
+  //                           else if(time!=val.time_start){
+  //                             document.getElementById("main").innerHTML = "";
+  //                             main_wrapper = document.getElementById('body');
+  //                             var item=`
+  //                               <div style="width: 80vw; height: 80vh; margin-top: 40px; background-color:white;border-width:0px;"class="div-block-80">
+  //                                 <h1 style="font-family: Poppins; ">We are very sorry but your class has not started yet.</h1>
+  //                               </div>
+  //                             `
+  //                             main_wrapper.innerHTML +=item
+  //                           }
+  //                           else{
+  //                             const fullname = data.first_name + " " + data.last_name;
+  //                             document.getElementById("name").innerHTML = fullname;
+  //                             var container = document.querySelector('#jitsi-container');
+  //                             var api = null;
+  //                             var roomurl = "tutorpalsession/"+sessionid;
+  //                             var domain = "meet.jit.si";
+  //                             var options = {
+  //                                 "roomName": roomurl,
+  //                                 "parentNode": container,
+  //                                 "width": window.innerWidth -20,
+  //                                 "height": window.innerHeight -20 ,
+  //                                 userInfo: {
+  //                                   displayName: fullname
+  //                                 }
+  //                             };
+  //                             api = new JitsiMeetExternalAPI(domain, options);
+  //                               const numberOfParticipants = api.getNumberOfParticipants();
+  //                               if(numberOfParticipants>2){
+  //                                 alert("There are not supposed to be greater than 2 participants in this meeting, one of you must leave")
+  //                               }
+                              
+  //                           }
+  //                         })
+  //                   })
+  //                   })
+  //             })
+  //             });
+  //         } catch (e) {
+  //             console.log(e)
+  //         }
+  //   });
   </script>
 </body>
 </html>
