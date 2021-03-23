@@ -5,18 +5,20 @@ import os
 from datetime import datetime
 
 
+# generates users along with tutors and students
 def generate_users():
     names_dir = os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))) + "/register/names.json"
     names_json = open(names_dir)
     names = json.load(names_json)
 
-    print(names[3:9])
-
     for i in range(10):
+        first_name = random.choice(names)
+        last_name = random.choice(names)
         user = User.objects.create(
-            first_name=random.choice(names),
-            last_name=random.choice(names),
+            email=first_name + last_name + "@sdlfjdsf.cofodkf",
+            first_name=first_name,
+            last_name=last_name,
             is_active=True,
         )
         user.save()
@@ -38,11 +40,14 @@ def generate_users():
                 gender="Other",
                 tutor_type="idk",
                 availability="when ur busy",
+                user=user
             )
-            tutor.save(user=user)
+            tutor.save()
         else:
             student = Student.objects.create(
                 parent_email="nunya@beezwax.baf",
-                birth_date=datetime.now()
+                birth_date=datetime.now(),
+                user=user
             )
-            student.save(user=user)
+            student.save()
+    print('successfully generated users')
