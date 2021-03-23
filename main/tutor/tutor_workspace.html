@@ -87,7 +87,19 @@
       return cookieValue;
   }
   const csrftoken = getCookie('csrftoken');
-  const refreshToken = localStorage.getItem("refresh")
+  const refreshToken = () => {
+  fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
+      try {
+        resp.json().then((data) => {
+          console.log(data);
+          return data;
+        });
+      } catch (e) {
+        console.warn(e);
+        return e;
+      }
+    });
+  };
   fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
       resp.json().then((data) => {
         const accessToken = data.access;

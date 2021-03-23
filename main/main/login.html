@@ -81,6 +81,7 @@
       }).then((resp) => {
         try {
           resp.json().then((data) => {
+            console.log(data)
             const user = data.user;
             if(user.is_student == true){
               window.location = "http://127.0.0.1:5000/main/student/index.html"
