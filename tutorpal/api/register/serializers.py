@@ -95,7 +95,6 @@ class TutorOwnerSerializer(serializers.ModelSerializer):
     extra_kwargs = {
         # 'average_reviews': {'read_only': True, "required": False, 'allow_null': True},
         # 'free_tutoring_given': {'read_only': True, "required": False, 'allow_null': True},
-        'verified': {'read_only': True, "required": False, 'allow_null': True},
         'linkedIn': {"required": False, 'allow_null': True}
     }
 

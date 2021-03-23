@@ -39,8 +39,8 @@ def register_student(request):
             student = student_serializer.save(user=user)
             user.student_id = student.id
         except Exception as e:
-            print(e)
-            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+            raise e
+            # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
         email = user.email
         current_site = get_current_site(request)

@@ -2,6 +2,7 @@ import json
 import random
 from .models import Student, Tutor, User, Review
 import os
+from datetime import datetime
 
 
 def generate_users():
@@ -21,27 +22,27 @@ def generate_users():
         user.save()
         if random.randint(1, 2) == 1:
             tutor = Tutor.objects.create(
-                # paypal_email
-                # qualifications
-                # what_you_teach
-                # subjects
-                # birth_date
-                # bio
-                # rates
-                # occupation
-                # linkedIn
-                # verified
-                # prof_exp
-                # teach_exp
-                # education
-                # school
-                # gpa
-                # major
-                # gender
-                # tutor_type
-                # availability
-                # num_classes
-                # average_reviews
-                # num_reviews
-                # free_tutoring_given
+                qualifications="none",
+                what_you_teach="something",
+                subjects="nunya beezwax",
+                birth_date=datetime.now(),
+                bio="no",
+                rates=15,
+                occupation="nunya beezwax",
+                prof_exp=42,
+                teach_exp=69,
+                education="nunya beezwax",
+                school="nunya beezwax",
+                gpa=3,
+                major="nunya beezwax",
+                gender="Other",
+                tutor_type="idk",
+                availability="when ur busy",
             )
+            tutor.save(user=user)
+        else:
+            student = Student.objects.create(
+                parent_email="nunya@beezwax.baf",
+                birth_date=datetime.now()
+            )
+            student.save(user=user)
