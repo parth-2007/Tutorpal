@@ -17,19 +17,19 @@ class RoomViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, DRYPermissions]
 
     def get_queryset(self):
-        if hasattr(self.request.user, 'student'):
+        if self.request.user.has_student:
             return Room.objects.filter(student=self.request.user.student)
-        elif hasattr(self.request.user, 'tutor'):
+        elif self.request.user.has_tutor:
             return Room.objects.filter(tutor=self.request.user.tutor)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You are not authenticated")
 
-    @action(detail=False)
+    @ action(detail=False)
     def inbox(self, request):
-        if hasattr(request.user, 'student'):
+        if self.request.user.has_student:
             room_queryset = Room.objects.filter(
                 student=request.user.student)
-        elif hasattr(request.user, 'tutor'):
+        elif self.request.user.has_tutor:
             room_queryset = Room.objects.filter(tutor=request.user.tutor)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You cannot view your rooms")
@@ -39,7 +39,7 @@ class RoomViewSet(viewsets.ModelViewSet):
             serializer_class = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer_class.data)
 
-        serializer_class = self.get_serializer(session_queryset, many=True)
+        serializer_class = self.get_serializer(room_queryset, many=True)
         return Response(serializer_class.data)
 
 

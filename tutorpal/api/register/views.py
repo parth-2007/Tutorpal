@@ -27,21 +27,20 @@ from django.core.mail import send_mail
 @api_view(('POST',))
 def register_student(request):
     if not request.user.is_authenticated:
-        # try:
-        print(request.data.get('user'))
-        user_serializer = UserOwnerSerializer(
-            data=request.data.get('user'))
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer.save()
-        user.is_active = False
-        user.save()
-        student_serializer = StudentOwnerSerializer(
-            data=request.data.get('student'))
-        student_serializer.is_valid(raise_exception=True)
-        student = student_serializer.save(user=user)
-        # except Exception as e:
-        #     print(e)
-        #     return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user_serializer = UserOwnerSerializer(
+                data=request.data.get('user'))
+            user_serializer.is_valid(raise_exception=True)
+            user = user_serializer.save()
+            user.is_active = False
+            student_serializer = StudentOwnerSerializer(
+                data=request.data.get('student'))
+            student_serializer.is_valid(raise_exception=True)
+            student = student_serializer.save(user=user)
+            user.student_id = student.id
+        except Exception as e:
+            print(e)
+            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
         email = user.email
         current_site = get_current_site(request)
@@ -67,24 +66,27 @@ def register_student(request):
 @api_view(('POST',))
 def register_tutor(request):
     if not request.user.is_authenticated:
+        req_data = request.data
+        req_data['average_reviews'] = 0.0
         try:
             user_serializer = UserOwnerSerializer(
-                data=request.POST.get('user'))
+                data=req_data.get('user'))
             user_serializer.is_valid(raise_exception=True)
-            user = user_serializer
+            user = user_serializer.save()
             user.is_active = False
-            user.save()
             tutor_serializer = TutorOwnerSerializer(
-                data=request.POST.get('tutor'))
+                data=req_data.get('tutor'))
             tutor_serializer.is_valid(raise_exception=True)
             tutor = tutor_serializer.save(user=user)
-        except Exception:
-            return Response(data="Invalid data given", status=status.HTTP_400_BAD_REQUEST)
+            user.tutor_id = tutor.id
+        except Exception as e:
+            raise e
+            # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
         email = user.email
         current_site = get_current_site(request)
         subject = 'Confirm Your Email for TutorPal'
-        message = render_to_string('register/emails/confirm-email.html', {
+        message = render_to_string('register/emails/confirm_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -203,7 +205,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def student(self, request, pk):
-        if hasattr(request.user, 'student'):
+        if self.request.user.has_student:
             if pk == self.request.user.pk:
                 serializer = StudentOwnerSerializer(request.user.student)
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -215,7 +217,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def tutor(self, request, pk):
-        if hasattr(request.user, 'tutor'):
+        if self.request.user.has_tutor:
             if pk == "me":
                 serializer = TutorOwnerSerializer(request.user.tutor)
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -250,7 +252,7 @@ class TutorViewSet(viewsets.ModelViewSet):
         #     return super().get_object()
         if self.action in ["retrieve", "update", "partial_update"]:
             pk = self.kwargs['pk']
-            if pk == "me" and hasattr(self.request.user, 'tutor'):
+            if pk == "me" and self.request.user.has_tutor:
                 return self.request.user.tutor
             else:
                 return super().get_object()
@@ -324,7 +326,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         #     return super().get_object()
         if self.action in ["retrieve", "update", "partial_update"]:
             pk = self.kwargs['pk']
-            if pk == "me" and hasattr(self.request.user, 'student'):
+            if pk == "me" and self.request.user.has_student:
                 return self.request.user.student
             else:
                 return super().get_object()

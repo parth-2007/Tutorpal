@@ -5,31 +5,6 @@ from typing import Union
 
 
 class UserViewingSerializer(serializers.ModelSerializer):
-    # student = serializers.SerializerMethodField('get_tutor_pk')
-    # tutor = serializers.SerializerMethodField('get_student_pk')
-
-    def get_tutor_pk(self, user: User) -> Union[int, None]:
-        if hasattr(user, 'tutor'):
-            return user.tutor.pk
-        else:
-            return None
-        # try:
-        #     tutor = user.tutor.pk
-        # except ObjectDoesNotExist:
-        #     tutor = None
-        # return tutor
-
-    def get_student_pk(self, user: User) -> Union[int, None]:
-        if hasattr(user, 'student'):
-            return user.student.pk
-        else:
-            return None
-        # try:
-        #     student = user.student.pk
-        # except ObjectDoesNotExist:
-        #     student = None
-        # return student
-
     class Meta:
         model = User
         fields = [
@@ -38,32 +13,25 @@ class UserViewingSerializer(serializers.ModelSerializer):
 
 
 class UserOwnerSerializer(serializers.ModelSerializer):
-    # student = serializers.SerializerMethodField('get_tutor_pk')
-    # tutor = serializers.SerializerMethodField('get_student_pk')
+    # is_student = serializers.SerializerMethodField('has_student')
+    # is_tutor = serializers.SerializerMethodField('has_tutor')
+    is_student = serializers.BooleanField(source='has_student', read_only=True)
+    is_tutor = serializers.BooleanField(source='has_tutor', read_only=True)
 
-    def get_tutor_pk(self, user: User) -> Union[int, None]:
-        try:
-            tutor = user.tutor.pk
-        except ObjectDoesNotExist:
-            tutor = None
-        return tutor
+    def has_student(self, user: User) -> bool:
+        return user.has_student
 
-    def get_student_pk(self, user: User) -> Union[int, None]:
-        try:
-            student = user.student.pk
-        except ObjectDoesNotExist:
-            student = None
-        return student
+    def has_tutor(self, user: User) -> bool:
+        return user.has_tutor
 
     class Meta:
         model = User
         fields = [
             'id', 'email', 'is_student', 'is_tutor',
-            'first_name', 'last_name', 'profile_pic', 'password'
-            # 'student', 'tutor',
+            'first_name', 'last_name', 'profile_pic', 'password',
+            'student_id', 'tutor_id',
         ]
-        extra_kwargs = {'is_student': {'write_only': True},
-                        'is_tutor': {'write_only': True}, 'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         print(validated_data)
@@ -108,10 +76,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class TutorOwnerSerializer(serializers.ModelSerializer):
     user = UserOwnerSerializer(read_only=True)
-    # reviews = serializers.SerializerMethodField('get_reviews')
 
-    # def get_reviews(self, tutor):
-    #     return ReviewSerializer(instance=Review.objects.filter(tutor=tutor), many=True).data
+    average_reviews = serializers.FloatField(read_only=True)
+    free_tutoring_given = serializers.DurationField(read_only=True)
+    num_classes = serializers.IntegerField(read_only=True)
+    num_reviews = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Tutor
@@ -120,11 +89,15 @@ class TutorOwnerSerializer(serializers.ModelSerializer):
             'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews',
-            'free_tutoring_given', 'paypal_email',  # 'reviews'
+            'free_tutoring_given', 'paypal_email', 'num_classes', 'num_reviews'
         ]
 
-    extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
-        'read_only': True}, 'free_tutoring_given': {'read_only': True}}
+    extra_kwargs = {
+        # 'average_reviews': {'read_only': True, "required": False, 'allow_null': True},
+        # 'free_tutoring_given': {'read_only': True, "required": False, 'allow_null': True},
+        'verified': {'read_only': True, "required": False, 'allow_null': True},
+        'linkedIn': {"required": False, 'allow_null': True}
+    }
 
 
 class TutorViewingSerializer(serializers.ModelSerializer):

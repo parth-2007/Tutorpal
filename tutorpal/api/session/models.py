@@ -58,9 +58,9 @@ class Session(models.Model):
 
     @authenticated_users
     def has_object_write_permission(self, request):
-        if hasattr(request.user, "tutor"):
+        if request.user.has_tutor:
             return self.tutor == request.user.tutor
-        elif hasattr(request.user, "student"):
+        elif request.user.has_student:
             return self.student == request.user.student
         else:
             return False
@@ -68,4 +68,4 @@ class Session(models.Model):
     @staticmethod
     @authenticated_users
     def has_create_permission(request):
-        return hasattr(request.user, "student")
+        return request.user.has_student

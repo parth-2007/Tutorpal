@@ -57,18 +57,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    is_tutor = models.BooleanField(default=False)
-    is_student = models.BooleanField(default=False)
+    # is_tutor = models.BooleanField(default=False)
+    # is_student = models.BooleanField(default=False)
     first_name = models.CharField(max_length=50, verbose_name="First Name")
     last_name = models.CharField(max_length=50, verbose_name="Last Name")
     timestamp = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(
         default='person.png', upload_to='profile_pics/')
     last_reset = models.DateTimeField(null=True)
+    student_id = models.IntegerField(null=True)
+    tutor_id = models.IntegerField(null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
     objects = UserManager()
+
+    @property
+    def has_student(self):
+        return self.student_id is not None
+
+    @property
+    def has_tutor(self):
+        return self.tutor_id is not None
 
     def get_full_name(self):
         return self.email
@@ -172,10 +182,26 @@ class Tutor(models.Model):
     tutor_type = models.CharField(max_length=50)
     availability = models.CharField(
         max_length=500, help_text="Please explain your availability times.")
-    num_classes = models.IntegerField()
-    average_reviews = models.FloatField()
-    num_reviews = models.IntegerField()
+    num_classes = models.IntegerField(default=0)
+    average_reviews = models.FloatField(default=0.0)
+    num_reviews = models.IntegerField(default=0)
     free_tutoring_given = models.DurationField(default=timedelta(hours=0))
+
+    # @property
+    # def free_tutoring_given(self):
+    #     pass
+
+    # @property
+    # def num_reviews(self):
+    #     pass
+
+    # @property
+    # def average_reviews(self):
+    #     pass
+
+    # @property
+    # def num_classes(self):
+    #     pass
 
     @staticmethod
     def has_read_permission(request):

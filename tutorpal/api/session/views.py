@@ -33,10 +33,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def my_sessions(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(tutor=request.user.tutor)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You cannot view your sessions")
@@ -51,10 +51,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_tutor(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student, accepted=False, rejected=False, canceled=False)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(
                 tutor=request.user.tutor, accepted=False, rejected=False, canceled=False)
         else:
@@ -70,10 +70,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_student_payment(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             my_sessions = Session.objects.filter(
                 student=request.user.student, student_paid=False, canceled=False, accepted=True)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             my_sessions = Session.objects.filter(
                 tutor=request.user.tutor, student_paid=False, canceled=False, accepted=True)
         else:
@@ -89,10 +89,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def upcoming(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student, accepted=True, student_paid=True, canceled=False)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(
                 tutor=request.user.tutor, accepted=True, student_paid=True, canceled=False)
         else:
@@ -108,10 +108,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def tutor_not_paid(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student, canceled=False, finished=True, tutor_paid=False)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(
                 tutor=request.user.tutor, canceled=False, finished=True, tutor_paid=False)
         else:
@@ -127,10 +127,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def finished_sessions(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student, finished=True, tutor_paid=True)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(
                 tutor=request.user.tutor, finished=True, tutor_paid=True)
         else:
@@ -146,10 +146,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def canceled_sessions(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student, canceled=True)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(
                 tutor=request.user.tutor, canceled=True)
         else:
@@ -165,10 +165,10 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def started_sessions(self, request):
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             session_queryset = Session.objects.filter(
                 student=request.user.student, started=True)
-        elif hasattr(request.user, 'tutor'):
+        elif request.user.has_tutor:
             session_queryset = Session.objects.filter(
                 tutor=request.user.tutor, started=True)
         else:

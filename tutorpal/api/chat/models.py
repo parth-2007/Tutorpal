@@ -17,9 +17,9 @@ class Room(models.Model):
         return True
 
     def has_object_read_permission(self, request):
-        if hasattr(request.user, 'tutor'):
+        if request.user.has_tutor:
             return self.tutor == request.user.tutor
-        if hasattr(request.user, 'student'):
+        if request.user.has_student:
             return self.student == request.user.student
 
     @staticmethod

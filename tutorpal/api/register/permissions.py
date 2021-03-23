@@ -17,7 +17,7 @@ class CanMakeObj(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        elif hasattr(request.user, 'student') or hasattr(request.user, 'tutor'):
+        elif request.user.has_student or request.user.has_tutor:
             return False
         else:
             return False
