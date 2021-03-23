@@ -27,7 +27,7 @@
               <nav class="navigation-dropdown-2 w-dropdown-list">
                 <div class="dropdown-pointer-2">
                   <div style="width: 300px;" class="dropdown-wrapper-2">
-                    <a href="#" class="dropdown-link-2 w-inline-block">
+                    <a id="logout" href="#" class="dropdown-link-2 w-inline-block">
                       <div class="nav-content-wrap-2">
                         <div class="dropdown-title-2">Logout</div>
                       </div>
@@ -100,7 +100,19 @@
         return cookieValue;
   }
   const csrftoken = getCookie('csrftoken');
-  const refreshToken = localStorage.getItem("refresh")
+  const refreshToken = () => {
+    fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
+        try {
+          resp.json().then((data) => {
+            console.log(data);
+            return data;
+          });
+        } catch (e) {
+          console.warn(e);
+          return e;
+        }
+      });
+  };
   fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
       resp.json().then((data) => {
         const accessToken = data.access;
@@ -114,17 +126,17 @@
           var fullname = user.first_name + " " + user.last_name;
           document.getElementById("name").innerHTML = fullname;
           document.getElementById('image').src = "http://127.0.0.1:5000" +user.profile_pic;
-          fetch("http://127.0.0.1:5000/api/sessions/started_sessions/", {
-              method: "GET",
-              credentials: 'same-origin',
-              headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json',
-                  'X-CSRFToken': csrftoken,
-                  'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
-              },
-          }).then((resp) => {
+            fetch("http://127.0.0.1:5000/api/sessions/started_sessions/", {
+                method: "GET",
+                credentials: 'same-origin',
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                    'Authorization': 'Bearer ' + accessToken, // This is important for identifying user
+                },
+            }).then((resp) => {
               resp.json().then((data) => {
                 const started = data.results;
                 started_wrapper = document.getElementById('started');
@@ -317,6 +329,23 @@
                   // }
                 })
               })
+            })
+            var form = document.getElementById('logout');
+            form.addEventListener('click',function(e){
+              e.preventDefault()
+              console.log("Successfully Logged Out")
+              fetch("http://127.0.0.1:5000/api/api-auth/token/logout/").then((resp) => {
+                try {
+                  resp.json().then((data) => {
+                    console.log(data);
+                    window.location = "http://127.0.0.1:5000/main/main/login.html";
+                    return data;
+                  });
+                } catch (e) {
+                  console.log(e);
+                  return e;
+                }
+              });   
             })
         }
       })

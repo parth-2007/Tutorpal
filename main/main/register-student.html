@@ -108,7 +108,7 @@ form {
         <div class="text-block">Already have an account?</div><a href="login.html" class="link">Sign In</a></div>
       <div class="div-block-3" style="margin-top: 0px;">
         <div style="margin-top: 60px; "class="container">
-          <form method="post" enctype="multipart/form-data">
+          <form onsubmit="myfunc()" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="col">
                 <label for="firstname" class="form-label">First Name</label>
@@ -155,8 +155,8 @@ form {
                 I agree with the <a href="toc.html">Terms of Service</a>
               </label>
             </div>
+            <button style="margin-top: 40px; margin-bottom: 20px;" type="submit" class="btn btn-primary">Register</button>
           </form>
-          <button style="margin-top: 40px; margin-bottom: 20px;" onclick="myfunc()" class="btn btn-primary">Register</button>
         </div>
       </div>
     </div>
@@ -183,10 +183,10 @@ form {
     function myfunc(){
       var firstname = document.getElementById('firstname').value;
       var lastname = document.getElementById('lastname').value;
-      var email = document.getElementById('emailaddress').value;
+      var email = String(document.getElementById('emailaddress').value);
       var password = document.getElementById('password').value;
       var confirmpassword = document.getElementById('confirmpassword').value;
-      var parentemail = document.getElementById('parentemail').value;
+      var parentemail = String(document.getElementById('parentemail').value);
       var birthdate = document.getElementById('birthdate').value;
       var pfp = document.getElementById("file").value;
 
@@ -197,40 +197,36 @@ form {
       }
       
       user = {
-        "email":"mukesham@gmail.com", 
-        "password":"1234", 
-        "is_student": true, 
-        "is_tutor": true, 
-        "first_name": "mukesh", 
-        "last_name": "ambani"
+          email: email,
+          password: password,
+          is_student: true,
+          is_tutor: false,
+          first_name: firstname,
+          last_name: lastname,
       }
-
-      student = {
-        
+      student = {      
+          "parent_email": parentemail,
+          "birth_date":  birthdate,
       }
-      
-      const createStudent = (user, student) => {
-      fetch('http://127.0.0.1:8000/api/register-student/', {
+      fetch("http://127.0.0.1:5000/api/api-auth/register-student/", {
           method: "POST",
           headers: {
-              'Accept': 'application/json',
-              'Content-type':'application/json', // Change to 'multipart/form-data' for images
+            Accept: "application/json",
+            "Content-type": "application/json", // Change to 'multipart/form-data' for images
           },
           body: JSON.stringify({
-              user,
-              student
-          })
-      })
-      .then((resp)=> {
+            user,
+            student,
+          }),
+        }).then((resp) => {
           try {
-              resp.json().then((data) => {
-                  console.log(data);
-              })
+            resp.json().then((data) => {
+              console.log(data);
+            });
           } catch (e) {
-              console.log(e);
+            console.log(e);
           }
       });
-  }
 }
     
 

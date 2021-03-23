@@ -123,7 +123,7 @@
       </div>
     </div>
   </div>
-  <form id="registerform"style="font-family: Poppins;">
+  <!-- <form id="registerform"style="font-family: Poppins;">
     <div class="div-block-7-copy">
       <h1 class="heading-4">Account Info</h1>
       <h1 class="heading-4-copy">Account Info</h1>
@@ -189,8 +189,7 @@
         </div>
         <div style="margin-right:0px;" class="w-col w-col-6">
           <select style="margin-top: 15px; width: 92%;"class="form-select" id="gender" aria-label="Default select example">
-            <option selected>Gender</option>
-            <option value="1">Male</option>
+            <option selected>Male</option>
             <option value="2">Female</option>
             <option value="3">Other</option>
           </select>
@@ -258,7 +257,7 @@
               <input type="text" class="form-control" id="school" required>
             </div>
           </div>
-          <textarea style="height:250px; margin-top: 25px;"class="form-control" id="education" rows="3"></textarea>
+          <textarea style="height:250px; margin-top: 25px;"class="form-control" id="t_education" rows="3"></textarea>
         </div>
       </div>
       <div class="columns-2-copy w-row">
@@ -335,41 +334,146 @@
           </div>
         </div>
       </div>
-      <button style="margin-top: 40px; margin-bottom: 20px;" onclick="myFunction()" class="btn btn-primary">Register</button>
-  </form>
+     </form> -->
+    <button onclick="myFunction()"style="margin-top: 40px; margin-bottom: 20px;" class="btn btn-primary">Register</button>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5f322f74eb6b4d7e4650a23e" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="registration/js/webflow.js" type="text/javascript"></script>
   <script>
-    var loadFile = function(event) {
-      var image = document.getElementById('output');
-      image.src = URL.createObjectURL(event.target.files[0]);
-    };
+    // var loadFile = function(event) {
+    //   var image = document.getElementById('output');
+    //   image.src = URL.createObjectURL(event.target.files[0]);
+    // };
 
-    function prices(){
-      var rates = document.getElementById('rates').value;
-      document.getElementById("pricedisplay").innerHTML = "Pricing: $"+rates;
-    }
-
+    // function prices(){
+    //   var rates = document.getElementById('rates').value;
+    //   document.getElementById("pricedisplay").innerHTML = "Pricing: $"+rates;
+    // }
+    
     form_array = ["FirstName", "LastName", "Password", "ConfirmPassword", "EmailAddress", "BirthDate", "Gender", "Occupation", "Subject", "ClassDescription", "Major", "GPA", "Education", "School", "EducationDescription", "LinkedinProfileLink", "Bio", "ProfilePic", "Pricing", "TeachingExperience","ProfessionalExperience", "Availability"];
     var profile = [];
     function myFunction() {
-      var i = 0;
-      var password = document.getElementById('password').value;
-      var confirmpassword = document.getElementById('confirmpassword').value;
-      if (password!=confirmpassword){
-        alert("Password and Confirm Password are inequal.")
+      // profile.push({
+      //       key:   "FirstName",
+      //       value: document.getElementById('firstname').value,
+      // });
+      // var i = 0;
+      // var password = document.getElementById('password').value;
+      // var confirmpassword = document.getElementById('confirmpassword').value;
+      // if (password!=confirmpassword){
+      //   alert("Password and Confirm Password are inequal.")
+      // }
+      // while (i < 21) {
+      //   i++;
+      //   var x = document.getElementById("registerform").elements[i].value;
+      //   var y = form_array[i]
+      //   if (x==undefined || x==null){
+      //     x = "";
+      //   }
+      //   profile.push({
+      //       key:   y,
+      //       value: x,
+      //   });
+      // }
+      user = {
+        email: "jwick@gmail.com",
+        password: "tutorpal123",
+        is_student: false,
+        is_tutor: true,
+        first_name: "John",
+        last_name: "Wick",
       }
-      while (i < 22) {
-        i++;
-        var x = document.getElementById("registerform").elements[i].value;
-        var y = form_array[i]
-        if (x==undefined || x==null){
-          x = "";
-        }
-        profile = profile + y+":"+x;
+      // if(profile[15].value!=""){
+      //   var verified=true
+      // }
+      // else{
+      //   var verified=false
+      // }
+
+      // if(profile[6].value==1){
+      //   var gender="Male"
+      // }
+      // else if(profile[6].value==2){
+      //   var gender="Female"
+      // }
+      // else if(profile[6].value==3){
+      //   var gender="Other"
+      // }
+
+      // if(profile[12].value==1){
+      //   var education="PhD"
+      // }
+      // else if(profile[12].value==2){
+      //   var education="Master"
+      // }
+      // else if(profile[12].value==3){
+      //   var education="Bachelors"
+      // }
+      // else if(profile[12].value==4){
+      //   var education="College Student"
+      // }else if(profile[12].value==3){
+      //   var education="Highschool"
+      // }
+
+      // tutor={
+      //   "qualifications": profile[14].value,
+      //   "what_you_teach": profile[9].value,
+      //   "subjects": profile[8].value,
+      //   "birth_date": null,
+      //   "bio": profile[16].value,
+      //   "rates": profile[18].value,
+      //   "occupation": profile[7].value,
+      //   "linkedIn": profile[15].value,
+      //   "verified": verified,
+      //   "prof_exp": profile[20].value,
+      //   "teach_exp": profile[19].value,
+      //   "education": education,
+      //   "school": profile[13].value,
+      //   "gpa": profile[11].value,
+      //   "major": profile[10].value,
+      //   "gender": gender,
+      //   "tutor_type": "",
+      //   "availability": profile[21].value,
+      //   "paypal_email": profile[4].value,
+      // }
+      tutor={
+        "qualifications": "im the best",
+        "what_you_teach": "math",
+        "subjects": "math",
+        "birth_date": "2001-03-05",
+        "bio": "i do stuff",
+        "rates": "1.13",
+        "occupation": "Professor",
+        "linkedIn": "linkedin.com/hi",
+        "verified": true,
+        "prof_exp": 8,
+        "teach_exp": 5,
+        "education": "High School",
+        "school": "",
+        "gpa": "4.0",
+        "major": "math",
+        "gender": "Male",
+        "tutor_type": null,
+        "availability": "Wednesdays when u arent available",
       }
-      console.log(profile)
-      return profile;
+      console.log(tutor, user)
+      fetch("http://127.0.0.1:5000/api/api-auth/register-tutor/", {
+          method: "POST",
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+          body: JSON.stringify({
+            user,
+            tutor,
+          }),
+        }).then((resp) => {
+          try {
+            resp.json().then((data) => {
+              console.log(data);
+            });
+          } catch (e) {
+            console.log(e);
+          }
+      });
     }
 
   </script>

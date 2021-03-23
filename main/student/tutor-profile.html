@@ -143,7 +143,19 @@
         return cookieValue;
     }
     const csrftoken = getCookie('csrftoken');
-    const refreshToken = localStorage.getItem("refresh")
+    const refreshToken = () => {
+    fetch("http://127.0.0.1:5000/api/api-auth/token/refresh/").then((resp) => {
+        try {
+          resp.json().then((data) => {
+            console.log(data);
+            return data;
+          });
+        } catch (e) {
+          console.warn(e);
+          return e;
+        }
+      });
+    };
     fetch('http://127.0.0.1:8000/api-auth/token/refresh/', {
         method: "POST",
         headers: {
@@ -309,25 +321,25 @@
               console.log(e)
           }
     });
-              var check_count = 0;
-              var trial = false;
-              function trial_function(){
-                check_count = check_count+1;
-                if(check_count % 2 == 0) {
-                    var bool = false;
-                }
-                else {
-                    var bool = true;
-                }
-                window.trial = bool;
-              } 
+    var check_count = 0;
+    var trial = false;
+    function trial_function(){
+      check_count = check_count+1;
+      if(check_count % 2 == 0) {
+          var bool = false;
+      }
+      else {
+          var bool = true;
+      }
+      window.trial = bool;
+    } 
 
-              function myfunc(){
-                var stars = document.getElementById('stars').value;
-                var description = document.getElementById('description').value;
-                console.log(stars)
-                console.log(description)
-              }
+    function myfunc(){
+      var stars = document.getElementById('stars').value;
+      var description = document.getElementById('description').value;
+      console.log(stars)
+      console.log(description)
+    }
               
               
   </script>
