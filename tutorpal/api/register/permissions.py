@@ -39,9 +39,9 @@ class CanMakeReview(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        elif request.user.is_tutor:
+        elif request.user.has_tutor:
             return False
-        elif request.user.is_student:
+        elif request.user.has_student:
             return True
         else:
             return False
