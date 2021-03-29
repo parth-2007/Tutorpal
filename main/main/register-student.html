@@ -199,8 +199,6 @@ form {
       user = {
           email: email,
           password: password,
-          is_student: true,
-          is_tutor: false,
           first_name: firstname,
           last_name: lastname,
       }
@@ -208,11 +206,12 @@ form {
           "parent_email": parentemail,
           "birth_date":  birthdate,
       }
-      fetch("http://127.0.0.1:5000/api/api-auth/register-student/", {
+      fetch("https://127.0.0.1:5000/api/api-auth/register-student/", {
           method: "POST",
           headers: {
             Accept: "application/json",
             "Content-type": "application/json", // Change to 'multipart/form-data' for images
+            'X-CSRFToken': csrftoken,
           },
           body: JSON.stringify({
             user,
@@ -222,6 +221,7 @@ form {
           try {
             resp.json().then((data) => {
               console.log(data);
+              // window.location = "activation page, sent in email etc."
             });
           } catch (e) {
             console.log(e);
