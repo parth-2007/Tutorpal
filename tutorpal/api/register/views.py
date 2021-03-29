@@ -26,82 +26,83 @@ from django.core.mail import send_mail
 
 @api_view(('POST',))
 def register_student(request):
-    if not request.user.is_authenticated:
-        try:
-            user_serializer = UserOwnerSerializer(
-                data=request.data.get('user'))
-            user_serializer.is_valid(raise_exception=True)
-            user = user_serializer.save()
-            user.is_active = False
-            student_serializer = StudentOwnerSerializer(
-                data=request.data.get('student'))
-            student_serializer.is_valid(raise_exception=True)
-            student = student_serializer.save(user=user)
-            user.student_id = student.id
-        except Exception as e:
-            raise e
-            # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+    # if not request.user.is_authenticated:
+    try:
+        user_serializer = UserOwnerSerializer(
+            data=request.data.get('user'))
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        user.is_active = False
+        student_serializer = StudentOwnerSerializer(
+            data=request.data.get('student'))
+        student_serializer.is_valid(raise_exception=True)
+        student = student_serializer.save(user=user)
+        user.student_id = student.id
+    except Exception as e:
+        raise e
+        # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
-        email = user.email
-        current_site = get_current_site(request)
-        subject = 'Confirm Your Email for TutorPal'
-        message = render_to_string('register/emails/confirm_email.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user)
-        })
-        send_mail(subject, message, None, [email])
+    email = user.email
+    current_site = get_current_site(request)
+    subject = 'Confirm Your Email for TutorPal'
+    message = render_to_string('register/emails/confirm_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user)
+    })
+    send_mail(subject, message, None, [email])
 
-        response = Response(data=StudentOwnerSerializer(
-            student).data, status=status.HTTP_201_CREATED)
-        # tz_name = request.data.get('tz_name')
-        # if tz_name in pytz.all_timezones:
-        #     response.set_cookie('tz_name', tz_name)
-        return response
-    else:
-        return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
+    response = Response(data=StudentOwnerSerializer(
+        student).data, status=status.HTTP_201_CREATED)
+    # tz_name = request.data.get('tz_name')
+    # if tz_name in pytz.all_timezones:
+    #     response.set_cookie('tz_name', tz_name)
+    return response
+    # else:
+    #     return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(('POST',))
 def register_tutor(request):
-    if not request.user.is_authenticated:
-        req_data = request.data
-        req_data['average_reviews'] = 0.0
-        try:
-            user_serializer = UserOwnerSerializer(
-                data=req_data.get('user'))
-            user_serializer.is_valid(raise_exception=True)
-            user = user_serializer.save()
-            user.is_active = False
-            tutor_serializer = TutorOwnerSerializer(
-                data=req_data.get('tutor'))
-            tutor_serializer.is_valid(raise_exception=True)
-            tutor = tutor_serializer.save(user=user)
-            user.tutor_id = tutor.id
-        except Exception as e:
-            raise e
-            # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+    # if not request.user.is_authenticated:
+    req_data = request.data
+    req_data['average_reviews'] = 0.0
+    try:
+        user_serializer = UserOwnerSerializer(
+            data=req_data.get('user'))
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        user.is_active = False
+        tutor_serializer = TutorOwnerSerializer(
+            data=req_data.get('tutor'))
+        tutor_serializer.is_valid(raise_exception=True)
+        tutor = tutor_serializer.save(user=user)
+        user.tutor_id = tutor.id
+    except Exception as e:
+        print("error: ", e)
+        raise e
+        # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
-        email = user.email
-        current_site = get_current_site(request)
-        subject = 'Confirm Your Email for TutorPal'
-        message = render_to_string('register/emails/confirm_email.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user)
-        })
-        send_mail(subject, message, None, [email])
+    email = user.email
+    current_site = get_current_site(request)
+    subject = 'Confirm Your Email for TutorPal'
+    message = render_to_string('register/emails/confirm_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user)
+    })
+    send_mail(subject, message, None, [email])
 
-        response = Response(data=TutorOwnerSerializer(
-            tutor).data, status=status.HTTP_201_CREATED)
-        # tz_name = request.data.get('tz_name')
-        # if tz_name in pytz.all_timezones:
-        #     response.set_cookie('tz_name', tz_name)
-        return response
-    else:
-        return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
+    response = Response(data=TutorOwnerSerializer(
+        tutor).data, status=status.HTTP_201_CREATED)
+    # tz_name = request.data.get('tz_name')
+    # if tz_name in pytz.all_timezones:
+    #     response.set_cookie('tz_name', tz_name)
+    return response
+    # else:
+    #     return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view()
