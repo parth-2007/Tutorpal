@@ -38,6 +38,7 @@ def register_student(request):
         student_serializer.is_valid(raise_exception=True)
         student = student_serializer.save(user=user)
         user.student_id = student.id
+        user.save()
     except Exception as e:
         raise e
         # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -79,6 +80,7 @@ def register_tutor(request):
         tutor_serializer.is_valid(raise_exception=True)
         tutor = tutor_serializer.save(user=user)
         user.tutor_id = tutor.id
+        user.save()
     except Exception as e:
         print("error: ", e)
         raise e
@@ -175,7 +177,7 @@ def get_trending():
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().select_related('student', 'tutor')
+    queryset = User.objects.all()
     serializer_class = UserViewingSerializer
     permission_classes = [DRYPermissions]
 

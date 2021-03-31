@@ -39,6 +39,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('', include('register.urls')),
+    path('', include('register.api_urls')),
     path('', include('session.urls')),
     path('', include('chat.urls')),
     path('', include('main.urls')),
