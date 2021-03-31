@@ -188,29 +188,29 @@ form {
       var confirmpassword = document.getElementById('confirmpassword').value;
       var parentemail = String(document.getElementById('parentemail').value);
       var birthdate = document.getElementById('birthdate').value;
-      var pfp = document.getElementById("file").value;
-
       var password = document.getElementById('password').value;
       var confirmpassword = document.getElementById('confirmpassword').value;
+      var thing = document.getElementById('file');
+      const something = thing.files;
       if (password!=confirmpassword){
         alert("Password and Confirm Password are inequal.")
       }
-      
       user = {
           email: email,
           password: password,
           first_name: firstname,
           last_name: lastname,
+          profile_pic: something,
       }
       student = {      
           "parent_email": parentemail,
           "birth_date":  birthdate,
       }
-      fetch("https://127.0.0.1:5000/api/api-auth/register-student/", {
+      fetch("http://127.0.0.1:5000/api/api-auth/register-student/", {
           method: "POST",
           headers: {
             Accept: "application/json",
-            "Content-type": "application/json", // Change to 'multipart/form-data' for images
+            "Content-type": "multipart/form-data", // Change to 'multipart/form-data' for images
             'X-CSRFToken': csrftoken,
           },
           body: JSON.stringify({
@@ -218,6 +218,7 @@ form {
             student,
           }),
         }).then((resp) => {
+          console.log(resp)
           try {
             resp.json().then((data) => {
               console.log(data);
