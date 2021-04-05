@@ -1,14 +1,23 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist
-from typing import Union
+# from django.core.exceptions import ObjectDoesNotExist
+# from typing import Union
 
 
 class UserViewingSerializer(serializers.ModelSerializer):
+    is_student = serializers.BooleanField(source='has_student', read_only=True)
+    is_tutor = serializers.BooleanField(source='has_tutor', read_only=True)
+
+    def has_student(self, user: User) -> bool:
+        return user.has_student
+
+    def has_tutor(self, user: User) -> bool:
+        return user.has_tutor
+
     class Meta:
         model = User
         fields = [
-            'id', 'first_name', 'last_name', 'profile_pic',  # 'student', 'tutor'
+            'id', 'first_name', 'last_name', 'profile_pic', 'is_student', 'is_tutor'
         ]
 
 
@@ -65,7 +74,7 @@ class StudentViewingSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     student = StudentViewingSerializer(read_only=True)
-    # tutor = TutorSerializer(read_only=True)
+    tutor = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Review

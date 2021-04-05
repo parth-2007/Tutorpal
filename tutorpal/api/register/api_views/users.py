@@ -38,7 +38,7 @@ class UserList(APIView):
 
 class UserDetail(generics.GenericAPIView, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     # queryset = User.objects.all()
-    # serializer_class = UserOwnerSerializer
+    serializer_class = UserOwnerSerializer
     # permission_classes = (DRYPermissions,)
 
     def dispatch(self, request, *args, **kwargs):

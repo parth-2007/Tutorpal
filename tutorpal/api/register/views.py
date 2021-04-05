@@ -363,6 +363,12 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, CanMakeReview]
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        print('# of Queries: {}'.format(len(connection.queries)))
+        return response
+
     def create(self, request):
         tutor = Tutor.objects.get(pk=request.data.get('tutor'))
         student = request.user.student

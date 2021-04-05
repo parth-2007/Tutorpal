@@ -16,6 +16,12 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     # serializer_class = SessionSerializer
     permission_classes = [DRYPermissions]
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        print('# of Queries: {}'.format(len(connection.queries)))
+        return response
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReservedSerializer

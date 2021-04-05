@@ -1,4 +1,4 @@
-from ..models import Review
+from ..models import Review, Tutor
 from ..serializers import ReviewSerializer
 from django.http import Http404
 from rest_framework.views import APIView
@@ -20,16 +20,19 @@ class ReviewList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        print(request.data)
         serializer = ReviewSerializer(data=request.data)
-        tutor = request.data.get('tutor')
-        # 1 query
+        tutor_id = request.data.get('tutor')
+        tutor = Tutor.objects.get(pk=tutor_id)
+        student = request.user.student
         if not Review.objects.filter(student__user=request.user, tutor=tutor).exists():
             if serializer.is_valid():
-                serializer.save(student__user=request.user)
+                # serializer.save(student=student)
+                Review.objects.create(tutor=tutor, student=student, stars=request.data.get(
+                    'stars'), description=request.data.get("description"))
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data="Cannot make review", status=status.HTTP_403_FORBIDDEN)
+        return Response(data="Cannot make review", status=status.HTTP_403_FORBIDDEN)
 
 
 class ReviewDetail(APIView):

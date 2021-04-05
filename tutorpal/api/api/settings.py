@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'register.apps.RegisterConfig',
     'chat',
     'session',
-    'frontend',
     'corsheaders',
     'channels',
     'rest_framework',
