@@ -4,3 +4,4 @@
 *.sqlite3
 venv/
 env/
+**/profile_pics/**

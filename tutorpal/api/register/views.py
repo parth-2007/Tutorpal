@@ -1,25 +1,27 @@
-from .models import User, Tutor, Student, Review
-from .serializers import UserOwnerSerializer, UserViewingSerializer, TutorOwnerSerializer, TutorViewingSerializer, StudentOwnerSerializer, StudentViewingSerializer, ReviewSerializer
-from .permissions import CanMakeReview
-
-from rest_framework import permissions, viewsets, status
-from rest_framework.response import Response
+from django.contrib.postgres.search import SearchVector
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.timezone import now
+from django.views.decorators.cache import cache_page
 from dry_rest_permissions.generics import DRYPermissions
+from rest_framework import permissions, status, viewsets, mixins
 # from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action, api_view
-from django.contrib.postgres.search import SearchVector
-from django.shortcuts import render
-from django.utils.timezone import now
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+from rest_framework.response import Response
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
+from .models import Review, Student, Tutor, User
+from .permissions import CanMakeReview
+from .serializers import (ReviewSerializer, StudentOwnerSerializer,
+                          StudentViewingSerializer, TutorOwnerSerializer,
+                          TutorViewingSerializer, UserOwnerSerializer,
+                          UserViewingSerializer)
 from .tokens import account_activation_token, password_reset_token
-from django.utils.encoding import force_text
-from django.core.mail import send_mail
+
 # from django.http import HttpRequest
 # import pytz
 
@@ -37,7 +39,8 @@ def register_student(request):
             data=request.data.get('student'))
         student_serializer.is_valid(raise_exception=True)
         student = student_serializer.save(user=user)
-        user.student_id = student.id
+        user.student_pk = student.id
+        user.save()
     except Exception as e:
         raise e
         # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -78,7 +81,8 @@ def register_tutor(request):
             data=req_data.get('tutor'))
         tutor_serializer.is_valid(raise_exception=True)
         tutor = tutor_serializer.save(user=user)
-        user.tutor_id = tutor.id
+        user.tutor_pk = tutor.id
+        user.save()
     except Exception as e:
         print("error: ", e)
         raise e
@@ -174,8 +178,12 @@ def get_trending():
     return tutors
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().select_related('student', 'tutor')
+class UserViewSet(viewsets.GenericViewSet,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  mixins.ListModelMixin):
+    queryset = User.objects.all()
     serializer_class = UserViewingSerializer
     permission_classes = [DRYPermissions]
 
@@ -229,7 +237,11 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(data="User has no Tutor", status=status.HTTP_404_NOT_FOUND)
 
 
-class TutorViewSet(viewsets.ModelViewSet):
+class TutorViewSet(viewsets.GenericViewSet,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.DestroyModelMixin):
     queryset = Tutor.objects.all().select_related('user')
     serializer_class = TutorViewingSerializer
     permission_classes = [DRYPermissions]
@@ -307,7 +319,11 @@ class TutorViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class StudentViewSet(viewsets.ModelViewSet):
+class StudentViewSet(viewsets.GenericViewSet,
+                     mixins.RetrieveModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin):
     queryset = Student.objects.all().select_related('user')
     serializer_class = StudentViewingSerializer
     permission_classes = [DRYPermissions]
@@ -355,11 +371,22 @@ class StudentViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class ReviewViewSet(viewsets.ModelViewSet):
+class ReviewViewSet(viewsets.GenericViewSet,
+                    mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.CreateModelMixin):
     queryset = Review.objects.all().select_related(
         'student', 'student__user', 'tutor')
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, CanMakeReview]
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        print('# of Queries: {}'.format(len(connection.queries)))
+        return response
 
     def create(self, request):
         tutor = Tutor.objects.get(pk=request.data.get('tutor'))

@@ -65,8 +65,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_pic = models.ImageField(
         default='person.png', upload_to='profile_pics/')
     last_reset = models.DateTimeField(null=True)
-    student_id = models.IntegerField(null=True)
-    tutor_id = models.IntegerField(null=True)
+    student_pk = models.IntegerField(null=True)
+    tutor_pk = models.IntegerField(null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -74,11 +74,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def has_student(self):
-        return self.student_id is not None
+        return self.student_pk is not None
 
     @property
     def has_tutor(self):
-        return self.tutor_id is not None
+        return self.tutor_pk is not None
 
     def get_full_name(self):
         return self.email
