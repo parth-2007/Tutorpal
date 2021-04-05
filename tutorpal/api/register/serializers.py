@@ -38,7 +38,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'email', 'is_student', 'is_tutor',
             'first_name', 'last_name', 'profile_pic', 'password',
-            'student_id', 'tutor_id',
+            'student_pk', 'tutor_pk',
         ]
         extra_kwargs = {'password': {'write_only': True}}
 

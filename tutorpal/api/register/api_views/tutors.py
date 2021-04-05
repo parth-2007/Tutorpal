@@ -8,6 +8,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework import mixins
 from rest_framework import generics
+from django.contrib.postgres.search import SearchVector
+from rest_framework.pagination import PageNumberPagination
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
 
@@ -49,7 +51,7 @@ class TutorDetail(generics.GenericAPIView, mixins.UpdateModelMixin, mixins.Destr
 
     def get(self, request, pk, format=None):
         tutor = self.get_object(pk)
-        if request.user.is_authenticated and pk == request.user.tutor_id:
+        if request.user.is_authenticated and pk == request.user.tutor_pk:
             serializer = TutorOwnerSerializer(tutor)
         else:
             serializer = TutorViewingSerializer(tutor)
@@ -99,7 +101,47 @@ def user(request, pk):
     if pk == "me":
         serializer = UserOwnerSerializer(request.user)
     else:
-        user = User.objects.get(tutor_id=pk)
+        user = User.objects.get(tutor_pk=pk)
         serializer = UserViewingSerializer(user)
     print('# of Queries: {}'.format(len(connection.queries)))
     return Response(data=serializer.data)
+
+
+# @api_view()
+# def search(self, request):
+#     query = request.GET.get('q')
+#     tutor_query = Tutor.objects.annotate(
+#         search=SearchVector('user__first_name', 'user__last_name', 'occupation',
+#                             'rates', 'qualifications', 'subjects', 'what_you_teach', 'education')
+#     ).filter(search=query)
+#     page = PageNumberPagination.paginate_queryset(tutor_query)
+#     if page is not None:
+#         serializer_class = self.get_serializer(page, many=True)
+#         return self.get_paginated_response(serializer_class.data)
+
+#     serializer_class = self.get_serializer(tutor_query, many=True)
+#     return Response(serializer_class.data)
+
+
+# @api_view()
+# def trending(self, request):
+#     tutor_query = Tutor.objects.order_by('num_classes', 'average_reviews')
+#     page = self.paginate_queryset(tutor_query)
+#     if page is not None:
+#         serializer_class = self.get_serializer(page, many=True)
+#         return self.get_paginated_response(serializer_class.data)
+
+#     serializer_class = self.get_serializer(tutor_query, many=True)
+#     return Response(serializer_class.data)
+
+
+# @api_view()
+# def reviews(self, request, pk):
+#     review_query = Review.objects.filter(tutor=pk)
+#     page = self.paginate_queryset(review_query)
+#     if page is not None:
+#         serializer_class = ReviewSerializer(page, many=True)
+#         return self.get_paginated_response(serializer_class.data)
+
+#     serializer_class = ReviewSerializer(review_query, many=True)
+#     return Response(serializer_class.data)

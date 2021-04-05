@@ -44,6 +44,9 @@ class Session(models.Model):
     student_emailed = models.BooleanField(default=False)
     parent_emailed = models.BooleanField(default=False)
 
+    student_pk = models.IntegerField()
+    tutor_pk = models.IntegerField()
+
     @staticmethod
     def has_read_permission(request):
         return True

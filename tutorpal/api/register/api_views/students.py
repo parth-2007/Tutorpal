@@ -49,7 +49,7 @@ class StudentDetail(generics.GenericAPIView, mixins.UpdateModelMixin, mixins.Des
 
     def get(self, request, pk, format=None):
         student = self.get_object(pk)
-        if request.user.is_authenticated and pk == request.user.student_id:
+        if request.user.is_authenticated and pk == request.user.student_pk:
             serializer = StudentOwnerSerializer(student)
         else:
             serializer = StudentViewingSerializer(student)
@@ -99,7 +99,7 @@ def user_(request, pk):
     if pk == "me":
         serializer = UserOwnerSerializer(request.user)
     else:
-        user = User.objects.get(student_id=pk)
+        user = User.objects.get(student_pk=pk)
         serializer = UserViewingSerializer(user)
     print('# of Queries: {}'.format(len(connection.queries)))
     return Response(data=serializer.data)

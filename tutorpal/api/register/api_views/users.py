@@ -4,12 +4,13 @@ from ..serializers import UserOwnerSerializer, UserViewingSerializer, TutorOwner
 
 from django.http import Http404
 from rest_framework.views import APIView
+from rest_framework.viewsets import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework import mixins
-from rest_framework import generics
 from django.http import HttpRequest
+from rest_framework.pagination import PageNumberPagination
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
 
@@ -23,7 +24,10 @@ def get_object(request: HttpRequest, pk: Union[int, str]) -> Union[User, Http404
         raise Http404
 
 
-class UserList(APIView):
+class UserList(generics.GenericAPIView):
+    queryset = User.objects.all()
+    pagination_class = PageNumberPagination
+
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
@@ -31,8 +35,14 @@ class UserList(APIView):
         return response
 
     def get(self, request, format=None):
-        users = User.objects.all()
-        serializer = UserViewingSerializer(users, many=True)
+        queryset = User.objects.all()
+        page = request.query_params.get('page')
+        if page is not None:
+            paginate_queryset = self.paginate_queryset(queryset)
+            serializer = UserViewingSerializer(paginate_queryset, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = UserViewingSerializer(queryset, many=True)
         return Response(serializer.data)
 
 

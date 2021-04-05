@@ -52,7 +52,7 @@ class UserAdmin(BaseUserAdmin):
         ('Permissions', {'fields': ('is_admin', 'is_staff')}),
         ('Account Info', {
          'fields': ('is_active', 'profile_pic', 'last_reset')}),
-        ('Tutor/Student', {'fields': ('student_id', 'tutor_id')})
+        ('Tutor/Student', {'fields': ('student_pk', 'tutor_pk')})
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
