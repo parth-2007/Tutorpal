@@ -11,10 +11,16 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 
-class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
+class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     # serializer_class = SessionSerializer
     permission_classes = [DRYPermissions]
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        from django.db import connection
+        print('# of Queries: {}'.format(len(connection.queries)))
+        return response
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -187,4 +193,5 @@ class SessionViewSet(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     #     if hasattr(request.user, 'tutor'):
 
     def perform_create(self, serializer):
-        serializer.save(student=self.request.user.student)
+        serializer.save(student=self.request.user.student, student_pk=self.request.user.student_pk, tutor_pk=int(
+            self.request.data.get('tutor')))

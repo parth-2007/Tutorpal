@@ -1,9 +1,9 @@
 import json
-import random
-from .models import Student, Tutor, User, Review
 import os
+import random
 from datetime import datetime, time, timedelta
 from session.models import Session
+from .models import Review, Student, Tutor, User
 
 
 # generates users along with tutors and students
@@ -45,6 +45,8 @@ def generate_users(iterations):
                 user=user
             )
             tutor.save()
+            user.tutor_pk = tutor.id
+            user.save()
         else:
             student = Student.objects.create(
                 parent_email="nunya@beezwax.baf",
@@ -52,6 +54,9 @@ def generate_users(iterations):
                 user=user
             )
             student.save()
+            user.student_pk = student.id
+            user.save()
+
     print('successfully generated users')
 
 
@@ -108,5 +113,7 @@ def generate_sessions(iterations):
             tutor_emailed=started,
             student_emailed=started,
             parent_emailed=started,
+            tutor_pk=tutor.pk,
+            student_pk=student.pk
         )
     print("success!")
