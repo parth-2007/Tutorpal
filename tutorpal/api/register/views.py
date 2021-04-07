@@ -10,8 +10,8 @@ from rest_framework.decorators import action, api_view
 from django.contrib.postgres.search import SearchVector
 from django.shortcuts import render
 from django.utils.timezone import now
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.cache import cache_page
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string

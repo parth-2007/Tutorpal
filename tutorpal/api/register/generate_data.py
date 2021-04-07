@@ -18,7 +18,7 @@ def generate_users(iterations):
         first_name = random.choice(names)
         last_name = random.choice(names)
         user = User.objects.create(
-            email=first_name + last_name + "@sdlfjdsf.cofodkf",
+            email=first_name + last_name + "@example.com",
             first_name=first_name,
             last_name=last_name,
             is_active=True,
