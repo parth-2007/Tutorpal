@@ -178,7 +178,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'tutor_pal',
+        'NAME': 'tutorpal',
         # 'NAME': 'posgtres',
 
         'USER': '',

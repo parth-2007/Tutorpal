@@ -180,11 +180,6 @@ def test(request):
     return render(request, 'register/index.html')
 
 
-def get_trending():
-    tutors = Tutor.objects.order_by('num_classes', 'average_reviews')
-    return tutors
-
-
 class UserViewSet(viewsets.GenericViewSet,
                   mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
@@ -291,7 +286,7 @@ class TutorViewSet(viewsets.GenericViewSet,
         tutor_query = Tutor.objects.annotate(
             search=SearchVector('user__first_name', 'user__last_name', 'occupation',
                                 'rates', 'qualifications', 'subjects', 'what_you_teach', 'education')
-        ).filter(search=query)
+        ).filter(search=query).select_related('user')
         page = self.paginate_queryset(tutor_query)
         if page is not None:
             serializer_class = self.get_serializer(page, many=True)
@@ -302,14 +297,14 @@ class TutorViewSet(viewsets.GenericViewSet,
 
     @action(detail=False)
     def trending(self, request):
-        tutor_query = get_trending()
+        tutor_query = Tutor.objects.all().order_by('num_classes', 'average_reviews').select_related('user')
         page = self.paginate_queryset(tutor_query)
         if page is not None:
-            serializer_class = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer_class.data)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
-        serializer_class = self.get_serializer(tutor_query, many=True)
-        return Response(serializer_class.data)
+        serializer = TutorViewingSerializer(tutor_query, many=True)
+        return Response(serializer.data)
 
     @action(detail=True)
     def reviews(self, request, pk):
