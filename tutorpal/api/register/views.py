@@ -1,7 +1,7 @@
 from django.contrib.postgres.search import SearchVector
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
-from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -13,7 +13,9 @@ from rest_framework import permissions, status, viewsets, mixins
 # from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
-
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from .models import Review, Student, Tutor, User
 from .permissions import CanMakeReview
 from .serializers import (ReviewSerializer, StudentOwnerSerializer,
@@ -22,7 +24,7 @@ from .serializers import (ReviewSerializer, StudentOwnerSerializer,
                           UserViewingSerializer)
 from .tokens import account_activation_token, password_reset_token
 import json
-
+from django.contrib.auth import authenticate, login
 # from django.http import HttpRequest
 # import pytz
 
@@ -175,9 +177,25 @@ def password_reset(request, uidb64, token):
     else:
         return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
 
+@ensure_csrf_cookie
+def set_csrf_token(request):
+    return JsonResponse({"CSRF":"CSRF Cookie Set"})
 
-def test(request):
-    return render(request, 'register/index.html')
+@require_POST
+def api_login(request):
+    data = json.loads(request.body)
+    email = data.get("email", None)
+    password = data.get("password", None)
+    if email is None or password is None:
+        return JsonResponse({"errors": "Did not provide an email or password"}, status=400)
+
+    user = authenticate(email=email, password=password)
+    if user is None:
+        return JsonResponse({"errors": "Invalid email or password"}, status=400)
+
+    login(request, user)
+    user_data = UserOwnerSerializer(user).data
+    return JsonResponse(user_data)
 
 
 class UserViewSet(viewsets.GenericViewSet,
@@ -391,16 +409,16 @@ class ReviewViewSet(viewsets.GenericViewSet,
         return response
 
     def create(self, request):
-        tutor = Tutor.objects.get(pk=request.data.get('tutor'))
-        student = request.user.student
         description = request.data.get('description')
         stars = request.data.get('stars')
-        if not Review.objects.filter(student=student, tutor=tutor).exists():
-            review = Review(tutor=tutor, student=student,
-                            stars=stars, description=description)
+        try:
+            review = Review.objects.get(student__user=request.user, tutor_id=request.data.get('tutor'))
+            return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")
+        except ObjectDoesNotExist:
+            student = request.user.student
+            tutor = Tutor.objects.get(pk=request.data.get('tutor'))
+            review = Review.objects.create(tutor=tutor, student=student, stars=stars, description=description)
             review.save()
             tutor.average_reviews = (
                 float(tutor.average_reviews) + float(stars)) / (float(tutor.num_reviews) + 1)
             return Response(status=status.HTTP_201_CREATED, data=self.serializer_class(review).data)
-        else:
-            return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")

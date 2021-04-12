@@ -62,9 +62,9 @@ class Session(models.Model):
     @authenticated_users
     def has_object_write_permission(self, request):
         if request.user.has_tutor:
-            return self.tutor == request.user.tutor
+            return self.tutor_pk == request.user.tutor_pk
         elif request.user.has_student:
-            return self.student == request.user.student
+            return self.student_pk == request.user.student_pk
         else:
             return False
 

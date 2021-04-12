@@ -19,6 +19,7 @@ class UserViewingSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'first_name', 'last_name', 'profile_pic', 'is_student', 'is_tutor'
         ]
+        read_only_fields = fields
 
 
 class UserOwnerSerializer(serializers.ModelSerializer):
@@ -40,7 +41,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'profile_pic', 'password',
             'student_pk', 'tutor_pk',
         ]
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}, 'student_pk':{'read_only':True}, 'tutor_pk':{'read_only':True}}
 
     def create(self, validated_data):
         # print(validated_data)
@@ -60,7 +61,6 @@ class StudentOwnerSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'parent_email', 'birth_date'
         ]
-        # depth = 1
 
 
 class StudentViewingSerializer(serializers.ModelSerializer):
@@ -69,7 +69,7 @@ class StudentViewingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'user']
-        # depth = 1
+        read_only_fields = fields
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -123,6 +123,7 @@ class TutorViewingSerializer(serializers.ModelSerializer):
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given',  # 'reviews'
         ]
+        read_only_fields = fields
     extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
         'read_only': True}, 'free_tutoring_given': {'read_only': True}}
 

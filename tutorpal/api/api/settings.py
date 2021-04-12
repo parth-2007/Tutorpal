@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'dry_rest_permissions',
     'rest_framework_simplejwt.token_blacklist',
+    # 'django_filters',
     'drf_yasg',  # remove in prod
     'debug_toolbar',  # remove in prod
 ]
@@ -256,13 +257,12 @@ EMAIL_USE_TLS = True
 CSRF_USE_SESSIONS = False
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
     'DEFAULT_PAGINATION_CLASS': 'register.pagination.MyCursorPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }

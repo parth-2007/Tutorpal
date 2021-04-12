@@ -11,6 +11,8 @@ router.register(r'reviews', v.ReviewViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('api-auth/csrf/', v.set_csrf_token),
+    path('api-auth/api-login/', v.api_login),
     # path('jwt/test/', jwt_test),
     #     path('api/change-password/', v.ChangePasswordView.as_view(),
     #          name='change-password'),
