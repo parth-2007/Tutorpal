@@ -267,18 +267,12 @@ class TutorViewSet(viewsets.GenericViewSet,
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
         print('# of Queries: {}'.format(len(connection.queries)))
+        # for query in connection.queries:
+        #     print("sql query: ", query.get("sql"))
+        print('# of Queries: {}'.format(len(connection.queries)))
         return response
 
     def get_object(self):
-        # print("# get_object() called")
-        # pk = self.kwargs['pk']
-        # if pk == "me" and hasattr(self.request.user, 'tutor'):
-        #     return self.request.user.tutor
-        # if self.action == "update" or self.action == "partial_update":
-        #     if pk == "me" and hasattr(self.request.user, 'tutor'):
-        #         return self.request.user.tutor
-        # else:
-        #     return super().get_object()
         if self.action in ["retrieve", "update", "partial_update"]:
             pk = self.kwargs['pk']
             if pk == "me" and self.request.user.has_tutor:
@@ -348,15 +342,12 @@ class StudentViewSet(viewsets.GenericViewSet,
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
+        # for query in connection.queries:
+        #     print("sql query: ", query.get("sql"))
         print('# of Queries: {}'.format(len(connection.queries)))
         return response
 
     def get_object(self):
-        # pk = self.kwargs['pk']
-        # if pk == "me" and hasattr(self.request.user, 'student'):
-        #     return self.request.user.student
-        # else:
-        #     return super().get_object()
         if self.action in ["retrieve", "update", "partial_update"]:
             pk = self.kwargs['pk']
             if pk == "me" and self.request.user.has_student:
@@ -371,17 +362,6 @@ class StudentViewSet(viewsets.GenericViewSet,
             return StudentOwnerSerializer
         else:
             return super().get_serializer_class()
-        # if self.action == "list":
-        #     return StudentViewingSerializer
-        # elif self.action == "retrieve":
-        #     pk = self.request.META.get("PATH_INFO")[10:-1]
-        #     try:
-        #         if Student.objects.get(pk=pk).user == self.request.user:
-        #             return StudentOwnerSerializer
-        #     except ObjectDoesNotExist:
-        #         return StudentViewingSerializer
-        #     return StudentViewingSerializer
-        # return StudentOwnerSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -401,20 +381,24 @@ class ReviewViewSet(viewsets.GenericViewSet,
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
+        for query in connection.queries:
+            print("sql query: ", query.get("sql"))
         print('# of Queries: {}'.format(len(connection.queries)))
         return response
 
     def create(self, request):
         description = request.data.get('description')
         stars = request.data.get('stars')
+        tutor_id = request.data.get('tutor')
         try:
-            review = Review.objects.get(student__user=request.user, tutor_id=request.data.get('tutor'))
+            review = Review.objects.get(student__user=request.user, tutor_id=tutor_id) # 1 query
             return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")
         except ObjectDoesNotExist:
-            student = request.user.student
-            tutor = Tutor.objects.get(pk=request.data.get('tutor'))
-            review = Review.objects.create(tutor=tutor, student=student, stars=stars, description=description)
-            review.save()
+            # student = request.user.student
+            student = Student(id=request.user.student_pk, user=request.user)
+            tutor = Tutor.objects.get(pk=request.data.get('tutor'))  # 2 query
+            review = Review.objects.create(tutor=tutor, student=student, stars=stars, description=description)  # 3 query
             tutor.average_reviews = (
                 float(tutor.average_reviews) + float(stars)) / (float(tutor.num_reviews) + 1)
+            tutor.save()  # 4 query
             return Response(status=status.HTTP_201_CREATED, data=self.serializer_class(review).data)
