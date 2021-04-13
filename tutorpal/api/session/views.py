@@ -23,12 +23,12 @@ class SessionViewSet(viewsets.ModelViewSet):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
         for query in connection.queries:
-            print("sql query: ", query.get("sql"))
-        print('# of Queries: {}'.format(len(connection.queries)))
+            print("\n", query.get("sql"))
+        print('\n# of Queries: {}\n'.format(len(connection.queries)))
         return response
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
+        if self.action in ["retrieve", "update", "partial_update"]:
             pk = self.kwargs.get('pk')
             # checks if self.session exists, if not it will call it from the db
             if not hasattr(self, 'session') and self.request.user.has_student:
@@ -44,7 +44,13 @@ class SessionViewSet(viewsets.ModelViewSet):
         return ReservedSerializer
 
     def get_object(self):
-        if self.action == "retrieve":
+        if self.action in ["retrieve", "update", "partial_update"]:
+            pk = self.kwargs.get('pk')
+            # checks if self.session exists, if not it will call it from the db
+            if not hasattr(self, 'session') and self.request.user.has_student:
+                self.session = Session.objects.select_related('tutor', 'tutor__user').get(pk=pk)
+            elif not hasattr(self, 'session') and self.request.user.has_tutor:
+                self.session = Session.objects.select_related('student', 'student__user').get(pk=pk)
             return self.session
         else:
             return super().get_object()
