@@ -25,32 +25,31 @@ from .serializers import (ReviewSerializer, StudentOwnerSerializer,
 from .tokens import account_activation_token, password_reset_token
 import json
 from django.contrib.auth import authenticate, login
-# from django.http import HttpRequest
-# import pytz
 
 
 @api_view(('POST',))
 def register_student(request):
-    # if not request.user.is_authenticated:
+    from django.db import connection
+    print(request.data)
     try:
         pfp = request.FILES.get("profile_pic")
-        data = json.loads(request.data.get("data"))
-        user_serializer = UserOwnerSerializer(
-            data=data.get('user'))
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer.save()
-        user.is_active = False
-        student_serializer = StudentOwnerSerializer(
-            data=data.get('student'))
-        student_serializer.is_valid(raise_exception=True)
-        student = student_serializer.save(user=user)
-        user.profile_pic = pfp
-        user.student_pk = student.id
+        data = request.data.get("data")
+        user_data = data.get('user')
+        password = user_data.pop('password')
+        student_data = data.get('student')
+        user = User(**user_data)
+        user.set_password(password)
+        if pfp:
+            user.profile_pic = pfp
+        student = Student(**student_data)
+        user.save()
+        student.user = user
+        student.save()
+        user.student_pk = student.pk
         user.save()
     except Exception as e:
         print("error: ", e)
         raise e
-        # return Response(data="The data that you put was invalid", status=status.HTTP_400_BAD_REQUEST)
 
     email = user.email
     current_site = get_current_site(request)
@@ -65,37 +64,34 @@ def register_student(request):
 
     response = Response(data=StudentOwnerSerializer(
         student).data, status=status.HTTP_201_CREATED)
-    # tz_name = request.data.get('tz_name')
-    # if tz_name in pytz.all_timezones:
-    #     response.set_cookie('tz_name', tz_name)
+    # for query in connection.queries:
+    #     print("sql query: ", query.get("sql"))
+    # print('# of Queries: {}'.format(len(connection.queries)))
     return response
-    # else:
-    #     return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(('POST',))
 def register_tutor(request):
-    # if not request.user.is_authenticated:
+    from django.db import connection
     try:
         pfp = request.FILES.get("profile_pic")
-        data = json.loads(request.data.get("data"))
-        data['average_reviews'] = 0.0
-        user_serializer = UserOwnerSerializer(
-            data=data.get('user'))
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer.save()
-        user.is_active = False
-        tutor_serializer = TutorOwnerSerializer(
-            data=data.get('tutor'))
-        tutor_serializer.is_valid(raise_exception=True)
-        tutor = tutor_serializer.save(user=user)
-        user.profile_pic = pfp
-        user.tutor_pk = tutor.id
+        data = request.data.get("data")
+        user_data = data.get('user')
+        password = user_data.pop('password')
+        tutor_data = data.get('tutor')
+        user = User(**user_data)
+        user.set_password(password)
+        if pfp:
+            user.profile_pic = pfp
+        tutor = Tutor(**tutor_data)
+        user.save()
+        tutor.user = user
+        tutor.save()
+        user.tutor_pk = tutor.pk
         user.save()
     except Exception as e:
         print("error: ", e)
         raise e
-        # return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
     email = user.email
     current_site = get_current_site(request)
@@ -110,12 +106,10 @@ def register_tutor(request):
 
     response = Response(data=TutorOwnerSerializer(
         tutor).data, status=status.HTTP_201_CREATED)
-    # tz_name = request.data.get('tz_name')
-    # if tz_name in pytz.all_timezones:
-    #     response.set_cookie('tz_name', tz_name)
+    # for query in connection.queries:
+    #     print("sql query: ", query.get("sql"))
+    # print('# of Queries: {}'.format(len(connection.queries)))
     return response
-    # else:
-    #     return Response(data="You cannot be authenticated while registering", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view()
@@ -211,6 +205,8 @@ class UserViewSet(viewsets.GenericViewSet,
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
+        for query in connection.queries:
+            print("sql query: ", query.get("sql"))
         print('# of Queries: {}'.format(len(connection.queries)))
         return response
 
