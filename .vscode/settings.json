@@ -5,13 +5,17 @@
     //     "baseUri": "/",
     //     "proxyUri": "http://127.0.0.1:8000/",
     // },
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
-    "python.linting.pylamaEnabled": true,
+    "python.linting.pylamaEnabled": false,
     "python.linting.pycodestyleArgs": [
         "--ignore=E501"
     ],
     "python.linting.pylamaArgs": [
         "--ignore=E501",
+    ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--ignore=E501"
     ]
 }

@@ -1,14 +1,16 @@
 from .models import Session
 from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from dry_rest_permissions.generics import DRYPermissions
-from django.core.exceptions import ObjectDoesNotExist
+# from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from register.pagination import MyCursorPagination
 from django.db.models.query import QuerySet
+from register.models import Tutor, Student
+from datetime import datetime
 # from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -20,8 +22,8 @@ class SessionViewSet(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
-        # for query in connection.queries:
-        #     print("sql query: ", query.get("sql"))
+        for query in connection.queries:
+            print("sql query: ", query.get("sql"))
         print('# of Queries: {}'.format(len(connection.queries)))
         return response
 
@@ -37,6 +39,8 @@ class SessionViewSet(viewsets.ModelViewSet):
                 return TutorSessionSerializer
             elif self.session.student_pk == self.request.user.student_pk:
                 return StudentSessionSerializer
+        if self.action == "create":
+            return StudentSessionSerializer
         return ReservedSerializer
 
     def get_object(self):
@@ -120,5 +124,12 @@ class SessionViewSet(viewsets.ModelViewSet):
         return self.session_view(request, student_queryset, tutor_queryset)
 
     def perform_create(self, serializer):
-        serializer.save(student=self.request.user.student, student_pk=self.request.user.student_pk, tutor_pk=int(
-            self.request.data.get('tutor')))
+        data = self.request.data
+        tutor = Tutor.objects.select_related("user").get(id=int(data.get('tutor')))  # 1 query
+        student = Student(id=self.request.user.student_pk, user=self.request.user)
+        start = datetime.strptime(data.get("time_start"), "%H:%M")
+        end = datetime.strptime(data.get("time_end"), "%H:%M")
+        duration = end - start
+        serializer.save(student=student, student_pk=self.request.user.student_pk,
+                        tutor=tutor, tutor_pk=int(data.get('tutor')),
+                        duration=duration)  # 2 query
