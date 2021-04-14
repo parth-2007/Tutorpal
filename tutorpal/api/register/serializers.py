@@ -1,7 +1,26 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
-# from django.core.exceptions import ObjectDoesNotExist
-# from typing import Union
+# from typing import Dict, Any
+# from django.conf import settings 
+
+
+# class FastUserOwnerSerializer:
+#     def __init__(self, user: User, *args, **kwargs):
+#         print()
+#         self.data = {
+#             'id': user.id,
+#             'email': user.email,
+#             'is_student': user.has_student,
+#             'is_tutor': user.has_tutor,
+#             'first_name': user.first_name,
+#             'last_name': user.last_name,
+#             'profile_pic': settings.SITE_DOMAIN + settings.MEDIA_URL + str(user.profile_pic),
+#             'student_pk': user.student_pk,
+#             'tutor_pk': user.tutor_pk
+#         }
+
+#     class Meta:
+#         model = User
 
 
 class UserViewingSerializer(serializers.ModelSerializer):
@@ -41,7 +60,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'profile_pic', 'password',
             'student_pk', 'tutor_pk',
         ]
-        extra_kwargs = {'password': {'write_only': True}, 'student_pk':{'read_only':True}, 'tutor_pk':{'read_only':True}}
+        extra_kwargs = {'password': {'write_only': True}, 'student_pk': {'read_only': True}, 'tutor_pk': {'read_only': True}}
 
     def create(self, validated_data):
         # print(validated_data)
