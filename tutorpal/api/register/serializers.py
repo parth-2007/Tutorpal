@@ -1,7 +1,7 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
 # from typing import Dict, Any
-# from django.conf import settings 
+# from django.conf import settings
 
 
 # class FastUserOwnerSerializer:

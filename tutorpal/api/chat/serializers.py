@@ -1,31 +1,22 @@
 from .models import Room, Message
 from rest_framework import serializers
-from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
-class RoomSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
-    # messages = serializers.SerializerMethodField('get_messages')
-
-    # def get_messages(self, room):
-    #     return MessageSerializer(instance=Message.objects.filter(room=room)[:50], many=True).data
-
+class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = [
-            'id', 'tutor', 'student', 'tutor_connected', 'student_connected',
-            'tutor_unread_msgs', 'student_unread_msgs', 'messages',
+            'id', 'tutor_pk', 'student_pk', 'tutor_connected', 'student_connected',
+            'tutor_unread_msgs', 'student_unread_msgs', 'messages'
         ]
-        # extra_kwargs = {'tutor': {'read_only': True},
-        #                 'student': {'read_only': True}}
 
 
-class MessageSerializer(AutoPrefetchViewSetMixin, serializers.ModelSerializer):
-    room = RoomSerializer(read_only=True)
+class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
         fields = [
-            'id', 'room', 'author', 'message', 'timestamp', 'read',
+            'id', 'author', 'message', 'timestamp'
         ]
         # extra_kwargs = {'room': {'write_only': True}, 'author': {
         #     'write_only': True}, 'message': {'write_only': True}}

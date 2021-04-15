@@ -40,7 +40,8 @@
         if (loc.protocol == 'https:') {
             wsStart = 'wss://'
         }
-        var endpoint = wsStart + loc.host + '/ws/chat/5' // change this to the proper url
+        // var endpoint = wsStart + loc.host + '/api/ws/chat/5' // change this to the proper url
+        var endpoint = 'ws://127.0.0.1:5000/api/ws/chat/5' // change this to the proper url
 
         // var socket = new ReconnectingWebSocket(endpoint)
         var socket = new WebSocket(endpoint)

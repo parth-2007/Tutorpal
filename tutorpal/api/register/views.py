@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
 
 
 @ensure_csrf_cookie
@@ -177,6 +178,7 @@ def password_reset(request, uidb64, token):
         user.set_password(password)
         user.last_reset = now()
         user.save()
+        update_session_auth_hash(request, user)
         return Response(data="Successfully changed password", status=status.HTTP_200_OK)
     else:
         return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
