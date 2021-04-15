@@ -37,16 +37,11 @@ class UserViewSet(viewsets.GenericViewSet,
             pk = self.kwargs['pk']
             if pk == "me" and self.request.user.is_authenticated:
                 return self.request.user
-            else:
-                return super().get_object()
-        else:
-            return super().get_object()
+        return super().get_object()
 
     def get_serializer_class(self):
         # print("# get_serializer_class() called")
         if 'pk' in self.kwargs and self.kwargs['pk'] == 'me':
-            # if self.action == "retrieve":
-            #     return FastUserOwnerSerializer
             return UserOwnerSerializer
         return super().get_serializer_class()
 
