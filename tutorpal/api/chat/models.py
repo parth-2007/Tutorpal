@@ -7,10 +7,8 @@ from dry_rest_permissions.generics import authenticated_users
 class Room(models.Model):
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    tutor_connected = models.BooleanField(default=False)
-    student_connected = models.BooleanField(default=False)
-    tutor_unread_msgs = models.IntegerField(default=0)
-    student_unread_msgs = models.IntegerField(default=0)
+    student_pk = models.IntegerField()
+    tutor_pk = models.IntegerField()
 
     @staticmethod
     def has_read_permission(request):
@@ -18,9 +16,10 @@ class Room(models.Model):
 
     def has_object_read_permission(self, request):
         if request.user.has_tutor:
-            return self.tutor == request.user.tutor
+            return self.tutor_pk == request.user.tutor_pk
         if request.user.has_student:
-            return self.student == request.user.student
+            return self.student_pk == request.user.student_pk
+        return False
 
     @staticmethod
     def has_write_permission(request):
@@ -41,7 +40,6 @@ class Message(models.Model):
         Room, related_name="messages", on_delete=models.CASCADE)
     message = models.CharField(max_length=128)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
-    read = models.BooleanField(default=False)
 
     @staticmethod
     def has_read_permission(request):

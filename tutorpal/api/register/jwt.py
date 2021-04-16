@@ -1,19 +1,18 @@
 # Back to JWT lol
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenViewBase
+from rest_framework_simplejwt.views import TokenViewBase  # ,TokenObtainPairView, TokenRefreshView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.tokens import Token, RefreshToken
-from django.conf import settings
-from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken  # , Token
+# from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from .models import User
-from django.utils.timezone import now, make_aware, localtime
-import json
-from rest_framework import serializers
+from django.utils.timezone import now  # , make_aware, localtime
+# import json
+# from rest_framework import serializers
 from datetime import datetime
-from django.conf import settings
+# from django.conf import settings
 from .serializers import UserOwnerSerializer
 
 
@@ -164,19 +163,19 @@ def cookie_logout(request):
         return Response(data=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view()
-def jwt_test(request):
-    # user = User.objects.get(id=5)
-    # tokens = create_tokens_from_user(user)
-    refresh_token = myTokens['refresh']
-    validated_token = RefreshToken(refresh_token)
-    print("\nValidated token: ", validated_token)
-    user_id = validated_token['user_id']
-    issued = validated_token['issued']
-    issued = datetime.strptime(issued, "%Y-%m-%d %H:%M:%S.%f%z")
-    print("\nIssued date and time: ", issued)
-    print("\nUser id:", user_id)
-    user = User.objects.get(pk=user_id)
-    if user.last_reset < issued:
-        print("\nduifhasdfdsjfuasjfk\n")
-    return Response(data={"id": str(user_id)})
+# @api_view()
+# def jwt_test(request):
+#     # user = User.objects.get(id=5)
+#     # tokens = create_tokens_from_user(user)
+#     refresh_token = myTokens['refresh']
+#     validated_token = RefreshToken(refresh_token)
+#     print("\nValidated token: ", validated_token)
+#     user_id = validated_token['user_id']
+#     issued = validated_token['issued']
+#     issued = datetime.strptime(issued, "%Y-%m-%d %H:%M:%S.%f%z")
+#     print("\nIssued date and time: ", issued)
+#     print("\nUser id:", user_id)
+#     user = User.objects.get(pk=user_id)
+#     if user.last_reset < issued:
+#         print("\nduifhasdfdsjfuasjfk\n")
+#     return Response(data={"id": str(user_id)})

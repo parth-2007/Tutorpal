@@ -1,6 +1,6 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.security.websocket import AllowedHostsOriginValidator, OriginValidator
+from channels.security.websocket import AllowedHostsOriginValidator
 from chat.consumers import ChatConsumer
 from django.conf.urls import url
 # from chat.views import RoomViewSet
@@ -11,7 +11,7 @@ application = ProtocolTypeRouter({
         AuthMiddlewareStack(
             URLRouter(
                 [
-                    url(r'^ws/chat/(?P<room_id>\w+)', ChatConsumer()),
+                    url(r'^api/ws/chat/(?P<room_id>\w+)', ChatConsumer.as_asgi()),
                     # url(r'^wsroom/$', view_as_consumer(RoomViewSet))
                 ]
             )

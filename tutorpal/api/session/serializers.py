@@ -1,12 +1,15 @@
 from .models import Session
 from rest_framework import serializers
+from register.serializers import StudentViewingSerializer, TutorViewingSerializer
 
 
-class SessionSerializer(serializers.ModelSerializer):
+class StudentSessionSerializer(serializers.ModelSerializer):
+    tutor = StudentViewingSerializer(read_only=True)
+
     class Meta:
         model = Session
         fields = [
-            'id', 'student_pk', 'tutor_pk',
+            'id', 'tutor',
             'date', 'time_start', 'time_end', 'duration',
             'price', 'free', 'description', 'call_url',
             'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
@@ -15,10 +18,20 @@ class SessionSerializer(serializers.ModelSerializer):
             'tutor_emailed', 'student_emailed', 'parent_emailed',
         ]
 
-    # def update(self, instance, validated_data):
-    #     instance.canceled = validated_data.get('canceled', instance.canceled)
-    #     instance.save()
-    #     return instance
+class TutorSessionSerializer(serializers.ModelSerializer):
+    student = StudentViewingSerializer(read_only=True)
+
+    class Meta:
+        model = Session
+        fields = [
+            'id', 'student',
+            'date', 'time_start', 'time_end', 'duration',
+            'price', 'free', 'description', 'call_url',
+            'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
+            'student_paid', 'tutor_paid',
+            'refund_requested', 'refund_available', 'refunded',
+            'tutor_emailed', 'student_emailed', 'parent_emailed',
+        ]
 
 
 class ReservedSerializer(serializers.ModelSerializer):
@@ -27,3 +40,4 @@ class ReservedSerializer(serializers.ModelSerializer):
         fields = [
             'tutor_pk', 'date', 'time_start', 'time_end', 'id'
         ]
+        read_only_fields = fields

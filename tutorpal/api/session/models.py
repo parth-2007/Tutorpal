@@ -17,10 +17,9 @@ class Session(models.Model):
     duration = models.DurationField(blank=True)
 
     # duration = models.DurationField(blank=True, null=True)
-    price = models.DecimalField(blank=True, null=True,
-                                max_digits=10, decimal_places=2)
+    price = models.DecimalField(blank=True, max_digits=10, decimal_places=2, default=0)
     free = models.BooleanField(default=False)
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=500, blank=True)
 
     # call_url = models.URLField(max_length=50, blank=True)
     call_url = models.CharField(max_length=30, blank=True)
@@ -62,9 +61,9 @@ class Session(models.Model):
     @authenticated_users
     def has_object_write_permission(self, request):
         if request.user.has_tutor:
-            return self.tutor == request.user.tutor
+            return self.tutor_pk == request.user.tutor_pk
         elif request.user.has_student:
-            return self.student == request.user.student
+            return self.student_pk == request.user.student_pk
         else:
             return False
 

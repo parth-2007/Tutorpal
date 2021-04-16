@@ -1,7 +1,26 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
-# from django.core.exceptions import ObjectDoesNotExist
-# from typing import Union
+# from typing import Dict, Any
+# from django.conf import settings
+
+
+# class FastUserOwnerSerializer:
+#     def __init__(self, user: User, *args, **kwargs):
+#         print()
+#         self.data = {
+#             'id': user.id,
+#             'email': user.email,
+#             'is_student': user.has_student,
+#             'is_tutor': user.has_tutor,
+#             'first_name': user.first_name,
+#             'last_name': user.last_name,
+#             'profile_pic': settings.SITE_DOMAIN + settings.MEDIA_URL + str(user.profile_pic),
+#             'student_pk': user.student_pk,
+#             'tutor_pk': user.tutor_pk
+#         }
+
+#     class Meta:
+#         model = User
 
 
 class UserViewingSerializer(serializers.ModelSerializer):
@@ -19,6 +38,7 @@ class UserViewingSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'first_name', 'last_name', 'profile_pic', 'is_student', 'is_tutor'
         ]
+        read_only_fields = fields
 
 
 class UserOwnerSerializer(serializers.ModelSerializer):
@@ -40,7 +60,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'profile_pic', 'password',
             'student_pk', 'tutor_pk',
         ]
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}, 'student_pk': {'read_only': True}, 'tutor_pk': {'read_only': True}}
 
     def create(self, validated_data):
         # print(validated_data)
@@ -60,7 +80,6 @@ class StudentOwnerSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'parent_email', 'birth_date'
         ]
-        # depth = 1
 
 
 class StudentViewingSerializer(serializers.ModelSerializer):
@@ -69,7 +88,7 @@ class StudentViewingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'user']
-        # depth = 1
+        read_only_fields = fields
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -123,34 +142,35 @@ class TutorViewingSerializer(serializers.ModelSerializer):
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given',  # 'reviews'
         ]
+        read_only_fields = fields
     extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
         'read_only': True}, 'free_tutoring_given': {'read_only': True}}
 
-    def update(self, instance, validated_data):
-        instance.qualifications = validated_data.get(
-            'qualifications', instance.qualifications)
-        instance.what_you_teach = validated_data.get(
-            'what_you_teach', instance.what_you_teach)
-        instance.subjects = validated_data.get('subjects', instance.subjects)
-        instance.birth_date = validated_data.get(
-            'birth_date', instance.birth_date)
-        instance.bio = validated_data.get('bio', instance.bio)
-        instance.rates = validated_data.get('rates', instance.rates)
-        instance.occupation = validated_data.get(
-            'occupation', instance.occupation)
-        instance.linkedIn = validated_data.get('linkedIn', instance.linkedIn)
-        instance.prof_exp = validated_data.get('prof_exp', instance.prof_exp)
-        instance.teach_exp = validated_data.get(
-            'teach_exp', instance.teach_exp)
-        instance.education = validated_data.get(
-            'education', instance.education)
-        instance.school = validated_data.get('school', instance.school)
-        instance.gpa = validated_data.get('gpa', instance.gpa)
-        instance.major = validated_data.get('major', instance.major)
-        instance.gender = validated_data.get('gender', instance.gender)
-        instance.tutor_type = validated_data.get(
-            'tutor_type', instance.tutor_type)
-        instance.availability = validated_data.get(
-            'availability', instance.availability)
-        instance.save()
-        return instance
+    # def update(self, instance, validated_data):
+    #     instance.qualifications = validated_data.get(
+    #         'qualifications', instance.qualifications)
+    #     instance.what_you_teach = validated_data.get(
+    #         'what_you_teach', instance.what_you_teach)
+    #     instance.subjects = validated_data.get('subjects', instance.subjects)
+    #     instance.birth_date = validated_data.get(
+    #         'birth_date', instance.birth_date)
+    #     instance.bio = validated_data.get('bio', instance.bio)
+    #     instance.rates = validated_data.get('rates', instance.rates)
+    #     instance.occupation = validated_data.get(
+    #         'occupation', instance.occupation)
+    #     instance.linkedIn = validated_data.get('linkedIn', instance.linkedIn)
+    #     instance.prof_exp = validated_data.get('prof_exp', instance.prof_exp)
+    #     instance.teach_exp = validated_data.get(
+    #         'teach_exp', instance.teach_exp)
+    #     instance.education = validated_data.get(
+    #         'education', instance.education)
+    #     instance.school = validated_data.get('school', instance.school)
+    #     instance.gpa = validated_data.get('gpa', instance.gpa)
+    #     instance.major = validated_data.get('major', instance.major)
+    #     instance.gender = validated_data.get('gender', instance.gender)
+    #     instance.tutor_type = validated_data.get(
+    #         'tutor_type', instance.tutor_type)
+    #     instance.availability = validated_data.get(
+    #         'availability', instance.availability)
+    #     instance.save()
+    #     return instance

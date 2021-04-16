@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'dry_rest_permissions',
     'rest_framework_simplejwt.token_blacklist',
+    # 'django_filters',
     'drf_yasg',  # remove in prod
     'debug_toolbar',  # remove in prod
 ]
@@ -75,26 +76,20 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-# CSRF_HEADER_NAME = 'X-CSRFToken'
+SITE_DOMAIN = 'http://127.0.0.1:8000'
 
 CORS_ORIGIN_ALLOW_ALL = False  # change later
-# CORS_ALLOW_CREDENTIALS = False
-
-# CORS_ALLOW_HEADERS = list(default_headers) + [
-#     'X-CSRFToken',
-#     'HTTP_X_CSRFTOKEN',
-#     'Access-Control-Allow-Origin',
-#     'Bearer',
-#     'bearer',
-# ]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
 ]
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -178,7 +173,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'tutor_pal',
+        'NAME': 'tutorpal',
         # 'NAME': 'posgtres',
 
         'USER': '',
@@ -256,13 +251,12 @@ EMAIL_USE_TLS = True
 CSRF_USE_SESSIONS = False
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
     'DEFAULT_PAGINATION_CLASS': 'register.pagination.MyCursorPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
