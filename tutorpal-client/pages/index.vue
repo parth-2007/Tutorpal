@@ -16,7 +16,7 @@
 import HomeMain from '../components/HomeMain';
 import HomeStudent from '../components/HomeStudent';
 import HomeTutor from '../components/HomeTutor';
-var x = 10;
+var x = 50;
 if (x === 50){
   require('../components/main/css/webflow.css');
   require('../components/main/css/homepage-12.webflow.css');
@@ -50,12 +50,5 @@ export default {
       }
   }
 }
-// var WebFont = require('webfontloader');
-
-// WebFont.load({
-//     google: {
-//       families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Poppins:regular","Roboto:regular"]
-//     }
-// });
 
 </script>

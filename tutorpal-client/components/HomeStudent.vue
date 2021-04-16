@@ -1,6 +1,6 @@
 
 <template>
-<client-only>
+<ssr-only>
 <html data-wf-page="5f600218af481481a99ffa6a" data-wf-site="5f600218af4814e3759ffa69">
 <head>
   <meta charset="utf-8">
@@ -80,7 +80,7 @@
  
 </body>
 </html>
-</client-only>
+</ssr-only>
 </template>
 <script >
 

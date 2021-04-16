@@ -1,5 +1,5 @@
 <template>
-<client-only>
+<ssr-only>
 <html data-wf-page="5f5844923df4f0c1c6587323" data-wf-site="5f5844923df4f032aa587322">
   <div class="section-2">
     <div class="div-block-5">
@@ -82,7 +82,7 @@
     </div>
   </div>
 </html>
-</client-only>
+</ssr-only>
 </template>
 
 <script>
