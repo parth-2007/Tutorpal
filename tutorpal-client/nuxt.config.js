@@ -2,8 +2,12 @@ export default {
   ssr: true,
   webfontloader: {
     google: {
-      families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Poppins:regular","Roboto:regular"] //Loads Lato font with weights 400 and 700
-    }
+      families: [
+        'Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic',
+        'Poppins:regular',
+        'Roboto:regular',
+      ], //Loads Lato font with weights 400 and 700
+    },
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -13,9 +17,7 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.jpg' },
-    ],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.jpg' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -49,4 +51,15 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        logLevel: 'debug',
+        pathRewrite: { '^/api': '/' },
+      },
+    },
+  },
 }

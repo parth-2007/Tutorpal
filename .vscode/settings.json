@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "tutorpal/venv/bin/python",
+    "python.pythonPath": "tutorpal-api/venv/bin/python",
     // "liveServer.settings.proxy":{
     //     "enable": false,
     //     "baseUri": "/",

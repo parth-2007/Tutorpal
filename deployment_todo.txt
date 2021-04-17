@@ -4,3 +4,4 @@
 - Make sure images go to S3 Bucket
 - Make sure django checks for only JWT
 - Fix access token lifetime
+- Add in proper paypal tokens
