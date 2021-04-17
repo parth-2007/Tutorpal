@@ -39,7 +39,7 @@ export default {
     '@nuxtjs/pwa',
     'nuxt-webfontloader',
   ],
-
+  
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
