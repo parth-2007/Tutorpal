@@ -249,6 +249,7 @@ EMAIL_USE_TLS = True
 # }
 
 CSRF_USE_SESSIONS = False
+CSRF_COOKIE_HTTPONLY = False
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'register.pagination.MyCursorPagination',

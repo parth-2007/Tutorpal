@@ -12,7 +12,7 @@ router.register(r'reviews', ReviewViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/ensure_csrf/', ensure_csrf),
+    path('auth/ensure-csrf/', ensure_csrf),
     path('auth/login/', login),
     path('auth/logout/', logout),
     path('api-auth/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),

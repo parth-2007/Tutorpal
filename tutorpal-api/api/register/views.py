@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.timezone import now
 from rest_framework.decorators import api_view
 from django.contrib.sites.shortcuts import get_current_site
-from .serializers import StudentOwnerSerializer, TutorOwnerSerializer, UserOwnerSerializer
+from .serializers import StudentOwnerSerializer, TutorOwnerSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
@@ -18,7 +18,7 @@ from django.contrib.auth import update_session_auth_hash
 
 @ensure_csrf_cookie
 def ensure_csrf(request):
-    return JsonResponse("CSRF Ensured!")
+    return JsonResponse({"success": "CSRF Ensured!"})
 
 
 def login(request):
@@ -27,13 +27,13 @@ def login(request):
     user = authenticate(email=email, password=password)
 
     if not user:
-        return JsonResponse({"error": "Incorrect email/password"}, status=400)
+        return JsonResponse({"error": "Incorrect password"}, status=400)
 
     if not user.is_active:
-        return Response({"error": "Inactive user (try checking email)"}, status=403)
+        return JsonResponse({"error": "Inactive user (try checking email)"}, status=403)
 
     django_login(request, user)
-    return JsonResponse({"user": UserOwnerSerializer(user).data})
+    return JsonResponse({"success": "Successfully logged in user"})
 
 
 def logout(request):
