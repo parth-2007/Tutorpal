@@ -1,5 +1,5 @@
 <template>
-<ssr-only>
+<client-only>
 <html data-wf-page="5f5d0db29d3d2a83a01fb34a" data-wf-site="5f5d0db29d3d2a6ab81fb349">
 <head>
   <meta charset="utf-8">
@@ -76,7 +76,7 @@
   </div>
 </body>
 </html>
-</ssr-only>
+</client-only>
 </template>
 <style>
 

@@ -1,5 +1,5 @@
 <template>
-<ssr-only>
+<client-only>
 <html data-wf-page="5f405fbdac064904ad639864" data-wf-site="5f3c2694b3e98672caad2a0f">
 <body><a href="/" class="link-block-4 w-inline-block"><img src="./main/images/logo.jpg" loading="lazy" width="200" alt=""></a>
   <div class="columns-6 w-row">
@@ -16,7 +16,7 @@
   </div>
 </body>
 </html>
-</ssr-only>
+</client-only>
 </template>
 <style>
 

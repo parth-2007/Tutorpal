@@ -1,10 +1,10 @@
 <template>
-<ssr-only>
+<client-only>
 <html data-wf-page="5f5844923df4f0c1c6587323" data-wf-site="5f5844923df4f032aa587322">
   <div class="section-2">
     <div class="div-block-5">
       <div class="div-block-3-copy">
-        <div class="div-block-4"><a href="/login" class="link-2">login</a></div><a href="register.html" class="button w-button">register</a></div>
+        <div class="div-block-4"><a href="/login" class="link-2">login</a></div><a href="/register" class="button w-button">register</a></div>
       <h1 class="heading">Find tutors around the globe,<br>in an instant</h1>
       <form action="search_main.html" class="stuff w-form"><img src="./main/images/search-1.png" loading="lazy" width="25" height="25" srcset="./main/images/search-1-p-500.png 500w, ./main/images/search-1.png 512w" sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
     </div>
@@ -82,7 +82,7 @@
     </div>
   </div>
 </html>
-</ssr-only>
+</client-only>
 </template>
 
 <script>

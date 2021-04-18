@@ -1,5 +1,5 @@
 <template>
-<ssr-only>
+<client-only>
 <html data-wf-page="5f59b13f87c4474926e0f928" data-wf-site="5f5844923df4f032aa587322">
 <head>
   <meta charset="utf-8">
@@ -33,7 +33,7 @@
   </div>
 </body>
 </html>
-</ssr-only>
+</client-only>
 </template>
 <style>
 
