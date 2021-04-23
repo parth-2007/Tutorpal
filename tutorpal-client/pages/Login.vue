@@ -13,17 +13,16 @@
     <div class="div-block-20">
       <div class="div-block-21">
         <div class="text-block-4">Sign-In</div>
+        <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins;">{{errors.email}} {{errors.password}}</p>
         <div style="margin-top: 20px;" class="div-block-22">
           <form style="font-family: Poppins;">
             <div class="mb-3">
               <label for="email" class="form-label">Email address</label>
               <input type="email" class="form-control" id="email" v-model="email" >
-              <p style="color: hsla(0, 100%, 64%, 1)">{{errors.email}}</p>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" v-model="password">
-              <p style="color: hsla(0, 100%, 64%, 1)">{{errors.password}}</p>
             </div>
           </form>
           <button class="button-11 w-button" v-on:click="submitHandler()">Continue</button>
@@ -64,7 +63,7 @@ export default {
       const emailValidation = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         console.log('failed regex email validation');
-        this.errors.email = 'Invalid email'
+        this.errors.email = 'Invalid email, '
       } else {
         this.errors.email = ''
       }
@@ -90,12 +89,12 @@ export default {
         })
         .then((res) => {
           if (res.status >= 400 && res.status < 600) {
-            this.errors.email = 'Something went wrong :('
+            this.errors.email = 'Something went wrong, Incorrect username or password.'
           }
           return res.json()
         })
         .catch((err) => {
-          this.errors.email = 'Something went wrong :('
+          this.errors.email = 'Something went wrong, Incorrect username or password.'
           return
         })
 

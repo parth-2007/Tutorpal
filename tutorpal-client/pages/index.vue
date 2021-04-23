@@ -20,7 +20,7 @@ import HomeMain from '../components/HomeMain';
 import HomeStudent from '../components/HomeStudent';
 import HomeTutor from '../components/HomeTutor';
 import NotFound from '../components/NotFound';
-var x = 0;
+var x = 20;
 if (x === 50){
   require('../components/main/css/webflow.css');
   require('../components/main/css/homepage-12.webflow.css');
