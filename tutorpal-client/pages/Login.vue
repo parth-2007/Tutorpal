@@ -44,7 +44,7 @@
               >login</a
             >
           </div>
-          <a style="z-index: 2" href="register.html" class="button w-button"
+          <a style="z-index: 2" href="/register" class="button w-button"
             >register</a
           >
         </div>
@@ -92,11 +92,11 @@
               >
               <div class="text-block-6">
                 By continuing, you agree to tutorPal&#x27;s
-                <a href="toc.html">Terms of Conditions.</a>
+                <a href="/toc">Terms of Conditions.</a>
               </div>
             </div>
             <div class="text-block-7">New to TutorPal?</div>
-            <a href="register.html" class="button-12 w-button"
+            <a href="/register" class="button-12 w-button"
               >Create an account</a
             >
           </div>

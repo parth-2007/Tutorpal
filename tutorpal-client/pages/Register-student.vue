@@ -189,7 +189,7 @@
                       required
                     />
                     <label class="form-check-label" for="toc">
-                      I agree with the <a href="toc.html">Terms of Service</a>
+                      I agree with the <a href="/toc">Terms of Service</a>
                     </label>
                     <p style="color: hsla(0, 100%, 64%, 1)">
                       {{ errors.toc }}

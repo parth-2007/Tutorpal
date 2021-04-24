@@ -21,7 +21,7 @@
       <body>
         <div class="div-block">
           <a
-            href="index.html"
+            href="/"
             aria-current="page"
             class="link-block w-inline-block w--current"
             ><img
@@ -491,7 +491,7 @@
                 />
                 <label class="form-check-label" for="toc">
                   I have read and agree with TutorPal's
-                  <a href="toc.html">Terms of Service</a> and will not hold them
+                  <a href="/toc">Terms of Service</a> and will not hold them
                   liable for personal damages.
                 </label>
               </div>
