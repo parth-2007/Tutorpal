@@ -55,9 +55,6 @@
           <div class="div-block-20">
             <div class="div-block-21">
               <div class="text-block-4">Sign-In</div>
-              <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
-                {{ errors.email }} {{ errors.password }}
-              </p>
               <div style="margin-top: 20px" class="div-block-22">
                 <form style="font-family: Poppins">
                   <div class="mb-3">
@@ -68,6 +65,9 @@
                       id="email"
                       v-model="email"
                     />
+                    <p style="color: hsla(0, 100%, 64%, 1)">
+                      {{ errors.email }}
+                    </p>
                   </div>
                   <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
@@ -77,6 +77,9 @@
                       id="password"
                       v-model="password"
                     />
+                    <p style="color: hsla(0, 100%, 64%, 1)">
+                      {{ errors.password }}
+                    </p>
                   </div>
                 </form>
                 <button class="button-11 w-button" @click="submitHandler()">
@@ -99,12 +102,16 @@
             <a href="register.html" class="button-12 w-button"
               >Create an account</a
             >
+            <p style="color: hsla(0, 100%, 64%, 1)">
+              {{ errors.global }}
+            </p>
           </div>
         </div>
       </body>
     </html>
   </client-only>
 </template>
+
 <script>
 import getCSRF from '../utils/getCSRF'
 
@@ -179,5 +186,3 @@ require('../components/main/css/webflow.css')
 require('../components/main/css/homepage-12.webflow.css')
 require('../components/main/css/normalize.css')
 </script>
-<style>
-</style>

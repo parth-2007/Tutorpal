@@ -8,12 +8,13 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.timezone import now
 from rest_framework.decorators import api_view
 from django.contrib.sites.shortcuts import get_current_site
-from .serializers import StudentOwnerSerializer, TutorOwnerSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
+import json
+from django.db.utils import IntegrityError
 
 
 @ensure_csrf_cookie
@@ -45,13 +46,14 @@ def logout(request):
 def register_student(request):
     try:
         pfp = request.FILES.get("profile_pic")
-        data = request.data.get("data")
-        user_data = data.get('user')
+        user_data = request.data.get("user")
+        user_data = json.loads(user_data)
         password = user_data.pop('password')
-        student_data = data.get('student')
+        student_data = request.data.get('student')
+        student_data = json.loads(student_data)
         user = User(**user_data)
         user.set_password(password)
-        if pfp:
+        if pfp is not None:
             user.profile_pic = pfp
         student = Student(**student_data)
         user.save()
@@ -59,9 +61,8 @@ def register_student(request):
         student.save()
         user.student_pk = student.pk
         user.save()
-    except Exception as e:
-        print("error: ", e)
-        raise e
+    except IntegrityError:
+        return Response(data={'error': 'this email is taken'}, status=status.HTTP_400_BAD_REQUEST)
 
     email = user.email
     current_site = get_current_site(request)
@@ -74,8 +75,7 @@ def register_student(request):
     })
     send_mail(subject, message, None, [email])
 
-    response = Response(data=StudentOwnerSerializer(
-        student).data, status=status.HTTP_201_CREATED)
+    response = Response(data={'success': 'Successfully created student'}, status=status.HTTP_201_CREATED)
     # for query in connection.queries:
     #     print("sql query: ", query.get("sql"))
     # print('# of Queries: {}'.format(len(connection.queries)))
@@ -86,10 +86,9 @@ def register_student(request):
 def register_tutor(request):
     try:
         pfp = request.FILES.get("profile_pic")
-        data = request.data.get("data")
-        user_data = data.get('user')
+        user_data = request.data.get('user')
         password = user_data.pop('password')
-        tutor_data = data.get('tutor')
+        tutor_data = request.data.get('tutor')
         user = User(**user_data)
         user.set_password(password)
         if pfp:
@@ -115,11 +114,7 @@ def register_tutor(request):
     })
     send_mail(subject, message, None, [email])
 
-    response = Response(data=TutorOwnerSerializer(
-        tutor).data, status=status.HTTP_201_CREATED)
-    # for query in connection.queries:
-    #     print("sql query: ", query.get("sql"))
-    # print('# of Queries: {}'.format(len(connection.queries)))
+    response = Response(data='Successfully created tutor', status=status.HTTP_201_CREATED)
     return response
 
 
