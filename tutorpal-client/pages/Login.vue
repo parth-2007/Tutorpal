@@ -56,7 +56,7 @@
             <div class="div-block-21">
               <div class="text-block-4">Sign-In</div>
               <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
-                {{ errors.email }} {{ errors.password }}
+                {{ errors.email }} {{ errors.password }} {{ errors.global }}
               </p>
               <div style="margin-top: 20px" class="div-block-22">
                 <form style="font-family: Poppins">
@@ -96,9 +96,7 @@
               </div>
             </div>
             <div class="text-block-7">New to TutorPal?</div>
-            <a href="/register" class="button-12 w-button"
-              >Create an account</a
-            >
+            <a href="/register" class="button-12 w-button">Create an account</a>
           </div>
         </div>
       </body>
