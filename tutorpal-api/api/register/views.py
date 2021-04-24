@@ -46,8 +46,10 @@ def logout(request):
 def register_student(request):
     try:
         pfp = request.FILES.get("profile_pic")
+        print("pfp: ", pfp)
         user_data = request.data.get("user")
         user_data = json.loads(user_data)
+        print(user_data)
         password = user_data.pop('password')
         student_data = request.data.get('student')
         student_data = json.loads(student_data)
@@ -75,7 +77,8 @@ def register_student(request):
     })
     send_mail(subject, message, None, [email])
 
-    response = Response(data={'success': 'Successfully created student'}, status=status.HTTP_201_CREATED)
+    response = Response(
+        data={'success': 'Successfully created student'}, status=status.HTTP_201_CREATED)
     # for query in connection.queries:
     #     print("sql query: ", query.get("sql"))
     # print('# of Queries: {}'.format(len(connection.queries)))
@@ -114,7 +117,8 @@ def register_tutor(request):
     })
     send_mail(subject, message, None, [email])
 
-    response = Response(data='Successfully created tutor', status=status.HTTP_201_CREATED)
+    response = Response(data='Successfully created tutor',
+                        status=status.HTTP_201_CREATED)
     return response
 
 

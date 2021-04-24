@@ -1,10 +1,5 @@
 {
     "python.pythonPath": "tutorpal-api/venv/bin/python",
-    // "liveServer.settings.proxy":{
-    //     "enable": false,
-    //     "baseUri": "/",
-    //     "proxyUri": "http://127.0.0.1:8000/",
-    // },
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.linting.pylamaEnabled": false,

@@ -115,10 +115,9 @@
                           accept="image/*"
                           type="file"
                           name="image"
-                          onchange="loadFile(event)"
                           id="file"
                           style="display: none"
-                          @change="handleFile($event, index)"
+                          @change="handleFile($event)"
                         />
                       </p>
                       <label for="file" style="cursor: pointer"
@@ -249,10 +248,10 @@ export default {
     }
   },
   methods: {
-    handleFileChange(e) {
-      e.preventDefault()
+    handleFile(e) {
+      // e.preventDefault()
       const profilePic = e.target.files || e.dataTransfer.files
-      this.profilePic = profilePic.length ? profilePic : null
+      this.profilePic = profilePic.length > 0 ? profilePic : null
     },
     checkErrors() {
       let isError = false
@@ -328,10 +327,13 @@ export default {
         const user = {
           email: this.email,
           password: this.password,
-          // profile_pic: this.profilePic,
+          first_name: this.firstName,
+          last_name: this.lastName,
         }
         if (this.profilePic) {
-          user.profile_pic = this.profilePic
+          // eslint-disable-next-line
+          console.log(this.profilePic[0])
+          formData.append('profile_pic', this.profilePic[0])
         }
         formData.append('user', JSON.stringify(user))
         formData.append(
