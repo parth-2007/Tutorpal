@@ -46,10 +46,8 @@ def logout(request):
 def register_student(request):
     try:
         pfp = request.FILES.get("profile_pic")
-        print("pfp: ", pfp)
         user_data = request.data.get("user")
         user_data = json.loads(user_data)
-        print(user_data)
         password = user_data.pop('password')
         student_data = request.data.get('student')
         student_data = json.loads(student_data)
@@ -89,12 +87,14 @@ def register_student(request):
 def register_tutor(request):
     try:
         pfp = request.FILES.get("profile_pic")
-        user_data = request.data.get('user')
+        user_data = request.data.get("user")
+        user_data = json.loads(user_data)
         password = user_data.pop('password')
         tutor_data = request.data.get('tutor')
+        tutor_data = json.loads(tutor_data)
         user = User(**user_data)
         user.set_password(password)
-        if pfp:
+        if pfp is not None:
             user.profile_pic = pfp
         tutor = Tutor(**tutor_data)
         user.save()
@@ -102,9 +102,8 @@ def register_tutor(request):
         tutor.save()
         user.tutor_pk = tutor.pk
         user.save()
-    except Exception as e:
-        print("error: ", e)
-        raise e
+    except IntegrityError:
+        return Response(data={'error': 'this email is taken'}, status=status.HTTP_400_BAD_REQUEST)
 
     email = user.email
     current_site = get_current_site(request)
@@ -117,7 +116,7 @@ def register_tutor(request):
     })
     send_mail(subject, message, None, [email])
 
-    response = Response(data='Successfully created tutor',
+    response = Response(data={'success': 'Successfully created tutor'},
                         status=status.HTTP_201_CREATED)
     return response
 
