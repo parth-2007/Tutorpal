@@ -77,7 +77,7 @@
     <div class="columns-2 w-row">
       <div class="column-8 w-col w-col-3"><a href="bug.html" class="link-3">Bugs</a></div>
       <div class="column-9 w-col w-col-3"><a href="team.html" class="link-3">Team</a></div>
-      <div class="column-10 w-col w-col-3"><a href="/terms" class="link-3">Terms of service</a></div>
+      <div class="column-10 w-col w-col-3"><a href="/toc" class="link-3">Terms of service</a></div>
       <div class="column-11 w-col w-col-3"><a href="feedback.html" class="link-3">User Feedback</a></div>
     </div>
   </div>
