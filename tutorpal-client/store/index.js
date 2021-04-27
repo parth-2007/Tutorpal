@@ -1,8 +1,9 @@
-// export default new Vuex.store({
-//   state: () => ({
-//     user: null
-//   }),
-//   mutations: {
-//     getUser()
-//   }
-// })
+import user from './modules/user'
+
+const store = {
+  modules: {
+    user,
+  },
+}
+
+export default store

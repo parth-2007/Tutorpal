@@ -1,5 +1,5 @@
 const getUserData = async () => {
-  const data = await fetch('api/users/me/')
+  const data = await fetch('http://localhost:5000/api/users/me/')
     .then((res) => {
       if (res.status === 404) {
         return { unauthenticated: true }
@@ -8,7 +8,9 @@ const getUserData = async () => {
       }
       return res.json()
     })
-    .catch(() => {
+    .catch((err) => {
+      // eslint-disable-next-line
+      console.warn(err)
       return { error: 'server error' }
     })
 

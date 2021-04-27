@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import getUserData from '../utils/getUserData'
+import { mapGetters, mapActions } from 'vuex'
 import HomeMain from '../components/HomeMain'
 import HomeStudent from '../components/HomeStudent'
 import HomeTutor from '../components/HomeTutor'
@@ -24,19 +24,15 @@ export default {
     HomeStudent,
     HomeTutor,
   },
-  data() {
-    return {
-      user: {},
-    }
-  },
   head() {
     return {
       title: 'Home - TutorPal',
     }
   },
+  computed: mapGetters({ user: 'getUser' }),
   async created() {
-    const user = await getUserData()
-    this.user = user
+    await this.fetchUser()
+    const user = this.getUser()
     if (user.unauthenticated) {
       require('../components/main/css/webflow.css')
       require('../components/main/css/homepage-12.webflow.css')
@@ -50,6 +46,10 @@ export default {
       require('../components/tutor/css/tutor-main.webflow.css')
       require('../components/tutor/css/normalize.css')
     }
+  },
+  methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
   },
 }
 </script>
