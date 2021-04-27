@@ -1,473 +1,483 @@
 <template>
-<div>
-  <form id="registerform" style="font-family: Poppins">
-    <div class="div-block-7-copy">
-      <h1 class="heading-4">Account Info</h1>
-      <h1 class="heading-4-copy">Account Info</h1>
-      <div class="text-block-4">
-        This is all of your account information. Use this to keep track of all
-        your information, to login, etc. Keep in mind that this can be changed
-        later.
-      </div>
-      <div class="columns-2 w-row">
-        <div class="column w-col w-col-6">
-          <div class="text-block-5">Full Name</div>
+  <div>
+    <form id="registerform" style="font-family: Poppins">
+      <div class="div-block-7-copy">
+        <h1 class="heading-4">Account Info</h1>
+        <h1 class="heading-4-copy">Account Info</h1>
+        <div class="text-block-4">
+          This is all of your account information. Use this to keep track of all
+          your information, to login, etc. Keep in mind that this can be changed
+          later.
         </div>
-        <div style="width: 50%" class="row">
-          <div class="col">
-            <label for="firstname" class="form-label">First Name</label>
-            <input
-              v-model="firstName"
-              type="text"
-              class="form-control"
-              id="firstname"
-              aria-label="First name"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.firstName }}</p>
+        <div class="columns-2 w-row">
+          <div class="column w-col w-col-6">
+            <div class="text-block-5">Full Name</div>
           </div>
-          <div style="padding-left: 0px" class="col">
-            <label for="lastname" class="form-label">Last Name</label>
-            <input
-              v-model="lastName"
-              type="text"
-              class="form-control"
-              id="lastname"
-              aria-label="Last name"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.lastName }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="columns-2-copy w-row">
-        <div class="column w-col w-col-6">
-          <div class="text-block-5">Password and confirmation</div>
-        </div>
-        <div style="width: 50%" class="row">
-          <div class="col">
-            <label for="password" class="form-label">Password</label>
-            <input
-              v-model="password"
-              type="password"
-              class="form-control"
-              id="password"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.password }}</p>
-          </div>
-          <div style="padding-left: 0px" class="col">
-            <label for="confirmpassword" class="form-label"
-              >Confirm Password</label
-            >
-            <input
-              v-model="confirmPassword"
-              type="password"
-              class="form-control"
-              id="confirmpassword"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.confirmPassword }}</p>
+          <div style="width: 50%" class="row">
+            <div class="col">
+              <label for="firstname" class="form-label">First Name</label>
+              <input
+                v-model="firstName"
+                type="text"
+                class="form-control"
+                id="firstname"
+                aria-label="First name"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.firstName }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <label for="lastname" class="form-label">Last Name</label>
+              <input
+                v-model="lastName"
+                type="text"
+                class="form-control"
+                id="lastname"
+                aria-label="Last name"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.lastName }}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="columns-2-copy w-row">
-        <div class="column w-col w-col-6">
-          <div class="text-block-5">
-            Email Address
+        <div class="columns-2-copy w-row">
+          <div class="column w-col w-col-6">
+            <div class="text-block-5">Password and confirmation</div>
           </div>
-        </div>
-        <div class="w-col w-col-6">
-          <div style="margin-top: 15px" class="mb-3">
-            <label for="emailaddress" class="form-label">Email Address</label>
-            <input
-              v-model="email"
-              type="email"
-              class="form-control"
-              id="emailaddress"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.email }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="columns-2-copy w-row">
-        <div class="column w-col w-col-6">
-          <div class="text-block-5">
-            PayPal Email Adress (Put the email address you like like to accept
-            payments from. If left blank, this will be set to your default email
-            address)
-          </div>
-        </div>
-        <div class="w-col w-col-6">
-          <div style="margin-top: 15px" class="mb-3">
-            <label for="paypalemail" class="form-label"
-              >PayPal Email Adress</label
-            >
-            <input
-              v-model="paypalEmail"
-              type="email"
-              class="form-control"
-              id="paypalemail"
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.paypalEmail }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div style="margin-left: 60px" class="column w-col w-col-6">
-        <div class="text-block-5">Birthdate</div>
-      </div>
-      <div style="margin-right: 60px" class="w-col w-col-6">
-        <div class="form-group row">
-          <label for="birthdate" class="col-2 col-form-label">Birthdate</label>
-          <div class="col-10">
-            <input
-              v-model="birthDate"
-              class="form-control"
-              type="date"
-              id="birthdate"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.birthDate }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">Gender</div>
-      </div>
-      <div style="margin-right: 0px" class="w-col w-col-6">
-        <select
-          v-model="gender"
-          style="margin-top: 15px; width: 92%"
-          class="form-select"
-          id="gender"
-          aria-label="Default select example"
-        >
-          <option selected>Select</option>
-          <option value="1">Prefer Not To Say</option>
-          <option value="2">Male</option>
-          <option value="3">Female</option>
-          <option value="4">Other</option>
-        </select>
-        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gender }}</p>
-      </div>
-    </div>
-    <div class="div-block-7">
-      <h1 class="heading-4-copy">Professional Info</h1>
-      <div class="text-block-4">
-        Tell us a bit about yourself. This information will appear on your
-        public profile, so that potential students can get to know you better.
-      </div>
-      <div class="columns-2 w-row">
-        <div class="column w-col w-col-6">
-          <div class="text-block-5">
-            Occupation (If none, or highschooler please type "highschooler" or
-            "student".)
-          </div>
-        </div>
-        <div class="w-col w-col-6">
-          <div style="margin-top: 15px" class="mb-3">
-            <input
-              v-model="occupation"
-              class="form-control"
-              id="occupation"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.occupation }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="columns-2-copy w-row">
-        <div class="column w-col w-col-6">
-          <div class="text-block-5">
-            Subject(s) (multiple subjects are valid eg. Physics - Mathematics)
-          </div>
-        </div>
-        <div class="w-col w-col-6">
-          <div style="margin-top: 15px" class="mb-3">
-            <input
-              v-model="subjects"
-              class="form-control"
-              id="subjects"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.subjects }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Class Description (please be as detailed as possible)
-        </div>
-      </div>
-      <div class="w-col w-col-6">
-        <textarea
-          v-model="whatYouTeach"
-          style="height: 250px"
-          class="form-control"
-          id="description"
-          rows="3"
-        ></textarea>
-        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.whatYouTeach }}</p>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Qualifications (eg. awards, accomplishments, achievements)
-        </div>
-      </div>
-      <div class="w-col w-col-6">
-        <div class="row">
-          <div class="col">
-            <label for="major" class="form-label">Major</label>
-            <input
-              v-model="major"
-              type="text"
-              class="form-control"
-              id="major"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.major }}</p>
-          </div>
-          <div style="padding-left: 0px" class="col">
-            <label for="gpa" class="form-label">GPA</label>
-            <input
-              v-model="gpa"
-              type="number"
-              id="gpa"
-              min="0"
-              max="5"
-              class="form-control"
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gpa }}</p>
-          </div>
-          <div style="padding-left: 0px" class="col">
-            <label for="education" class="form-label">Education</label>
-            <select
-              v-model="education"
-              style="margin-top: 0px"
-              class="form-select"
-              id="education"
-              aria-label="Default select example"
-            >
-              <option selected>Select</option>
-              <option value="1">Highschooler</option>
-              <option value="3">Bachelors</option>
-              <option value="4">Masters</option>
-              <option value="5">PhD</option>
-            </select>
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
-          </div>
-          <div style="padding-left: 0px" class="col">
-            <label for="school" class="form-label">School/College</label>
-            <input
-              v-model="school"
-              type="text"
-              class="form-control"
-              id="school"
-              required
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.school }}</p>
-          </div>
-        </div>
-        <textarea
-          v-model="qualifications"
-          style="height: 250px; margin-top: 25px"
-          class="form-control"
-          id="t_education"
-          rows="3"
-        ></textarea>
-        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.qualifications }}</p>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Linkedin Profile Link(optional)
-        </div>
-      </div>
-      <div class="w-col w-col-6">
-        <input
-          v-model="linkedIn"
-          class="form-control"
-          id="linkedin"
-          placeholder="linkedin.com/in/johndoe"
-        />
-        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Tell us a bit about yourself
-        </div>
-      </div>
-      <div class="w-col w-col-6">
-        <div class="row">
-          <div class="col">
-            <textarea
-              v-model="bio"
-              style="height: 250px; margin-top: 25px"
-              class="form-control"
-              id="bio"
-              placeholder="eg. my hobbies are..."
-              rows="3"
-            ></textarea>
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.bio }}</p>
-          </div>
-          <div style="padding-left: 0px" class="col">
-            <div style="position: relative; text-align: center" class="col">
-              <p>
-                <input
-                  type="file"
-                  accept="image/"
-                  name="image"
-                  id="file"
-                  @change="handleFile"
-                  style="display: none"
-                />
-                <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profilePic }}</p>
-              <label for="file" style="cursor: pointer"
-                ><p>
-                  <img
-                    style="border-radius: 400px"
-                    src="../components/register/images/user-2.png"
-                    id="output"
-                    width="250"
-                    height="250"
-                  />
-                </p
-              ></label>
-              <label
-                style="
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                "
-                class="form-label"
-                >Upload</label
+          <div style="width: 50%" class="row">
+            <div class="col">
+              <label for="password" class="form-label">Password</label>
+              <input
+                v-model="password"
+                type="password"
+                class="form-control"
+                id="password"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.password }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <label for="confirmpassword" class="form-label"
+                >Confirm Password</label
               >
+              <input
+                v-model="confirmPassword"
+                type="password"
+                class="form-control"
+                id="confirmpassword"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">
+                {{ errors.confirmPassword }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="columns-2-copy w-row">
+          <div class="column w-col w-col-6">
+            <div class="text-block-5">Email Address</div>
+          </div>
+          <div class="w-col w-col-6">
+            <div style="margin-top: 15px" class="mb-3">
+              <label for="emailaddress" class="form-label">Email Address</label>
+              <input
+                v-model="email"
+                type="email"
+                class="form-control"
+                id="emailaddress"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.email }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="columns-2-copy w-row">
+          <div class="column w-col w-col-6">
+            <div class="text-block-5">
+              PayPal Email Adress (Put the email address you like like to accept
+              payments from. If left blank, this will be set to your default
+              email address)
+            </div>
+          </div>
+          <div class="w-col w-col-6">
+            <div style="margin-top: 15px" class="mb-3">
+              <label for="paypalemail" class="form-label"
+                >PayPal Email Adress</label
+              >
+              <input
+                v-model="paypalEmail"
+                type="email"
+                class="form-control"
+                id="paypalemail"
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">
+                {{ errors.paypalEmail }}
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Pricing Per Hour (in terms of USD)
+      <div class="columns-2-copy w-row">
+        <div style="margin-left: 60px" class="column w-col w-col-6">
+          <div class="text-block-5">Birthdate</div>
         </div>
-      </div>
-      <div class="w-col w-col-6">
-        <label for="number" class="form-label">Pricing</label>
-        <input
-          v-model="rates"
-          type="number"
-          id="pricing"
-          min="0"
-          max="1000"
-          @change="prices"
-          class="form-control"
-        />
-        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.rates }}</p>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">Experience</div>
-      </div>
-      <div class="w-col w-col-6">
-        <div class="row">
-          <div class="col">
-            <label for="teachexp" class="form-label"
-              >Years of Teaching Experience</label
+        <div style="margin-right: 60px" class="w-col w-col-6">
+          <div class="form-group row">
+            <label for="birthdate" class="col-2 col-form-label"
+              >Birthdate</label
             >
-            <input
-              v-model="teachExp"
-              type="number"
-              id="teachexp"
-              min="0"
-              max="30"
-              class="form-control"
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.teachExp }}</p>
-          </div>
-          <div style="padding-left: 0px" class="col">
-            <label for="profexp" class="form-label"
-              >Years of Professional Experience</label
-            >
-            <input
-              v-model="profExp"
-              id="profexp"
-              type="number"
-              min="0"
-              max="30"
-              class="form-control"
-            />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profExp }}</p>
+            <div class="col-10">
+              <input
+                v-model="birthDate"
+                class="form-control"
+                type="date"
+                id="birthdate"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.birthDate }}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Availability(optional)
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">Gender</div>
+        </div>
+        <div style="margin-right: 0px" class="w-col w-col-6">
+          <select
+            v-model="gender"
+            style="margin-top: 15px; width: 92%"
+            class="form-select"
+            id="gender"
+            aria-label="Default select example"
+          >
+            <option selected>Select</option>
+            <option value="1">Prefer Not To Say</option>
+            <option value="2">Male</option>
+            <option value="3">Female</option>
+            <option value="4">Other</option>
+          </select>
+          <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gender }}</p>
         </div>
       </div>
-      <div class="w-col w-col-6">
-        <input
-          v-model="availability"
-          class="form-control"
-          id="availability"
-          placeholder="Mondays, 4:00 PM - 6:00 PM"
-        />
-        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
-      </div>
-    </div>
-    <div class="columns-2-copy w-row">
-      <div class="column w-col w-col-6">
-        <div style="margin-left: 60px" class="text-block-5">
-          Agree to legal terms
+      <div class="div-block-7">
+        <h1 class="heading-4-copy">Professional Info</h1>
+        <div class="text-block-4">
+          Tell us a bit about yourself. This information will appear on your
+          public profile, so that potential students can get to know you better.
+        </div>
+        <div class="columns-2 w-row">
+          <div class="column w-col w-col-6">
+            <div class="text-block-5">
+              Occupation (If none, or highschooler please type "highschooler" or
+              "student".)
+            </div>
+          </div>
+          <div class="w-col w-col-6">
+            <div style="margin-top: 15px" class="mb-3">
+              <input
+                v-model="occupation"
+                class="form-control"
+                id="occupation"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">
+                {{ errors.occupation }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="columns-2-copy w-row">
+          <div class="column w-col w-col-6">
+            <div class="text-block-5">
+              Subject(s) (multiple subjects are valid eg. Physics - Mathematics)
+            </div>
+          </div>
+          <div class="w-col w-col-6">
+            <div style="margin-top: 15px" class="mb-3">
+              <input
+                v-model="subjects"
+                class="form-control"
+                id="subjects"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.subjects }}</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="w-col w-col-6">
-        <div style="margin-top: 15px; margin-bottom: 15px" class="form-check">
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Class Description (please be as detailed as possible)
+          </div>
+        </div>
+        <div class="w-col w-col-6">
+          <textarea
+            v-model="whatYouTeach"
+            style="height: 250px"
+            class="form-control"
+            id="description"
+            rows="3"
+          ></textarea>
+          <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.whatYouTeach }}</p>
+        </div>
+      </div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Qualifications (eg. awards, accomplishments, achievements)
+          </div>
+        </div>
+        <div class="w-col w-col-6">
+          <div class="row">
+            <div class="col">
+              <label for="major" class="form-label">Major</label>
+              <input
+                v-model="major"
+                type="text"
+                class="form-control"
+                id="major"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.major }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <label for="gpa" class="form-label">GPA</label>
+              <input
+                v-model="gpa"
+                type="number"
+                id="gpa"
+                min="0"
+                max="5"
+                class="form-control"
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gpa }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <label for="education" class="form-label">Education</label>
+              <select
+                v-model="education"
+                style="margin-top: 0px"
+                class="form-select"
+                id="education"
+                aria-label="Default select example"
+              >
+                <option selected>Select</option>
+                <option value="1">Highschooler</option>
+                <option value="3">Bachelors</option>
+                <option value="4">Masters</option>
+                <option value="5">PhD</option>
+              </select>
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <label for="school" class="form-label">School/College</label>
+              <input
+                v-model="school"
+                type="text"
+                class="form-control"
+                id="school"
+                required
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.school }}</p>
+            </div>
+          </div>
+          <textarea
+            v-model="qualifications"
+            style="height: 250px; margin-top: 25px"
+            class="form-control"
+            id="t_education"
+            rows="3"
+          ></textarea>
+          <p style="color: hsla(0, 100%, 64%, 1)">
+            {{ errors.qualifications }}
+          </p>
+        </div>
+      </div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Linkedin Profile Link(optional)
+          </div>
+        </div>
+        <div class="w-col w-col-6">
           <input
-            v-model="toc"
-            class="form-check-input"
-            nam="checkbox"
-            type="checkbox"
-            id="toc"
-            required
+            v-model="linkedIn"
+            class="form-control"
+            id="linkedin"
+            placeholder="linkedin.com/in/johndoe"
           />
-          <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
-          <label class="form-check-label" for="toc">
-            I have read and agree with TutorPal's
-            <a href="/toc">Terms of Service</a> and will not hold them liable
-            for personal damages.
-          </label>
+          <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
         </div>
       </div>
-    </div>
-  </form>
-  <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.global }}</p>
-  <button
-    @click="handleSubmit"
-    style="margin-top: 40px; margin-bottom: 20px; margin-left: 60px"
-    class="btn btn-primary"
-  >
-    Register
-  </button>
-</div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Tell us a bit about yourself
+          </div>
+        </div>
+        <div class="w-col w-col-6">
+          <div class="row">
+            <div class="col">
+              <textarea
+                v-model="bio"
+                style="height: 250px; margin-top: 25px"
+                class="form-control"
+                id="bio"
+                placeholder="eg. my hobbies are..."
+                rows="3"
+              ></textarea>
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.bio }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <div style="position: relative; text-align: center" class="col">
+                <p>
+                  <input
+                    type="file"
+                    accept="image/"
+                    name="image"
+                    id="file"
+                    @change="handleFile"
+                    style="display: none"
+                  />
+                </p>
+
+                <p style="color: hsla(0, 100%, 64%, 1)">
+                  {{ errors.profilePic }}
+                </p>
+                <label for="file" style="cursor: pointer"
+                  ><p>
+                    <img
+                      style="border-radius: 400px"
+                      src="../components/register/images/user-2.png"
+                      id="output"
+                      width="250"
+                      height="250"
+                    /></p
+                ></label>
+                <label
+                  style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  "
+                  class="form-label"
+                  >Upload</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Pricing Per Hour (in terms of USD)
+          </div>
+        </div>
+        <div class="w-col w-col-6">
+          <label for="number" class="form-label">Pricing</label>
+          <input
+            v-model="rates"
+            type="number"
+            id="pricing"
+            min="0"
+            max="1000"
+            class="form-control"
+          />
+          <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.rates }}</p>
+        </div>
+      </div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">Experience</div>
+        </div>
+        <div class="w-col w-col-6">
+          <div class="row">
+            <div class="col">
+              <label for="teachexp" class="form-label"
+                >Years of Teaching Experience</label
+              >
+              <input
+                v-model="teachExp"
+                type="number"
+                id="teachexp"
+                min="0"
+                max="30"
+                class="form-control"
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.teachExp }}</p>
+            </div>
+            <div style="padding-left: 0px" class="col">
+              <label for="profexp" class="form-label"
+                >Years of Professional Experience</label
+              >
+              <input
+                v-model="profExp"
+                id="profexp"
+                type="number"
+                min="0"
+                max="30"
+                class="form-control"
+              />
+              <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profExp }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Availability(optional)
+          </div>
+        </div>
+        <div class="w-col w-col-6">
+          <input
+            v-model="availability"
+            class="form-control"
+            id="availability"
+            placeholder="Mondays, 4:00 PM - 6:00 PM"
+          />
+          <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
+        </div>
+      </div>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+          <div style="margin-left: 60px" class="text-block-5">
+            Agree to legal terms
+          </div>
+        </div>
+        <div class="w-col w-col-6">
+          <div style="margin-top: 15px; margin-bottom: 15px" class="form-check">
+            <input
+              v-model="toc"
+              class="form-check-input"
+              nam="checkbox"
+              type="checkbox"
+              id="toc"
+              required
+            />
+            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
+            <label class="form-check-label" for="toc">
+              I have read and agree with TutorPal's
+              <a href="/toc">Terms of Service</a> and will not hold them liable
+              for personal damages.
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.global }}</p>
+    <button
+      @click="handleSubmit"
+      style="margin-top: 40px; margin-bottom: 20px; margin-left: 60px"
+      class="btn btn-primary"
+    >
+      Register
+    </button>
+  </div>
 </template>
 <script>
 import getCSRF from '../utils/getCSRF'
@@ -536,24 +546,17 @@ export default {
   },
   methods: {
     handleFile(e) {
-      // e.preventDefault()
-      var image = document.getElementById('output');
-      image.src = URL.createObjectURL(e.target.files[0]);
-      const profilePic = e.target.files || e.dataTransfer.files
-      this.profilePic = profilePic.length > 0 ? profilePic : null
+      const image = e.target.files || e.dataTransfer.files
+      image.src = URL.createObjectURL(image)
+      this.profilePic = image.length > 0 ? image : null
     },
     checkErrors() {
       let isError = false
-      // eslint-disable-next-line
       Object.keys(this.errors).forEach((key) => {
         if (this.errors[key].length > 0) {
           isError = true
         }
-        // eslint-disable-next-line
-        console.log(key, isError)
       })
-      // eslint-disable-next-line
-      console.log(isError)
       return isError
     },
     validateData() {
@@ -612,12 +615,8 @@ export default {
         this.errors.confirmPassword = ''
       }
     },
-    async handleSubmit(event) {
-      // eslint-disable-next-line
-      console.log('handling submit...')
+    async handleSubmit() {
       this.validateData()
-      // eslint-disable-next-line
-      console.log('validating data...')
       if (!this.checkErrors()) {
         // eslint-disable-next-line
         console.log('sending data...')
