@@ -101,14 +101,14 @@
         </div>
         <div class="w-col w-col-6">
           <div style="margin-top: 15px" class="mb-3">
-            <label for="emailaddress" class="form-label"
+            <label for="paypalemail" class="form-label"
               >PayPal Email Adress</label
             >
             <input
               v-model="paypalEmail"
               type="email"
               class="form-control"
-              id="emailaddress"
+              id="paypalemail"
             />
             <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.paypalEmail }}</p>
           </div>
@@ -334,7 +334,6 @@
                   style="display: none"
                 />
                 <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profilePic }}</p>
-              </p>
               <label for="file" style="cursor: pointer"
                 ><p>
                   <img
@@ -343,7 +342,8 @@
                     id="output"
                     width="250"
                     height="250"
-                  /></p
+                  />
+                </p
               ></label>
               <label
                 style="
@@ -374,6 +374,7 @@
           id="pricing"
           min="0"
           max="1000"
+          @change="prices"
           class="form-control"
         />
         <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.rates }}</p>
@@ -536,6 +537,8 @@ export default {
   methods: {
     handleFile(e) {
       // e.preventDefault()
+      var image = document.getElementById('output');
+      image.src = URL.createObjectURL(e.target.files[0]);
       const profilePic = e.target.files || e.dataTransfer.files
       this.profilePic = profilePic.length > 0 ? profilePic : null
     },
@@ -609,7 +612,7 @@ export default {
         this.errors.confirmPassword = ''
       }
     },
-    async handleSubmit() {
+    async handleSubmit(event) {
       // eslint-disable-next-line
       console.log('handling submit...')
       this.validateData()
