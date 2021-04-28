@@ -182,6 +182,7 @@
   </client-only>
 </template>
 <script>
+
 export default {
   head() {
     return {

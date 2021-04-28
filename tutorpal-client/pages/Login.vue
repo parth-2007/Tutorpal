@@ -103,8 +103,12 @@
     </html>
   </client-only>
 </template>
-<script>
+<script type="text/javascript">
 import getCSRF from '../utils/getCSRF'
+import '../components/main/css/webflow.css';
+import '../components/main/css/homepage-12.webflow.css';
+import '../components/main/css/normalize.css';
+
 
 export default {
   data() {
@@ -144,7 +148,6 @@ export default {
         const formData = new FormData()
         formData.append('email', this.email)
         formData.append('password', this.password)
-
         const data = await fetch('api/auth/login/', {
           method: 'POST',
           headers: {
@@ -173,9 +176,8 @@ export default {
     },
   },
 }
-require('../components/main/css/webflow.css')
-require('../components/main/css/homepage-12.webflow.css')
-require('../components/main/css/normalize.css')
+
+
 </script>
 <style>
 </style>
