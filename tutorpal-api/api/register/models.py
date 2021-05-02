@@ -64,9 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     timestamp = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(
         default='person.png', upload_to='profile_pics/')
-    last_reset = models.DateTimeField(null=True)
-    student_pk = models.IntegerField(null=True)
-    tutor_pk = models.IntegerField(null=True)
+    last_reset = models.DateTimeField(null=True, blank=True)
+    student_pk = models.IntegerField(null=True, blank=True)
+    tutor_pk = models.IntegerField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

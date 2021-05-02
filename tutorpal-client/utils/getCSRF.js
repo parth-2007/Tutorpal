@@ -14,14 +14,29 @@ const getCookie = (name) => {
   return cookieValue
 }
 
-const getCSRF = () => {
+const getCSRF = async () => {
   let csrfToken = getCookie('csrftoken')
-  if (csrfToken != null) {
-    return csrfToken
+  if (csrfToken !== null && csrfToken !== undefined) {
+    console.log('csrfToken was not null: ', csrfToken)
+    return { success: csrfToken }
   } else {
-    fetch('api/auth/ensure-csrf/')
-    csrfToken = getCookie('csrftoken')
-    return csrfToken
+    const resp = await fetch('api/auth/ensure-csrf/')
+      .then((res) => {
+        if (res.status >= 400 && res.status < 600) {
+          return { error: 'server error' }
+        }
+        return res.json()
+      })
+      .catch(() => {
+        return { error: 'server error' }
+      })
+    if (resp.success === 'CSRF Ensured!') {
+      csrfToken = getCookie('csrftoken')
+      console.log('csrfToken was null: ', csrfToken)
+      return { success: csrfToken }
+    } else {
+      return { error: 'error in getting csrf token' }
+    }
   }
 }
 

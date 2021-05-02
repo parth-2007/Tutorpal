@@ -8,9 +8,7 @@ const getUserData = async () => {
       }
       return res.json()
     })
-    .catch((err) => {
-      // eslint-disable-next-line
-      console.warn(err)
+    .catch(() => {
       return { error: 'server error' }
     })
 

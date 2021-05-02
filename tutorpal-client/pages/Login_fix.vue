@@ -105,10 +105,9 @@
 </template>
 <script type="text/javascript">
 import getCSRF from '../utils/getCSRF'
-import '../components/main/css/webflow.css';
-import '../components/main/css/homepage-12.webflow.css';
-import '../components/main/css/normalize.css';
-
+import '../components/main/css/webflow.css'
+import '../components/main/css/homepage-12.webflow.css'
+import '../components/main/css/normalize.css'
 
 export default {
   data() {
@@ -148,36 +147,38 @@ export default {
         const formData = new FormData()
         formData.append('email', this.email)
         formData.append('password', this.password)
-        const data = await fetch('api/auth/login/', {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': getCSRF(),
-          },
-          body: formData,
-        })
-          .then((res) => {
-            if (res.status >= 400 && res.status < 600) {
+        const csrfToken = await getCSRF()
+        console.log('submitting form csrf: ', csrfToken.success)
+        if (csrfToken.success !== null && csrfToken.success !== undefined) {
+          const data = await fetch('api/auth/login/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+            },
+            body: formData,
+          })
+            .then((res) => {
+              if (res.status >= 400 && res.status < 600) {
+                this.errors.global = 'Something went wrong :('
+              }
+              return res.json()
+            })
+            .catch(() => {
               this.errors.global = 'Something went wrong :('
-            }
-            return res.json()
-          })
-          .catch(() => {
-            this.errors.global = 'Something went wrong :('
-          })
+            })
 
-        if (data && data.error) {
-          this.errors.global = data.error
-        }
+          if (data && data.error) {
+            this.errors.global = data.error
+          }
 
-        if (data && data.success === 'Successfully logged in user') {
-          this.$router.push('/')
+          if (data && data.success === 'Successfully logged in user') {
+            this.$router.push('/')
+          }
+        } else {
+          this.errors.global = 'Something went wrong :('
         }
       }
     },
   },
 }
-
-
 </script>
-<style>
-</style>
