@@ -4,21 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-      crossorigin="anonymous"
-    />
       <body>
         <div style="display:none;opacity:0" class="div-block-22">
           <div style="border-radius: 8px; padding-bottom: 20px; height: 550px;" class="div-block-23">
-            <div data-w-id="473c235f-1497-5a38-a04b-c345cec6357a" class="div-block-24"><img src="tutor/images/close-1.png" width="20" alt=""></div>
+            <div data-w-id="473c235f-1497-5a38-a04b-c345cec6357a" class="div-block-24"><img src="../static/tutor/images/close-1.png" width="20" alt=""></div>
             <h1 class="heading-10">Update Profile</h1>
             <div class="div-block-25">
               <form>
@@ -63,7 +52,7 @@
                     </div>
                     <textarea style="height:250px; margin-top: 25px;" class="form-control" placeholder="Extra Information About Your Education" id="educationdescription" rows="3"></textarea>
                     <div style="margin-top: 15px; margin-bottom: 5px;" class="text-block-5"><b>Linkedin Profile Link(Optional)</b></div>
-                    <input class="form-control" id="linkedin" placeholder="linkedin.com/in/johndoe">
+                    <input class="form-control" id="linkedin" placeholder="https://www.linkedin.com/in/johndoe">
                       <div class="row">
                         <div class="col">
                           <textarea style="height:250px; margin-top: 25px;" class="form-control" id="bio" placeholder="Eg. My hobbies are..." rows="3"></textarea>
@@ -71,7 +60,7 @@
                         <div style="padding-left: 0px;" class="col">
                           <div style="position: relative; text-align: center;" class="col">
                             <p><input type="file" accept="image/" name="image" id="file" onchange="loadFile(event)" style="display: none;"></p>
-                            <label for="file" style="cursor: pointer;"><p><img style="border-radius:400px" src="tutor/images/user-2.png" id="output" width="250" height="250"/></p></label>
+                            <label for="file" style="cursor: pointer;"><p><img style="border-radius:400px" src="../static/tutor/images/user-2.png" id="output" width="250" height="250"/></p></label>
                             <label style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="form-label">Upload</label>
                           </div>
                         </div>
@@ -98,7 +87,7 @@
           </div>
         </div>
         <div>
-          <div class="section"><a href="index.html" class="link-block w-inline-block"><img src="tutor/images/logo.jpg" loading="lazy" width="260" srcset="tutor/images/logo-p-500.jpeg 500w, tutor/images/logo-p-800.jpeg 800w, tutor/images/logo-p-1080.jpeg 1080w, tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></a>
+          <div class="section"><router-link to="/" class="link-block w-inline-block"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
             <div class="div-block-4">
               <div class="div-block-43">
                 <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
@@ -115,11 +104,11 @@
                               <div class="dropdown-title-2">Logout</div>
                             </div>
                           </a>
-                          <a href="account.html" class="dropdown-link-2 w-inline-block">
+                          <router-link to="account.html" class="dropdown-link-2 w-inline-block">
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Account</div>
                             </div>
-                          </a>
+                          </router-link>
                         </div>
                       </div>
                     </nav>
@@ -131,7 +120,7 @@
           <div class="div-block-6">
             <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
               <div class="container-2 w-container">
-                <nav role="navigation" class="nav-menu-3 w-nav-menu"><a href="index.html" aria-current="page" class="nav-link-4 w-nav-link w--current">Requests</a><a href="inbox_tutor.html" class="nav-link-4 w-nav-link">Messages</a><a href="payments.html" class="nav-link-4 w-nav-link">Payments</a></nav>
+                <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link href="/" aria-current="page" class="nav-link-4 w-nav-link w--current">Requests</router-link><router-link to="inbox_tutor.html" class="nav-link-4 w-nav-link">Messages</router-link><router-link href="payments.html" class="nav-link-4 w-nav-link">Payments</router-link></nav>
                 <div class="menu-button-2 w-nav-button">
                   <div class="icon-2 w-icon-nav-menu"></div>
                 </div>
@@ -163,6 +152,13 @@ export default {
   head() {
     return {
       title: 'Account Information',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
+        { type:"text/js", href:'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js' },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
+      ]
     }
   },
 }

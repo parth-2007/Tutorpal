@@ -350,7 +350,7 @@
                   ><p>
                     <img
                       style="border-radius: 400px"
-                      src="../components/register/images/user-2.png"
+                      src="../static/register/images/user-2.png"
                       id="output"
                       width="250"
                       height="250"
@@ -542,6 +542,11 @@ export default {
   head() {
     return {
       title: 'Tutor Registration',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/registration/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/registration/css/new-registration.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/registration/css/normalize.css" },
+      ]
     }
   },
   methods: {

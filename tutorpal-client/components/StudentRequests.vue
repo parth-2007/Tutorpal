@@ -30,11 +30,11 @@
 export default {
   head() {
     return {
-      title: '404 Not Found',
+      title: 'My Requests',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
       ]
     }
   },

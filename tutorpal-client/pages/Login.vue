@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <!-- <html
+    <html
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
@@ -89,7 +89,7 @@
           </div>
         </div>
       </body>
-    </html> -->
+    </html>
   </client-only>
 </template>
  

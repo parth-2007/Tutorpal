@@ -8,22 +8,22 @@
         <div class="div-block-5">
           <div class="div-block-3-copy">
             <div class="div-block-4">
-              <a href="/login" class="link-2">login</a>
+              <router-link to="/login" class="link-2">login</router-link>
             </div>
-            <a href="/register" class="button w-button">register</a>
+            <router-link to="/register" class="button w-button">register</router-link>
           </div>
           <h1 class="heading">
             Find tutors around the globe,<br />in an instant
           </h1>
           <form action="search_main.html" class="stuff w-form">
             <img
-              src="./main/images/search-1.png"
+              src="../static/main/images/search-1.png"
               loading="lazy"
               width="25"
               height="25"
               srcset="
-                ./main/images/search-1-p-500.png 500w,
-                ./main/images/search-1.png       512w
+                ../static/main/images/search-1-p-500.png 500w,
+                ../static/main/images/search-1.png       512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
               alt=""
@@ -50,7 +50,7 @@
         <div class="column-7 w-col w-col-2">
           <div class="div-block-11">
             <img
-              src="./main/images/notes.png"
+              src="../static/main/images/notes.png"
               loading="lazy"
               width="70"
               alt=""
@@ -62,12 +62,12 @@
         <div class="column-6 w-col w-col-2">
           <div class="div-block-11">
             <img
-              src="./main/images/trophy.png"
+              src="../static/main/images/trophy.png"
               loading="lazy"
               width="70"
               srcset="
-                ./main/images/trophy-p-500.png 500w,
-                main/images/trophy.png         512w
+                ../static/main/images/trophy-p-500.png 500w,
+                ../static/main/images/trophy.png         512w
               "
               sizes="70px"
               alt=""
@@ -79,7 +79,7 @@
         <div class="column-5 w-col w-col-2">
           <div class="div-block-11">
             <img
-              src="./main/images/files-and-folders.png"
+              src="../static/main/images/files-and-folders.png"
               loading="lazy"
               width="70"
               alt=""
@@ -91,7 +91,7 @@
         <div class="column-2 w-col w-col-2">
           <div class="div-block-11">
             <img
-              src="./main/images/student.png"
+              src="../static/main/images/student.png"
               loading="lazy"
               width="70"
               alt=""
@@ -103,12 +103,12 @@
         <div class="column-3 w-col w-col-2">
           <div class="div-block-11">
             <img
-              src="./main/images/school.png"
+              src="../static/main/images/school.png"
               loading="lazy"
               width="70"
               srcset="
-                ./main/images/school-p-500.png 500w,
-                ./main/images/school.png       512w
+                ../static/main/images/school-p-500.png 500w,
+                ../static/main/images/school.png       512w
               "
               sizes="70px"
               alt=""
@@ -120,12 +120,12 @@
         <div class="column-4 w-col w-col-2">
           <div class="div-block-11">
             <img
-              src="./main/images/research.png"
+              src="../static/main/images/research.png"
               loading="lazy"
               width="70"
               srcset="
-                ./main/images/research-p-500.png 500w,
-                ./main/images/research.png       512w
+                ../static/main/images/research-p-500.png 500w,
+                ../static/main/images/research.png       512w
               "
               sizes="70px"
               alt=""
@@ -140,12 +140,12 @@
         <div class="w-layout-grid grid">
           <div class="div-block-15">
             <img
-              src="./main/images/coin.png"
+              src="../static/main/images/coin.png"
               loading="lazy"
               width="80"
               srcset="
-                ./main/images/coin-p-500.png 500w,
-                ./main/images/coin.png       512w
+                ../static/main/images/coin-p-500.png 500w,
+                ../static/main/images/coin.png       512w
               "
               sizes="80px"
               alt=""
@@ -162,12 +162,12 @@
           </div>
           <div class="div-block-15">
             <img
-              src="./main/images/person.png"
+              src="../static/main/images/person.png"
               loading="lazy"
               width="80"
               srcset="
-                ./main/images/person-p-500.png 500w,
-                ./main/images/person.png       512w
+                ../static/main/images/person-p-500.png 500w,
+                ../static/main/images/person.png       512w
               "
               sizes="80px"
               alt=""
@@ -183,12 +183,12 @@
           </div>
           <div class="div-block-15">
             <img
-              src="./main/images/ocean.png"
+              src="../static/main/images/ocean.png"
               loading="lazy"
               width="80"
               srcset="
-                ./main/images/ocean-p-500.png 500w,
-                ./main/images/ocean.png       512w
+                ../static/main/images/ocean-p-500.png 500w,
+                ../static/main/images/ocean.png       512w
               "
               sizes="80px"
               alt=""
@@ -206,7 +206,7 @@
           </div>
           <div class="div-block-15">
             <img
-              src="./main/images/gear.png"
+              src="../static/main/images/gear.png"
               loading="lazy"
               width="80"
               alt=""
@@ -247,23 +247,35 @@
       <div class="footer-copy" style="position: static">
         <div class="columns-2 w-row">
           <div class="column-8 w-col w-col-3">
-            <a href="bug.html" class="link-3">Bugs</a>
+            <router-link to="bug.html" class="link-3">Bugs</router-link>
           </div>
           <div class="column-9 w-col w-col-3">
-            <a href="team.html" class="link-3">Team</a>
+            <router-link to="team.html" class="link-3">Team</router-link>
           </div>
           <div class="column-10 w-col w-col-3">
-            <a href="/toc" class="link-3">Terms of service</a>
+            <router-link to="/toc" class="link-3">Terms of service</router-link>
           </div>
           <div class="column-11 w-col w-col-3">
-            <a href="feedback.html" class="link-3">User Feedback</a>
+            <router-link to="feedback.html" class="link-3">User Feedback</router-link>
           </div>
         </div>
       </div>
     </html>
   </client-only>
 </template>
-
 <script>
+
+export default {
+  head() {
+    return {
+      title: 'Home - TutorPal',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/main/css/homepage-12.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+      ]
+    }
+  },
+}
 
 </script>

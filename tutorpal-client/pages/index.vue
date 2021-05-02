@@ -10,6 +10,7 @@
       <HomeTutor></HomeTutor>
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -32,20 +33,6 @@ export default {
   computed: mapGetters({ user: 'getUser' }),
   async created() {
     await this.fetchUser()
-    const user = this.getUser()
-    if (user.unauthenticated) {
-      require('../components/main/css/webflow.css')
-      require('../components/main/css/homepage-12.webflow.css')
-      require('../components/main/css/normalize.css')
-    } else if (user.is_student) {
-      require('../components/student/css/webflow.css')
-      require('../components/student/css/student-main.webflow.css')
-      require('../components/student/css/normalize.css')
-    } else if (user.is_tutor) {
-      require('../components/tutor/css/webflow.css')
-      require('../components/tutor/css/tutor-main.webflow.css')
-      require('../components/tutor/css/normalize.css')
-    }
   },
   methods: {
     ...mapGetters(['getUser']),

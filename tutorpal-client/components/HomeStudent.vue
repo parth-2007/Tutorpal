@@ -11,33 +11,33 @@
       <body id="body" class="body">
         <div class="div-block-55">
           <div class="section">
-            <a
-              href="/"
+            <router-link
+              to="/"
               aria-current="page"
               class="link-block w-inline-block w--current"
               ><img
-                src="./student/images/logo.jpg"
+                src="../static/student/images/logo.jpg"
                 loading="lazy"
                 width="260"
                 srcset="
-                  ./student/images/logo-p-500.jpeg   500w,
-                  ./student/images/logo-p-800.jpeg   800w,
-                  ./student/images/logo-p-1080.jpeg 1080w,
-                  ./student/images/logo.jpg         1432w
+                  ../static/student/images/logo-p-500.jpeg   500w,
+                  ../static/student/images/logo-p-800.jpeg   800w,
+                  ../static/student/images/logo-p-1080.jpeg 1080w,
+                  ../static/student/images/logo.jpg         1432w
                 "
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw"
                 alt=""
-            /></a>
+            /></router-link>
             <div class="div-block-4">
               <form action="search_student.html" class="stuff w-form">
                 <img
-                  src="./student/images/search-1.png"
+                  src="../static/student/images/search-1.png"
                   loading="lazy"
                   width="25"
                   height="25"
                   srcset="
-                    ./student/images/search-1-p-500.png 500w,
-                    ./student/images/search-1.png       512w
+                    ../static/student/images/search-1-p-500.png 500w,
+                    ../static/student/images/search-1.png       512w
                   "
                   sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                   alt=""
@@ -86,14 +86,14 @@
                               <div class="dropdown-title-2">Logout</div>
                             </div>
                           </a>
-                          <a
+                          <router-link
                             href="profile.html"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Account</div>
                             </div>
-                          </a>
+                          </router-link>
                         </div>
                       </div>
                     </nav>
@@ -112,17 +112,17 @@
             >
               <div class="container-2 w-container">
                 <nav role="navigation" class="nav-menu-3 w-nav-menu">
-                  <a
-                    href="index.html"
+                  <router-link
+                    to="/"
                     aria-current="page"
                     class="nav-link-4 w-nav-link w--current"
-                    >Explore</a
-                  ><a href="inbox_student.html" class="nav-link-4 w-nav-link"
-                    >Messages</a
-                  ><a href="requests.html" class="nav-link-4 w-nav-link"
-                    >Requests</a
-                  ><a href="payments.html" class="nav-link-4 w-nav-link"
-                    >Payments</a
+                    >Explore</router-link
+                  ><router-link to="/register" class="nav-link-4 w-nav-link"
+                    >Messages</router-link
+                  ><router-link to="requests.html" class="nav-link-4 w-nav-link"
+                    >Requests</router-link
+                  ><router-link to="payments.html" class="nav-link-4 w-nav-link"
+                    >Payments</router-link
                   >
                 </nav>
                 <div class="menu-button-2 w-nav-button">
@@ -137,7 +137,7 @@
             <div class="div-block-44">
               <div class="div-block-45">
                 <img
-                  src="./student/images/question.png"
+                  src="../static/student/images/question.png"
                   loading="lazy"
                   width="30"
                   alt=""
@@ -182,15 +182,20 @@
   </client-only>
 </template>
 <script>
-
 export default {
   head() {
     return {
       title: 'Home',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
+        { type:"text/js", href:'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js' },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+      ]
     }
   },
 }
 </script>
-
 
 

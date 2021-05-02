@@ -5,9 +5,9 @@
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
       <body>
-        <router-link to="/" class="link-block-4 w-inline-block"
+        <a href="/" class="link-block-4 w-inline-block"
           ><img src="../static/main/images/logo.jpg" loading="lazy" width="200" alt=""
-        /></router-link>
+        /></a>
         <div class="columns-6 w-row">
           <div class="column-6 w-col w-col-6">
             <div class="div-block-41">
@@ -30,11 +30,11 @@
 export default {
   head() {
     return {
-      title: '404 Not Found',
+      title: 'My Payments',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
       ]
     }
   },

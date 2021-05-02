@@ -4,21 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-      crossorigin="anonymous"
-    />
       <body>
         <div style="display:none;opacity:0" class="div-block-22">
           <div style="border-radius: 8px; padding-bottom: 20px; height: 550px;" class="div-block-23">
-            <div data-w-id="69136265-1695-60aa-62df-790d926cab79" class="div-block-24"><img src="./student/images/close-1.png" width="20" alt=""></div>
+            <div data-w-id="69136265-1695-60aa-62df-790d926cab79" class="div-block-24"><img src="../static//student/images/close-1.png" width="20" alt=""></div>
             <h1 class="heading-10">Update Profile</h1>
             <div class="div-block-25">
               <form style="font-family: Poppins; padding-bottom: 20px;">
@@ -60,14 +49,14 @@
           </div>
         </div>
         <div class="div-block-55">
-          <div class="section"><a href="/" aria-current="page" class="link-block w-inline-block w--current"><img src="./student/images/logo.jpg" loading="lazy" width="200" srcset="./student/images/logo-p-500.jpeg 500w, ./student/images/logo-p-800.jpeg 800w, ./student/images/logo-p-1080.jpeg 1080w, ./student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></a>
+          <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
             <div class="div-block-4">
-              <form action="search_student.html" class="stuff w-form"><img src="./student/images/search-1.png" loading="lazy" width="25" height="25" srcset="./student/images/search-1-p-500.png 500w, ./student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
+              <form action="search_student.html" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
               <div class="div-block-43">
                 <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                   <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                     <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div id="name" class="text-block-18"></div>
+                      <div class="text-block-18">John Wick</div>
                       <div class="text-block-20">Student</div>
                     </div>
                     <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -78,11 +67,11 @@
                               <div class="dropdown-title-2">Logout</div>
                             </div>
                           </a>
-                          <a href="profile.html" class="dropdown-link-2 w-inline-block">
+                          <router-link to="profile.html" class="dropdown-link-2 w-inline-block">
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Account</div>
                             </div>
-                          </a>
+                          </router-link>
                         </div>
                       </div>
                     </nav>
@@ -94,7 +83,7 @@
           <div class="div-block-6">
             <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
               <div class="container-2 w-container">
-                <nav role="navigation" class="nav-menu-3 w-nav-menu"><a href="/" aria-current="page" class="nav-link-4 w-nav-link w--current">Explore</a><a href="inbox_student.html" class="nav-link-4 w-nav-link">Messages</a><a href="requests.html" class="nav-link-4 w-nav-link">Requests</a><a href="payments.html" class="nav-link-4 w-nav-link">Payments</a></nav>
+                <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link w--current">Explore</router-link><router-link to="inbox_student.html" class="nav-link-4 w-nav-link">Messages</router-link><router-link to="requests.html" class="nav-link-4 w-nav-link">Requests</router-link><router-link to="payments.html" class="nav-link-4 w-nav-link">Payments</router-link></nav>
                 <div class="menu-button-2 w-nav-button">
                   <div class="icon-2 w-icon-nav-menu"></div>
                 </div>
@@ -117,10 +106,16 @@
   </no-ssr>
 </template>
 <script>
+
 export default {
   head() {
     return {
       title: 'Account Information',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+      ]
     }
   },
 }

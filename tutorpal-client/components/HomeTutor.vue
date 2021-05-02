@@ -10,23 +10,23 @@
       <body id="body" class="body">
         <div id="main">
           <div class="section">
-            <a
-              href="/"
+            <router-link
+              to="/"
               aria-current="page"
               class="link-block w-inline-block w--current"
               ><img
-                src="./tutor/images/logo.jpg"
+                src="../static/tutor/images/logo.jpg"
                 loading="lazy"
                 width="260"
                 srcset="
-                  ./tutor/images/logo-p-500.jpeg   500w,
-                  ./tutor/images/logo-p-800.jpeg   800w,
-                  ./tutor/images/logo-p-1080.jpeg 1080w,
-                  ./tutor/images/logo.jpg         1432w
+                  ../static/tutor/images/logo-p-500.jpeg   500w,
+                  ../static/tutor/images/logo-p-800.jpeg   800w,
+                  ../static/tutor/images/logo-p-1080.jpeg 1080w,
+                  ../static/tutor/images/logo.jpg         1432w
                 "
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"
                 alt=""
-            /></a>
+            /></router-link>
             <div class="div-block-4">
               <div class="div-block-43">
                 <div class="name_profile_pic">
@@ -59,14 +59,14 @@
                               <div class="dropdown-title-2">Logout</div>
                             </div>
                           </a>
-                          <a
-                            href="account.html"
+                          <router-link
+                            to="account.html"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Account</div>
                             </div>
-                          </a>
+                          </router-link>
                         </div>
                       </div>
                     </nav>
@@ -85,15 +85,15 @@
             >
               <div class="container-2 w-container">
                 <nav role="navigation" class="nav-menu-3 w-nav-menu">
-                  <a
-                    href="index.html"
+                  <router-link
+                    to="/"
                     aria-current="page"
                     class="nav-link-4 w-nav-link w--current"
-                    >Requests</a
-                  ><a href="inbox_tutor.html" class="nav-link-4 w-nav-link"
-                    >Messages</a
-                  ><a href="payments.html" class="nav-link-4 w-nav-link"
-                    >Payments</a
+                    >Requests</router-link
+                  ><router-link to="inbox_tutor.html" class="nav-link-4 w-nav-link"
+                    >Messages</router-link
+                  ><router-link to="payments.html" class="nav-link-4 w-nav-link"
+                    >Payments</router-link
                   >
                 </nav>
                 <div class="menu-button-2 w-nav-button">
@@ -108,7 +108,7 @@
             <div class="div-block-44">
               <div class="div-block-45">
                 <img
-                  src="./tutor/images/question.png"
+                  src="../static/tutor/images/question.png"
                   loading="lazy"
                   width="30"
                   alt=""
@@ -157,6 +157,11 @@ export default {
   head() {
     return {
       title: 'Home',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
+      ]
     }
   },
 }

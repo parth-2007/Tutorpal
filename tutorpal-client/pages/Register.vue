@@ -9,41 +9,42 @@
       </head>
       <body>
         <div class="div-block-3">
-          <a href="/" class="w-inline-block"
+          <router-link to="/" class="w-inline-block"
             ><img
-              src="../components/main/images/logo.jpg"
+              src="../static/main/images/logo.jpg"
               loading="lazy"
               width="307"
               srcset="
-                ../components/main/images/logo-p-500.jpeg   500w,
-                ../components/main/images/logo-p-800.jpeg   800w,
-                ../components/main/images/logo-p-1080.jpeg 1080w,
-                ../components/main/images/logo.jpg         1432w
+                ../static/main/images/logo-p-500.jpeg   500w,
+                ../static/main/images/logo-p-800.jpeg   800w,
+                ../static/main/images/logo-p-1080.jpeg 1080w,
+                ../static/main/images/logo.jpg         1432w
               "
               sizes="(max-width: 479px) 100vw, (max-width: 767px) 27vw, (max-width: 991px) 24vw, (max-width: 1439px) 21vw, (max-width: 1919px) 16vw, 13vw"
               alt=""
               class="image-14"
-          /></a>
+          /></router-link>
           <div class="div-block-4">
-            <a href="/login" class="link-2-copy">login</a>
+            <router-link to="/login" class="link-2-copy">login</router-link>
           </div>
-          <a
-            href="/register"
+          <router-link
+            to="/register"
             aria-current="page"
             class="button w-button w--current"
-            >register</a
+            >register</router-link
           >
         </div>
+        
         <div class="columns-3 w-row">
           <div class="column-13 w-col w-col-6">
-            <a href="/register-tutor" class="link-block-2 w-inline-block"
+            <router-link to="/register-tutor" class="link-block-2 w-inline-block"
               ><img
-                src="../components/main/images/partners.png"
+                src="../static/main/images/partners.png"
                 loading="lazy"
                 width="150"
                 srcset="
-                  ../components/main/images/partners-p-500.png 500w,
-                  ../components/main/images/partners.png       512w
+                  ../static/main/images/partners-p-500.png 500w,
+                  ../static/main/images/partners.png       512w
                 "
                 sizes="150px"
                 alt=""
@@ -56,18 +57,18 @@
                 what you list as your price is how much you get paid. If your
                 tutor agency or program has been shut down due to COVID-19, make
                 it online and global in a couple of minutes.
-              </p></a
+              </p></router-link
             >
           </div>
           <div class="column-13 w-col w-col-6">
-            <a href="/register-student" class="link-block-2 w-inline-block"
+            <router-link to="/register-student" class="link-block-2 w-inline-block"
               ><img
-                src="../components/main/images/student-1.png"
+                src="../static/main/images/student-1.png"
                 loading="lazy"
                 width="150"
                 srcset="
-                  ../components/main/images/student-1-p-500.png 500w,
-                  ../components/main/images/student-1.png       512w
+                  ../static/main/images/student-1-p-500.png 500w,
+                  ../static/main/images/student-1.png       512w
                 "
                 sizes="150px"
                 alt=""
@@ -79,7 +80,7 @@
                 provide a variety of services here at TutorPal. It does NOT cost
                 to register an account as a student. Gain access to these
                 services in the click of a button.
-              </p></a
+              </p></router-link
             >
           </div>
         </div>
@@ -92,12 +93,13 @@ export default {
   head() {
     return {
       title: 'Register',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/main/css/homepage-12.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+      ]
     }
   },
 }
-require('../components/main/css/webflow.css')
-require('../components/main/css/homepage-12.webflow.css')
-require('../components/main/css/normalize.css')
+
 </script>
-<style>
-</style>

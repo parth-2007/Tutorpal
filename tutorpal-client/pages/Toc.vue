@@ -8,16 +8,16 @@
         <meta charset="utf-8" />
       </head>
       <body>
-        <a
+        <router-link
           style="margin-top: 0px; margin-bottom: -30px"
-          href="/"
+          to="/"
           class="link-block w-inline-block"
           ><img
-            src="../components/main/images/logo.jpg"
+            src="../static/main/images/logo.jpg"
             width="250"
             alt=""
             class="image"
-        /></a>
+        /></router-link>
         <div class="div-block">
           <div class="text-block">TutorPal Terms and Conditions</div>
           <div class="text-block-2">
@@ -367,10 +367,12 @@ export default {
   head() {
     return {
       title: 'Terms of Conditions',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
+      ]
     }
   },
 }
-require('../components/outcast/css/webflow.css')
-require('../components/outcast/css/last-project-afcf8d.webflow.css')
-require('../components/outcast/css/normalize.css')
 </script>

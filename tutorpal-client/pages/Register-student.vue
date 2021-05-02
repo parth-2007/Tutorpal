@@ -4,28 +4,22 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
-      <head>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossorigin="anonymous"
-        />
-      </head>
+    <head>
+    </head>
       <body style="height: 130vh" class="body">
         <div style="height: 170vh" class="section">
           <div
             style="font-family: Poppins; height: 750px; width: 500px"
             class="div-block"
           >
-            <div style="margin-top: 40px" class="div-block-4">
+            <div style="margin-top: 15px" class="div-block-4">
               <h1 class="heading">Create a student account</h1>
             </div>
             <div class="div-block-2">
               <div class="text-block">Already have an account?</div>
-              <a href="/login" class="link">Sign In</a>
+              <router-link to="/login" class="link">Sign In</router-link>
             </div>
-            <div class="div-block-3">
+            <div style="margin-top: 20px" class="div-block-3">
               <div>
                 <form method="post" enctype="multipart/form-data">
                   <div class="row">
@@ -105,7 +99,7 @@
                       </p>
                     </div>
                   </div>
-                  <div style="margin-top: 15px; float: left" class="row">
+                  <div style="margin-top: 0px; margin-bottom: 0px; float: left" class="row">
                     <div
                       style="position: relative; text-align: center"
                       class="col"
@@ -124,7 +118,7 @@
                         ><p>
                           <img
                             style="border-radius: 400px"
-                            src="../components/register/images/user-2.png"
+                            src="../static/register/images/user-2.png"
                             id="output"
                             width="100"
                             height="100"
@@ -145,7 +139,7 @@
                       {{ errors.profilePic }}
                     </p>
                   </div>
-                  <div style="margin-top: 25px" class="mb-3">
+                  <div style="margin-top: 0px" class="mb-3">
                     <input
                       id="parentemail"
                       v-model="parentEmail"
@@ -188,7 +182,7 @@
                       required
                     />
                     <label class="form-check-label" for="toc">
-                      I agree with the <a href="/toc">Terms of Service</a>
+                      I agree with the <router-link to="/toc">Terms of Service</router-link>
                     </label>
                     <p style="color: hsla(0, 100%, 64%, 1)">
                       {{ errors.toc }}
@@ -245,6 +239,13 @@ export default {
   head() {
     return {
       title: 'Student Registration',
+      link: [
+        { rel:"stylesheet", type:"text/css", href:"/register/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/register/css/2tor4u-2-0.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/register/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
+        { type:"text/js", href:'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js' },
+      ]
     }
   },
   methods: {
@@ -373,7 +374,7 @@ export default {
   },
 }
 
-require('../components/register/css/webflow.css')
-require('../components/register/css/2tor4u-2-0.webflow.css')
-require('../components/register/css/normalize.css')
 </script>
+<style scoped>
+
+</style>
