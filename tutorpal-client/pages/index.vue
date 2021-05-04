@@ -10,7 +10,6 @@
       <HomeTutor></HomeTutor>
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -35,7 +34,6 @@ export default {
     await this.fetchUser()
   },
   methods: {
-    ...mapGetters(['getUser']),
     ...mapActions(['fetchUser']),
   },
 }
