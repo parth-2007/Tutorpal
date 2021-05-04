@@ -244,7 +244,6 @@ export default {
         { rel:"stylesheet", type:"text/css", href:'/register/css/2tor4u-2-0.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/register/css/normalize.css" },
         { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-        { type:"text/js", href:'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js' },
       ]
     }
   },

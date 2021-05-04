@@ -1115,7 +1115,7 @@
 .body-4 {
   background-color: rgba(65, 168, 211, 0.2);
 }
-
+/* 
 .div-block-22 {
   position: fixed;
   z-index: 21;
@@ -1123,7 +1123,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-}
+} */
 
 .div-block-23 {
   position: absolute;
@@ -2185,9 +2185,6 @@
   .column-16 {
     margin-bottom: 20px;
   }
-  .div-block-22 {
-    display: none;
-  }
   .div-block-23 {
     width: 500px;
   }
@@ -2430,10 +2427,10 @@
   .div-block-69 {
     margin-left: 0px;
   }
-  .div-block-22 {
+  /* .div-block-22 {
     -o-object-fit: contain;
     object-fit: contain;
-  }
+  } */
   .div-block-23 {
     overflow: visible;
     width: auto;

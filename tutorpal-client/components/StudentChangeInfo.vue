@@ -5,10 +5,10 @@
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
       <body>
-        <div style="display:none;opacity:0" class="div-block-22">
+        <div :style="updatemodal" class="div-block-22">
           <div style="border-radius: 8px; padding-bottom: 20px; height: 550px;" class="div-block-23">
-            <div data-w-id="69136265-1695-60aa-62df-790d926cab79" class="div-block-24"><img src="../static//student/images/close-1.png" width="20" alt=""></div>
-            <h1 class="heading-10">Update Profile</h1>
+            <div class="div-block-24"><img @click="updatemodalvalue()" src="../static/student/images/close-1.png" width="20" alt=""></div>
+            <h1 style="margin-top: 30px;" class="heading-10">Update Profile</h1>
             <div class="div-block-25">
               <form style="font-family: Poppins; padding-bottom: 20px;">
                   <div class="row">
@@ -97,7 +97,8 @@
             <div class="column-17 w-col w-col-8 w-col-small-small-stack w-col-tiny-tiny-stack">
               <div class="div-block-69">
                 <h1 class="heading-3">Johnny Appleseed</h1>
-                <p class="paragraph-7"><strong>Birth Date: </strong><small id="bday" style="font-size: 14px;"></small><br><strong>Student Email: </strong><small style="font-size: 14px;" id="email"></small><br><strong>Parent Email: </strong><small style="font-size: 14px;" id="parent"></small></p><a data-w-id="8efab9db-2eae-9d24-16f8-25a1a8058650" href="#" class="b10 w-button">Change Info</a></div>
+                <p class="paragraph-7"><strong>Birth Date: </strong><small id="bday" style="font-size: 14px;"></small><br><strong>Student Email: </strong><small style="font-size: 14px;" id="email"></small><br><strong>Parent Email: </strong><small style="font-size: 14px;" id="parent"></small></p>
+                <a @click="updatemodalvalue()" href="#" class="b10 w-button">Update Information</a></div>
             </div>
           </div>
         </div>
@@ -106,19 +107,45 @@
   </no-ssr>
 </template>
 <script>
-
 export default {
+  data(){
+    return {clicked:false} 
+  },
   head() {
     return {
+      show: false,
       title: 'Account Information',
       link: [
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" },
       ]
+    }
+  },
+  computed: {
+    updatemodal() {
+      return {
+        display: this.clicked ? "flex" : "none"
+      }
+    }
+  },
+  methods: {
+    updatemodalvalue(){
+      this.clicked = !this.clicked
     }
   },
 }
 </script>
 <style>
+.div-block-22 {
+  position: fixed;
+  z-index: 21;
+  width: 100vw;
+  display: none;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  -o-object-fit: contain;
+    object-fit: contain;
+}
 </style>
