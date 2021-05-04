@@ -85,7 +85,9 @@
               </div>
             </div>
             <div class="text-block-7">New to TutorPal?</div>
-            <router-link to="/register" class="button-12 w-button">Create an account</router-link>
+            <router-link to="/register" class="button-12 w-button"
+              >Create an account</router-link
+            >
           </div>
         </div>
       </body>
@@ -95,9 +97,7 @@
  
 <script type="text/javascript">
 import getCSRF from '../utils/getCSRF'
- 
- 
- 
+
 export default {
   data() {
     return {
@@ -114,12 +114,29 @@ export default {
     return {
       title: 'Login',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/main/css/homepage-12.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-        { type:"text/js", href:'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js' }
-      ]
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/main/css/homepage-12.webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/main/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href:
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
+        },
+        {
+          type: 'text/js',
+          href:
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js',
+        },
+      ],
     }
   },
   methods: {
@@ -130,7 +147,6 @@ export default {
       } else {
         this.errors.email = ''
       }
- 
       if (!this.password.length > 0) {
         this.errors.password = 'Invalid password'
       } else {
@@ -143,38 +159,38 @@ export default {
         const formData = new FormData()
         formData.append('email', this.email)
         formData.append('password', this.password)
-        const data = await fetch('api/auth/login/', {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': getCSRF(),
-          },
-          body: formData,
-        })
-          .then((res) => {
-            if (res.status >= 400 && res.status < 600) {
+        const csrfToken = await getCSRF()
+        if (csrfToken.success !== null && csrfToken.success !== undefined) {
+          const data = await fetch('api/auth/login/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+            },
+            body: formData,
+          })
+            .then((res) => {
+              if (res.status >= 400 && res.status < 600) {
+                this.errors.global = 'Something went wrong :('
+              }
+              return res.json()
+            })
+            .catch(() => {
               this.errors.global = 'Something went wrong :('
-            }
-            return res.json()
-          })
-          .catch(() => {
-            this.errors.global = 'Something went wrong :('
-          })
- 
-        if (data && data.error) {
-          this.errors.global = data.error
-        }
- 
-        if (data && data.success === 'Successfully logged in user') {
-          this.$router.push('/')
+            })
+          if (data && data.error) {
+            this.errors.global = data.error
+          }
+          if (data && data.success === 'Successfully logged in user') {
+            this.$router.push('/')
+          }
+        } else {
+          this.errors.global = 'Something went wrong :('
         }
       }
     },
   },
 }
- 
- 
 </script>
 <style>
- 
 </style>
 
