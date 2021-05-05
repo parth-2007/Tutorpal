@@ -282,11 +282,7 @@
                     <nav class="navigation-dropdown-2 w-dropdown-list">
                       <div class="dropdown-pointer-2">
                         <div style="width: 300px" class="dropdown-wrapper-2">
-                          <a
-                            href="#"
-                            id="logout"
-                            class="dropdown-link-2 w-inline-block"
-                          >
+                          <a id="logout" class="dropdown-link-2 w-inline-block">
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Logout</div>
                             </div>
@@ -397,8 +393,9 @@
 <script>
 export default {
   data() {
-    return { 
-    clicked: false }
+    return {
+      clicked: false,
+    }
   },
   head() {
     return {

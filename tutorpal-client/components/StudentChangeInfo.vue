@@ -62,7 +62,7 @@
                     <nav class="navigation-dropdown-2 w-dropdown-list">
                       <div class="dropdown-pointer-2">
                         <div style="width: 300px;" class="dropdown-wrapper-2">
-                          <a href="#" id="logout" class="dropdown-link-2 w-inline-block">
+                          <a id="logout" class="dropdown-link-2 w-inline-block">
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Logout</div>
                             </div>
@@ -98,7 +98,7 @@
               <div class="div-block-69">
                 <h1 class="heading-3">Johnny Appleseed</h1>
                 <p class="paragraph-7"><strong>Birth Date: </strong><small id="bday" style="font-size: 14px;"></small><br><strong>Student Email: </strong><small style="font-size: 14px;" id="email"></small><br><strong>Parent Email: </strong><small style="font-size: 14px;" id="parent"></small></p>
-                <a @click="updatemodalvalue()" href="#" class="b10 w-button">Update Information</a></div>
+                <a @click="updatemodalvalue()" class="b10 w-button">Update Information</a></div>
             </div>
           </div>
         </div>
