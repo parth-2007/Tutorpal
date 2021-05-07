@@ -71,7 +71,7 @@
                     class="dropdown-3 w-dropdown"
                   >
                     <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div class="text-block-18" id="name"></div>
+                      <div class="text-block-18" id="name">John Wick</div>
                       <div class="text-block-20">Student</div>
                     </div>
                     <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -87,7 +87,7 @@
                             </div>
                           </a>
                           <router-link
-                            href="profile.html"
+                            href="/account"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
@@ -119,9 +119,9 @@
                     >Explore</router-link
                   ><router-link to="/register" class="nav-link-4 w-nav-link"
                     >Messages</router-link
-                  ><router-link to="requests.html" class="nav-link-4 w-nav-link"
+                  ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
-                  ><router-link to="payments.html" class="nav-link-4 w-nav-link"
+                  ><router-link to="/payments" class="nav-link-4 w-nav-link"
                     >Payments</router-link
                   >
                 </nav>

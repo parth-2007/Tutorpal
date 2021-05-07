@@ -62,7 +62,7 @@
                     class="dropdown-3 w-dropdown"
                   >
                     <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div id="name" class="text-block-18"></div>
+                      <div id="name" class="text-block-18">John Wick</div>
                       <div class="text-block-20">Tutor</div>
                     </div>
                     <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -102,13 +102,13 @@
                   <router-link
                     to="/"
                     aria-current="page"
-                    class="nav-link-4 w-nav-link w--current"
+                    class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link
                     to="inbox_tutor.html"
                     class="nav-link-4 w-nav-link"
                     >Messages</router-link
-                  ><router-link to="payments.html" class="nav-link-4 w-nav-link"
+                  ><router-link to="/payments" class="nav-link-4 w-nav-link"
                     >Payments</router-link
                   >
                 </nav>
