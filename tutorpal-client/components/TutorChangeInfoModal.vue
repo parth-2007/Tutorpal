@@ -5,6 +5,14 @@
       <input type="email" class="form-control" id="emailaddress" required />
     </div>
     <div class="mb-3">
+      <label for="firstname" class="form-label">First Name</label>
+      <input class="form-control" id="firstname" required />
+    </div>
+    <div class="mb-3">
+      <label for="lastname" class="form-label">Last Name</label>
+      <input class="form-control" id="lastname" required />
+    </div>
+    <div class="mb-3">
       <label for="occupation" class="form-label">Occupation</label>
       <input class="form-control" id="occupation" required />
     </div>
@@ -52,7 +60,7 @@
     <textarea
       style="height: 250px; margin-top: 25px"
       class="form-control"
-      placeholder="Extra Information About Your Education"
+      placeholder="Qualifications"
       id="educationdescription"
       rows="3"
     ></textarea>
@@ -168,16 +176,13 @@
 export default {
   data() {
     return {
-      toc: false,
       email: '',
       firstName: '',
       lastName: '',
-      password: '',
-      confirmPassword: '',
       profilePic: null,
-      paypalEmail: '',
-      birthDate: '',
-      gender: '',
+      paypalEmail: '', // missing
+      birthDate: '', // missing
+      gender: '', // missing
       occupation: '',
       subjects: '',
       whatYouTeach: '',
