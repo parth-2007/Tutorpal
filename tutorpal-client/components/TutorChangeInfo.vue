@@ -93,7 +93,7 @@
                 <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
                   <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                     <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div id="name" class="text-block-18"></div>
+                      <div id="name" class="text-block-18">John Wick</div>
                       <div class="text-block-20">Tutor</div>
                     </div>
                     <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -120,7 +120,7 @@
           <div class="div-block-6">
             <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
               <div class="container-2 w-container">
-                <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link w--current">Requests</router-link><router-link to="inbox_tutor.html" class="nav-link-4 w-nav-link">Messages</router-link><router-link to="payments.html" class="nav-link-4 w-nav-link">Payments</router-link></nav>
+                <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link">Requests</router-link><router-link to="inbox_tutor.html" class="nav-link-4 w-nav-link">Messages</router-link><router-link to="/payments" class="nav-link-4 w-nav-link">Payments</router-link></nav>
                 <div class="menu-button-2 w-nav-button">
                   <div class="icon-2 w-icon-nav-menu"></div>
                 </div>

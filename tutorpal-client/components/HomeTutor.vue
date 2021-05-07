@@ -44,7 +44,7 @@
                     class="dropdown-3 w-dropdown"
                   >
                     <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div id="name" class="text-block-18"></div>
+                      <div id="name" class="text-block-18">John Wick</div>
                       <div class="text-block-20">Tutor</div>
                     </div>
                     <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -52,7 +52,6 @@
                         <div style="width: 300px" class="dropdown-wrapper-2">
                           <a
                             id="logout"
-                            href="#"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
@@ -60,7 +59,7 @@
                             </div>
                           </a>
                           <router-link
-                            to="account.html"
+                            to="/account"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
@@ -92,7 +91,7 @@
                     >Requests</router-link
                   ><router-link to="inbox_tutor.html" class="nav-link-4 w-nav-link"
                     >Messages</router-link
-                  ><router-link to="payments.html" class="nav-link-4 w-nav-link"
+                  ><router-link to="/payments" class="nav-link-4 w-nav-link"
                     >Payments</router-link
                   >
                 </nav>
