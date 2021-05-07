@@ -247,16 +247,16 @@
       <div class="footer-copy" style="position: static">
         <div class="columns-2 w-row">
           <div class="column-8 w-col w-col-3">
-            <router-link to="bug.html" class="link-3">Bugs</router-link>
+            <router-link to="/bugs" class="link-3">Bugs</router-link>
           </div>
           <div class="column-9 w-col w-col-3">
-            <router-link to="team.html" class="link-3">Team</router-link>
+            <router-link to="/team" class="link-3">Team</router-link>
           </div>
           <div class="column-10 w-col w-col-3">
             <router-link to="/toc" class="link-3">Terms of service</router-link>
           </div>
           <div class="column-11 w-col w-col-3">
-            <router-link to="feedback.html" class="link-3">User Feedback</router-link>
+            <router-link to="/feedback" class="link-3">User Feedback</router-link>
           </div>
         </div>
       </div>
