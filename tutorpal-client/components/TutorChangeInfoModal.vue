@@ -317,7 +317,6 @@ export default {
   async created() {
     await this.fetchTutor()
     await this.fetchUser()
-    console.log(this.getTutor(), this.getUser())
     this.tutor = this.getTutor()
     this.user = this.getUser()
   },
