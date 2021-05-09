@@ -3,10 +3,10 @@
     <div v-if="user.unauthenticated">
       <HomeMain></HomeMain>
     </div>
-    <div v-else-if="user.is_student">
+    <div v-else-if="user.isStudent">
       <HomeStudent></HomeStudent>
     </div>
-    <div v-else-if="user.is_tutor">
+    <div v-else-if="user.isTutor">
       <HomeTutor></HomeTutor>
     </div>
   </div>

@@ -1,5 +1,5 @@
-const getUserData = async () => {
-  const data = await fetch('http://localhost:5000/api/users/me/')
+const loggedInFetch = async (url) => {
+  const data = await fetch(url)
     .then((res) => {
       if (res.status === 404) {
         return { unauthenticated: true }
@@ -15,4 +15,4 @@ const getUserData = async () => {
   return data
 }
 
-export default getUserData
+export default loggedInFetch

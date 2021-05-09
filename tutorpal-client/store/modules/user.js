@@ -1,4 +1,5 @@
-import getUserData from '../../utils/getUserData'
+import loggedInFetch from '../../utils/loggedInFetch'
+import keysToCamel from '../../utils/keysToCamel'
 
 const state = () => ({
   user: { unfetched: true },
@@ -11,8 +12,8 @@ const getters = {
 const actions = {
   async fetchUser({ commit, state }) {
     if (state.user.unfetched) {
-      const user = await getUserData()
-      commit('setUser', user)
+      const user = await loggedInFetch('api/users/me')
+      commit('setUser', keysToCamel(user))
     }
   },
 }

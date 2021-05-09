@@ -2,26 +2,90 @@
   <form>
     <div style="margin-top: 15px" class="mb-3">
       <label for="emailaddress" class="form-label">Email Address</label>
-      <input type="email" class="form-control" id="emailaddress" required />
+      <input
+        v-model="user.email"
+        type="email"
+        class="form-control"
+        id="emailaddress"
+        required
+      />
+    </div>
+    <div style="margin-top: 15px" class="mb-3">
+      <label for="paypalemailaddress" class="form-label"
+        >PayPal Email Address</label
+      >
+      <input
+        v-model="tutor.paypalEmail"
+        type="email"
+        class="form-control"
+        id="paypalemailaddress"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="birthdate" class="form-label">Birthdate</label>
+      <input
+        v-model="tutor.birthDate"
+        class="form-control"
+        type="date"
+        id="birthdate"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="birthdate" class="form-label">Gender</label>
+      <select
+        v-model="tutor.gender"
+        class="form-select"
+        id="gender"
+        aria-label="Default select example"
+      >
+        <option selected>Select</option>
+        <option value="1">Prefer Not To Say</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+        <option value="4">Other</option>
+      </select>
     </div>
     <div class="mb-3">
       <label for="firstname" class="form-label">First Name</label>
-      <input class="form-control" id="firstname" required />
+      <input
+        v-model="user.firstName"
+        class="form-control"
+        id="firstname"
+        required
+      />
     </div>
     <div class="mb-3">
       <label for="lastname" class="form-label">Last Name</label>
-      <input class="form-control" id="lastname" required />
+      <input
+        v-model="user.lastName"
+        class="form-control"
+        id="lastname"
+        required
+      />
     </div>
     <div class="mb-3">
       <label for="occupation" class="form-label">Occupation</label>
-      <input class="form-control" id="occupation" required />
+      <input
+        v-model="tutor.occupation"
+        class="form-control"
+        id="occupation"
+        required
+      />
     </div>
     <div class="mb-3">
       <label for="subject" class="form-label">Subjects</label>
-      <input class="form-control" id="subject" required />
+      <input
+        v-model="tutor.subjects"
+        class="form-control"
+        id="subject"
+        required
+      />
     </div>
     <div class="text-block-5"><b>Class Description</b></div>
     <textarea
+      v-model="tutor.whatYouTeach"
       style="height: 250px"
       class="form-control"
       id="description"
@@ -30,15 +94,29 @@
     <div style="margin-top: 15px" class="row">
       <div class="col">
         <label for="major" class="form-label">Major</label>
-        <input type="text" class="form-control" id="major" required />
+        <input
+          v-model="tutor.major"
+          type="text"
+          class="form-control"
+          id="major"
+          required
+        />
       </div>
       <div style="padding-left: 0px" class="col">
         <label for="gpa" class="form-label">GPA</label>
-        <input type="number" id="gpa" min="0" max="5" class="form-control" />
+        <input
+          v-model="tutor.gpa"
+          type="number"
+          id="gpa"
+          min="0"
+          max="5"
+          class="form-control"
+        />
       </div>
       <div style="padding-left: 0px" class="col">
         <label for="education" class="form-label">Education</label>
         <select
+          v-model="tutor.education"
           style="margin-top: 0px"
           class="form-select"
           id="education"
@@ -54,10 +132,17 @@
       </div>
       <div style="padding-left: 0px" class="col">
         <label for="school" class="form-label">School/College</label>
-        <input type="text" class="form-control" id="school" required />
+        <input
+          v-model="tutor.school"
+          type="text"
+          class="form-control"
+          id="school"
+          required
+        />
       </div>
     </div>
     <textarea
+      v-model="tutor.qualifications"
       style="height: 250px; margin-top: 25px"
       class="form-control"
       placeholder="Qualifications"
@@ -68,6 +153,7 @@
       <b>Linkedin Profile Link(Optional)</b>
     </div>
     <input
+      v-model="tutor.linkedIn"
       class="form-control"
       id="linkedin"
       placeholder="https://www.linkedin.com/in/johndoe"
@@ -75,6 +161,7 @@
     <div class="row">
       <div class="col">
         <textarea
+          v-model="tutor.bio"
           style="height: 250px; margin-top: 25px"
           class="form-control"
           id="bio"
@@ -122,15 +209,23 @@
       for="rates"
       id="pricedisplay"
       class="form-label"
-      >Pricing: $500</label
+      >Pricing:</label
     >
-    <input type="range" min="0" max="1000" class="form-range" id="rates" />
+    <input
+      v-model="tutor.rates"
+      type="number"
+      min="0"
+      max="1000"
+      class="form-control"
+      id="rates"
+    />
     <div style="margin-top: 15px" class="row">
       <div class="col">
         <label for="teachexp" class="form-label"
           >Years of Teaching Experience</label
         >
         <input
+          v-model="tutor.teachExp"
           type="number"
           id="teachexp"
           min="0"
@@ -143,6 +238,7 @@
           >Years of Professional Experience</label
         >
         <input
+          v-model="tutor.profExp"
           id="profexp"
           type="number"
           min="0"
@@ -155,14 +251,15 @@
       >Availability</label
     >
     <input
+      v-model="tutor.availability"
       class="form-control"
       id="availability"
       placeholder="Mondays, 4:00 PM - 6:00 PM"
     />
-    <label style="margin-top: 15px" for="password" class="form-label"
+    <!-- <label style="margin-top: 15px" for="password" class="form-label"
       >Verify Password</label
     >
-    <input type="password" class="form-control" id="password" required />
+    <input type="password" class="form-control" id="password" required /> -->
     <button
       style="margin-top: 15px; font-family: Poppins; margin-left: 0px"
       class="btn btn-primary"
@@ -173,30 +270,12 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      email: '',
-      firstName: '',
-      lastName: '',
-      profilePic: null,
-      paypalEmail: '', // missing
-      birthDate: '', // missing
-      gender: '', // missing
-      occupation: '',
-      subjects: '',
-      whatYouTeach: '',
-      major: '',
-      gpa: 0,
-      education: '',
-      school: '',
-      qualifications: '',
-      linkedIn: '',
-      bio: '',
-      rates: 0,
-      teachExp: 0,
-      profExp: 0,
-      availability: '',
+      tutor: {},
+      user: {},
       errors: {
         toc: '',
         email: '',
@@ -225,6 +304,31 @@ export default {
         global: '',
       },
     }
+  },
+  computed: {
+    updatemodal() {
+      return {
+        display: this.clicked ? 'flex' : 'none',
+      }
+    },
+    ...mapGetters({ tutor: 'getTutor' }),
+    ...mapGetters({ user: 'getUser' }),
+  },
+  async created() {
+    await this.fetchTutor()
+    await this.fetchUser()
+    console.log(this.getTutor(), this.getUser())
+    this.tutor = this.getTutor()
+    this.user = this.getUser()
+  },
+  methods: {
+    updatemodalvalue() {
+      this.clicked = !this.clicked
+    },
+    ...mapActions(['fetchTutor']),
+    ...mapActions(['fetchUser']),
+    ...mapGetters(['getTutor']),
+    ...mapGetters(['getUser']),
   },
 }
 </script>

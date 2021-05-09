@@ -1,5 +1,5 @@
 <template>
-  <no-ssr>
+  <client-only>
     <html
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
@@ -140,43 +140,55 @@
           </div>
           <div class="w-col w-col-8">
             <div>
-              <h1 class="heading-3">Subject: Stuff</h1>
+              <h1 class="heading-3">Subject: {{ tutor.subjects }}</h1>
               <div class="div-block-54">
                 <div class="text-block-32">
-                  <strong class="bold-text-3">Stuff Stuff </strong>
+                  <strong class="bold-text-3">
+                    {{ user.firstName }} {{ user.lastName }}
+                  </strong>
                 </div>
               </div>
               <p style="padding-top: 20px" class="paragraph-7">
-                <strong>Member since:</strong> 7/12/2020<br /><strong
-                  >Birth Date: </strong
-                >Its my bday<br /><strong>Qualification Description: </strong
-                >Qualifications<br /><strong>Education:</strong>
-                Education<br /><strong>Working/Subject Experience:</strong> 6
-                years<br /><strong>Teaching Experience: </strong>9 years<br /><strong
-                  >Average Review:</strong
+                <!-- <strong>Member since:</strong> 7/12/2020<br /> -->
+                <strong>Birth Date: </strong>{{ tutor.birthDate }}<br /><strong
+                  >Qualification Description: </strong
+                >{{ tutor.qualifications }}<br /><strong>Education:</strong>
+                {{ tutor.education }}<br /><strong
+                  >Working/Subject Experience:</strong
                 >
-                10 stars<br /><strong>Number of classes taught:</strong>
-                300<br /><strong>Occupation:</strong> SWE<br /><strong
-                  >Price: </strong
-                >$54 per hour <br /><strong>Bio: </strong>I eat cake<br /><strong
-                  >Course Description: </strong
-                >I teach stuff<br /><a href="" target="_blank"
-                  ><strong>Linkedin Account:</strong>
-                </a>
+                {{ tutor.profExp }}<br /><strong>Teaching Experience: </strong>9
+                years<br /><strong>Average Review:</strong>
+                {{ tutor.averageReviews }}<br /><strong
+                  >Number of classes taught:</strong
+                >
+                {{ tutor.numClasses }}<br /><strong>Occupation:</strong>
+                {{ tutor.occupation }}<br /><strong>Price: </strong>${{
+                  tutor.rates
+                }}
+                per hour <br /><strong>Bio: </strong>{{ tutor.bio
+                }}<br /><strong>Course Description: </strong
+                >{{ tutor.whatYouTeach }}<br />
+                <!-- <a
+                v-if="tutor.linkedIn.length > 0"
+                :href="tutor.linkedIn"
+                target="_blank"
+                ><strong>Linkedin Account:</strong>
+              </a> -->
+                <a
+                  @click="updatemodalvalue()"
+                  class="button-10-copy-copy w-button"
+                  >Update Information</a
+                >
               </p>
-              <a
-                @click="updatemodalvalue()"
-                class="button-10-copy-copy w-button"
-                >Update Information</a
-              >
             </div>
           </div>
         </div>
       </body>
     </html>
-  </no-ssr>
+  </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import TutorChangeInfoModal from './TutorChangeInfoModal.vue'
 export default {
   components: { TutorChangeInfoModal },
@@ -215,11 +227,19 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
+    ...mapGetters({ tutor: 'getTutor' }),
+    ...mapGetters({ user: 'getUser' }),
+  },
+  async created() {
+    await this.fetchTutor()
+    await this.fetchUser()
   },
   methods: {
     updatemodalvalue() {
       this.clicked = !this.clicked
     },
+    ...mapActions(['fetchTutor']),
+    ...mapActions(['fetchUser']),
   },
 }
 </script>
