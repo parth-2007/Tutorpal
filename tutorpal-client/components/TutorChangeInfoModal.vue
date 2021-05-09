@@ -311,14 +311,12 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ tutor: 'getTutor' }),
-    ...mapGetters({ user: 'getUser' }),
   },
   async created() {
     await this.fetchTutor()
     await this.fetchUser()
-    this.tutor = this.getTutor()
-    this.user = this.getUser()
+    this.tutor = { ...this.getTutor() }
+    this.user = { ...this.getUser() }
   },
   methods: {
     updatemodalvalue() {
