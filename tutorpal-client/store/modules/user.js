@@ -12,7 +12,7 @@ const getters = {
 const actions = {
   async fetchUser({ commit, state }) {
     if (state.user.unfetched) {
-      const user = await loggedInFetch('api/users/me')
+      const user = await loggedInFetch('api/users/me/')
       commit('setUser', keysToCamel(user))
     }
   },

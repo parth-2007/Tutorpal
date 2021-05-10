@@ -104,7 +104,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class TutorOwnerSerializer(serializers.ModelSerializer):
-    # user = UserOwnerSerializer(read_only=True)
+    user = UserOwnerSerializer()
 
     average_reviews = serializers.FloatField(read_only=True)
     free_tutoring_given = serializers.DurationField(read_only=True)
@@ -114,7 +114,7 @@ class TutorOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tutor
         fields = [
-            'id', 'qualifications', 'what_you_teach',
+            'id', 'user', 'qualifications', 'what_you_teach',
             'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews',
@@ -124,7 +124,8 @@ class TutorOwnerSerializer(serializers.ModelSerializer):
     extra_kwargs = {
         # 'average_reviews': {'read_only': True, "required": False, 'allow_null': True},
         # 'free_tutoring_given': {'read_only': True, "required": False, 'allow_null': True},
-        'linkedIn': {"required": False, 'allow_null': True}
+        'linkedIn': {"required": False, 'allow_null': True},
+        'user': {'write_only': True}
     }
 
 

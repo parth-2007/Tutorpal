@@ -70,11 +70,7 @@ class UserViewSet(viewsets.GenericViewSet,
             return Response(data="User has no Tutor", status=status.HTTP_404_NOT_FOUND)
 
 
-class TutorViewSet(viewsets.GenericViewSet,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.ListModelMixin,
-                   mixins.DestroyModelMixin):
+class TutorViewSet(viewsets.ModelViewSet):
     queryset = Tutor.objects.all().select_related('user')
     serializer_class = TutorViewingSerializer
     permission_classes = [DRYPermissions]
@@ -122,7 +118,8 @@ class TutorViewSet(viewsets.GenericViewSet,
 
     @action(detail=False)
     def trending(self, request):
-        tutor_query = Tutor.objects.all().order_by('num_classes', 'average_reviews').select_related('user')
+        tutor_query = Tutor.objects.all().order_by(
+            'num_classes', 'average_reviews').select_related('user')
         page = self.paginate_queryset(tutor_query)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -208,13 +205,15 @@ class ReviewViewSet(viewsets.GenericViewSet,
         stars = request.data.get('stars')
         tutor_id = request.data.get('tutor')
         try:
-            review = Review.objects.get(student__user=request.user, tutor_id=tutor_id)  # 1 query
+            review = Review.objects.get(
+                student__user=request.user, tutor_id=tutor_id)  # 1 query
             return Response(status=status.HTTP_403_FORBIDDEN, data="This student has already made a review about the tutor.")
         except Review.DoesNotExist:
             # student = request.user.student
             student = Student(id=request.user.student_pk, user=request.user)
             tutor = Tutor.objects.get(pk=request.data.get('tutor'))  # 2 query
-            review = Review.objects.create(tutor=tutor, student=student, stars=stars, description=description)  # 3 query
+            review = Review.objects.create(
+                tutor=tutor, student=student, stars=stars, description=description)  # 3 query
             tutor.average_reviews = (
                 float(tutor.average_reviews) + float(stars)) / (float(tutor.num_reviews) + 1)
             tutor.save()  # 4 query

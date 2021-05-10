@@ -5,7 +5,7 @@
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
       <body>
-        <div :style="updatemodal" class="div-block-22">
+        <div :style="updateModal" class="div-block-22">
           <div
             style="
               border-radius: 8px;
@@ -17,7 +17,8 @@
           >
             <div class="div-block-24">
               <img
-                @click="updatemodalvalue()"
+                @click="updateModalValue()"
+                @modalSubmit="handleModalSubmit"
                 src="../static/tutor/images/close-1.png"
                 width="20"
                 alt=""
@@ -135,6 +136,7 @@
               height="257"
               sizes="(max-width: 479px) 73vw, (max-width: 767px) 257px, (max-width: 991px) 28vw, 257px"
               alt=""
+              :src="user.profilePic"
               class="image-11"
             />
           </div>
@@ -175,7 +177,8 @@
                 ><strong>Linkedin Account:</strong>
               </a> -->
                 <a
-                  @click="updatemodalvalue()"
+                  @modalSubmit="handleModalSubmit()"
+                  @click="updateModalValue"
                   class="button-10-copy-copy w-button"
                   >Update Information</a
                 >
@@ -222,7 +225,7 @@ export default {
     }
   },
   computed: {
-    updatemodal() {
+    updateModal() {
       return {
         display: this.clicked ? 'flex' : 'none',
       }
@@ -235,8 +238,13 @@ export default {
     await this.fetchUser()
   },
   methods: {
-    updatemodalvalue() {
+    updateModalValue() {
       this.clicked = !this.clicked
+    },
+    async handleModalSubmit() {
+      this.clicked = false
+      await this.fetchTutor()
+      await this.fetchUser()
     },
     ...mapActions(['fetchTutor']),
     ...mapActions(['fetchUser']),
