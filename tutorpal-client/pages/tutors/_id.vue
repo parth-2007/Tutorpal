@@ -1,6 +1,6 @@
 <template>
     <div v-if="user.unauthenticated">
-      <StudentTutorProfile></StudentTutorProfile>
+      <HomeTutorProfile></HomeTutorProfile>
     </div>
     <div v-else-if="user.isStudent">
       <StudentTutorProfile></StudentTutorProfile>
