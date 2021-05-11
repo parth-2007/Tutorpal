@@ -1,4 +1,5 @@
 export default {
+  components: true,
   webfontloader: {
     google: {
       families: [
