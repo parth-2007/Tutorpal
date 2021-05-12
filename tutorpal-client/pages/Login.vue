@@ -96,6 +96,7 @@
 </template>
  
 <script type="text/javascript">
+import { mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
 
 export default {
@@ -181,6 +182,7 @@ export default {
             this.errors.global = data.error
           }
           if (data && data.success === 'Successfully logged in user') {
+            await this.refreshUser()
             this.$router.push('/')
           }
         } else {
@@ -188,6 +190,7 @@ export default {
         }
       }
     },
+    ...mapActions(['refreshUser']),
   },
 }
 </script>
