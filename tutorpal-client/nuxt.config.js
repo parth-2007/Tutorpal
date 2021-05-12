@@ -18,11 +18,10 @@ export default {
       { hid: 'description', name: 'description', content: '' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.jpg' }],
-    script: [
-      { src: 'https://www.paypal.com/sdk/js?client-id=AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ',  }
-    ]
   },
-
+  router: {
+    base: '/'
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
