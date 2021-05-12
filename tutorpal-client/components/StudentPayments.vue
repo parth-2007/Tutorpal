@@ -4,7 +4,7 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <body id="body" class="body-3">
+    <body id="body" style="height: 100vh" class="body-3">
         <div id="main">
           <div class="div-block-55">
             <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
@@ -41,7 +41,7 @@
             <div class="div-block-6">
               <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
                 <div class="container-2 w-container">
-                  <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link">Explore</router-link><router-link to="inbox_student.html" class="nav-link-4 w-nav-link">Messages</router-link><router-link to="/requests" class="nav-link-4 w-nav-link">Requests</router-link><router-link to="/payments" class="nav-link-4 w-nav-link w--current">Payments</router-link></nav>
+                  <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link">Explore</router-link><router-link to="/inbox" class="nav-link-4 w-nav-link">Messages</router-link><router-link to="/requests" class="nav-link-4 w-nav-link">Requests</router-link><router-link to="/payments" class="nav-link-4 w-nav-link w--current">Payments</router-link></nav>
                   <div class="menu-button-2 w-nav-button">
                     <div class="icon-2 w-icon-nav-menu"></div>
                   </div>

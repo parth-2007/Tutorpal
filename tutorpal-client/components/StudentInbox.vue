@@ -8,7 +8,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body class="body-2" id="body">
+      <body style="background-color: rgba(65, 168, 211, 0.2); height: 100vh" id="body">
         <div id="main">
           <div class="div-block-55">
             <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
@@ -65,7 +65,7 @@
                   <div class="div-block-51">
                     <div class="div-block-51-copy"><img src="../static/student/images/user-2.png" loading="lazy"  height="60"  width="60" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
                       <h1 class="heading-12">Jane Doe</h1>
-                    </div><router-link to="/chat/id" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                    </div><router-link to="/chat" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
                 </div>
             </div>
           </div>
@@ -78,7 +78,7 @@
 export default {
   head() {
     return {
-      title: 'Home',
+      title: 'Inbox',
       link: [
         { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },

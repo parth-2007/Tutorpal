@@ -7,6 +7,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        
       </head>
       <body id="body" style="height: 100vh;" class="body-3">
           <div id="main">
@@ -53,43 +54,30 @@
                 </div>
               </div>
             </div>
-            <div class="div-block-66">
-              <div class="div-block-45"><img src="../static/student/images/question.png" loading="lazy" width="30" alt=""><a href="mailto:the2tor4u@gmail.com?subject=Website%20Email" class="link-2">Need help? Send us an email</a></div>
-              <h1 class="heading">Student Requests</h1>
-              <div class="div-block-65">
-                <div class="text-block-23">Requests</div>
-                <p class="paragraph">These are the requests you have sent to potential tutors who have not accepted yet. Once the tutor has accepted, please check the <router-link to="/payments" class="link-3">payments</router-link> page to pay for the class.</p>
-              </div>
-              <div id="requests" class="loop"></div>
-                <div class="i">
-                  <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                    <div class="text-block-26">Tutor: Bobby Flay</div>
-                    <p class="paragraph-2"><strong class="bold-text">Schedule
-                      <br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: $${amount}<br>Trial: ${trial}</p>
-                  </div>
-                  <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
-                  <div class="text-block-27">This tutor has not accepted your request yet.</div>
-                </div>
-            </div>
+          <div style="width: Auto;" class="div-block-80">
+            <h1 class="heading-14">Pay for your classes</h1>
+            <p class="paragraph-11">Pay here using either PayPal, PayPal Credit, or a Debit/Credit card. Your payment will be sent to the tutor, 12 hours after the class ends. Information pertaining to the purchase will be sent through email. If you are not satisfied with your class, you may apply for a refund request.<br></p>
+            <div id="paypal-button-container"></div>
           </div>
-    </body>
+        </div>
+     </body>
     </html>
   </client-only>
 </template>
 <script>
+
 export default {
   head() {
     return {
-      title: 'Home',
+      title: 'Pay',
       link: [
         { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-      ]
+      ],
     }
   },
 }
+
 </script>
-
-

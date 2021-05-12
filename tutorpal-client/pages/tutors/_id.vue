@@ -1,4 +1,5 @@
 <template>
+  <div id="main">
     <div v-if="user.unauthenticated">
       <HomeTutorProfile></HomeTutorProfile>
     </div>
@@ -8,13 +9,21 @@
     <div v-else-if="user.isTutor">
       <HomeTutorProfile></HomeTutorProfile>
     </div>
+  </div>
 </template>
 <script>
+import HomeTutorProfile from '@/components/HomeTutorProfile'
+import StudentTutorProfile from '@/components/StudentTutorProfile'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+   components: {
+    HomeTutorProfile,
+    StudentTutorProfile,
+  },
   head() {
-    return {}
+    return {
+    }
   },
   computed: mapGetters({ user: 'getUser' }),
   async created() {
