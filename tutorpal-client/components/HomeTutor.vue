@@ -7,7 +7,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body id="body" class="body">
+      <body id="body" style="height: 100vh" class="body">
         <div id="main">
           <div class="section">
             <router-link

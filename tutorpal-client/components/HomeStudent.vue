@@ -8,7 +8,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body id="body" class="body">
+      <body id="body" style="height: 100%" class="body">
         <div class="div-block-55">
           <div class="section">
             <router-link
@@ -87,7 +87,7 @@
                             </div>
                           </a>
                           <router-link
-                            href="/account"
+                            to="/account"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
@@ -117,7 +117,7 @@
                     aria-current="page"
                     class="nav-link-4 w-nav-link w--current"
                     >Explore</router-link
-                  ><router-link to="/register" class="nav-link-4 w-nav-link"
+                  ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages</router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link

@@ -4,7 +4,7 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <body id="body" class="body-2">
+    <body id="body" style="height: 100vh" class="body-2">
       <div id="main">
         <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
           <div class="div-block-4">
@@ -59,7 +59,7 @@
               <div class="div-block-78">
                 <div class="div-block-77"><img src="../static/tutor/images/user-2.png" loading="lazy" height="60"  width="60" alt="" class="image-15">
                   <h1 class="heading-12">Jane Doe</h1>
-                </div><router-link to="/chat/id" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                </div><router-link to="/chat" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
             </div>
         </div>
       </div>
@@ -71,7 +71,7 @@
 export default {
   head() {
     return {
-      title: 'My Payments',
+      title: 'Inbox',
       link: [
         { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },

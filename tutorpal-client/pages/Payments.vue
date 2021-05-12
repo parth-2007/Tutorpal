@@ -3,10 +3,10 @@
     <div v-if="user.unauthenticated">
       <NotFound></NotFound>
     </div>
-    <div v-else-if="user.is_student">
+    <div v-else-if="user.isStudent">
       <StudentPayments></StudentPayments>
     </div>
-    <div v-else-if="user.is_tutor">
+    <div v-else-if="user.isTutor">
       <TutorPayments></TutorPayments>
     </div>
   </div>
