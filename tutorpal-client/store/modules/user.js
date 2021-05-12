@@ -16,6 +16,10 @@ const actions = {
       commit('setUser', keysToCamel(user))
     }
   },
+  async refreshUser({ commit }) {
+    const user = await loggedInFetch('api/users/me/')
+    commit('setUser', keysToCamel(user))
+  },
 }
 
 const mutations = {
