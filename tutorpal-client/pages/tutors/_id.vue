@@ -1,7 +1,7 @@
 <template>
   <div id="main">
     <div v-if="user.unauthenticated">
-      <HomeTutorProfile></HomeTutorProfile>
+      <MainTutorProfile></MainTutorProfile>
     </div>
     <div v-else-if="user.isStudent">
       <StudentTutorProfile></StudentTutorProfile>
@@ -12,13 +12,13 @@
   </div>
 </template>
 <script>
-import HomeTutorProfile from '@/components/HomeTutorProfile'
+import MainTutorProfile from '@/components/MainTutorProfile'
 import StudentTutorProfile from '@/components/StudentTutorProfile'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
    components: {
-    HomeTutorProfile,
+    MainTutorProfile,
     StudentTutorProfile,
   },
   head() {

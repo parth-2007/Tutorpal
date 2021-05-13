@@ -1,28 +1,28 @@
 <template>
   <div id="main">
     <div v-if="user.unauthenticated">
-      <HomeMain></HomeMain>
+      <MainHome></MainHome>
     </div>
     <div v-else-if="user.isStudent">
-      <HomeStudent></HomeStudent>
+      <StudentHome></StudentHome>
     </div>
     <div v-else-if="user.isTutor">
-      <HomeTutor></HomeTutor>
+      <TutorHome></TutorHome>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import HomeMain from '../components/HomeMain'
-import HomeStudent from '../components/HomeStudent'
-import HomeTutor from '../components/HomeTutor'
+import MainHome from '../components/MainHome'
+import StudentHome from '../components/StudentHome'
+import TutorHome from '../components/TutorHome'
 
 export default {
   components: {
-    HomeMain,
-    HomeStudent,
-    HomeTutor,
+    MainHome,
+    StudentHome,
+    TutorHome,
   },
   head() {
     return {
