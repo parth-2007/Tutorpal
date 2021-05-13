@@ -20,14 +20,24 @@ const actions = {
     const user = await loggedInFetch('api/users/me/')
     commit('setUser', keysToCamel(user))
   },
+  async logoutUser({ commit }) {
+    await fetch('api/auth/logout')
+      .then((res) => {
+        if (res.status >= 400 && res.status < 600) {
+          return { error: 'server error' }
+        }
+        return res.json()
+      })
+      .catch(() => {
+        return { error: 'client error' }
+      })
+    commit('setUser', { unauthenticated: true })
+  },
 }
 
 const mutations = {
   setUser(state, user) {
     state.user = user
-  },
-  logout(state) {
-    state.user = { unauthenticated: true }
   },
 }
 

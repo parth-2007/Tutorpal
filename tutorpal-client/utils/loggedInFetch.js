@@ -9,7 +9,7 @@ const loggedInFetch = async (url) => {
       return res.json()
     })
     .catch(() => {
-      return { error: 'server error' }
+      return { error: 'client error' }
     })
 
   return data
