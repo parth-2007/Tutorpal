@@ -57,13 +57,29 @@
               <p class="paragraph">These classes have been accepted by your tutor but you have not paid yet. Please make sure to pay for your session before it has started.</p>
             </div>
             <div class="loop">
-                <div id="paypending"></div>
+                <div id="paypending">
+                  <div class="i">
+                    <div class="div-block-51-copy"><img src="../static/student/images/user-2.png" loading="lazy" width="75" height="75" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+                      <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
+                    </div>
+                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                    <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><router-link to="/pay/id" class="button-10 w-button">Pay Now</router-link>
+                  </div>
+                </div>
             </div>
             <div class="div-block-65-copy">
               <div class="text-block-23">Paid Classes</div>
               <p class="paragraph">Congratulations! All your work is over, now you can sit back and learn from your professional tutor.</p>
             </div>
-            <div id="paid"></div>
+            <div id="paid">
+              <div class="item-copy">
+                <div class="div-block-51-copy"><img src="../static/student/images/user-2.png" loading="lazy" width="75" height="75" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+                  <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
+                </div>
+                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                <div class="text-block-27-copy">Thank you for paying for your session!</div>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -72,9 +88,6 @@
 </template>
 <script>
 export default {
-  data(){
-    return {clicked:false} 
-  },
   head() {
     return {
       show: false,

@@ -51,12 +51,28 @@
         <div class="text-block-23">Payments</div>
         <p class="paragraph">12 hours after your class is completed, you will be paid through your registered email using PayPal. All of your payments will be recorded here.</p>
       </div>
-        <div id="paid"></div>
+        <div id="paid">
+          <div class="div-block-64">
+            <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
+            <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
+            <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
+            <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
+            <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
+          </div>
+        </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Unpaid Classes (student)</div>
         <p class="paragraph">You are not required to start the class until your student has paid for it.</p>
       </div>
-    <div id="unpaid"></div>
+      <div id="unpaid">
+        <div class="div-block-64">
+          <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
+          <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>$${amount}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> ${studentname}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> ${date}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>${duration}</div>
+        </div>
+      </div>
       </body>
     </html>
   </client-only>

@@ -30,7 +30,15 @@
             </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div id="posts"></div>
+            <div id="posts">
+              <div class="review_bundle">
+                <div class="review_item"><img src="tutor/images/user-2.png" loading="lazy" width="40" srcset="tutor/images/user-2.png 500w, tutor/images/user-2.png 512w" sizes="40px" alt="" class="image-12">
+                  <div class="text-block-33">${fullname}</div>
+                  <div class="text-block-34">Review: <strong>${stars} Stars</strong></div>
+                </div>
+                <p class="paragraph-9">${description}</p>
+              </div>
+            </div>
           </div>
       </body>
     </html>

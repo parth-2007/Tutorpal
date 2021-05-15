@@ -58,6 +58,7 @@
               <div class="div-block-43">
                 <div class="name_profile_pic">
                   <img
+                    :src="user.profilePic"
                     id="image"
                     width="60"
                     height="60"
@@ -71,7 +72,7 @@
                     class="dropdown-3 w-dropdown"
                   >
                     <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div class="text-block-18" id="name">John Wick</div>
+                      <div class="text-block-18" id="name">{{user.firstName}}{{user.lastName}}</div>
                       <div class="text-block-20">Student</div>
                     </div>
                     <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -155,7 +156,19 @@
                 </p>
               </div>
               <div class="trending">
-                <div id="trending"></div>
+                <div v-for="tutor of trending.results" :key="tutor.id" id="trending">
+                  <router-link :to="'/tutors/'+tutor.id" class="link-block-2 w-inline-block">
+                    <div style="line-height: 14px;" class="div-block-54"><img :src="tutor.user.profile_pic" loading="lazy" width="38" height="38" sizes="38px" alt="" class="image-5">
+                      <div class="text-block-21"><strong class="bold-text-3">{{tutor.user.first_name}} {{tutor.user.last_name}}</strong></div>
+                          <div class="text-block-21-copy">Subject: {{tutor.subjects}}</div>
+                          <div class="text-block-21-copy-2">Price: ${{tutor.rates}} hourly</div>
+                          <div class="text-block-21-copy-2">Degree: {{tutor.education}}</div>
+                          <div class="text-block-21-copy-2">Education: {{tutor.major}} at {{tutor.school}}, GPA of {{tutor.gpa}}</div>
+                          <div class="text-block-21-copy-2">Reviews: {{tutor.average_reviews}} Stars</div>
+                          <div class="text-block-21-copy-2">Occupation: {{tutor.occupation}}</div>
+                    </div>
+                  </router-link>
+                </div>
               </div>
             </div>
           </div>
@@ -163,7 +176,14 @@
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
               <div class="upcoming_loop">
-                <div id="started"></div>
+                <div id="started">
+                  <div class="upcoming_item">
+                    <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><router-link to="/sessions/id" class="button-4 w-button">Join Meeting</router-link>
+                  </div>
+                </div>
+                <div style="text-align: center; padding: 20%" v-if="started = []">
+                  <strong style="font-family: Poppins; font-size: 18px;" class="bold-text-2">Your classes have not started yet</strong>
+                </div>
               </div>
             </div>
             <div
@@ -172,7 +192,11 @@
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
               <div class="upcoming_loop">
-                <div id="upcoming"></div>
+                <div id="upcoming">
+                  <div class="upcoming_item">
+                    <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -182,7 +206,20 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+  data(){
+    return{
+      trending:[],
+      started: [],
+    }
+  },
+  async fetch() {
+    this.trending = await fetch('/api/tutors/trending').then(res =>
+      res.json()
+    )
+  },
   head() {
     return {
       title: 'Home',
@@ -193,6 +230,13 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
       ]
     }
+  },
+  computed: mapGetters({ user: 'getUser' }),
+  async created() {
+    await this.fetchUser()
+  },
+  methods: {
+    ...mapActions(['fetchUser']),
   },
 }
 </script>
