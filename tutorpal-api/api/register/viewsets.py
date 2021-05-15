@@ -79,7 +79,6 @@ class TutorViewSet(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         from django.db import connection
-        print('# of Queries: {}'.format(len(connection.queries)))
         # for query in connection.queries:
         #     print("sql query: ", query.get("sql"))
         print('# of Queries: {}'.format(len(connection.queries)))
@@ -88,7 +87,7 @@ class TutorViewSet(viewsets.ModelViewSet):
     def get_object(self):
         if self.action in ["retrieve", "update", "partial_update"]:
             pk = self.kwargs['pk']
-            if pk == "me" and self.request.user.has_tutor:
+            if self.request.user.is_authenticated and pk == "me" and self.request.user.has_tutor:
                 return self.request.user.tutor
             else:
                 return super().get_object()
@@ -100,6 +99,39 @@ class TutorViewSet(viewsets.ModelViewSet):
             return TutorOwnerSerializer
         else:
             return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        tutor_data = request.data.get('tutor')
+        user_data = request.data.get('user')
+
+        tutor_obj = self.get_object()
+        user_obj = request.user
+
+        tutor_serializer = TutorOwnerSerializer(
+            tutor_obj, data=tutor_data, partial=partial)
+        user_serializer = UserOwnerSerializer(
+            user_obj, data=user_data, partial=partial)
+
+        tutor_serializer.is_valid(raise_exception=True)
+        user_serializer.is_valid(raise_exception=True)
+
+        tutor_serializer.save()
+        user_serializer.save()
+
+        if getattr(tutor_obj, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            tutor_obj._prefetched_objects_cache = {}
+        if getattr(user_obj, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            tutor_obj._prefetched_objects_cache = {}
+
+        return Response({'success': 'successfully updated tutor'})
 
     @action(detail=False)
     def search(self, request):
@@ -138,13 +170,6 @@ class TutorViewSet(viewsets.ModelViewSet):
 
         serializer_class = ReviewSerializer(review_query, many=True)
         return Response(serializer_class.data)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    def perform_update(self, serializer):
-        print('performing update')
-        return super().perform_update(serializer)
 
 
 class StudentViewSet(viewsets.GenericViewSet,

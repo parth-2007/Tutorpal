@@ -369,7 +369,7 @@ export default {
         this.errors.paypalEmail = 'Invalid email'
       } else {
         this.errors.paypalEmail = ''
-        this.tutor.paypalEmail = this.user.email
+        // this.tutor.paypalEmail = this.user.email
       }
     },
     async handleSubmit() {
@@ -380,19 +380,23 @@ export default {
         (!objectsEqual(this.tutor, this.getTutor()) ||
           !objectsEqual(this.user, this.getUser()))
       ) {
-        const formData = new FormData()
-        formData.append(
-          'tutor',
-          JSON.stringify({ ...this.tutor, user: { ...this.user } })
-        )
+        // const formData = new FormData()
+        // formData.append(
+        //   'tutor',
+        //   JSON.stringify({ ...this.tutor, user: { ...this.user } })
+        // )
         const csrfToken = await getCSRF()
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
           const data = await fetch('api/tutors/me/', {
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,
+              'Content-Type': 'application/json',
             },
-            body: formData,
+            body: JSON.stringify({
+              tutor: { ...this.tutor },
+              user: { ...this.user },
+            }),
           })
             .then((res) => {
               if (res.status >= 400 && res.status < 600) {

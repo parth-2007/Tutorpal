@@ -104,7 +104,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class TutorOwnerSerializer(serializers.ModelSerializer):
-    user = UserOwnerSerializer()
+    user = UserOwnerSerializer(read_only=True)
 
     average_reviews = serializers.FloatField(read_only=True)
     free_tutoring_given = serializers.DurationField(read_only=True)
