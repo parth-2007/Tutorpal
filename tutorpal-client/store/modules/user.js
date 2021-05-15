@@ -21,7 +21,7 @@ const actions = {
     commit('setUser', keysToCamel(user))
   },
   async logoutUser({ commit }) {
-    await fetch('api/auth/logout')
+    await fetch('api/auth/logout/')
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {
           return { error: 'server error' }
@@ -32,6 +32,9 @@ const actions = {
         return { error: 'client error' }
       })
     commit('setUser', { unauthenticated: true })
+  },
+  updateUser({ commit }, user) {
+    commit('setUser', user)
   },
 }
 

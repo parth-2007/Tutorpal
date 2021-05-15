@@ -273,7 +273,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
 import objectsEqual from '../utils/objectsEqual'
 
@@ -315,9 +315,8 @@ export default {
     this.user = { ...this.getUser() }
   },
   methods: {
-    ...mapActions(['fetchTutor', 'fetchUser']),
+    ...mapActions(['fetchTutor', 'fetchUser', 'updateTutor', 'updateUser']),
     ...mapGetters(['getUser', 'getTutor']),
-    ...mapMutations(['setTutor', 'setUser']),
 
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
@@ -376,43 +375,51 @@ export default {
     async handleSubmit() {
       this.validateData()
 
-      const formData = new FormData()
-      formData.append(
-        'tutor',
-        JSON.stringify({ ...this.tutor, user: { ...this.user } })
-      )
-      const csrfToken = await getCSRF()
-      if (csrfToken.success !== null && csrfToken.success !== undefined) {
-        const data = await fetch('api/tutors/me/', {
-          method: 'PATCH',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-          },
-          body: formData,
-        })
-          .then((res) => {
-            if (res.status >= 400 && res.status < 600) {
+      if (
+        !this.checkErrors() &&
+        (!objectsEqual(this.tutor, this.getTutor()) ||
+          !objectsEqual(this.user, this.getUser()))
+      ) {
+        const formData = new FormData()
+        formData.append(
+          'tutor',
+          JSON.stringify({ ...this.tutor, user: { ...this.user } })
+        )
+        const csrfToken = await getCSRF()
+        if (csrfToken.success !== null && csrfToken.success !== undefined) {
+          const data = await fetch('api/tutors/me/', {
+            method: 'PATCH',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+            },
+            body: formData,
+          })
+            .then((res) => {
+              if (res.status >= 400 && res.status < 600) {
+                this.errors.global = 'Something went wrong :('
+              }
+              return res.json()
+            })
+            .catch(() => {
               this.errors.global = 'Something went wrong :('
+            })
+          if (data && data.error) {
+            this.errors.global = data.error
+          } else {
+            if (!objectsEqual(this.tutor, this.getTutor())) {
+              this.updateTutor({ ...this.tutor })
             }
-            return res.json()
-          })
-          .catch(() => {
-            this.errors.global = 'Something went wrong :('
-          })
-        if (data && data.error) {
-          this.errors.global = data.error
+            if (!objectsEqual(this.user, this.getUser())) {
+              this.updateUser({ ...this.user })
+            }
+            this.$emit('modalSubmit')
+            // this.errors.global = 'Something went wrong :('
+          }
         } else {
-          if (!objectsEqual(this.tutor, this.getTutor())) {
-            this.setTutor(this.tutor)
-          }
-          if (!objectsEqual(this.user, this.getUser())) {
-            this.setUser(this.user)
-          }
-          this.$emit('modalSubmit')
-          // this.errors.global = 'Something went wrong :('
+          this.errors.global = 'Something went wrong :('
         }
       } else {
-        this.errors.global = 'Something went wrong :('
+        this.$emit('modalSubmit')
       }
     },
   },

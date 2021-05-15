@@ -12,22 +12,25 @@ const getters = {
 const actions = {
   async fetchTutor({ commit, state }) {
     if (state.tutor.unfetched) {
-      const tutor = await loggedInFetch('api/tutors/me')
+      const tutor = await loggedInFetch('api/tutors/me/')
       commit('setTutor', keysToCamel(tutor))
     }
   },
-  async refreshTutor({ commit, state }) {
-    const tutor = await loggedInFetch('api/tutors/me')
+  async refreshTutor({ commit }) {
+    const tutor = await loggedInFetch('api/tutors/me/')
     commit('setTutor', keysToCamel(tutor))
+  },
+  logoutTutor({ commit }) {
+    commit('setTutor', { unauthenticated: true })
+  },
+  updateTutor({ commit }, tutor) {
+    commit('setTutor', tutor)
   },
 }
 
 const mutations = {
   setTutor(state, tutor) {
     state.tutor = tutor
-  },
-  logout(state) {
-    state.tutor = { unauthenticated: true }
   },
 }
 

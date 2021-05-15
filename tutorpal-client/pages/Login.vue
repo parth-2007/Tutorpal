@@ -183,6 +183,8 @@ export default {
           }
           if (data && data.success === 'Successfully logged in user') {
             await this.refreshUser()
+            await this.refreshTutor()
+            await this.refreshStudent()
             this.$router.push('/')
           }
         } else {
@@ -190,7 +192,7 @@ export default {
         }
       }
     },
-    ...mapActions(['refreshUser']),
+    ...mapActions(['refreshUser', 'refreshTutor', 'refreshStudent']),
   },
 }
 </script>

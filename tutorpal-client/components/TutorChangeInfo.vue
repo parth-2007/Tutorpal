@@ -1,4 +1,4 @@
-<template>
+T<template>
   <client-only>
     <html
       data-wf-page="5f405fbdac064904ad639864"
@@ -26,7 +26,7 @@
             </div>
             <h1 style="margin-top: 30px" class="heading-10">Update Profile</h1>
             <div class="div-block-25">
-              <TutorChangeInfoModal />
+              <TutorChangeInfoModal @modalSubmit="handleModalSubmit()" />
             </div>
           </div>
         </div>
@@ -262,5 +262,3 @@ export default {
   object-fit: contain;
 }
 </style>
- 
-
