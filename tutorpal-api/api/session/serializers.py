@@ -4,7 +4,7 @@ from register.serializers import StudentViewingSerializer, TutorViewingSerialize
 
 
 class StudentSessionSerializer(serializers.ModelSerializer):
-    tutor = StudentViewingSerializer(read_only=True)
+    tutor = TutorViewingSerializer(read_only=True)
 
     class Meta:
         model = Session
