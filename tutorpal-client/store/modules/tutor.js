@@ -16,6 +16,10 @@ const actions = {
       commit('setTutor', keysToCamel(tutor))
     }
   },
+  async refreshTutor({ commit, state }) {
+    const tutor = await loggedInFetch('api/tutors/me')
+    commit('setTutor', keysToCamel(tutor))
+  },
 }
 
 const mutations = {
