@@ -1,0 +1,53 @@
+import keysToCamel from '../../utils/keysToCamel'
+
+const state = () => ({
+  trending: { unfetched: true },
+})
+
+const getters = {
+  getTrending: (state) => state.trending,
+}
+
+const actions = {
+  async fetchTrending({ commit, state }) {
+    if (state.trending.unfetched) {
+      const trending = await fetch('api/tutors/trending')
+        .then((res) => {
+          if (res.status >= 400 && res.status < 600) {
+            return { error: 'server error' }
+          }
+          return res.json()
+        })
+        .catch(() => {
+          return { error: 'client error' }
+        })
+      commit('setTrending', keysToCamel(trending.results))
+    }
+  },
+  async refreshTrending({ commit }) {
+    const trending = await fetch('api/tutors/trending')
+      .then((res) => {
+        if (res.status >= 400 && res.status < 600) {
+          return { error: 'server error' }
+        }
+        return res.json()
+      })
+      .catch(() => {
+        return { error: 'client error' }
+      })
+    commit('setTrending', keysToCamel(trending.results))
+  },
+}
+
+const mutations = {
+  setTrending(state, trending) {
+    state.trending = trending
+  },
+}
+
+export default {
+  state,
+  getters,
+  actions,
+  mutations,
+}

@@ -16,7 +16,7 @@ const actions = {
       commit('setStudent', keysToCamel(student))
     }
   },
-  async refreshStudent({ commit, state }) {
+  async refreshStudent({ commit }) {
     const student = await loggedInFetch('api/students/me')
     commit('setStudent', keysToCamel(student))
   },
