@@ -402,20 +402,14 @@ export default {
         if (data && data.error) {
           this.errors.global = data.error
         } else {
-          // if (!objectsEqual(this.tutor, this.getTutor())) {
-          //   this.setTutor(this.tutor)
-          // }
-          // if (!objectsEqual(this.user, this.getUser())) {
-          //   this.setUser(this.user)
-          // }
-          // this.$emit('modalSubmit')
-          if (
-            !objectsEqual(this.tutor, this.getTutor()) &&
-            !objectsEqual(this.user, this.getUser())
-          ) {
-            window.location.reload()
+          if (!objectsEqual(this.tutor, this.getTutor())) {
+            this.setTutor(this.tutor)
           }
-          this.errors.global = 'Something went wrong :('
+          if (!objectsEqual(this.user, this.getUser())) {
+            this.setUser(this.user)
+          }
+          this.$emit('modalSubmit')
+          // this.errors.global = 'Something went wrong :('
         }
       } else {
         this.errors.global = 'Something went wrong :('

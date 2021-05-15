@@ -142,6 +142,10 @@ class TutorViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def perform_update(self, serializer):
+        print('performing update')
+        return super().perform_update(serializer)
+
 
 class StudentViewSet(viewsets.GenericViewSet,
                      mixins.RetrieveModelMixin,

@@ -11,12 +11,13 @@ class StudentSessionSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'tutor',
             'date', 'time_start', 'time_end', 'duration',
-            'price', 'free', 'description', 'call_url',
+            'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
             'student_paid', 'tutor_paid',
             'refund_requested', 'refund_available', 'refunded',
             'tutor_emailed', 'student_emailed', 'parent_emailed',
         ]
+
 
 class TutorSessionSerializer(serializers.ModelSerializer):
     student = StudentViewingSerializer(read_only=True)
@@ -26,7 +27,7 @@ class TutorSessionSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'student',
             'date', 'time_start', 'time_end', 'duration',
-            'price', 'free', 'description', 'call_url',
+            'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
             'student_paid', 'tutor_paid',
             'refund_requested', 'refund_available', 'refunded',

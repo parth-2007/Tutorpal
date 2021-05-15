@@ -17,9 +17,11 @@ class Session(models.Model):
     duration = models.DurationField(blank=True)
 
     # duration = models.DurationField(blank=True, null=True)
-    price = models.DecimalField(blank=True, max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(
+        blank=True, max_digits=10, decimal_places=2, default=0)
     free = models.BooleanField(default=False)
     description = models.TextField(max_length=500, blank=True)
+    subjects = models.CharField(max_length=64, blank=True)
 
     # call_url = models.URLField(max_length=50, blank=True)
     call_url = models.CharField(max_length=30, blank=True)

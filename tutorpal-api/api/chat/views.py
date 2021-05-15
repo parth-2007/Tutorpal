@@ -1,5 +1,5 @@
 from .models import Room, Message
-from .serializers import RoomSerializer, MessageSerializer
+from .serializers import StudentRoomSerializer, TutorRoomSerializer, MessageSerializer, RoomSerializer
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
 from dry_rest_permissions.generics import DRYPermissions
@@ -15,11 +15,18 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.has_student:
-            return Room.objects.filter(student__id=self.request.user.student_pk)
+            return Room.objects.filter(student_pk=self.request.user.student_pk)
         elif self.request.user.has_tutor:
-            return Room.objects.filter(tutor__id=self.request.user.tutor_pk)
+            return Room.objects.filter(tutor_pk=self.request.user.tutor_pk)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You are not authenticated")
+
+    def get_serializer_class(self):
+        if self.request.user.has_student:
+            return StudentRoomSerializer
+        elif self.request.user.has_tutor:
+            return TutorRoomSerializer
+        return RoomSerializer
 
     @action(detail=True)
     def messages(self, request, pk):
@@ -40,4 +47,5 @@ class RoomViewSet(viewsets.ModelViewSet):
         return Response(serializer_class.data)
 
     def perform_create(self, serializer):
-        serializer.save(tutor_pk=int(self.request.data.get('tutor')), student_pk=self.request.user.student_pk)
+        serializer.save(tutor_pk=int(self.request.data.get(
+            'tutor')), student_pk=self.request.user.student_pk)

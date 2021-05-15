@@ -1,7 +1,9 @@
 <template>
   <div>
-    <button @click="logSessions">log sessions</button>
+    <!-- <button @click="logSessions">log sessions</button> -->
     <button @click="addSession">add session</button>
+    <br />
+    {{ startedSessions }}
   </div>
 </template>
 
@@ -9,17 +11,13 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  // computed: mapGetters({startedSessions: this.getStartedSessions()}),
+  computed: mapGetters({ startedSessions: 'getStartedSessions' }),
   async created() {
     await this.fetchSessions('startedSessions')
   },
   methods: {
     ...mapActions(['fetchSessions', 'updateSessions']),
     ...mapGetters(['getStartedSessions']),
-    logSessions() {
-      const startedSessions = this.getStartedSessions()
-      console.log(startedSessions)
-    },
     addSession() {
       this.updateSessions([{ hi: 'hi' }, 'startedSessions'])
     },

@@ -246,8 +246,7 @@ export default {
       await this.fetchTutor()
       await this.fetchUser()
     },
-    ...mapActions(['fetchTutor']),
-    ...mapActions(['fetchUser']),
+    ...mapActions(['fetchTutor', 'fetchUser']),
   },
 }
 </script>

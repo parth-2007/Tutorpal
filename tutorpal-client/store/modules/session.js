@@ -40,13 +40,6 @@ const actions = {
     commit('setSessions', [keysToCamel(sessions.results), sessionName])
   },
   updateSessions({ commit, state }, [newSession, sessionName]) {
-    // console.log(
-    //   sessionName,
-    //   state[sessionName],
-    //   typeof state[sessionName],
-    //   newSession
-    // )
-    console.log([newSession, ...state[sessionName]])
     commit('setSessions', [[newSession, ...state[sessionName]], sessionName])
   },
 }
