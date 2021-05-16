@@ -84,6 +84,7 @@ import convertTime from '../utils/convertTime'
 export default {
   async fetch() {
     await this.fetchSessions('pendingOnTutor')
+    await this.fetchUser()
   },
   head() {
     return {

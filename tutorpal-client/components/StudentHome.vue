@@ -178,7 +178,7 @@
               <div class="upcoming_loop">
                 <div v-for="session in started" :key="session.id" id="started">
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: blank for now<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
                   </div>
                 </div>
                 <div style="text-align: center; padding: 20%" v-if="started=null">
@@ -194,7 +194,7 @@
               <div class="upcoming_loop">
                 <div v-for="session in upcoming" :key="session.id" id="upcoming">
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: blank for now<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
                   </div>
                 </div>
               </div>
@@ -215,9 +215,9 @@ export default {
     }
   },
   async fetch() {
+    await this.fetchTrending()
     await this.fetchSessions('startedSessions')
     await this.fetchSessions('upcoming')
-    await this.fetchTrending()
     await this.fetchUser()
   },
   head() {
