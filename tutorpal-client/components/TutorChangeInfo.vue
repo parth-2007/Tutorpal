@@ -18,7 +18,6 @@ T<template>
             <div class="div-block-24">
               <img
                 @click="updateModalValue()"
-                @modalSubmit="handleModalSubmit"
                 src="../static/tutor/images/close-1.png"
                 width="20"
                 alt=""
@@ -177,7 +176,6 @@ T<template>
                 ><strong>Linkedin Account:</strong>
               </a> -->
                 <a
-                  @modalSubmit="handleModalSubmit()"
                   @click="updateModalValue"
                   class="button-10-copy-copy w-button"
                   >Update Information</a
@@ -242,7 +240,7 @@ export default {
       this.clicked = !this.clicked
     },
     async handleModalSubmit() {
-      this.clicked = false
+      this.updateModalValue()
       await this.fetchTutor()
       await this.fetchUser()
     },

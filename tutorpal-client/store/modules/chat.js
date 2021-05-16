@@ -1,5 +1,5 @@
 import loggedInFetch from '../../utils/loggedInFetch'
-import keysToCamel from '../../utils/keysToCamel'
+import { keysToCamel } from '../../utils/changeObjectNaming'
 
 const state = () => ({
   contacts: { unfetched: true },

@@ -276,6 +276,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
 import objectsEqual from '../utils/objectsEqual'
+import { unpackTutor, unpackUser } from '../utils/unPackObjects'
+import { keysToSnake } from '../utils/changeObjectNaming'
 
 export default {
   data() {
@@ -374,7 +376,6 @@ export default {
     },
     async handleSubmit() {
       this.validateData()
-
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
@@ -394,8 +395,8 @@ export default {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              tutor: { ...this.tutor },
-              user: { ...this.user },
+              tutor: keysToSnake(unpackTutor({ ...this.tutor })),
+              user: keysToSnake(unpackUser({ ...this.user })),
             }),
           })
             .then((res) => {

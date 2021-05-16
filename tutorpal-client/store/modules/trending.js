@@ -1,4 +1,4 @@
-import keysToCamel from '../../utils/keysToCamel'
+import { keysToCamel } from '../../utils/changeObjectNaming'
 
 const state = () => ({
   trending: { unfetched: true },

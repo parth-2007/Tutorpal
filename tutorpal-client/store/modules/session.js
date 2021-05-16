@@ -1,5 +1,5 @@
 import loggedInFetch from '../../utils/loggedInFetch'
-import keysToCamel from '../../utils/keysToCamel'
+import { keysToCamel } from '../../utils/changeObjectNaming'
 
 const camelToSnakeCase = (str) =>
   str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
