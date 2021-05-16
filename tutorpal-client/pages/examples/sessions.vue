@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <button @click="logSessions">log sessions</button> -->
-    <button @click="addSession">add session</button>
+    <button @click="addSessionHandler">add session</button>
     <br />
     {{ startedSessions }}
   </div>
@@ -18,7 +18,7 @@ export default {
   methods: {
     ...mapActions(['fetchSessions', 'addSession']),
     ...mapGetters(['getStartedSessions']),
-    addSession() {
+    addSessionHandler() {
       this.addSession([{ hi: 'hi' }, 'startedSessions'])
     },
   },
