@@ -15,10 +15,10 @@
               <div class="div-block-4">
                 <form action="search_student.html" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">
-                  <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+                  <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                     <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                       <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                        <div id="name" class="text-block-18">John Wick</div>
+                        <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                         <div class="text-block-20">Student</div>
                       </div>
                       <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -60,12 +60,12 @@
               <p class="paragraph">View all of your contacts here on the messages page, click the buttons to reach the chatroom</p>
             </div>
             <!-- gets looped here -->
-            <div class="loop">
+            <div v-for="contact in contacts" :key="contact.id" class="loop">
                 <div style="padding-top: 5px; padding-bottom: 5px;" class="i-copy">
                   <div class="div-block-51">
-                    <div class="div-block-51-copy"><img src="../static/student/images/user-2.png" loading="lazy"  height="60"  width="60" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                      <h1 class="heading-12">Jane Doe</h1>
-                    </div><router-link to="/chat" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                    <div class="div-block-51-copy"><img :src="contact.tutor !== undefined ? contact.tutor.user.profilePic: ''" loading="lazy"  height="60"  width="60" sizes="100px" alt="" class="image-15">
+                      <h1 class="heading-12">{{contact.tutor !== undefined ? contact.tutor.user.firstName: '' }} {{contact.tutor !== undefined ? contact.tutor.user.lastName: ''}}</h1>
+                    </div><router-link :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
                 </div>
             </div>
           </div>
@@ -75,6 +75,8 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   head() {
     return {
@@ -86,6 +88,15 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
       ]
     }
+  },
+  async fetch() {
+    await this.fetchUser()
+    await this.fetchContacts()
+  },
+  computed: mapGetters({ user: 'getUser', contacts: 'getContacts'}),
+  methods: {
+    ...mapActions(['fetchUser', 'fetchContacts']),
+    ...mapGetters(['getUser', 'getContacts']),
   },
 }
 </script>

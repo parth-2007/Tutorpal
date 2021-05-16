@@ -15,10 +15,10 @@
                 <div class="div-block-4">
                   <form action="search_student.html" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                   <div class="div-block-43">
-                    <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+                    <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                       <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                         <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                          <div id="name" class="text-block-18">John Wick</div>
+                          <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                           <div class="text-block-20">Student</div>
                         </div>
                         <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -60,16 +60,17 @@
                 <div class="text-block-23">Requests</div>
                 <p class="paragraph">These are the requests you have sent to potential tutors who have not accepted yet. Once the tutor has accepted, please check the <router-link to="/payments" class="link-3">payments</router-link> page to pay for the class.</p>
               </div>
-              <div id="requests" class="loop"></div>
+              <div v-for="session in requests" :key="session.id" id="requests" class="loop">
                 <div class="i">
-                  <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                    <div class="text-block-26">Tutor: Bobby Flay</div>
+                  <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
                     <p class="paragraph-2"><strong class="bold-text">Schedule
-                      <br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: $${amount}<br>Trial: ${trial}</p>
+                      <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                      <br>Amount: ${{session.price}}<br>Trial: {{session.free}}</p>
                   </div>
-                  <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                  <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
                   <div class="text-block-27">This tutor has not accepted your request yet.</div>
                 </div>
+              </div>
             </div>
           </div>
     </body>
@@ -77,10 +78,15 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import convertTime from '../utils/convertTime'
+
 export default {
+  async fetch() {
+    await this.fetchSessions('pendingOnTutor')
+  },
   head() {
     return {
-      title: 'Home',
       link: [
         { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
@@ -88,6 +94,12 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
       ]
     }
+  },
+  computed: mapGetters({ user: 'getUser', requests: 'getPendingOnTutor'}),
+  methods: {
+    ...mapActions(['fetchUser', 'fetchSessions']),
+    ...mapGetters(['getPendingOnTutor','getUser']),
+    convertTime
   },
 }
 </script>

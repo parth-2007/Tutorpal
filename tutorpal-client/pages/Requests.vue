@@ -24,6 +24,7 @@ export default {
   },
   head() {
     return {
+      title: 'Requests'
     }
   },
   computed: mapGetters({ user: 'getUser' }),

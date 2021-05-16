@@ -29,7 +29,7 @@
                 alt=""
             /></router-link>
             <div class="div-block-4">
-              <form action="search_student.html" class="stuff w-form">
+              <form action="/search" class="stuff w-form">
                 <img
                   src="../static/student/images/search-1.png"
                   loading="lazy"
@@ -156,10 +156,10 @@
                 </p>
               </div>
               <div class="trending">
-                <div v-for="tutor of trending.results" :key="tutor.id" id="trending">
+                <div v-for="tutor of trending" :key="tutor.id" id="trending">
                   <router-link :to="'/tutors/'+tutor.id" class="link-block-2 w-inline-block">
-                    <div style="line-height: 14px;" class="div-block-54"><img :src="tutor.user.profile_pic" loading="lazy" width="38" height="38" sizes="38px" alt="" class="image-5">
-                      <div class="text-block-21"><strong class="bold-text-3">{{tutor.user.first_name}} {{tutor.user.last_name}}</strong></div>
+                    <div style="line-height: 14px;" class="div-block-54"><img :src="tutor.user !== undefined ? tutor.user.profilePic:'' " loading="lazy" width="38" height="38" sizes="38px" alt="" class="image-5">
+                      <div class="text-block-21"><strong class="bold-text-3">{{tutor.user!== undefined ? tutor.user.firstName:''}} {{tutor.user !== undefined ? tutor.user.lastName:''}}</strong></div>
                           <div class="text-block-21-copy">Subject: {{tutor.subjects}}</div>
                           <div class="text-block-21-copy-2">Price: ${{tutor.rates}} hourly</div>
                           <div class="text-block-21-copy-2">Degree: {{tutor.education}}</div>
@@ -176,12 +176,12 @@
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
               <div class="upcoming_loop">
-                <div id="started">
+                <div v-for="session in started" :key="session.id" id="started">
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍</p><router-link to="/sessions/id" class="button-4 w-button">Join Meeting</router-link>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: blank for now<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
                   </div>
                 </div>
-                <div style="text-align: center; padding: 20%" v-if="started = []">
+                <div style="text-align: center; padding: 20%" v-if="started=null">
                   <strong style="font-family: Poppins; font-size: 18px;" class="bold-text-2">Your classes have not started yet</strong>
                 </div>
               </div>
@@ -192,9 +192,9 @@
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
               <div class="upcoming_loop">
-                <div id="upcoming">
+                <div v-for="session in upcoming" :key="session.id" id="upcoming">
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: ${date}<br>Time: ${duration}<br>Tutor: ${tutorname}<br>Subject: ${subject}<br>‍<br><strong class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: blank for now<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
                   </div>
                 </div>
               </div>
@@ -207,18 +207,18 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import convertTime from '../utils/convertTime'
 
 export default {
   data(){
     return{
-      trending:[],
-      started: [],
     }
   },
   async fetch() {
-    this.trending = await fetch('/api/tutors/trending').then(res =>
-      res.json()
-    )
+    await this.fetchSessions('startedSessions')
+    await this.fetchSessions('upcoming')
+    await this.fetchTrending()
+    await this.fetchUser()
   },
   head() {
     return {
@@ -231,13 +231,13 @@ export default {
       ]
     }
   },
-  computed: mapGetters({ user: 'getUser' }),
-  async created() {
-    await this.fetchUser()
-  },
+  computed: mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming', trending: 'getTrending'}),
   methods: {
-    ...mapActions(['fetchUser']),
+    ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending']),
+    ...mapGetters(['getStartedSessions', 'getUpcoming', 'getUser']),
+    convertTime
   },
+
 }
 </script>
 
