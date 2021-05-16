@@ -93,6 +93,11 @@ import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 
 export default {
+  async fetch() {
+    await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchSessions('upcoming')
+    await this.fetchUser()
+  },
   head() {
     return {
       show: false,
@@ -106,11 +111,6 @@ export default {
     }
   },
   computed: mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getUpcoming', }),
-  async created() {
-    await this.fetchSessions('pendingOnStudentPayment')
-    await this.fetchSessions('upcoming')
-    await this.fetchUser()
-  },
   methods: {
     ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
     ...mapActions(['fetchUser', 'fetchSessions']),

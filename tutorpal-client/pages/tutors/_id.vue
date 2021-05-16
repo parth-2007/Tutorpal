@@ -7,7 +7,7 @@
       <StudentTutorProfile></StudentTutorProfile>
     </div>
     <div v-else-if="user.isTutor">
-      <HomeTutorProfile></HomeTutorProfile>
+      <MainTutorProfile></MainTutorProfile>
     </div>
   </div>
 </template>
