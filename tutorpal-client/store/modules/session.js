@@ -1,5 +1,5 @@
 import loggedInFetch from '../../utils/loggedInFetch'
-import keysToCamel from '../../utils/keysToCamel'
+import { keysToCamel } from '../../utils/changeObjectNaming'
 
 const camelToSnakeCase = (str) =>
   str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
@@ -39,7 +39,7 @@ const actions = {
     )
     commit('setSessions', [keysToCamel(sessions.results), sessionName])
   },
-  updateSessions({ commit, state }, [newSession, sessionName]) {
+  addSession({ commit, state }, [newSession, sessionName]) {
     commit('setSessions', [[newSession, ...state[sessionName]], sessionName])
   },
 }

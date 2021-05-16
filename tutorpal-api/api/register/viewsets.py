@@ -121,6 +121,9 @@ class TutorViewSet(viewsets.ModelViewSet):
 
         tutor_serializer.save()
         user_serializer.save()
+        print(user_data)
+        print(user_obj)
+        print(user_serializer.data)
 
         if getattr(tutor_obj, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to

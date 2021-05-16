@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <button @click="logSessions">log sessions</button> -->
-    <button @click="addSession">add session</button>
+    <button @click="addSessionHandler">add session</button>
     <br />
     {{ startedSessions }}
   </div>
@@ -16,10 +16,10 @@ export default {
     await this.fetchSessions('startedSessions')
   },
   methods: {
-    ...mapActions(['fetchSessions', 'updateSessions']),
+    ...mapActions(['fetchSessions', 'addSession']),
     ...mapGetters(['getStartedSessions']),
-    addSession() {
-      this.updateSessions([{ hi: 'hi' }, 'startedSessions'])
+    addSessionHandler() {
+      this.addSession([{ hi: 'hi' }, 'startedSessions'])
     },
   },
 }

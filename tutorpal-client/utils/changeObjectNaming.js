@@ -4,6 +4,9 @@ const toCamel = (key) => {
   })
 }
 
+const toSnake = (key) =>
+  key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
+
 const isArray = (a) => {
   return Array.isArray(a)
 }
@@ -12,7 +15,7 @@ const isObject = (o) => {
   return o === Object(o) && !isArray(o) && typeof o !== 'function'
 }
 
-const keysToCamel = (o) => {
+export const keysToCamel = (o) => {
   if (isObject(o)) {
     const n = {}
 
@@ -30,4 +33,20 @@ const keysToCamel = (o) => {
   return o
 }
 
-export default keysToCamel
+export const keysToSnake = (o) => {
+  if (isObject(o)) {
+    const n = {}
+
+    Object.keys(o).forEach((k) => {
+      n[toSnake(k)] = keysToSnake(o[k])
+    })
+
+    return n
+  } else if (isArray(o)) {
+    return o.map((i) => {
+      return keysToSnake(i)
+    })
+  }
+
+  return o
+}
