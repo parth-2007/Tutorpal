@@ -164,7 +164,7 @@
                           <div class="text-block-21-copy-2">Price: ${{tutor.rates}} hourly</div>
                           <div class="text-block-21-copy-2">Degree: {{tutor.education}}</div>
                           <div class="text-block-21-copy-2">Education: {{tutor.major}} at {{tutor.school}}, GPA of {{tutor.gpa}}</div>
-                          <div class="text-block-21-copy-2">Reviews: {{tutor.average_reviews}} Stars</div>
+                          <div class="text-block-21-copy-2">Reviews: {{tutor.averageReviews}} Stars</div>
                           <div class="text-block-21-copy-2">Occupation: {{tutor.occupation}}</div>
                     </div>
                   </router-link>
