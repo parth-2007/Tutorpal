@@ -11,10 +11,10 @@
               <div class="div-block-4">
                 <form action="search_student.html" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">
-                  <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+                  <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                     <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                       <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                        <div id="name" class="text-block-18">John Wick</div>
+                        <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                         <div class="text-block-20">Student</div>
                       </div>
                       <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -57,13 +57,14 @@
               <p class="paragraph">These classes have been accepted by your tutor but you have not paid yet. Please make sure to pay for your session before it has started.</p>
             </div>
             <div class="loop">
-                <div id="paypending">
+                <div v-for="session in paymentpending" :key="session.id" id="paypending">
                   <div class="i">
-                    <div class="div-block-51-copy"><img src="../static/student/images/user-2.png" loading="lazy" width="75" height="75" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                      <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
+                    <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
+                      <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                      <br>Amount: <strong class="bold-text-7">{{session.price}}</strong><br>Trial: {{session.free}}</p>
                     </div>
-                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
-                    <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><router-link to="/pay/id" class="button-10 w-button">Pay Now</router-link>
+                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{session.description}}}</p>
+                    <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><router-link :to="'/pay/'+session.id" class="button-10 w-button">Pay Now</router-link>
                   </div>
                 </div>
             </div>
@@ -71,12 +72,13 @@
               <div class="text-block-23">Paid Classes</div>
               <p class="paragraph">Congratulations! All your work is over, now you can sit back and learn from your professional tutor.</p>
             </div>
-            <div id="paid">
+            <div v-for="session in paymentfinished" :key="session.id" id="paid">
               <div class="item-copy">
-                <div class="div-block-51-copy"><img src="../static/student/images/user-2.png" loading="lazy" width="75" height="75" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                  <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: ${date}<br>Tutor: ${tutorname}<br>Duration: ${duration}<br>Amount: <strong class="bold-text-7">${amount}</strong><br>Trial: ${trial}</p>
+                <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
+                  <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                  <br>Amount: <strong class="bold-text-7">{{session.price}}</strong><br>Trial: {{session.free}}</p>
                 </div>
-                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>${description}</p>
+                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
                 <div class="text-block-27-copy">Thank you for paying for your session!</div>
               </div>
             </div>
@@ -87,11 +89,14 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import convertTime from '../utils/convertTime'
+
 export default {
   head() {
     return {
       show: false,
-      title: 'Account Information',
+      title: 'My Payments',
       link: [
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
@@ -99,6 +104,17 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" },
       ]
     }
+  },
+  computed: mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getUpcoming', }),
+  async created() {
+    await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchSessions('upcoming')
+    await this.fetchUser()
+  },
+  methods: {
+    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
+    ...mapActions(['fetchUser', 'fetchSessions']),
+    convertTime
   },
 }
 </script>
