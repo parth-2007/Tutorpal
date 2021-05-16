@@ -16,10 +16,10 @@ export default {
     await this.fetchSessions('startedSessions')
   },
   methods: {
-    ...mapActions(['fetchSessions', 'updateSessions']),
+    ...mapActions(['fetchSessions', 'addSession']),
     ...mapGetters(['getStartedSessions']),
     addSession() {
-      this.updateSessions([{ hi: 'hi' }, 'startedSessions'])
+      this.addSession([{ hi: 'hi' }, 'startedSessions'])
     },
   },
 }
