@@ -93,7 +93,6 @@ export default {
   },
   data(){
     return {
-      clicked:false,
       url: '',
       data: [],
       reviews: [],

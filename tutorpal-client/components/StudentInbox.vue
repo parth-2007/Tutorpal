@@ -78,6 +78,10 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  async fetch() {
+    await this.fetchContacts()
+    await this.fetchUser()
+  },
   head() {
     return {
       title: 'Inbox',
@@ -88,10 +92,6 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
       ]
     }
-  },
-  async fetch() {
-    await this.fetchUser()
-    await this.fetchContacts()
   },
   computed: mapGetters({ user: 'getUser', contacts: 'getContacts'}),
   methods: {

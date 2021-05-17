@@ -137,6 +137,14 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data(){
+    return {
+      clicked:false,
+      url: '',
+      data: [],
+      reviews: [],
+    } 
+  },
   async fetch() {
       this.url = '/api/tutors/'+this.$route.params.id+'/'
       this.data = await fetch(this.url).then(res =>
@@ -147,14 +155,6 @@ export default {
       this.reviews = await fetch(this.url).then(res =>
         res.json()
       )
-  },
-  data(){
-    return {
-      clicked:false,
-      url: '',
-      data: [],
-      reviews: [],
-    } 
   },
   head() {
     return {

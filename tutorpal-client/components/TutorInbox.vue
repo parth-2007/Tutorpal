@@ -9,10 +9,10 @@
         <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
           <div class="div-block-4">
             <div class="div-block-43">
-              <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
+              <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
                 <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                   <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                    <div id="name" class="text-block-18">John Wick</div>
+                    <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                     <div class="text-block-20">Tutor</div>
                   </div>
                   <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -53,13 +53,12 @@
           <div class="text-block-23">Messages</div>
           <p class="paragraph">View all of your contacts here on the messages page, click the buttons to reach the chatroom</p>
         </div>
-        <div class="loop">
-          <!-- gets looped here -->
+        <div v-for="contact in contacts" :key="contact.id" class="loop">
             <div style="padding-bottom: 5px; padding-top: 5px; " class="item-2">
               <div class="div-block-78">
-                <div class="div-block-77"><img src="../static/tutor/images/user-2.png" loading="lazy" height="60"  width="60" alt="" class="image-15">
-                  <h1 class="heading-12">Jane Doe</h1>
-                </div><router-link to="/chat" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                <div class="div-block-77"><img :src="contact.student !== undefined ? contact.student.user.profilePic: ''" loading="lazy" height="60"  width="60" alt="" class="image-15">
+                  <h1 class="heading-12">{{contact.student !== undefined ? contact.student.user.firstName: '' }} {{contact.student !== undefined ? contact.student.user.lastName: ''}}</h1>
+                </div><router-link :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
             </div>
         </div>
       </div>
@@ -68,7 +67,13 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+  async fetch() {
+    await this.fetchContacts()
+    await this.fetchUser()
+  },
   head() {
     return {
       title: 'Inbox',
@@ -78,6 +83,11 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
       ]
     }
+  },
+  computed: mapGetters({ user: 'getUser', contacts: 'getContacts'}),
+  methods: {
+    ...mapActions(['fetchUser', 'fetchContacts']),
+    ...mapGetters(['getUser', 'getContacts']),
   },
 }
 </script>
