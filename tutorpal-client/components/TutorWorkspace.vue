@@ -9,28 +9,48 @@
         <div class="section"><router-link to="/" class="link-block w-inline-block"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
           <div class="div-block-4">
             <div class="div-block-43">
-              <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
-                <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
-                  <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                    <div id="name" class="text-block-18">John Wick</div>
-                    <div class="text-block-20">Tutor</div>
-                  </div>
-                  <nav class="navigation-dropdown-2 w-dropdown-list">
-                    <div class="dropdown-pointer-2">
-                      <div style="width: 300px;"  class="dropdown-wrapper-2">
-                        <a href="#" id="logout" class="dropdown-link-2 w-inline-block">
-                          <div class="nav-content-wrap-2">
-                            <div class="dropdown-title-2">Logout</div>
-                          </div>
-                        </a>
-                        <router-link to="/account" class="dropdown-link-2 w-inline-block">
-                          <div class="nav-content-wrap-2">
-                            <div class="dropdown-title-2">Account</div>
-                          </div>
-                        </router-link>
-                      </div>
+              <div class="name_profile_pic">
+                <img
+                    :src="user.profilePic"
+                    id="image"
+                    width="60"
+                    height="60"
+                    sizes="60px"
+                    alt=""
+                    class="image-7"
+                  />
+                  <div
+                    data-hover=""
+                    data-delay="0"
+                    class="dropdown-3 w-dropdown"
+                  >
+                    <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
+                      <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
+                      <div class="text-block-20">Tutor</div>
                     </div>
-                  </nav>
+                    <nav :style="logout" class="navigation-dropdown-2">
+                      <div class="dropdown-pointer-2">
+                        <div class="dropdown-wrapper-2">
+                          <router-link
+                            to="/logout"
+                            id="logout"
+                            class="dropdown-link-2 w-inline-block"
+                          >
+                            <div class="nav-content-wrap-2">
+                              <div class="dropdown-title-2">Logout</div>
+                            </div>
+                          </router-link>
+                          <router-link
+                            to="/account"
+                            class="dropdown-link-2 w-inline-block"
+                          >
+                            <div class="nav-content-wrap-2">
+                              <div class="dropdown-title-2">Account</div>
+                            </div>
+                          </router-link>
+                        </div>
+                      </div>
+                    </nav>
                 </div>
               </div>
             </div>
@@ -43,7 +63,14 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+  data() {
+    return {
+      clicked: false,
+    }
+  },
   head() {
     return {
       title: 'Tutor Workspace',
@@ -67,6 +94,23 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    logout() {
+        return {
+          display: this.clicked ? "flex" : "none"
+        }
+    },
+    ...mapGetters({ user: 'getUser' }),
+  },
+  async created() {
+    await this.fetchUser()
+  },
+  methods: {
+    logoutclick(){
+      this.clicked = !this.clicked
+    },
+    ...mapActions(['fetchUser']),
   },
 }
 </script>

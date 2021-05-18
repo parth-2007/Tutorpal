@@ -7,7 +7,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body>
+      <body v-if="user.unauthenticated">
         <div class="div-block">
           <router-link
             to="/"
@@ -100,10 +100,14 @@
         </div>
         <RegisterTutorForm />
       </body>
+      <div v-else>
+        404 Not Found
+      </div>
     </html>
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import RegisterTutorForm from '../components/RegisterTutorForm'
 
 export default {
@@ -117,6 +121,14 @@ export default {
       ]
     }
   },
+  computed: mapGetters({ user: 'getUser' }),
+  async created() {
+    await this.fetchUser()
+  },
+  methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
+  }
 }
 </script>
 <style>

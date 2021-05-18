@@ -7,7 +7,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body class="body">
+      <body v-if="user.unauthenticated" class="body">
         <div class="div-block-3">
           <router-link style="z-index: 2" to="/" class="w-inline-block"
             ><img
@@ -91,12 +91,15 @@
           </div>
         </div>
       </body>
+      <div v-else>
+        404 Not Found
+      </div>
     </html>
   </client-only>
 </template>
  
 <script type="text/javascript">
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
 
 export default {
@@ -140,7 +143,13 @@ export default {
       ],
     }
   },
+  computed: mapGetters({ user: 'getUser' }),
+  async created() {
+    await this.fetchUser()
+  },
   methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
     validateData() {
       const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {

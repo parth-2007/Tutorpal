@@ -45,19 +45,26 @@
                 <div class="div-block-43">
                   <div class="name_profile_pic"><img :src="user.profilePic" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                     <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
-                      <div class="dropdown-toggle-2-copy w-dropdown-toggle">
+                        <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                         <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                         <div class="text-block-20">Student</div>
                       </div>
-                      <nav class="navigation-dropdown-2 w-dropdown-list">
+                      <nav :style="logout" class="navigation-dropdown-2">
                         <div class="dropdown-pointer-2">
                           <div class="dropdown-wrapper-2">
-                            <a class="dropdown-link-2 w-inline-block">
+                            <router-link
+                              to="/logout"
+                              id="logout"
+                              class="dropdown-link-2 w-inline-block"
+                            >
                               <div class="nav-content-wrap-2">
                                 <div class="dropdown-title-2">Logout</div>
                               </div>
-                            </a>
-                            <router-link to="/account" class="dropdown-link-2 w-inline-block">
+                            </router-link>
+                            <router-link
+                              to="/account"
+                              class="dropdown-link-2 w-inline-block"
+                            >
                               <div class="nav-content-wrap-2">
                                 <div class="dropdown-title-2">Account</div>
                               </div>
@@ -140,6 +147,7 @@ export default {
   data(){
     return {
       clicked:false,
+      clicked1:false,
       url: '',
       data: [],
       reviews: [],
@@ -173,6 +181,11 @@ export default {
         display: this.clicked ? "flex" : "none"
       }
     },
+    logout() {
+        return {
+          display: this.clicked1 ? "flex" : "none"
+        }
+    },
     ...mapGetters({user: "getUser"})
   },
 
@@ -181,6 +194,9 @@ export default {
     ...mapActions(['fetchUser']),
     updatemodalvalue(){
       this.clicked = !this.clicked
+    },
+    logoutclick(){
+      this.clicked1 = !this.clicked1
     }
   },
 }
