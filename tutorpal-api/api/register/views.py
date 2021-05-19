@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 import json
 from django.db.utils import IntegrityError
+from .serializers import TutorOwnerSerializer, StudentOwnerSerializer, UserOwnerSerializer
 
 
 @ensure_csrf_cookie
@@ -180,3 +181,59 @@ def password_reset(request, uidb64, token):
         return Response(data="Successfully changed password", status=status.HTTP_200_OK)
     else:
         return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(('PATCH', 'PUT'))
+def update_tutor(request):
+    partial = True if request.method == "PATCH" else False
+    tutor_data = request.data.get('tutor')
+    tutor_data = json.loads(tutor_data)
+    user_data = request.data.get('user')
+    user_data = json.loads(user_data)
+    profile_pic = request.FILES.get('profile_pic', None)
+    if profile_pic is not None:
+        user_data['profile_pic'] = profile_pic
+
+    tutor_obj = request.user.tutor
+    user_obj = request.user
+
+    tutor_serializer = TutorOwnerSerializer(
+        tutor_obj, data=tutor_data, partial=partial)
+    user_serializer = UserOwnerSerializer(
+        user_obj, data=user_data, partial=partial)
+
+    tutor_serializer.is_valid(raise_exception=True)
+    user_serializer.is_valid(raise_exception=True)
+
+    tutor_serializer.save()
+    user_serializer.save()
+
+    return Response({'success': 'successfully updated tutor'})
+
+
+@api_view(('PATCH', 'PUT'))
+def update_student(request):
+    partial = True if request.method == "PATCH" else False
+    student_data = request.data.get('student')
+    student_data = json.loads('student_data')
+    user_data = request.data.get('user')
+    user_data = json.loads(user_data)
+    profile_pic = request.FILES.get('profile_pic', None)
+    if profile_pic is not None:
+        user_data['profile_pic'] = profile_pic
+
+    student_obj = request.user.student
+    user_obj = request.user
+
+    student_serializer = StudentOwnerSerializer(
+        student_obj, data=student_data, partial=partial)
+    user_serializer = UserOwnerSerializer(
+        user_obj, data=user_data, partial=partial)
+
+    student_serializer.is_valid(raise_exception=True)
+    user_serializer.is_valid(raise_exception=True)
+
+    student_serializer.save()
+    user_serializer.save()
+
+    return Response({'success': 'successfully updated tutor'})

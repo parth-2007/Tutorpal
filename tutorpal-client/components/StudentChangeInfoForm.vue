@@ -185,23 +185,27 @@ export default {
         (!objectsEqual(this.student, this.getStudent()) ||
           !objectsEqual(this.user, this.getUser()))
       ) {
-        // const formData = new FormData()
-        // formData.append(
-        //   'tutor',
-        //   JSON.stringify({ ...this.tutor, user: { ...this.user } })
-        // )
         const csrfToken = await getCSRF()
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
-          const data = await fetch('api/students/me/', {
+          const formData = new FormData()
+          if (this.profilePic) {
+            formData.append('profile_pic', this.profilePic[0])
+          }
+          formData.append(
+            'student',
+            JSON.stringify(keysToSnake(unpackStudent({ ...this.student })))
+          )
+          formData.append(
+            'user',
+            JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
+          )
+          const data = await fetch('api/auth/update-student/', {
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,
-              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              student: { ...keysToSnake(unpackStudent(this.student)) },
-              user: { ...keysToSnake(unpackUser(this.user)) },
-            }),
+            body: formData,
           })
             .then((res) => {
               if (res.status >= 400 && res.status < 600) {

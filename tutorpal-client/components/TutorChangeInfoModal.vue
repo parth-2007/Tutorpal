@@ -178,7 +178,7 @@
                 accept="image/"
                 name="image"
                 id="file"
-                onchange="loadFile(event)"
+                @change="handleFile"
                 style="display: none"
               />
             </p>
@@ -284,6 +284,7 @@ export default {
     return {
       tutor: {},
       user: {},
+      profilePic: null,
       errors: {
         email: '',
         firstName: '',
@@ -388,16 +389,25 @@ export default {
         // )
         const csrfToken = await getCSRF()
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
-          const data = await fetch('api/tutors/me/', {
+          const formData = new FormData()
+          if (this.profilePic) {
+            formData.append('profile_pic', this.profilePic[0])
+          }
+          formData.append(
+            'tutor',
+            JSON.stringify(keysToSnake(unpackTutor({ ...this.tutor })))
+          )
+          formData.append(
+            'user',
+            JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
+          )
+          const data = await fetch('api/auth/update-tutor/', {
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,
-              'Content-Type': 'application/json',
+              // 'Content-Type': 'multipart/form-data',
             },
-            body: JSON.stringify({
-              tutor: keysToSnake(unpackTutor({ ...this.tutor })),
-              user: keysToSnake(unpackUser({ ...this.user })),
-            }),
+            body: formData,
           })
             .then((res) => {
               if (res.status >= 400 && res.status < 600) {

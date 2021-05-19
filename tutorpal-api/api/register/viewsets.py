@@ -70,7 +70,10 @@ class UserViewSet(viewsets.GenericViewSet,
             return Response(data="User has no Tutor", status=status.HTTP_404_NOT_FOUND)
 
 
-class TutorViewSet(viewsets.ModelViewSet):
+class TutorViewSet(viewsets.GenericViewSet,
+                   mixins.RetrieveModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.DestroyModelMixin):
     queryset = Tutor.objects.all().select_related('user')
     serializer_class = TutorViewingSerializer
     permission_classes = [DRYPermissions]
@@ -102,36 +105,6 @@ class TutorViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        tutor_data = request.data.get('tutor')
-        user_data = request.data.get('user')
-
-        tutor_obj = self.get_object()
-        user_obj = request.user
-
-        tutor_serializer = TutorOwnerSerializer(
-            tutor_obj, data=tutor_data, partial=partial)
-        user_serializer = UserOwnerSerializer(
-            user_obj, data=user_data, partial=partial)
-
-        tutor_serializer.is_valid(raise_exception=True)
-        user_serializer.is_valid(raise_exception=True)
-
-        tutor_serializer.save()
-        user_serializer.save()
-
-        if getattr(tutor_obj, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            tutor_obj._prefetched_objects_cache = {}
-        if getattr(user_obj, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            user_obj._prefetched_objects_cache = {}
-
-        return Response({'success': 'successfully updated tutor'})
 
     @action(detail=False)
     def search(self, request):
@@ -174,11 +147,10 @@ class TutorViewSet(viewsets.ModelViewSet):
 
 class StudentViewSet(viewsets.GenericViewSet,
                      mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
                      mixins.ListModelMixin,
                      mixins.DestroyModelMixin):
     queryset = Student.objects.all().select_related('user')
-    serializer_class = StudentViewingSerializer
+    # serializer_class = StudentViewingSerializer
     permission_classes = [DRYPermissions]
 
     # @method_decorator(cache_page(60*15))  # may want to edit this
@@ -201,43 +173,13 @@ class StudentViewSet(viewsets.GenericViewSet,
             return super().get_object()
 
     def get_serializer_class(self):
-        if 'pk' in self.kwargs and self.kwargs['pk'] == "me":
+        if 'pk' in self.kwargs and self.kwargs['pk'] == "me" and self.request.method == "GET":
             return StudentOwnerSerializer
         else:
-            return super().get_serializer_class()
+            return StudentViewingSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        student_data = request.data.get('student')
-        user_data = request.data.get('user')
-
-        student_obj = self.get_object()
-        user_obj = request.user
-
-        student_serializer = StudentOwnerSerializer(
-            student_obj, data=student_data, partial=partial)
-        user_serializer = UserOwnerSerializer(
-            user_obj, data=user_data, partial=partial)
-
-        student_serializer.is_valid(raise_exception=True)
-        user_serializer.is_valid(raise_exception=True)
-
-        student_serializer.save()
-        user_serializer.save()
-
-        if getattr(student_obj, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            student_obj._prefetched_objects_cache = {}
-        if getattr(user_obj, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            user_obj._prefetched_objects_cache = {}
-
-        return Response({'success': 'successfully updated student'})
 
 
 class ReviewViewSet(viewsets.GenericViewSet,
