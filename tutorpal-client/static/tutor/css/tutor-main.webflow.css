@@ -294,16 +294,11 @@
 }
 
 .navigation-dropdown-2 {
-  min-width: 140px;
-}
-
-.navigation-dropdown-2.w--open {
+  position: absolute; 
   left: auto;
   z-index: 1;
-  width: 160%;
-  max-height: none;
   min-width: 0px;
-  margin-top: 80px;
+  margin-top: 60px;
   margin-bottom: 0px;
   margin-left: -75px;
   padding-top: 0px;
@@ -380,6 +375,7 @@
 .dropdown-wrapper-2 {
   position: static;
   z-index: 1;
+  width: 120%;
   overflow: hidden;
   min-width: 140px;
   margin-right: 10px;
@@ -2001,9 +1997,6 @@
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-  }
-  .navigation-dropdown-2 {
-    margin-right: 20px;
   }
   .name_profile_pic {
     margin-left: 0px;

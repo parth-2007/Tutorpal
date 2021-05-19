@@ -71,22 +71,22 @@
                     data-delay="0"
                     class="dropdown-3 w-dropdown"
                   >
-                    <div class="dropdown-toggle-2-copy w-dropdown-toggle">
+                    <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                       <div class="text-block-18" id="name">{{user.firstName}}{{user.lastName}}</div>
                       <div class="text-block-20">Student</div>
                     </div>
-                    <nav class="navigation-dropdown-2 w-dropdown-list">
+                    <nav :style="logout" class="navigation-dropdown-2">
                       <div class="dropdown-pointer-2">
-                        <div style="width: 300px" class="dropdown-wrapper-2">
-                          <a
-                            href="#"
+                        <div class="dropdown-wrapper-2">
+                          <router-link
+                            to="/logout"
                             id="logout"
                             class="dropdown-link-2 w-inline-block"
                           >
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Logout</div>
                             </div>
-                          </a>
+                          </router-link>
                           <router-link
                             to="/account"
                             class="dropdown-link-2 w-inline-block"
@@ -181,9 +181,6 @@
                     <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
                   </div>
                 </div>
-                <div style="text-align: center; padding: 20%" v-if="started=null">
-                  <strong style="font-family: Poppins; font-size: 18px;" class="bold-text-2">Your classes have not started yet</strong>
-                </div>
               </div>
             </div>
             <div
@@ -211,8 +208,7 @@ import convertTime from '../utils/convertTime'
 
 export default {
   data(){
-    return{
-    }
+    return {clicked:false} 
   },
   async fetch() {
     await this.fetchTrending()
@@ -231,11 +227,21 @@ export default {
       ]
     }
   },
-  computed: mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming', trending: 'getTrending'}),
+  computed: {
+    logout() {
+      return {
+        display: this.clicked ? "flex" : "none"
+      }
+    },
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming', trending: 'getTrending'}),
+  },
   methods: {
     ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending']),
     ...mapGetters(['getStartedSessions', 'getUpcoming', 'getUser']),
-    convertTime
+    convertTime,
+    logoutclick(){
+      this.clicked = !this.clicked
+    }
   },
 
 }

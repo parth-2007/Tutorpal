@@ -127,7 +127,6 @@
 
 .dropdown-pointer-2 {
   position: relative;
-  z-index: 0;
   margin: -50px 0px 0px 20px;
 }
 
@@ -142,16 +141,11 @@
 }
 
 .navigation-dropdown-2 {
-  min-width: 140px;
-}
-
-.navigation-dropdown-2.w--open {
+  position: absolute; 
   left: auto;
   z-index: 1;
-  width: 160%;
-  max-height: none;
   min-width: 0px;
-  margin-top: 80px;
+  margin-top: 60px;
   margin-bottom: 0px;
   margin-left: -75px;
   padding-top: 0px;
@@ -164,6 +158,7 @@
   overflow: hidden;
   min-width: 140px;
   margin-right: 10px;
+  width: 120%;
   margin-left: 20px;
   border-radius: 10px;
   background-color: #fff;
@@ -1924,9 +1919,6 @@
   }
   .dropdown-pointer-2 {
     margin-right: 40px;
-  }
-  .navigation-dropdown-2 {
-    margin-right: 20px;
   }
   .container-2 {
     -webkit-box-pack: center;

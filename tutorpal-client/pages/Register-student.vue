@@ -6,7 +6,7 @@
     >
     <head>
     </head>
-      <body style="height: 130vh" class="body">
+      <body v-if="user.unauthenticated" style="height: 130vh" class="body">
         <div style="height: 170vh" class="section">
           <div
             style="font-family: Poppins; height: 750px; width: 500px"
@@ -204,11 +204,15 @@
           </div>
         </div>
       </body>
+      <div v-else>
+        404 Not Found
+      </div>
     </html>
   </client-only>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
 
 export default {
@@ -247,7 +251,13 @@ export default {
       ]
     }
   },
+  computed: mapGetters({ user: 'getUser' }),
+  async created() {
+    await this.fetchUser()
+  },
   methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
     handleFile(e) {
       // e.preventDefault()
       const profilePic = e.target.files || e.dataTransfer.files
@@ -374,6 +384,3 @@ export default {
 }
 
 </script>
-<style scoped>
-
-</style>

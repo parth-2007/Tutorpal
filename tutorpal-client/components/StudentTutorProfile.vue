@@ -43,21 +43,28 @@
               <div class="div-block-4">
                 <form action="search_student.html" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">
-                  <div class="name_profile_pic"><img src="../static/student/images/user-2.png" width="60" height="60" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+                  <div class="name_profile_pic"><img :src="user.profilePic" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                     <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
-                      <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                        <div id="name" class="text-block-18">John wick</div>
+                        <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
+                        <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                         <div class="text-block-20">Student</div>
                       </div>
-                      <nav class="navigation-dropdown-2 w-dropdown-list">
+                      <nav :style="logout" class="navigation-dropdown-2">
                         <div class="dropdown-pointer-2">
                           <div class="dropdown-wrapper-2">
-                            <a class="dropdown-link-2 w-inline-block">
+                            <router-link
+                              to="/logout"
+                              id="logout"
+                              class="dropdown-link-2 w-inline-block"
+                            >
                               <div class="nav-content-wrap-2">
                                 <div class="dropdown-title-2">Logout</div>
                               </div>
-                            </a>
-                            <router-link to="/account" class="dropdown-link-2 w-inline-block">
+                            </router-link>
+                            <router-link
+                              to="/account"
+                              class="dropdown-link-2 w-inline-block"
+                            >
                               <div class="nav-content-wrap-2">
                                 <div class="dropdown-title-2">Account</div>
                               </div>
@@ -82,18 +89,22 @@
             </div>
           </div>
           <div class="div-block-70">
-            <div class="div-block-71"><img src="../static/student/images/user-2.png" loading="lazy" width="74" height="74" srcset="../static/student/images/user-2.png 500w, ../static/student/images/user-2.png 512w" sizes="74px" alt="">
+            <div class="div-block-71"><img :src="data.user !== undefined ? data.user.profile_pic:'' " loading="lazy" width="74" height="74" sizes="74px" alt="">
               <div class="div-block-72">
-                <h1 class="heading-3" id="subjects">Mothematics</h1>
+                <h1 class="heading-3" id="subjects">{{data.subjects}}</h1>
                 <div class="div-block-68">
-                  <div class="text-block-32"><strong id="fullname" class="bold-text-8">Johnny Appleseed</strong></div>
+                  <div class="text-block-32"><strong id="fullname" class="bold-text-8">{{data.user !== undefined ? data.user.first_name:''}} {{data.user !== undefined ? data.user.last_name:''}}</strong></div>
                 </div>
               </div>
             </div>
-            <p style="padding-top: 20px;" class="paragraph-8"><strong>Degree: </strong><small style="font-size: 14px;" id="degree"></small><br><strong>Birthdate: </strong><small style="font-size: 14px;" id="birthdate"></small><br><strong>Qualification Description: </strong><small id="qualifications" style="font-size: 14px;"></small><br><strong>Education: </strong><small style="font-size: 14px;" id="education"></small><br><strong>Professional Experience:</strong> <small style="font-size: 14px;" id="professional_exp"></small> years<br><strong>Teaching Experience: </strong><small style="font-size: 14px;" id="teaching_exp"></small> years<br><strong>Average Review:</strong> <small style="font-size: 14px;" id="average_reviews"></small> Stars<br><strong>Time taught: </strong><small style="font-size: 14px;" id="hours_taught"></small><br><strong>Occupation: </strong><small style="font-size: 14px" id="occupation"></small><br><strong>Gender: </strong><small style="font-size: 14px;" id="gender"></small><br><strong>Price: </strong><small style="font-size: 14px;" id="price"></small> hourly <br><strong>Bio: </strong><small style="font-size: 14px;" id="bio"></small><br><strong>Course Description: </strong><small style="font-size: 14px;" id="course"></small><br><strong>Availability: </strong><small style="font-size: 14px;" id="availability"></small>
-              <div id="linkedin"></div>
+            <p style="padding-top: 20px;" class="paragraph-8"><strong>Degree: </strong>{{data.education}}<br><strong>Birthdate: </strong>{{data.birth_date}}<br><strong>Qualification Description: </strong>{{data.qualifications}}<br>
+            <strong>Education: </strong>{{data.major}} at {{data.school}}, GPA of {{data.gpa}}<br><strong>Professional Experience: </strong>{{data.prof_exp}} years<br><strong>Teaching Experience: </strong>{{data.teach_exp}} years<br>
+            <strong>Average Review:</strong> {{data.average_reviews}} Stars<br v-if="reviews.results=[]">No reviews yet<br><strong>TutorPal Hours Taught: </strong>{{data.free_tutoring_given}}<br><strong>Occupation: </strong>{{data.occupation}}<br><strong>Gender: </strong>{{data.gender}}<br>
+            <strong>Price: </strong>${{data.rates}} hourly <br><strong>Bio: </strong>{{data.bio}}<br><strong>Course Description: </strong>{{data.what_you_teach}}<br><strong>Availability: </strong>{{data.availability}}
+            <br><a style="font-family: Poppins;" :href="data.linkedIn" target="_blank"><strong>Linkedin Account:</strong></a>
+            </p>
               <a @click="updatemodalvalue()" class="button-9 w-button">Schedule a class</a>
-              <router-link style="margin-left: 20px;" to="/chat/tutorid" class="button-9 w-buttion">Send a message</router-link>
+              <router-link style="margin-left: 20px;" :to="'/chat/'+$route.params.id" class="button-9 w-buttion">Send a message</router-link>
           </div>  
           <!-- if already taken class -->
           <div class="div-block-56">
@@ -114,13 +125,13 @@
               </div>
             </div>
             <h1 class="heading-11">Reviews</h1>
-                <div id="posts">
+                <div v-for="review in reviews.results" :key="review.id" id="posts">
                   <div class="review_bundle">
-                    <div class="review_item"><img src="tutor/images/user-2.png" loading="lazy" width="40" srcset="tutor/images/user-2.png 500w, tutor/images/user-2.png 512w" sizes="40px" alt="" class="image-12">
-                      <div class="text-block-33">${fullname}</div>
-                      <div class="text-block-34">Review: <strong>${stars} Stars</strong></div>
+                    <div class="review_item"><img :src="review.student.user.profile_pic" loading="lazy" width="40" sizes="40px" alt="" class="image-12">
+                      <div class="text-block-33">{{review.student.user.first_name}} {{review.student.user.last_name}}</div>
+                      <div class="text-block-34">Review: <strong>{{review.stars}} Stars</strong></div>
                     </div>
-                    <p class="paragraph-9">${description}</p>
+                    <p class="paragraph-9">{{review.description}}</p>
                   </div>
                 </div>
           </div>
@@ -130,11 +141,28 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data(){
     return {
       clicked:false,
+      clicked1:false,
+      url: '',
+      data: [],
+      reviews: [],
     } 
+  },
+  async fetch() {
+      this.url = '/api/tutors/'+this.$route.params.id+'/'
+      this.data = await fetch(this.url).then(res =>
+        res.json()
+      )
+      await this.fetchUser()
+      this.url = '/api/tutors/'+this.$route.params.id+'/reviews/'
+      this.reviews = await fetch(this.url).then(res =>
+        res.json()
+      )
   },
   head() {
     return {
@@ -147,19 +175,30 @@ export default {
       ]
     }
   },
-  computed: {
+  computed:  {
     updatemodal() {
       return {
         display: this.clicked ? "flex" : "none"
       }
-    }
+    },
+    logout() {
+        return {
+          display: this.clicked1 ? "flex" : "none"
+        }
+    },
+    ...mapGetters({user: "getUser"})
   },
+
   methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
     updatemodalvalue(){
       this.clicked = !this.clicked
+    },
+    logoutclick(){
+      this.clicked1 = !this.clicked1
     }
   },
-  
 }
 </script>
 <style>

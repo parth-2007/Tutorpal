@@ -264,10 +264,10 @@
                 aria-label="Default select example"
               >
                 <option selected>Select</option>
-                <option value="1">Highschooler</option>
-                <option value="3">Bachelors</option>
-                <option value="4">Masters</option>
-                <option value="5">PhD</option>
+                <option value="High School">Highschooler</option>
+                <option value="Bachelors">Bachelors</option>
+                <option value="Masters">Masters</option>
+                <option value="Ph.D.">PhD</option>
               </select>
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
             </div>
@@ -552,7 +552,6 @@ export default {
   methods: {
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
-      image.src = URL.createObjectURL(image)
       this.profilePic = image.length > 0 ? image : null
     },
     checkErrors() {

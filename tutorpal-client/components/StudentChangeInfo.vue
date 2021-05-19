@@ -129,9 +129,7 @@
                     aria-current="page"
                     class="nav-link-4 w-nav-link"
                     >Explore</router-link
-                  ><router-link
-                    to="inbox_student.html"
-                    class="nav-link-4 w-nav-link"
+                  ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages</router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
