@@ -45,3 +45,7 @@ export const unpackTutor = ({
 export const unpackUser = ({ email, firstName, lastName }) => {
   return { email, firstName, lastName }
 }
+
+export const unpackStudent = ({ parentEmail, birthDate }) => {
+  return { parentEmail, birthDate }
+}

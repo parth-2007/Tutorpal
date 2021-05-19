@@ -121,9 +121,6 @@ class TutorViewSet(viewsets.ModelViewSet):
 
         tutor_serializer.save()
         user_serializer.save()
-        print(user_data)
-        print(user_obj)
-        print(user_serializer.data)
 
         if getattr(tutor_obj, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
@@ -132,7 +129,7 @@ class TutorViewSet(viewsets.ModelViewSet):
         if getattr(user_obj, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
-            tutor_obj._prefetched_objects_cache = {}
+            user_obj._prefetched_objects_cache = {}
 
         return Response({'success': 'successfully updated tutor'})
 
@@ -211,6 +208,36 @@ class StudentViewSet(viewsets.GenericViewSet,
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        student_data = request.data.get('student')
+        user_data = request.data.get('user')
+
+        student_obj = self.get_object()
+        user_obj = request.user
+
+        student_serializer = StudentOwnerSerializer(
+            student_obj, data=student_data, partial=partial)
+        user_serializer = UserOwnerSerializer(
+            user_obj, data=user_data, partial=partial)
+
+        student_serializer.is_valid(raise_exception=True)
+        user_serializer.is_valid(raise_exception=True)
+
+        student_serializer.save()
+        user_serializer.save()
+
+        if getattr(student_obj, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            student_obj._prefetched_objects_cache = {}
+        if getattr(user_obj, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            user_obj._prefetched_objects_cache = {}
+
+        return Response({'success': 'successfully updated student'})
 
 
 class ReviewViewSet(viewsets.GenericViewSet,

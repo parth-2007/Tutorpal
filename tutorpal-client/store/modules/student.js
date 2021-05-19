@@ -20,6 +20,12 @@ const actions = {
     const student = await loggedInFetch('api/students/me/')
     commit('setStudent', keysToCamel(student))
   },
+  logoutStudent({ commit }) {
+    commit('setStudent', { unauthenticated: true })
+  },
+  updateStudent({ commit }, student) {
+    commit('setStudent', student)
+  },
 }
 
 const mutations = {
