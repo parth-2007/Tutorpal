@@ -94,7 +94,7 @@
         <div class="columns-2-copy w-row">
           <div class="column w-col w-col-6">
             <div class="text-block-5">
-              PayPal Email Adress (Put the email address you like like to accept
+              PayPal Email Address (Put the email address you like like to accept
               payments from. If left blank, this will be set to your default
               email address)
             </div>
@@ -102,7 +102,7 @@
           <div class="w-col w-col-6">
             <div style="margin-top: 15px" class="mb-3">
               <label for="paypalemail" class="form-label"
-                >PayPal Email Adress</label
+                >PayPal Email Address</label
               >
               <input
                 v-model="paypalEmail"
@@ -462,8 +462,8 @@
             <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
             <label class="form-check-label" for="toc">
               I have read and agree with TutorPal's
-              <a href="/toc">Terms of Service</a> and will not hold them liable
-              for personal damages.
+              <router-link to="/toc">Terms of Service</router-link> and will not hold them liable
+              for personal losses. I also acknowldge that TutorPal takes a 10% fee of the payments I receive.
             </label>
           </div>
         </div>

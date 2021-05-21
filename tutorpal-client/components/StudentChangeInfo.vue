@@ -44,7 +44,7 @@
                 alt=""
             /></router-link>
             <div class="div-block-4">
-              <form action="search_student.html" class="stuff w-form">
+              <form action="/search" class="stuff w-form">
                 <img
                   src="../static/student/images/search-1.png"
                   loading="lazy"
