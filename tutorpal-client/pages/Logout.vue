@@ -7,10 +7,12 @@ import { mapActions } from 'vuex'
 export default {
   created() {
     this.logoutUser()
+    this.logoutStudent()
+    this.logoutTutor()
     this.$router.push('/')
   },
   methods: {
-    ...mapActions(['logoutUser']),
+    ...mapActions(['logoutUser', 'logoutTutor', 'logoutStudent']),
   },
 }
 </script>
