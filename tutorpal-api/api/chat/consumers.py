@@ -29,13 +29,13 @@ class ChatConsumer(AsyncConsumer):
 
     async def websocket_receive(self, event):
         print('Received', event)
-        front_text = event.get("text", None)
-        front_dict = json.loads(front_text)
-        message = front_dict.get("message")
+        message = event.get("text", None)
+        # front_dict = json.loads(front_text)
+        # message = front_dict.get("message")
         tzname = self.scope['cookies'].get("tz_name")
         if message is not None and len(message.replace(" ", "")) > 0:
-            loaded_dict_data = json.loads(front_text)
-            msg = loaded_dict_data.get('message')
+            # loaded_dict_data = json.loads(front_text)
+            # msg = loaded_dict_data.get('message')
             me_user_obj = self.me_user_obj
             room_obj = self.room_obj
             if self.check_user_in_room(me_user_obj, room_obj):
@@ -44,18 +44,13 @@ class ChatConsumer(AsyncConsumer):
                     local_time = timezone.now().astimezone(tzone)
                 else:
                     local_time = timezone.now()
+                message_obj = await self.create_chat_message(message)
                 myResponse = {
-                    'message': msg,
-                    'full_name': me_user_obj.first_name + " " + me_user_obj.last_name,
-                    'year': local_time.year,
-                    'month': local_time.month,
-                    'day': local_time.day,
-                    'hour': local_time.hour,
-                    'minute': local_time.minute,
-                    'student': me_user_obj.has_student,
-                    'tutor': me_user_obj.has_tutor,
+                    'message': message,
+                    'author': me_user_obj.id,
+                    'timestamp': str(local_time),
+                    'id': message_obj.id,
                 }
-                await self.create_chat_message(msg)
                 await self.channel_layer.group_send(
                     self.chat_room,
                     {
@@ -83,6 +78,14 @@ class ChatConsumer(AsyncConsumer):
 
     async def websocket_disconnect(self, event):
         print('Disconnected', event)
+        try:
+            for group in self.groups:
+                await self.channel_layer.group_discard(group, self.channel_name)
+        except AttributeError:
+            raise exceptions.InvalidChannelLayerError(
+                "BACKEND is unconfigured or doesn't support groups"
+            )
+        await self.disconnect(event["code"])
         raise exceptions.StopConsumer()
 
     @database_sync_to_async
@@ -90,15 +93,11 @@ class ChatConsumer(AsyncConsumer):
         return Room.objects.get(id=id)
 
     @database_sync_to_async
-    def get_user(self, email):
-        user_obj = User.objects.get(email=email)
-        return user_obj
-
-    @database_sync_to_async
     def create_chat_message(self, msg):
         room_obj = self.room_obj
         me_user_obj = self.me_user_obj
-        message = Message.objects.create(author=me_user_obj, room=room_obj, message=msg)
+        message = Message.objects.create(
+            author=me_user_obj, room=room_obj, message=msg)
         return message
 
     @database_sync_to_async
