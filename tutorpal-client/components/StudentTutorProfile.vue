@@ -13,27 +13,27 @@
           <div :style="updatemodal" class="div-block-22-copy">
             <div style="border-radius: 8px; padding-bottom: 20px; height: 600px;" class="div-block-23">
               <div class="div-block-24"><img @click="updatemodalvalue()" src="../static/student/images/close-1.png" width="20" alt=""></div>
-              <h1 class="heading-10">Schedule a Class</h1>
+              <h1 style="margin-top: 15px" class="heading-10">Schedule a Class</h1>
               <div class="div-block-25">
                 <form id="form-wrapper" style="font-family: Poppins;">
                   <div class="form-group row">
                     <label for="date-time" class="col-2 col-form-label">Date and Start Time</label>
                     <div class="col-10">
-                      <input class="form-control" type="datetime-local" id="date-time" required>
+                      <input v-model="date_startTime" class="form-control" type="datetime-local" id="date-time" required>
                     </div>
                     <label for="date-time" class="col-2 col-form-label">Duration in Minutes</label>
                     <div class="col-10">
-                      <input type="number" id="duration" class="form-control" required>
+                      <input v-model="duration" type="number" id="duration" class="form-control" required>
                     </div>
                   </div> 
-                  <textarea style="height:250px; margin-top: 25px; margin-bottom: 15px;" class="form-control" id="classdescription" placeholder="Describe what you want to learn, cover, or what you need help with." rows="3" required></textarea>
+                  <textarea v-model="description" style="height:250px; margin-top: 25px; margin-bottom: 15px;" class="form-control" id="classdescription" placeholder="Describe what you want to learn, cover, or what you need help with." rows="3" required></textarea>
                   <div style="margin-top: 15px; margin-bottom: 15px;" class="form-check">
-                    <input class="form-check-input" nam="checkbox" type="checkbox" id="trial">
+                    <input @click="trial()" class="form-check-input" nam="checkbox" type="checkbox" id="trial">
                     <label class="form-check-label" for="trial">
                       I want this class to be a trial class
                     </label>
                   </div>
-                  <button class="btn btn-primary" name="session">Send request</button>
+                  <button @click="addSessionHandler" class="btn btn-primary" name="session">Send request</button>
                 </form>
               </div>
             </div>
@@ -125,7 +125,7 @@
               </div>
             </div>
             <h1 class="heading-11">Reviews</h1>
-                <div v-for="review in reviews.results" :key="review.id" id="posts">
+                <!-- <div v-for="review in reviews.results" :key="review.id" id="posts">
                   <div class="review_bundle">
                     <div class="review_item"><img :src="review.student.user.profile_pic" loading="lazy" width="40" sizes="40px" alt="" class="image-12">
                       <div class="text-block-33">{{review.student.user.first_name}} {{review.student.user.last_name}}</div>
@@ -133,7 +133,7 @@
                     </div>
                     <p class="paragraph-9">{{review.description}}</p>
                   </div>
-                </div>
+                </div> -->
           </div>
         </div>
       </body>
@@ -151,18 +151,26 @@ export default {
       url: '',
       data: [],
       reviews: [],
+      date_startTime: '',
+      duration: '',
+      description: '',
+      free: false,
     } 
   },
   async fetch() {
-      this.url = '/api/tutors/'+this.$route.params.id+'/'
-      this.data = await fetch(this.url).then(res =>
-        res.json()
-      )
-      await this.fetchUser()
-      this.url = '/api/tutors/'+this.$route.params.id+'/reviews/'
-      this.reviews = await fetch(this.url).then(res =>
-        res.json()
-      )
+    this.url = '/api/tutors/'+this.$route.params.id+'/'
+    this.data = await fetch(this.url).then(res =>
+      res.json()
+    )
+    await this.fetchUser()
+    this.url = '/api/tutors/'+this.$route.params.id+'/reviews/'
+    this.reviews = await fetch(this.url).then(res =>
+      res.json()
+    )
+  },
+  async created(){
+    await this.fetchSessions('pendingOnTutor')
+
   },
   head() {
     return {
@@ -186,18 +194,114 @@ export default {
           display: this.clicked1 ? "flex" : "none"
         }
     },
-    ...mapGetters({user: "getUser"})
+    ...mapGetters({user: "getUser", pendingOnTutor: 'getPendingOnTutor'})
   },
 
   methods: {
-    ...mapGetters(['getUser']),
-    ...mapActions(['fetchUser']),
+    ...mapGetters(['getUser', 'getPendingOnTutor']),
+    ...mapActions(['fetchUser', 'addSession', 'fetchSessions', ]),
     updatemodalvalue(){
       this.clicked = !this.clicked
     },
     logoutclick(){
       this.clicked1 = !this.clicked1
-    }
+    },
+    trial(){
+      this.free = !this.free
+      console.log(this.free)
+    },
+    addSessionHandler() {
+      this.addSession([{
+        date: "2021-05-20",
+        time_start: "12:30:00",
+        time_end: "14:30:00",
+        duration: "2:00:00",
+        price: "130.00",
+        free: false,
+        description: "lalalala",
+        call_url: "",
+        subjects: "mothematica",
+        accepted: false,
+        rejected: false,
+        started: false,
+        finished: false,
+        accessable: false,
+        canceled: false,
+        student_paid: false,
+        tutor_paid: false,
+        refund_requested: false,
+        refund_available: false,
+        refunded: false,
+        tutor_emailed: false,
+        student_emailed: false,
+        parent_emailed: false
+      }, 'pendingOnTutor'])
+    },
+    // addSessionHandler() {
+    //   const sessionDate = (this.date_startTime || '').substring(0, 10)
+    //   const startTime = (this.date_startTime || '').substring(11, 18)+':00'
+    //   const hours = (parseInt(this.duration) / 60);
+    //   const rhours = Math.floor(hours);
+    //   const minutes = (hours - rhours) * 60;
+    //   let rminutes = Math.round(minutes);
+    //   if (rminutes<10){
+    //     rminutes='0'+rminutes
+    //   }
+    //   const sessionDuration = rhours + ':'+rminutes+':00'
+    //   const sessionPrice = Math.round((this.data.rates/60)*parseInt(this.duration));
+
+    //   const sessionData = {
+    //     date: sessionDate,
+    //     time_start: startTime,
+    //     time_end : '18:00:00',
+    //     duration : sessionDuration,
+    //     price : sessionPrice,
+    //     free : false,
+    //     description: this.description,
+    //     call_url: "",
+    //     subjects: this.data.subjects,
+    //     accepted: false,
+    //     rejected: false,
+    //     started: false,
+    //     finished: false,
+    //     accessable: false,
+    //     canceled: false,
+    //     student_paid: false,
+    //     tutor_paid: false,
+    //     refund_requested: false,
+    //     refund_available: false,
+    //     refunded: false,
+    //     tutor_emailed: false,
+    //     student_emailed: false,
+    //     parent_emailed: false
+    //   }
+    //   console.log(sessionData)
+    //   this.addSession([{
+    //     "date": "2021-05-20",
+    //     "time_start": "12:30:00",
+    //     "time_end": "14:30:00",
+    //     "duration": "2:00:00",
+    //     "price": "130.00",
+    //     "free": false,
+    //     "description": "lalalala",
+    //     "call_url": "",
+    //     "subjects": "mothematica",
+    //     "accepted": false,
+    //     "rejected": false,
+    //     "started": false,
+    //     "finished": false,
+    //     "accessable": false,
+    //     "canceled": false,
+    //     "student_paid": false,
+    //     "tutor_paid": false,
+    //     "refund_requested": false,
+    //     "refund_available": false,
+    //     "refunded": false,
+    //     "tutor_emailed": false,
+    //     "student_emailed": false,
+    //     "parent_emailed": false
+    //   }, 'pendingOnTutor'])
+    // },
   },
 }
 </script>

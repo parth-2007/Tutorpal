@@ -50,6 +50,7 @@
           <label for="file" style="cursor: pointer"
             ><p>
               <img
+                :src="user.profilePic"
                 style="border-radius: 400px"
                 id="output"
                 width="100"

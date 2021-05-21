@@ -74,6 +74,7 @@
               <div class="div-block-43">
                 <div class="name_profile_pic">
                   <img
+                    :src="user.profilePic"
                     id="image"
                     width="60"
                     height="60"
@@ -86,18 +87,22 @@
                     data-delay="0"
                     class="dropdown-3 w-dropdown"
                   >
-                    <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div class="text-block-18">John Wick</div>
-                      <div class="text-block-20">Student</div>
-                    </div>
-                    <nav class="navigation-dropdown-2 w-dropdown-list">
-                      <div class="dropdown-pointer-2">
-                        <div style="width: 300px" class="dropdown-wrapper-2">
-                          <a id="logout" class="dropdown-link-2 w-inline-block">
+                  <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
+                    <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
+                    <div class="text-block-20">Student</div>
+                  </div>
+                  <nav :style="logout" class="navigation-dropdown-2">
+                    <div class="dropdown-pointer-2">
+                      <div class="dropdown-wrapper-2">
+                          <router-link
+                            to="/logout"
+                            id="logout"
+                            class="dropdown-link-2 w-inline-block"
+                          >
                             <div class="nav-content-wrap-2">
                               <div class="dropdown-title-2">Logout</div>
                             </div>
-                          </a>
+                          </router-link>
                           <router-link
                             to="/account"
                             class="dropdown-link-2 w-inline-block"
@@ -150,6 +155,7 @@
               class="column-16 w-col w-col-4 w-col-small-small-stack w-col-tiny-tiny-stack"
             >
               <img
+                :src="user.profilePic"
                 id="profile"
                 loading="lazy"
                 width="257"
@@ -192,7 +198,10 @@ import StudentChangeInfoForm from './StudentChangeInfoForm.vue'
 export default {
   components: { StudentChangeInfoForm },
   data() {
-    return { clicked: false }
+    return { 
+      clicked: false,
+      clicked1:false, 
+    }
   },
   head() {
     return {
@@ -229,6 +238,11 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
+    logout() {
+        return {
+          display: this.clicked1 ? "flex" : "none"
+        }
+    },
     ...mapGetters({ student: 'getStudent' }),
     ...mapGetters({ user: 'getUser' }),
   },
@@ -238,6 +252,9 @@ export default {
   methods: {
     updateModalValue() {
       this.clicked = !this.clicked
+    },
+    logoutclick(){
+      this.clicked1 = !this.clicked1
     },
     // async handleFormSubmit() {
     //   console.log('hi')

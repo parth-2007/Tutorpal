@@ -96,8 +96,10 @@ export default {
   },
   async fetch() {
     await this.fetchSessions('upcoming')
-    await this.fetchSessions('pendingOnStudentPayment')
     await this.fetchUser()
+  },
+  async created(){
+    await this.fetchSessions('pendingOnStudentPayment')
   },
   head() {
     return {
