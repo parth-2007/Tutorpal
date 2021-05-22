@@ -19,7 +19,11 @@
         <div style="border-radius: 8px" class="div-block-80">
           <div class="div-block-71">
             <img
-              src="../static/student/images/user-2.png"
+              :src="
+                otherUser
+                  ? otherUser.profilePic
+                  : '../static/student/images/user-2.png'
+              "
               loading="lazy"
               width="130"
               height="130"
@@ -28,11 +32,12 @@
                 ../static/student/images/user-2.png 512w
               "
               sizes="74px"
-              alt=""
+              alt="Student profile picture"
             />
             <div class="div-block-72">
               <h1 class="heading-3" id="fullname" style="font-size: 30px">
-                Johnny Lawrence
+                {{ otherUser ? otherUser.firstName : '' }}
+                {{ otherUser ? otherUser.lastName : '' }}
               </h1>
             </div>
           </div>
@@ -91,6 +96,12 @@ import { mapGetters } from 'vuex'
 import loggedInFetch from '../utils/loggedInFetch'
 
 export default {
+  props: {
+    otherUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       socket: null,
@@ -101,7 +112,7 @@ export default {
   },
   head() {
     return {
-      title: 'Chat with John',
+      title: `Chat with ${this.otherUser.firstName}`,
       link: [
         {
           rel: 'stylesheet',
@@ -131,7 +142,7 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   async created() {
-    // const chatMsgs = this.chatMsgs
+    // console.log('otherUser: ', this.otherUser)
     const response = await loggedInFetch(
       'api/rooms/' + this.$route.params.id + '/messages/'
     )
@@ -153,10 +164,9 @@ export default {
       // }
       // const host = loc.host
       const pastMessages = response.results
-      console.log(pastMessages)
-      this.chatMsgs = pastMessages
-      this.connect()
+      this.chatMsgs = pastMessages.reverse()
     }
+    this.connect()
   },
   methods: {
     // RUN DOCKER AND REDIS !!!!!!
@@ -164,47 +174,43 @@ export default {
       const chatMsgs = this.chatMsgs
       const endpoint =
         'ws://localhost:5000/api/ws/chat/' + this.$route.params.id + '/'
+      // const addChatMsg = this.addChatMsg
 
       this.socket = new WebSocket(endpoint)
       // const chatMsgs = this.chatMsgs
 
       this.socket.onmessage = function (e) {
-        console.log('message', e)
+        // console.log('message', e)
         const chatDataMsg = JSON.parse(e.data)
         if (!chatDataMsg.error) {
-          console.log('chatmsgs: ', chatMsgs)
+          // console.log('chatMsgs: ', chatMsgs)
           chatMsgs.push(chatDataMsg)
-        } else {
-          console.warn(chatDataMsg)
         }
+        // else {
+        //   console.warn(chatDataMsg)
+        // }
       }
-      this.socket.onopen = (e) => {
-        console.log('open', e)
-      }
-      this.socket.onerror = (e) => {
-        console.log('error', e)
-      }
+      // this.socket.onopen = (e) => {
+      //   console.log('chatMsgs: ', this.chatMsgs)
+      //   console.log('open', e)
+      // }
+      // this.socket.onerror = (e) => {
+      //   console.log('error', e)
+      // }
       this.socket.onclose = (e) => {
-        console.log('close', e)
-        // setTimeout(() => {
-        //   this.connect()
-        // }, 1000)
+        // console.log('close', e)
+        setTimeout(() => {
+          this.connect()
+        }, 1000)
       }
     },
-    // escapeOutput(toOutput) {
-    //   return toOutput
-    //     .replace(/&/g, '&amp;')
-    //     .replace(/</g, '&lt;')
-    //     .replace(/>/g, '&gt;')
-    //     .replace(/"/g, '&quot;')
-    //     .replace(/'/g, '&#x27')
-    //     .replace(/\//g, '&#x2F')
-    // },
     handleFormSubmit() {
-      // const jsonData = JSON.stringify({ message: this.message })
-      console.log(this.message)
+      // console.log('sending: ', this.message)
       this.socket.send(this.message)
       this.message = ''
+    },
+    addChatMsg(msg) {
+      this.chatMsgs.push(msg)
     },
   },
 }

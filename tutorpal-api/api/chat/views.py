@@ -15,8 +15,10 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.has_student:
+            print(Room.objects.filter(student_pk=self.request.user.student_pk))
             return Room.objects.filter(student_pk=self.request.user.student_pk)
         elif self.request.user.has_tutor:
+            print(Room.objects.filter(tutor_pk=self.request.user.tutor_pk))
             return Room.objects.filter(tutor_pk=self.request.user.tutor_pk)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data="You are not authenticated")
