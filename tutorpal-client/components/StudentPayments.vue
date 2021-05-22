@@ -9,7 +9,7 @@
           <div class="div-block-55">
             <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
               <div class="div-block-4">
-                <form action="search_student.html" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
+                <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">
                   <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                     <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
@@ -68,7 +68,7 @@
                   <div class="i">
                     <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
                       <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
-                      <br>Amount: <strong class="bold-text-7">{{session.price}}</strong><br>Trial: {{session.free}}</p>
+                      <br>Amount: <strong class="bold-text-7">${{session.price}}</strong><br>Trial: {{session.free}}</p>
                     </div>
                     <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{session.description}}}</p>
                     <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><router-link :to="'/pay/'+session.id" class="button-10 w-button">Pay Now</router-link>
@@ -83,7 +83,7 @@
               <div class="item-copy">
                 <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
                   <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
-                  <br>Amount: <strong class="bold-text-7">{{session.price}}</strong><br>Trial: {{session.free}}</p>
+                  <br>Amount: <strong class="bold-text-7">${{session.price}}</strong><br>Trial: {{session.free}}</p>
                 </div>
                 <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
                 <div class="text-block-27-copy">Thank you for paying for your session!</div>
@@ -101,9 +101,11 @@ import convertTime from '../utils/convertTime'
 
 export default {
   async fetch() {
-    await this.fetchSessions('pendingOnStudentPayment')
     await this.fetchSessions('upcoming')
     await this.fetchUser()
+  },
+  async created (){
+    await this.fetchSessions('pendingOnStudentPayment')
   },
   data(){
     return {clicked:false} 

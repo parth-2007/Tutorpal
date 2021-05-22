@@ -213,6 +213,8 @@ export default {
   async fetch() {
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
+  },
+  async created(){
     await this.fetchSessions('upcoming')
     await this.fetchUser()
   },

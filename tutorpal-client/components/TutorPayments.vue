@@ -57,7 +57,7 @@
       </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Payments</div>
-        <p class="paragraph">12 hours after your class is completed, you will be paid through your registered email using PayPal. All of your payments will be recorded here.</p>
+        <p class="paragraph">12 hours after your class is completed, you will be paid through your registered email using PayPal. All of your payments will be recorded here. Remember that TutorPal takes a small 10% fee per payment.</p>
       </div>
         <div v-for="session in paymentfinished" :key="session.id" id="paid">
           <div class="div-block-64">
@@ -96,8 +96,10 @@ export default {
   },
   async fetch() {
     await this.fetchSessions('upcoming')
-    await this.fetchSessions('pendingOnStudentPayment')
     await this.fetchUser()
+  },
+  async created(){
+    await this.fetchSessions('pendingOnStudentPayment')
   },
   head() {
     return {
