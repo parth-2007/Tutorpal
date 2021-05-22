@@ -16,6 +16,7 @@
     "core-js": "^3.9.1",
     "nuxt": "^2.15.3",
     "nuxt-webfontloader": "^1.1.0",
+    "timelite": "^1.0.0",
     "vue": "^2.6.12",
     "webfontloader": "^1.6.28"
   },

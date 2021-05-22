@@ -25,6 +25,10 @@
                     <div class="col-10">
                       <input v-model="duration" type="number" id="duration" class="form-control" required>
                     </div>
+                    <label for="date-time" class="col-2 col-form-label">Subject(specify the topic)</label>
+                    <div class="col-10">
+                      <input id="duration" class="form-control" required>
+                    </div>
                   </div> 
                   <textarea v-model="description" style="height:250px; margin-top: 25px; margin-bottom: 15px;" class="form-control" id="classdescription" placeholder="Describe what you want to learn, cover, or what you need help with." rows="3" required></textarea>
                   <div style="margin-top: 15px; margin-bottom: 15px;" class="form-check">
@@ -33,8 +37,8 @@
                       I want this class to be a trial class
                     </label>
                   </div>
-                  <button @click="addSessionHandler" class="btn btn-primary" name="session">Send request</button>
                 </form>
+                <button @click="addSessionHandler" class="btn btn-primary" name="session">Send request</button>
               </div>
             </div>
           </div>
@@ -142,6 +146,8 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { add, str } from 'timelite/time'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
@@ -208,100 +214,66 @@ export default {
     },
     trial(){
       this.free = !this.free
-      console.log(this.free)
     },
-    addSessionHandler() {
-      this.addSession([{
-        date: "2021-05-20",
-        time_start: "12:30:00",
-        time_end: "14:30:00",
-        duration: "2:00:00",
-        price: "130.00",
-        free: false,
-        description: "lalalala",
-        call_url: "",
-        subjects: "mothematica",
-        accepted: false,
-        rejected: false,
-        started: false,
-        finished: false,
-        accessable: false,
-        canceled: false,
-        student_paid: false,
-        tutor_paid: false,
-        refund_requested: false,
-        refund_available: false,
-        refunded: false,
-        tutor_emailed: false,
-        student_emailed: false,
-        parent_emailed: false
-      }, 'pendingOnTutor'])
+    async addSessionHandler() {
+      const sessionDate = (this.date_startTime || '').substring(0, 10)
+      const startTime = (this.date_startTime || '').substring(11, 18)
+      const hours = (parseInt(this.duration) / 60);
+      let rhours = Math.floor(hours);
+      const minutes = (hours - rhours) * 60;
+      let rminutes = Math.round(minutes);
+      if (rminutes<10){
+        rminutes='0'+rminutes
+      }
+      if (rhours<10){
+        rhours='0'+rhours
+      }
+      const sessionDuration = rhours + ':'+rminutes+':00'
+      const sessionPrice = Math.round((this.data.rates/60)*parseInt(this.duration))+".00";
+      let endTime = add([startTime, sessionDuration])
+      endTime = str(endTime)
+      endTime = endTime.substring(0,5)
+      const sessionData = {
+          "tutor": this.$route.params.id,
+          "date": sessionDate,
+          "time_start": startTime,
+          "time_end": endTime,
+          "duration": sessionDuration,
+          "price": sessionPrice,
+          "free": this.free,
+          "description": this.description,
+          "call_url": "",
+          "subjects": "mothematica",
+          "accepted": false,
+          "rejected": false,
+          "started": false,
+          "finished": false,
+          "accessable": false,
+          "canceled": false,
+          "student_paid": false,
+          "tutor_paid": false,
+          "refund_requested": false,
+          "refund_available": false,
+          "refunded": false,
+          "tutor_emailed": false,
+          "student_emailed": false,
+          "parent_emailed": false
+      }
+      const csrfToken = await getCSRF()
+      this.addSession([sessionData , 'pendingOnTutor'])
+      JSON.stringify(sessionData)
+      await fetch('/api/sessions/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sessionData),
+      })
+      .then((res) => {
+        console.log(res)
+      })
     },
-    // addSessionHandler() {
-    //   const sessionDate = (this.date_startTime || '').substring(0, 10)
-    //   const startTime = (this.date_startTime || '').substring(11, 18)+':00'
-    //   const hours = (parseInt(this.duration) / 60);
-    //   const rhours = Math.floor(hours);
-    //   const minutes = (hours - rhours) * 60;
-    //   let rminutes = Math.round(minutes);
-    //   if (rminutes<10){
-    //     rminutes='0'+rminutes
-    //   }
-    //   const sessionDuration = rhours + ':'+rminutes+':00'
-    //   const sessionPrice = Math.round((this.data.rates/60)*parseInt(this.duration));
-
-    //   const sessionData = {
-    //     date: sessionDate,
-    //     time_start: startTime,
-    //     time_end : '18:00:00',
-    //     duration : sessionDuration,
-    //     price : sessionPrice,
-    //     free : false,
-    //     description: this.description,
-    //     call_url: "",
-    //     subjects: this.data.subjects,
-    //     accepted: false,
-    //     rejected: false,
-    //     started: false,
-    //     finished: false,
-    //     accessable: false,
-    //     canceled: false,
-    //     student_paid: false,
-    //     tutor_paid: false,
-    //     refund_requested: false,
-    //     refund_available: false,
-    //     refunded: false,
-    //     tutor_emailed: false,
-    //     student_emailed: false,
-    //     parent_emailed: false
-    //   }
-    //   console.log(sessionData)
-    //   this.addSession([{
-    //     "date": "2021-05-20",
-    //     "time_start": "12:30:00",
-    //     "time_end": "14:30:00",
-    //     "duration": "2:00:00",
-    //     "price": "130.00",
-    //     "free": false,
-    //     "description": "lalalala",
-    //     "call_url": "",
-    //     "subjects": "mothematica",
-    //     "accepted": false,
-    //     "rejected": false,
-    //     "started": false,
-    //     "finished": false,
-    //     "accessable": false,
-    //     "canceled": false,
-    //     "student_paid": false,
-    //     "tutor_paid": false,
-    //     "refund_requested": false,
-    //     "refund_available": false,
-    //     "refunded": false,
-    //     "tutor_emailed": false,
-    //     "student_emailed": false,
-    //     "parent_emailed": false
-    //   }, 'pendingOnTutor'])
-    // },
   },
 }
 </script>

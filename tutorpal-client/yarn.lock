@@ -8049,6 +8049,11 @@ time-fix-plugin@^2.0.7:
   resolved "https://registry.yarnpkg.com/time-fix-plugin/-/time-fix-plugin-2.0.7.tgz#4ba70ae2e40cedf34dabe505eda7b71b1b244f50"
   integrity sha512-uVFet1LQToeUX0rTcSiYVYVoGuBpc8gP/2jnlUzuHMHe+gux6XLsNzxLUweabMwiUj5ejhoIMsUI55nVSEa/Vw==
 
+timelite@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/timelite/-/timelite-1.0.0.tgz#871f72b290f7ef0bc0d0a1822041c44e8181e3f4"
+  integrity sha512-KWZOR1l6IxOuMY36Dkey2SibwMFmgontepHuBjfDNS8I37gJUw+hMIEf+hoEC6+ZfslpKzDvbXEPOJvA4iSVFg==
+
 timers-browserify@^2.0.4:
   version "2.0.12"
   resolved "https://registry.yarnpkg.com/timers-browserify/-/timers-browserify-2.0.12.tgz#44a45c11fbf407f34f97bccd1577c652361b00ee"
