@@ -11,6 +11,7 @@ from register.pagination import MyCursorPagination
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
 from datetime import datetime
+import random
 # from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -32,9 +33,11 @@ class SessionViewSet(viewsets.ModelViewSet):
             pk = self.kwargs.get('pk')
             # checks if self.session exists, if not it will call it from the db
             if not hasattr(self, 'session') and self.request.user.has_student:
-                self.session = Session.objects.select_related('tutor', 'tutor__user').get(pk=pk)
+                self.session = Session.objects.select_related(
+                    'tutor', 'tutor__user').get(pk=pk)
             elif not hasattr(self, 'session') and self.request.user.has_tutor:
-                self.session = Session.objects.select_related('student', 'student__user').get(pk=pk)
+                self.session = Session.objects.select_related(
+                    'student', 'student__user').get(pk=pk)
             if self.session.tutor_pk == self.request.user.tutor_pk:
                 return TutorSessionSerializer
             elif self.session.student_pk == self.request.user.student_pk:
@@ -48,9 +51,11 @@ class SessionViewSet(viewsets.ModelViewSet):
             pk = self.kwargs.get('pk')
             # checks if self.session exists, if not it will call it from the db
             if not hasattr(self, 'session') and self.request.user.has_student:
-                self.session = Session.objects.select_related('tutor', 'tutor__user').get(pk=pk)
+                self.session = Session.objects.select_related(
+                    'tutor', 'tutor__user').get(pk=pk)
             elif not hasattr(self, 'session') and self.request.user.has_tutor:
-                self.session = Session.objects.select_related('student', 'student__user').get(pk=pk)
+                self.session = Session.objects.select_related(
+                    'student', 'student__user').get(pk=pk)
             return self.session
         else:
             return super().get_object()
@@ -74,68 +79,90 @@ class SessionViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer_class.data)
 
         if request.user.has_student:
-            serializer_class = StudentSessionSerializer(session_queryset, many=True)
+            serializer_class = StudentSessionSerializer(
+                session_queryset, many=True)
         elif request.user.has_tutor:
-            serializer_class = TutorSessionSerializer(session_queryset, many=True)
+            serializer_class = TutorSessionSerializer(
+                session_queryset, many=True)
         else:
             serializer_class = ReservedSerializer(session_queryset, many=True)
         return Response(serializer_class.data)
 
     @action(detail=False)
     def my_sessions(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_tutor(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, accepted=False, rejected=False, canceled=False).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, accepted=False, rejected=False, canceled=False).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, accepted=False, rejected=False, canceled=False).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, accepted=False, rejected=False, canceled=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_student_payment(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def upcoming(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, accepted=True, student_paid=True, canceled=False).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, accepted=True, student_paid=True, canceled=False).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, accepted=True, student_paid=True, canceled=False).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, accepted=True, student_paid=True, canceled=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def tutor_not_paid(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, canceled=False, finished=True, tutor_paid=False).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, canceled=False, finished=True, tutor_paid=False).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, canceled=False, finished=True, tutor_paid=False).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, canceled=False, finished=True, tutor_paid=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def finished_sessions(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, finished=True, tutor_paid=True).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, finished=True, tutor_paid=True).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, finished=True, tutor_paid=True).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, finished=True, tutor_paid=True).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def canceled_sessions(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, canceled=True).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, canceled=True).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, canceled=True).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, canceled=True).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def started_sessions(self, request):
-        student_queryset = Session.objects.filter(student__user=request.user, started=True).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(tutor__user=request.user, started=True).select_related('student', 'student__user')
+        student_queryset = Session.objects.filter(
+            student__user=request.user, started=True).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, started=True).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     def perform_create(self, serializer):
         data = self.request.data
-        tutor = Tutor.objects.select_related("user").get(id=int(data.get('tutor')))  # 1 query
-        student = Student(id=self.request.user.student_pk, user=self.request.user)
+        tutor = Tutor.objects.select_related("user").get(
+            id=int(data.get('tutor')))  # 1 query
+        student = Student(id=self.request.user.student_pk,
+                          user=self.request.user)
         start = datetime.strptime(data.get("time_start"), "%H:%M")
         end = datetime.strptime(data.get("time_end"), "%H:%M")
         duration = end - start
+        letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        result_str = ''.join(random.choice(letters) for i in range(30))
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
-                        duration=duration)  # 2 query
+                        duration=duration, call_url=result_str)  # 2 query
