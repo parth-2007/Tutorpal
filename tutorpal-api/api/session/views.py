@@ -115,9 +115,9 @@ class SessionViewSet(viewsets.ModelViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated])
     def upcoming(self, request):
         student_queryset = Session.objects.filter(
-            student__user=request.user, accepted=True, student_paid=True, canceled=False).select_related('tutor', 'tutor__user')
+            student__user=request.user, accepted=True, student_paid=True, canceled=False, started=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
-            tutor__user=request.user, accepted=True, student_paid=True, canceled=False).select_related('student', 'student__user')
+            tutor__user=request.user, accepted=True, student_paid=True, canceled=False, started=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
@@ -147,9 +147,9 @@ class SessionViewSet(viewsets.ModelViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated])
     def started_sessions(self, request):
         student_queryset = Session.objects.filter(
-            student__user=request.user, started=True).select_related('tutor', 'tutor__user')
+            student__user=request.user, started=True, finished=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
-            tutor__user=request.user, started=True).select_related('student', 'student__user')
+            tutor__user=request.user, started=True, finished=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     def perform_create(self, serializer):
