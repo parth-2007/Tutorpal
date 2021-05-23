@@ -9,7 +9,7 @@ class StudentSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
-            'id', 'tutor',
+            'id', 'tutor', 'student_pk',
             'date', 'time_start', 'time_end', 'duration',
             'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
@@ -25,7 +25,7 @@ class TutorSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = [
-            'id', 'student',
+            'id', 'student', 'tutor_pk',
             'date', 'time_start', 'time_end', 'duration',
             'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
