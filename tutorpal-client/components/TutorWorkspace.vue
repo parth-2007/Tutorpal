@@ -4,7 +4,16 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <body id="body" style="margin-bottom: 0px; background-color: rgba(65, 168, 211, 0.2);" class="body-5">
+    <div v-if="session.started===false">
+        <NotStarted></NotStarted>
+    </div>
+    <div v-else-if="session.finished===true">
+        <NotFound></NotFound>
+    </div>
+    <div v-else-if="session.tutor_pk !== user.tutorPk">
+        <NotFound></NotFound>
+    </div>
+    <body v-else id="body" style="margin-bottom: 0px; background-color: rgba(65, 168, 211, 0.2);" class="body-5">
       <div id="main">
         <div class="section"><router-link to="/" class="link-block w-inline-block"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
           <div class="div-block-4">
@@ -57,7 +66,7 @@
           </div>
         </div>
       </div>
-        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+$route.params.id"></iframe>
+        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
       </body>
     </html>
   </client-only>
@@ -69,7 +78,16 @@ export default {
   data() {
     return {
       clicked: false,
+      session: [],
     }
+  },
+  async created(){
+    const url = '/api/sessions/'+this.$route.params.id+"/"
+    this.session = await fetch(url).then(res =>
+      res.json()
+    )
+    console.log(this.session)
+    await this.fetchUser()
   },
   head() {
     return {
@@ -102,9 +120,6 @@ export default {
         }
     },
     ...mapGetters({ user: 'getUser' }),
-  },
-  async created() {
-    await this.fetchUser()
   },
   methods: {
     logoutclick(){

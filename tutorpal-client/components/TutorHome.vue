@@ -158,7 +158,8 @@
             <div class="upcoming_loop">
               <div v-for="session in upcoming" :key="session.id" id="upcoming">
                 <div class="upcoming_item">
-                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
+                  <button @click="startclass(session.id)" class="button-4 w-button">Start this meeting</button>
                 </div>
               </div>
             </div>
@@ -180,11 +181,11 @@ export default {
     return {clicked:false} 
   },
   async fetch() {
-    await this.fetchSessions('pendingOnTutor')
     await this.fetchSessions('startedSessions')
+    await this.fetchSessions('upcoming')
   },
   async created(){
-    await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnTutor')
     await this.fetchUser()
   },
   head() {
@@ -206,7 +207,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', ]),
+    ...mapActions(['fetchUser', 'fetchSessions', 'addSession' ]),
     ...mapGetters(['getStartedSessions', 'getUpcoming', 'getUser','getPendingOnTutor']),
     convertTime,
     
@@ -223,6 +224,7 @@ export default {
             "accepted": true,
           }),
       })
+      location.reload();
     },
     async deny(id){
       const url = '/api/sessions/'+id+'/'
@@ -236,6 +238,25 @@ export default {
           body: JSON.stringify({
             "accepted": false,
           }),
+      })
+      location.reload();
+    },
+    async startclass(id){
+      console.log(id)
+      const url = '/api/sessions/' +id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "started": true,
+        }),
+      })
+      .then((res) => {
+        console.log(res)
       })
     },
     logoutclick(){

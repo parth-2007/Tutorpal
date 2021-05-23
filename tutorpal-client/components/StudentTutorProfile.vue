@@ -261,7 +261,6 @@ export default {
       }
       const csrfToken = await getCSRF()
       this.addSession([sessionData , 'pendingOnTutor'])
-      JSON.stringify(sessionData)
       await fetch('/api/sessions/', {
         method: 'POST',
         headers: {
@@ -273,6 +272,7 @@ export default {
       .then((res) => {
         console.log(res)
       })
+      location.reload();
     },
   },
 }

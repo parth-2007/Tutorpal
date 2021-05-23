@@ -4,7 +4,16 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <body id="body" style="margin-bottom: 0px; background-color: rgba(65, 168, 211, 0.2);" class="body-5">
+    <div v-if="session.started===false">
+        <NotStarted></NotStarted>
+    </div>
+    <div v-else-if="session.finished===true">
+        <NotFound></NotFound>
+    </div>
+    <div v-else-if="session.student_pk !== user.studentPk">
+        <NotFound></NotFound>
+    </div>
+    <body v-else id="body" style="margin-bottom: 0px; background-color: rgba(65, 168, 211, 0.2);" class="body-5">
       <div id="main">
             <div class="div-block-55">
               <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
@@ -28,7 +37,7 @@
                   >
                     <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                       <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
-                      <div class="text-block-20">Tutor</div>
+                      <div class="text-block-20">Student</div>
                     </div>
                     <nav :style="logout" class="navigation-dropdown-2">
                       <div class="dropdown-pointer-2">
@@ -72,7 +81,16 @@ export default {
   data() {
     return {
       clicked: false,
+      session: [],
     }
+  },
+  async created(){
+    const url = '/api/sessions/'+this.$route.params.id+"/"
+    this.session = await fetch(url).then(res =>
+      res.json()
+    )
+    console.log(this.session)
+    await this.fetchUser()
   },
   head() {
     return {
@@ -105,9 +123,6 @@ export default {
         }
     },
     ...mapGetters({ user: 'getUser' }),
-  },
-  async created() {
-    await this.fetchUser()
   },
   methods: {
     logoutclick(){
