@@ -70,7 +70,7 @@
                       <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
                       <br>Amount: <strong class="bold-text-7">${{session.price}}</strong><br>Trial: {{session.free}}</p>
                     </div>
-                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{session.description}}}</p>
+                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
                     <div class="text-block-27">You have not paid for this session yet. Please do as soon as possible.</div><router-link :to="'/pay/'+session.id" class="button-10 w-button">Pay Now</router-link>
                   </div>
                 </div>
