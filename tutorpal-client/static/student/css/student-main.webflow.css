@@ -1589,10 +1589,6 @@
 }
 
 .div-block-80 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   margin-top: 20px;
   margin-right: 10%;
   margin-left: 10%;

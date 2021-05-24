@@ -4,10 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <div v-if="session.started===false">
-        <NotStarted></NotStarted>
+    <div v-if="session.student_paid === true && session.started===false">
+        <p>This class has not been started yet, your job as a tutor is to start meetings when the proper times and date occur.</p>
     </div>
-    <div v-else-if="session.finished===true">
+    <div v-else-if="session.student_paid === false || session.finished===true">
         <NotFound></NotFound>
     </div>
     <div v-else-if="session.tutor_pk !== user.tutorPk">
@@ -83,9 +83,13 @@ export default {
   },
   async created(){
     const url = '/api/sessions/'+this.$route.params.id+"/"
-    this.session = await fetch(url).then(res =>
-      res.json()
-    )
+    this.session = await fetch(url)
+    .then((res) => {
+      if (res.status === 500) {
+          this.$router.push('/')
+      }
+      return res.json()
+    })
     console.log(this.session)
     await this.fetchUser()
   },

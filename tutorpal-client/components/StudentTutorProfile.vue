@@ -27,7 +27,7 @@
                     </div>
                     <label for="date-time" class="col-2 col-form-label">Subject(specify the topic)</label>
                     <div class="col-10">
-                      <input id="duration" class="form-control" required>
+                      <input v-model="subjects" id="duration" class="form-control" required>
                     </div>
                   </div> 
                   <textarea v-model="description" style="height:250px; margin-top: 25px; margin-bottom: 15px;" class="form-control" id="classdescription" placeholder="Describe what you want to learn, cover, or what you need help with." rows="3" required></textarea>
@@ -156,11 +156,12 @@ export default {
       clicked1:false,
       url: '',
       data: [],
-      reviews: [],
       date_startTime: '',
       duration: '',
       description: '',
       free: false,
+      subjects:'',
+      reviews: []
     } 
   },
   async fetch() {
@@ -169,10 +170,6 @@ export default {
       res.json()
     )
     await this.fetchUser()
-    this.url = '/api/tutors/'+this.$route.params.id+'/reviews/'
-    this.reviews = await fetch(this.url).then(res =>
-      res.json()
-    )
   },
   async created(){
     await this.fetchSessions('pendingOnTutor')
@@ -234,7 +231,8 @@ export default {
       endTime = str(endTime)
       endTime = endTime.substring(0,5)
       const sessionData = {
-          "tutor": this.$route.params.id,
+          "student_pk": this.user.studentPk,
+          "tutor": parseInt(this.$route.params.id),
           "date": sessionDate,
           "time_start": startTime,
           "time_end": endTime,
@@ -243,7 +241,7 @@ export default {
           "free": this.free,
           "description": this.description,
           "call_url": "",
-          "subjects": "mothematica",
+          "subjects": this.subjects,
           "accepted": false,
           "rejected": false,
           "started": false,
@@ -259,6 +257,7 @@ export default {
           "student_emailed": false,
           "parent_emailed": false
       }
+      console.log(sessionData)
       const csrfToken = await getCSRF()
       this.addSession([sessionData , 'pendingOnTutor'])
       await fetch('/api/sessions/', {
