@@ -187,6 +187,33 @@
             </div>
           </div>
         </div>
+        <div style="padding-top: 40px; padding-bottom: 40px; height: 100%" class="body-3">
+            <div v-for="completed in session.results" :key="completed.id" style="background-color: #fff; margin-right: 10%; margin-left: 10%;" class="i">
+              <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+                <div class="text-block-26">Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}</div>
+                <p class="paragraph-2"><strong class="bold-text">Schedule
+                  <br></strong>First Session: {{completed.date}}<br>Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}<br>Duration: {{completed.duration}}<br>Amount: ${{completed.price}}<br>Trial: {{completed.free}}</p>
+              </div>
+              <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{completed.description}}</p>
+              <div class="text-block-27">This tutor has not accepted your request yet.</div>
+              <div class="div-block-73">
+              <h1 style="font-size: 18px;" class="heading-11">Post a review</h1>
+              <div class="div-block-74">
+                <form class="from-group">
+                  <select style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option selected value="5">5 Stars</option>
+                  </select>
+                  <textarea style="height:250px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
+                  <button class="btn btn-primary" name="review">Post Review</button>
+                </form>
+              </div>
+            </div>
+            </div>
+        </div>
       </body>
     </html>
   </client-only>
@@ -201,7 +228,15 @@ export default {
     return { 
       clicked: false,
       clicked1:false, 
+      session: []
     }
+  },
+  async fetch(){
+    this.session = await fetch("/api/sessions/finished_sessions/").then(res =>
+      res.json()
+    )
+    console.log(this.session)
+
   },
   head() {
     return {

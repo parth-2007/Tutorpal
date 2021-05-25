@@ -112,22 +112,6 @@
           </div>  
           <!-- if already taken class -->
           <div class="div-block-56">
-            <div class="div-block-73">
-              <h1 style="font-size: 18px;" class="heading-11">Post a review</h1>
-              <div class="div-block-74">
-                <form class="from-group">
-                  <select style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option selected value="5">5 Stars</option>
-                  </select>
-                  <textarea style="height:250px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
-                  <button class="btn btn-primary" name="review">Post Review</button>
-                </form>
-              </div>
-            </div>
             <h1 class="heading-11">Reviews</h1>
                 <!-- <div v-for="review in reviews.results" :key="review.id" id="posts">
                   <div class="review_bundle">

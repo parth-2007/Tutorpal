@@ -69,7 +69,7 @@
             </div>
           </div>
         </div>
-        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+$route.params.id"></iframe>
+        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
       </body>
     </html>
   </client-only>

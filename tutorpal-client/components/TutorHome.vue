@@ -258,6 +258,7 @@ export default {
       .then((res) => {
         console.log(res)
       })
+      location.reload();
     },
     logoutclick(){
       this.clicked = !this.clicked
