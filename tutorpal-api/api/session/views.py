@@ -129,11 +129,19 @@ class SessionViewSet(viewsets.ModelViewSet):
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
-    def finished_sessions(self, request):
+    def past_sessions(self, request):
         student_queryset = Session.objects.filter(
             student__user=request.user, finished=True, tutor_paid=True).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
             tutor__user=request.user, finished=True, tutor_paid=True).select_related('student', 'student__user')
+        return self.session_view(request, student_queryset, tutor_queryset)
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def finished_sessions(self, request):
+        student_queryset = Session.objects.filter(
+            student__user=request.user, finished=True).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.filter(
+            tutor__user=request.user, finished=True).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
