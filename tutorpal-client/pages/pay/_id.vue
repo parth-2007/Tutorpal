@@ -1,12 +1,9 @@
 <template>
-    <div v-if="user.unauthenticated">
+    <div v-if="user.unauthenticated || user.isTutor">
       <NotFound></NotFound>
     </div>
     <div v-else-if="user.isStudent">
       <StudentPay></StudentPay>
-    </div>
-    <div v-else-if="user.isTutor">
-      <NotFound></NotFound>
     </div>
 </template>
 <script>

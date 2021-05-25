@@ -4,10 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <div v-if="session.started===false">
+    <div v-if="session.student_paid === true && session.started===false">
         <NotStarted></NotStarted>
     </div>
-    <div v-else-if="session.finished===true">
+    <div v-else-if="session.student_paid === false || session.finished===true">
         <NotFound></NotFound>
     </div>
     <div v-else-if="session.student_pk !== user.studentPk">
@@ -69,7 +69,7 @@
             </div>
           </div>
         </div>
-        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+$route.params.id"></iframe>
+        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
       </body>
     </html>
   </client-only>
@@ -86,9 +86,13 @@ export default {
   },
   async created(){
     const url = '/api/sessions/'+this.$route.params.id+"/"
-    this.session = await fetch(url).then(res =>
-      res.json()
-    )
+    this.session = await fetch(url)
+    .then((res) => {
+      if (res.status === 500) {
+          this.$router.push('/')
+      }
+      return res.json()
+    })
     console.log(this.session)
     await this.fetchUser()
   },

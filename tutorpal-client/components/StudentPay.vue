@@ -6,8 +6,7 @@
       data-wf-site="5f600218af4814e3759ffa69"
     >
       <head>
-        <meta charset="utf-8" />
-        
+        <meta charset="utf-8" />  
       </head>
       <body id="body" style="height: 100vh;" class="body-3">
           <div id="main">
@@ -16,10 +15,10 @@
                 <div class="div-block-4">
                   <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                   <div class="div-block-43">
-                    <div class="name_profile_pic"><img id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+                    <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                       <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                         <div class="dropdown-toggle-2-copy w-dropdown-toggle">
-                          <div id="name" class="text-block-18">John Wick</div>
+                          <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                           <div class="text-block-20">Student</div>
                         </div>
                         <nav class="navigation-dropdown-2 w-dropdown-list">
@@ -54,10 +53,10 @@
                 </div>
               </div>
             </div>
-          <div style="width: Auto;" class="div-block-80">
-            <h1 class="heading-14">Pay for your classes</h1>
-            <p class="paragraph-11">Pay here using either PayPal, PayPal Credit, or a Debit/Credit card. Your payment will be sent to the tutor, 12 hours after the class ends. Information pertaining to the purchase will be sent through email. If you are not satisfied with your class, you may apply for a refund request.<br></p>
-            <div id="paypal-button-container"></div>
+          <div class="div-block-80">
+              <h1 style="text-align: center" class="heading-14">Pay for your classes</h1>
+              <p class="paragraph-11">Pay here using either PayPal, PayPal Credit, or a Debit/Credit card. Your payment will be sent to the tutor, 12 hours after the class ends. Information pertaining to the purchase will be sent through email. If you are not satisfied with your class, you may apply for a refund request.<br></p>
+              <div style="margin-left: 20%; margin-right: 20%" ref="paypal"></div>
           </div>
         </div>
      </body>
@@ -65,8 +64,16 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import getCSRF from '../utils/getCSRF'
 
 export default {
+  data(){
+    return {
+      session:[],
+      render404: true
+    }
+  },
   head() {
     return {
       title: 'Pay',
@@ -75,9 +82,85 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+
       ],
     }
   },
+  async fetch(){
+    const url = '/api/sessions/'+this.$route.params.id+'/'
+    const data = await fetch(url)
+    .then((res) => {
+      if (res.status === 500) {
+          this.$router.push('/payments')
+      }
+      return res.json()
+    })
+    await this.fetchUser()
+    if(data.student_pk !== this.user.studentPk || data.student_paid === true || data.accepted === false){
+        this.$router.push('/payments')
+    }
+    this.session = data
+  },
+  mounted() {
+    const script = document.createElement("script");
+    script.src =
+      "https://www.paypal.com/sdk/js?client-id=AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ";
+    script.addEventListener("load", this.setLoaded);
+    document.body.appendChild(script);
+  },
+  computed: {
+    ...mapGetters({ user: 'getUser'}),
+  },
+  methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
+    setLoaded() {
+      window.paypal
+        .Buttons({
+          style: {
+            color:'blue',
+            shape:'pill',
+            label:'pay',
+            height: 40,
+          },
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  description: "Pay for your TutorPal Session",
+                  amount: {
+                    currency_code: "USD",
+                    value: this.session.price,
+                  }
+                }
+              ]
+            });
+          },
+          onApprove: async (data, actions) => {
+            const order = await actions.order.capture();
+            console.log(order);
+            const url = '/api/sessions/' +this.$route.params.id+'/'
+            const csrfToken = await getCSRF()
+            await fetch(url, {
+              method: 'PATCH',
+              headers: {
+                'X-CSRFToken': csrfToken.success,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  "student_paid": true,
+              }),
+            })
+            this.$router.push('/payments')
+          },
+          onError: err => {
+            console.log(err);
+            alert("Sorry, we had an error with processing the payment. Please try again")
+          }
+        })
+        .render(this.$refs.paypal);
+    }
+  }
 }
 
 </script>

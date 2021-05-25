@@ -27,7 +27,7 @@
                     </div>
                     <label for="date-time" class="col-2 col-form-label">Subject(specify the topic)</label>
                     <div class="col-10">
-                      <input id="duration" class="form-control" required>
+                      <input v-model="subjects" id="duration" class="form-control" required>
                     </div>
                   </div> 
                   <textarea v-model="description" style="height:250px; margin-top: 25px; margin-bottom: 15px;" class="form-control" id="classdescription" placeholder="Describe what you want to learn, cover, or what you need help with." rows="3" required></textarea>
@@ -112,22 +112,6 @@
           </div>  
           <!-- if already taken class -->
           <div class="div-block-56">
-            <div class="div-block-73">
-              <h1 style="font-size: 18px;" class="heading-11">Post a review</h1>
-              <div class="div-block-74">
-                <form class="from-group">
-                  <select style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option selected value="5">5 Stars</option>
-                  </select>
-                  <textarea style="height:250px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
-                  <button class="btn btn-primary" name="review">Post Review</button>
-                </form>
-              </div>
-            </div>
             <h1 class="heading-11">Reviews</h1>
                 <!-- <div v-for="review in reviews.results" :key="review.id" id="posts">
                   <div class="review_bundle">
@@ -156,11 +140,12 @@ export default {
       clicked1:false,
       url: '',
       data: [],
-      reviews: [],
       date_startTime: '',
       duration: '',
       description: '',
       free: false,
+      subjects:'',
+      reviews: []
     } 
   },
   async fetch() {
@@ -169,10 +154,6 @@ export default {
       res.json()
     )
     await this.fetchUser()
-    this.url = '/api/tutors/'+this.$route.params.id+'/reviews/'
-    this.reviews = await fetch(this.url).then(res =>
-      res.json()
-    )
   },
   async created(){
     await this.fetchSessions('pendingOnTutor')
@@ -234,7 +215,8 @@ export default {
       endTime = str(endTime)
       endTime = endTime.substring(0,5)
       const sessionData = {
-          "tutor": this.$route.params.id,
+          "student_pk": this.user.studentPk,
+          "tutor": parseInt(this.$route.params.id),
           "date": sessionDate,
           "time_start": startTime,
           "time_end": endTime,
@@ -243,7 +225,7 @@ export default {
           "free": this.free,
           "description": this.description,
           "call_url": "",
-          "subjects": "mothematica",
+          "subjects": this.subjects,
           "accepted": false,
           "rejected": false,
           "started": false,
@@ -259,6 +241,7 @@ export default {
           "student_emailed": false,
           "parent_emailed": false
       }
+      console.log(sessionData)
       const csrfToken = await getCSRF()
       this.addSession([sessionData , 'pendingOnTutor'])
       await fetch('/api/sessions/', {

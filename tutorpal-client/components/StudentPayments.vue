@@ -102,10 +102,10 @@ import convertTime from '../utils/convertTime'
 export default {
   async fetch() {
     await this.fetchSessions('upcoming')
-    await this.fetchUser()
   },
   async created (){
     await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchUser()
   },
   data(){
     return {clicked:false} 
