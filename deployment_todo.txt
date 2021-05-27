@@ -2,6 +2,5 @@
 - Remove Django Debug Toolbar stuff
 - Add in proper email stuff
 - Make sure images go to S3 Bucket
-- Make sure django checks for only JWT
-- Fix access token lifetime
 - Add in proper paypal tokens
+- Make sure django and nuxt are in prod settings
