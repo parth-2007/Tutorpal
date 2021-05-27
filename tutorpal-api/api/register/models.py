@@ -187,21 +187,10 @@ class Tutor(models.Model):
     num_reviews = models.IntegerField(default=0)
     free_tutoring_given = models.DurationField(default=timedelta(hours=0))
 
-    # @property
-    # def free_tutoring_given(self):
-    #     pass
-
-    # @property
-    # def num_reviews(self):
-    #     pass
-
-    # @property
-    # def average_reviews(self):
-    #     pass
-
-    # @property
-    # def num_classes(self):
-    #     pass
+    @property
+    def rank(self):
+        rank = self.average_reviews * 4 + self.num_reviews * 2 + self.num_classes
+        return rank
 
     @staticmethod
     def has_read_permission(request):

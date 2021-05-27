@@ -11,6 +11,7 @@ from .serializers import (ReviewSerializer, StudentOwnerSerializer,
                           TutorViewingSerializer, UserOwnerSerializer,
                           UserViewingSerializer)
 from rest_framework.decorators import action
+from django.db.models import F, FloatField, ExpressionWrapper
 
 
 class UserViewSet(viewsets.GenericViewSet,
@@ -79,7 +80,7 @@ class TutorViewSet(viewsets.GenericViewSet,
     permission_classes = [DRYPermissions]
 
     filter_backends = (filters.OrderingFilter,)
-    ordering = ('-average_reviews', '-num_reviews', '-num_classes')
+    ordering = ('-ranking')
 
     # @method_decorator(cache_page(60*15))  # may want to edit this
     def dispatch(self, request, *args, **kwargs):
@@ -89,6 +90,11 @@ class TutorViewSet(viewsets.GenericViewSet,
         #     print("sql query: ", query.get("sql"))
         print('# of Queries: {}'.format(len(connection.queries)))
         return response
+
+    def get_queryset(self):
+        ranking = ExpressionWrapper(4 * F('average_reviews') + 2 * F('num_reviews') +
+                                    F('num_classes'), output_field=FloatField())
+        return Tutor.objects.select_related('user').annotate(ranking=ranking).order_by('ranking')
 
     def get_object(self):
         if self.action in ["retrieve", "update", "partial_update"]:
@@ -124,31 +130,9 @@ class TutorViewSet(viewsets.GenericViewSet,
         serializer_class = self.get_serializer(tutor_query, many=True)
         return Response(serializer_class.data)
 
-    def rank(self, scope):
-        rankings = {}
-        for tutor in scope:
-            conversions = {"High School": 1, "Bachelors Degree": 2,
-                           "Masters Degree": 3, "Ph.D.": 4}
-            education = conversions.get(tutor.education)
-            if tutor.average_reviews < 1:
-                average = 2.5
-            else:
-                average = tutor.average_reviews
-            if tutor.num_classes < 1:
-                num_classes = 1
-            else:
-                num_classes = tutor.num_classes
-            rankings[tutor] = (average * 0.75) * \
-                (education * 0.25) * (num_classes * 0.75)
-            rankings = {k: v for k, v in sorted(
-                rankings.items(), key=lambda item: item[1], reverse=True)}
-        return rankings
-
     @action(detail=False)
     def trending(self, request):
-        tutor_query = Tutor.objects.order_by(
-            'num_classes', 'average_reviews', 'num_reviews').select_related('user')
-        print(tutor_query)
+        tutor_query = self.get_queryset()
         page = self.paginate_queryset(tutor_query)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
