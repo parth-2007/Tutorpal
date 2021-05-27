@@ -12,6 +12,7 @@ const state = () => ({
   finishedSessions: { unfetched: true },
   canceledSessions: { unfetched: true },
   startedSessions: { unfetched: true },
+  pastClasses: { unfetched: true },
 })
 
 const getters = {
@@ -22,6 +23,7 @@ const getters = {
   getFinishedSessions: (state) => state.finishedSessions,
   getCanceledSessions: (state) => state.canceledSessions,
   getStartedSessions: (state) => state.startedSessions,
+  getPastClasses: (state) => state.pastClasses,
 }
 
 const actions = {
