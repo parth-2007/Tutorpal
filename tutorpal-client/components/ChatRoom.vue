@@ -44,8 +44,8 @@
           </div>
         </div>
         <!-- display chat messages -->
-        <div class="chatroomcontainer" style="overflow-y: auto;display: flex; flex-direction: column-reverse; width: 100%;);">
-            <div style="height: 55vh;" class="wrapper" id="chat-items">
+        <div class="chatroomcontainer" style="overflow-y: auto; display: flex; flex-direction: column-reverse; width: 100%;);">
+            <div style="height: 55vh; overflow-y: auto;" class="wrapper" id="chat-items">
               <p class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
               <!-- eslint-disable-next-line -->
               <div v-for="chatMsg in chatMsgs">
@@ -226,6 +226,8 @@ export default {
   margin-left: 10%;
   padding-top: 20px;
   padding-bottom: 20px;
+  padding-left: 25px;
+  padding-right: 25px;
   background-color: #fff;
   border-radius: 8px;  
 }
