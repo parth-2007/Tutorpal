@@ -45,9 +45,8 @@
         </div>
         <!-- display chat messages -->
         <div class="chatroomcontainer" style="width: 100%;">
-            <div style="height: 55vh; overflow-y: auto;" class="wrapper" id="chat-items">
+            <div ref="container" style="height: 55vh; overflow-y: auto;" class="wrapper" id="container">
               <p class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
-              <div style="display: flex; flex-direction: column-reverse;">
                   <!-- eslint-disable-next-line -->
                   <div v-for="chatMsg in chatMsgs">
                     <div :key="chatMsg ? chatMsg.id : null">
@@ -79,7 +78,6 @@
                   </div>
               </div>
             </div>
-        </div>
         <input
           v-model="message"
           style="
@@ -147,11 +145,13 @@ export default {
   computed: {
     ...mapGetters({ user: 'getUser' }),
   },
+  
   async created() {
     // console.log('otherUser: ', this.otherUser)
     const response = await loggedInFetch(
       'api/rooms/' + this.$route.params.id + '/messages/'
     )
+    this.scroll()
     if (response.error) {
       if (
         response.error === 'client error' ||
@@ -218,6 +218,10 @@ export default {
     addChatMsg(msg) {
       this.chatMsgs.push(msg)
     },
+    scroll(){
+      const container = this.$refs.container;
+      container.scrollTop = container.scrollHeight;
+    }
   },
 }
 </script>
