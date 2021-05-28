@@ -44,37 +44,39 @@
           </div>
         </div>
         <!-- display chat messages -->
-        <div class="chatroomcontainer" style="overflow-y: auto; display: flex; flex-direction: column-reverse; width: 100%;);">
+        <div class="chatroomcontainer" style="width: 100%;">
             <div style="height: 55vh; overflow-y: auto;" class="wrapper" id="chat-items">
               <p class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
-              <!-- eslint-disable-next-line -->
-              <div v-for="chatMsg in chatMsgs">
-                <div :key="chatMsg ? chatMsg.id : null">
-                  <div
-                    :class="
-                      (chatMsg ? chatMsg.author : null) == user.id
-                        ? 'chat_item_here'
-                        : 'chat_item_away'
-                    "
-                  >
-                    <div
-                      :class="
-                        (chatMsg ? chatMsg.author : null) == user.id
-                          ? 'div-block-61-copy'
-                          : 'div-block-61'
-                      "
-                    >
-                      <p class="paragraph-6">
-                        {{ chatMsg ? chatMsg.message : '' }}
-                      </p>
-                      <div class="text-block-40">
-                        <em class="italic-text">{{
-                          chatMsg ? chatMsg.timestamp : ''
-                        }}</em>
+              <div style="display: flex; flex-direction: column-reverse;">
+                  <!-- eslint-disable-next-line -->
+                  <div v-for="chatMsg in chatMsgs">
+                    <div :key="chatMsg ? chatMsg.id : null">
+                      <div
+                        :class="
+                          (chatMsg ? chatMsg.author : null) == user.id
+                            ? 'chat_item_here'
+                            : 'chat_item_away'
+                        "
+                      >
+                        <div
+                          :class="
+                            (chatMsg ? chatMsg.author : null) == user.id
+                              ? 'div-block-61-copy'
+                              : 'div-block-61'
+                          "
+                        >
+                          <p class="paragraph-6">
+                            {{ chatMsg ? chatMsg.message : '' }}
+                          </p>
+                          <div class="text-block-40">
+                            <em class="italic-text">{{
+                              chatMsg ? chatMsg.timestamp : ''
+                            }}</em>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
               </div>
             </div>
         </div>
