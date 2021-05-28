@@ -17,8 +17,9 @@
           >Go back to contacts</router-link
         >
         <div style="border-radius: 8px" class="div-block-80">
-          <div class="div-block-71">
+          <div style="" class="div-block-71">
             <img
+              style="margin-left: auto"
               :src="
                 otherUser
                   ? otherUser.profilePic
@@ -34,7 +35,7 @@
               sizes="74px"
               alt="Student profile picture"
             />
-            <div class="div-block-72">
+            <div style="margin-right: auto" class="div-block-72">
               <h1 class="heading-3" id="fullname" style="font-size: 30px">
                 {{ otherUser ? otherUser.firstName : '' }}
                 {{ otherUser ? otherUser.lastName : '' }}
@@ -43,36 +44,39 @@
           </div>
         </div>
         <!-- display chat messages -->
-        <div class="wrapper" id="chat-items">
-          <!-- eslint-disable-next-line -->
-          <div v-for="chatMsg in chatMsgs">
-            <div :key="chatMsg ? chatMsg.id : null">
-              <div
-                :class="
-                  (chatMsg ? chatMsg.author : null) == user.id
-                    ? 'chat_item_here'
-                    : 'chat_item_away'
-                "
-              >
-                <div
-                  :class="
-                    (chatMsg ? chatMsg.author : null) == user.id
-                      ? 'div-block-61-copy'
-                      : 'div-block-61'
-                  "
-                >
-                  <p class="paragraph-6">
-                    {{ chatMsg ? chatMsg.message : '' }}
-                  </p>
-                  <div class="text-block-40">
-                    <em class="italic-text">{{
-                      chatMsg ? chatMsg.timestamp : ''
-                    }}</em>
+        <div class="chatroomcontainer" style="overflow-y: auto;display: flex; flex-direction: column-reverse; width: 100%;);">
+            <div style="height: 55vh;" class="wrapper" id="chat-items">
+              <p class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
+              <!-- eslint-disable-next-line -->
+              <div v-for="chatMsg in chatMsgs">
+                <div :key="chatMsg ? chatMsg.id : null">
+                  <div
+                    :class="
+                      (chatMsg ? chatMsg.author : null) == user.id
+                        ? 'chat_item_here'
+                        : 'chat_item_away'
+                    "
+                  >
+                    <div
+                      :class="
+                        (chatMsg ? chatMsg.author : null) == user.id
+                          ? 'div-block-61-copy'
+                          : 'div-block-61'
+                      "
+                    >
+                      <p class="paragraph-6">
+                        {{ chatMsg ? chatMsg.message : '' }}
+                      </p>
+                      <div class="text-block-40">
+                        <em class="italic-text">{{
+                          chatMsg ? chatMsg.timestamp : ''
+                        }}</em>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
         </div>
         <input
           v-model="message"
@@ -217,16 +221,12 @@ export default {
 </script>
 <style scoped>
 .wrapper {
-  overflow-y: auto;
   margin-top: 20px;
   margin-right: 10%;
   margin-left: 10%;
   padding-top: 20px;
   padding-bottom: 20px;
   background-color: #fff;
-  padding-left: 20%;
-  padding-right: 20%;
-  border-radius: 8px;
-  height: 58%;
+  border-radius: 8px;  
 }
 </style>

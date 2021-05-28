@@ -683,7 +683,7 @@ export default {
         }
 
         if (data && data.success === 'Successfully created tutor') {
-          this.$router.push('/login')
+          this.$router.push('/checkemail')
         }
       }
     },

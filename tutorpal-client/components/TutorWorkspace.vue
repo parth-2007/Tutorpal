@@ -66,13 +66,15 @@
           </div>
         </div>
       </div>
-        <iframe style="width: 100vw; height: 87vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
+        <button @click="endclass()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
+        <iframe style="width: 100vw; height: 78.5vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
       </body>
     </html>
   </client-only>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data() {
@@ -90,7 +92,6 @@ export default {
       }
       return res.json()
     })
-    console.log(this.session)
     await this.fetchUser()
   },
   head() {
@@ -128,6 +129,25 @@ export default {
   methods: {
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async endclass(id){
+      console.log(id)
+      const url = '/api/sessions/'+this.$route.params.id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "finished": true,
+        }),
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      this.$router.push('/')
     },
     ...mapActions(['fetchUser']),
   },

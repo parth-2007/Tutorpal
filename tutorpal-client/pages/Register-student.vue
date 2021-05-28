@@ -376,7 +376,7 @@ export default {
         }
 
         if (data && data.success === 'Successfully created student') {
-          this.$router.push('/login')
+          this.$router.push('/checkemail')
         }
       }
     },

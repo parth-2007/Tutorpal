@@ -188,30 +188,30 @@
           </div>
         </div>
         <div style="padding-top: 40px; padding-bottom: 40px; height: 100%" class="body-3">
-            <div v-for="completed in session.results" :key="completed.id" style="background-color: #fff; margin-right: 10%; margin-left: 10%;" class="i">
-              <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-                <div class="text-block-26">Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}</div>
-                <p class="paragraph-2"><strong class="bold-text">Schedule
-                  <br></strong>First Session: {{completed.date}}<br>Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}<br>Duration: {{completed.duration}}<br>Amount: ${{completed.price}}<br>Trial: {{completed.free}}</p>
-              </div>
-              <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description:<strong class="bold-text"> </strong>{{completed.description}}</p>
-              <div class="text-block-27">This tutor has not accepted your request yet.</div>
-              <div class="div-block-73">
-              <h1 style="font-size: 18px;" class="heading-11">Post a review</h1>
-              <div class="div-block-74">
-                <form class="from-group">
-                  <select style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option selected value="5">5 Stars</option>
-                  </select>
-                  <textarea style="height:250px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
-                  <button class="btn btn-primary" name="review">Post Review</button>
-                </form>
-              </div>
+          <div v-for="completed in session.results" :key="completed.id" style="background-color: #fff; margin-right: 10%; margin-left: 10%;" class="i">
+            <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
+              <div class="text-block-26">Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}</div>
+              <p class="paragraph-2"><strong class="bold-text">Schedule
+                <br></strong>First Session: {{completed.date}}<br>Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}<br>Duration: {{completed.duration}}<br>Amount: ${{completed.price}}<br>Trial: {{completed.free}}</p>
             </div>
+            <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{completed.description}}</p>
+            <div class="text-block-27-copy">Congratulation! You have finished this class, let us know how it went in your reviews.</div>
+            {{error}}
+              <div style="font-family: Poppins; margin-left: 10px; margin-top: 15px;">
+                <div style="margin-left: 0px;" class="columns-2-copy w-row">
+                  <div class="w-col w-col-6">
+                      <select v-model="stars" style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option selected value="5">5 Stars</option>
+                      </select>
+                      <textarea v-model="description" style="height:150px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
+                      <button @click="createReview(completed.id, completed.tutor.id)" class="btn btn-primary" name="review">Post Review</button>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
       </body>
@@ -220,6 +220,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import getCSRF from '../utils/getCSRF'
 import StudentChangeInfoForm from './StudentChangeInfoForm.vue'
 
 export default {
@@ -228,15 +229,16 @@ export default {
     return { 
       clicked: false,
       clicked1:false, 
-      session: []
+      session: [],
+      stars: parseInt(),
+      description: '',
+      error: ''
     }
   },
   async fetch(){
     this.session = await fetch("/api/sessions/finished_sessions/").then(res =>
       res.json()
     )
-    console.log(this.session)
-
   },
   head() {
     return {
@@ -290,6 +292,37 @@ export default {
     },
     logoutclick(){
       this.clicked1 = !this.clicked1
+    },
+    async createReview(sessionid, tutorid){
+      const csrfToken = await getCSRF()
+      const reviewdata = {
+        "student": this.user,
+        "stars": parseInt(this.stars),
+        "description":this.description,
+        "tutor": tutorid,
+        "id":parseInt(sessionid)
+      }
+      console.log(reviewdata)
+      await fetch("/api/reviews/", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({reviewdata}),
+      })
+      .then((res) => {
+        if (res.status === 403) {
+            this.error = "You have already posted a review for this tutor."
+        }
+        else if(res.status === 500) {
+            this.error = "Please check your inputs and make sure they are not empty."
+        }
+        else if(res.status === 404) {
+            this.error = "We are dealing with some issues, please try again at a later time. Sorry for the inconvenience."
+        }
+        return res.json()
+      })
     },
     // async handleFormSubmit() {
     //   console.log('hi')
