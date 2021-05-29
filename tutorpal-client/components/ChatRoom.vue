@@ -44,11 +44,12 @@
           </div>
         </div>
         <!-- display chat messages -->
-        <div class="chatroomcontainer" style="width: 100%;">
-            <div style="height: 55vh; overflow-y: auto;" class="wrapper">
+        <div style="width: 100%;">
+            <div style="height: 55vh;" class="wrapper">
               <p class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
+                <div style="overflow-y: auto;" ref="container">
                   <!-- eslint-disable-next-line -->
-                  <div ref="container" v-for="chatMsg in chatMsgs">
+                  <div v-for="chatMsg in chatMsgs">
                     <div :key="chatMsg ? chatMsg.id : null">
                       <div
                         :class="
@@ -76,6 +77,7 @@
                       </div>
                     </div>
                   </div>
+                </div>
               </div>
             </div>
         <input
