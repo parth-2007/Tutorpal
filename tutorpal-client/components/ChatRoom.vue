@@ -45,10 +45,10 @@
         </div>
         <!-- display chat messages -->
         <div class="chatroomcontainer" style="width: 100%;">
-            <div ref="container" style="height: 55vh; overflow-y: auto;" class="wrapper">
+            <div style="height: 55vh; overflow-y: auto;" class="wrapper">
               <p class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
                   <!-- eslint-disable-next-line -->
-                  <div id="container" v-for="chatMsg in chatMsgs">
+                  <div ref="container" v-for="chatMsg in chatMsgs">
                     <div :key="chatMsg ? chatMsg.id : null">
                       <div
                         :class="
