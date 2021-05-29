@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import register_student, register_tutor, reset_password, password_reset, activate_account, ensure_csrf, login, logout, update_student, update_tutor
-from .viewsets import UserViewSet, TutorViewSet, StudentViewSet, ReviewViewSet
+from .viewsets import UserViewSet, TutorViewSet, StudentViewSet, ReviewViewSet, TutorReviews
 # from .jwt import MyTokenObtainPairView, refresh_token_from_cookie, cookie_logout
 
 router = DefaultRouter()
@@ -12,6 +12,7 @@ router.register(r'reviews', ReviewViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('tutors/<pk>/reviews/', TutorReviews.as_view({'get': 'get'})),
     path('auth/ensure-csrf/', ensure_csrf),
     path('auth/login/', login),
     path('auth/logout/', logout),

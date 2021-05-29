@@ -92,8 +92,8 @@ class TutorViewSet(viewsets.GenericViewSet,
         return response
 
     def get_queryset(self):
-        ranking = ExpressionWrapper(4 * F('average_reviews') + 2 * F('num_reviews') +
-                                    F('num_classes'), output_field=FloatField())
+        ranking = ExpressionWrapper(4 * F('average_reviews') + 2 * F(
+            'num_reviews') + F('num_classes'), output_field=FloatField())
         return Tutor.objects.select_related('user').annotate(ranking=ranking).order_by('ranking')
 
     def get_object(self):
@@ -141,14 +141,18 @@ class TutorViewSet(viewsets.GenericViewSet,
         serializer = TutorViewingSerializer(tutor_query, many=True)
         return Response(serializer.data)
 
-    @action(detail=True)
-    def reviews(self, request, pk):
+
+class TutorReviews(viewsets.GenericViewSet):
+    queryset = Review.objects.all()
+
+    def get(self, request, pk):
+        if pk == 'me' and self.request.user.has_tutor:
+            pk = self.request.user.tutor_pk
         review_query = Review.objects.filter(tutor=pk)
         page = self.paginate_queryset(review_query)
         if page is not None:
             serializer_class = ReviewSerializer(page, many=True)
             return self.get_paginated_response(serializer_class.data)
-
         serializer_class = ReviewSerializer(review_query, many=True)
         return Response(serializer_class.data)
 
