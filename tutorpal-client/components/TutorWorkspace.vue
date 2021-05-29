@@ -66,8 +66,9 @@
           </div>
         </div>
       </div>
-        <button @click="endclass()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
-        <iframe style="width: 100vw; height: 78.5vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
+      <h1 style="font-family: Poppins; margin-left: 20px; margin-top: 10px; margin-bottom: 10px; font-size: 30px"><strong>Countdown Timer: {{dateToString(timerDisplay)}}</strong></h1>
+      <button @click="endclass()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
+      <iframe style="width: 100vw; height: 78.5vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
       </body>
     </html>
   </client-only>
@@ -75,12 +76,15 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
+import dateToString from '../utils/dateToString'
 
 export default {
   data() {
     return {
       clicked: false,
       session: [],
+      timerCount: "",
+      timerDisplay: ""
     }
   },
   async created(){
@@ -92,6 +96,10 @@ export default {
       }
       return res.json()
     })
+    const hms = this.session.duration
+    const a = hms.split(':');
+    const seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+    this.timerCount = seconds
     await this.fetchUser()
   },
   head() {
@@ -118,6 +126,27 @@ export default {
       ],
     }
   },
+  watch: {
+    timerCount: {
+      handler(value) {
+          if (value > 0) {
+              setTimeout(() => {
+                  this.timerCount--;
+              }, 1000);
+          }
+          else if(value===300){
+            alert("There are five minutes remaining in this class. We suggest wrapping things up!")
+          }
+          else if(value===0){
+            alert("This meeting's time is up, please end the meeting shortly.")
+          }
+          const t = new Date(1970, 0, 1); // Epoch
+          t.setSeconds(value)
+          this.timerDisplay = t.toString()
+      },
+      immediate: true // This ensures the watcher is triggered upon creation
+    }
+  },
   computed: {
     logout() {
         return {
@@ -127,6 +156,7 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   methods: {
+    dateToString,
     logoutclick(){
       this.clicked = !this.clicked
     },
