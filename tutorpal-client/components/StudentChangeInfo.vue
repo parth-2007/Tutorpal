@@ -196,18 +196,17 @@
             </div>
             <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{completed.description}}</p>
             <div class="text-block-27-copy">Congratulation! You have finished this class, let us know how it went in your reviews.</div>
-            {{error}}
               <div style="font-family: Poppins; margin-left: 10px; margin-top: 15px;">
                 <div style="margin-left: 0px;" class="columns-2-copy w-row">
                   <div class="w-col w-col-6">
-                      <select v-model="stars" style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
+                      <select ref="select" v-model="stars" style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
                         <option value="1">1 Star</option>
                         <option value="2">2 Stars</option>
                         <option value="3">3 Stars</option>
                         <option value="4">4 Stars</option>
                         <option selected value="5">5 Stars</option>
                       </select>
-                      <textarea v-model="description" style="height:150px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
+                      <textarea ref="description" v-model="description" style="height:150px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
                       <button @click="createReview(completed.id, completed.tutor.id)" class="btn btn-primary" name="review">Post Review</button>
                   </div>
                 </div>
@@ -232,7 +231,6 @@ export default {
       session: [],
       stars: parseInt(),
       description: '',
-      error: ''
     }
   },
   async fetch(){
@@ -295,33 +293,37 @@ export default {
     },
     async createReview(sessionid, tutorid){
       const csrfToken = await getCSRF()
-      const reviewdata = {
-        "student": this.user,
-        "stars": parseInt(this.stars),
-        "description":this.description,
-        "tutor": tutorid,
-        "id":parseInt(sessionid)
-      }
-      console.log(reviewdata)
+      console.log(sessionid)
       await fetch("/api/reviews/", {
           method: 'POST',
           headers: {
             'X-CSRFToken': csrfToken.success,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({reviewdata}),
+          body: JSON.stringify({
+            "student": this.user.studentPk,
+            "stars": parseInt(this.stars),
+            "description":this.description,
+            "tutor": tutorid,
+          }),
       })
       .then((res) => {
+        let error=null
         if (res.status === 403) {
-            this.error = "You have already posted a review for this tutor."
+            error = "You have already posted a review for this tutor."
         }
         else if(res.status === 500) {
-            this.error = "Please check your inputs and make sure they are not empty."
+            error = "Please check your inputs and make sure they are not empty."
         }
         else if(res.status === 404) {
-            this.error = "We are dealing with some issues, please try again at a later time. Sorry for the inconvenience."
+            error = "We are dealing with some issues, please try again at a later time. Sorry for the inconvenience."
         }
-        return res.json()
+        if(error===null){
+          location.reload()
+        }
+        alert(error)
+        this.description=""
+        this.stars=undefined
       })
     },
     // async handleFormSubmit() {

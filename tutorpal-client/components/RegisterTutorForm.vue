@@ -350,7 +350,7 @@
                   ><p>
                     <img
                       style="border-radius: 400px"
-                      src="../static/register/images/user-2.png"
+                      :src="src"
                       id="output"
                       width="250"
                       height="250"
@@ -537,6 +537,7 @@ export default {
         availability: '',
         global: '',
       },
+      src:"http://localhost:5000/_nuxt/static/register/images/user-2.png"
     }
   },
   head() {
@@ -552,6 +553,7 @@ export default {
   methods: {
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
+      this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
     },
     checkErrors() {

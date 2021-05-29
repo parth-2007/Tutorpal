@@ -186,7 +186,7 @@
               ><p>
                 <img
                   style="border-radius: 400px"
-                  src="../static/tutor/images/user-2.png"
+                  :src="src"
                   id="output"
                   width="250"
                   height="250"
@@ -285,6 +285,7 @@ export default {
       tutor: {},
       user: {},
       profilePic: null,
+      src:"",
       errors: {
         email: '',
         firstName: '',
@@ -316,6 +317,7 @@ export default {
     await this.fetchUser()
     this.tutor = { ...this.getTutor() }
     this.user = { ...this.getUser() }
+    this.src = this.user.profilePic
   },
   methods: {
     ...mapActions(['fetchTutor', 'fetchUser', 'updateTutor', 'updateUser']),
@@ -323,7 +325,7 @@ export default {
 
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
-      image.src = URL.createObjectURL(image)
+      this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
     },
     checkErrors() {

@@ -39,6 +39,7 @@
         <div style="position: relative; text-align: center" class="col">
           <p>
             <input
+              @change="handleFile"
               type="file"
               accept="image/*"
               name="image"
@@ -50,7 +51,7 @@
           <label for="file" style="cursor: pointer"
             ><p>
               <img
-                :src="user.profilePic"
+                :src="src"
                 style="border-radius: 400px"
                 id="output"
                 width="100"
@@ -126,6 +127,7 @@ export default {
         parentEmail: '',
         birthDate: '',
       },
+      src:""
     }
   },
   async created() {
@@ -133,6 +135,7 @@ export default {
     await this.fetchUser()
     this.student = { ...this.getStudent() }
     this.user = { ...this.getUser() }
+    this.src = this.user.profilePic
   },
   methods: {
     ...mapActions(['fetchStudent', 'fetchUser', 'updateStudent', 'updateUser']),
@@ -140,7 +143,7 @@ export default {
 
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
-      image.src = URL.createObjectURL(image)
+      this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
     },
     checkErrors() {
