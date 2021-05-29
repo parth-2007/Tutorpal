@@ -10,4 +10,5 @@ function convertTime(time){
   return time.join('');
 
 }
+
 export default convertTime

@@ -56,7 +56,7 @@
             </div>
             <p style="padding-top: 20px;" class="paragraph-8"><strong>Degree: </strong>{{data.education}}<br><strong>Birthdate: </strong>{{data.birth_date}}<br><strong>Qualification Description: </strong>{{data.qualifications}}<br>
             <strong>Education: </strong>{{data.major}} at {{data.school}}, GPA of {{data.gpa}}<br><strong>Professional Experience: </strong>{{data.prof_exp}} years<br><strong>Teaching Experience: </strong>{{data.teach_exp}} years<br>
-            <strong>Average Review:</strong> {{data.average_reviews}} Stars<br v-if="reviews.results=[]">No reviews yet<br><strong>TutorPal Hours Taught: </strong>{{data.free_tutoring_given}}<br><strong>Occupation: </strong>{{data.occupation}}<br><strong>Gender: </strong>{{data.gender}}<br>
+            <strong>Average Review:</strong> {{data.average_reviews}} Stars<br><strong>Occupation: </strong>{{data.occupation}}<br><strong>Gender: </strong>{{data.gender}}<br>
             <strong>Price: </strong>${{data.rates}} hourly <br><strong>Bio: </strong>{{data.bio}}<br><strong>Course Description: </strong>{{data.what_you_teach}}<br><strong>Availability: </strong>{{data.availability}}
             <br><a style="font-family: Poppins;" :href="data.linkedIn" target="_blank"><strong>Linkedin Account:</strong></a>
             </p>
@@ -64,15 +64,15 @@
           <!-- if already taken class -->
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-                <div v-for="review in reviews.results" :key="review.id" id="posts">
-                  <div class="review_bundle">
-                    <div class="review_item"><img :src="review.student.user.profile_pic" loading="lazy" width="40" sizes="40px" alt="" class="image-12">
-                      <div class="text-block-33">{{review.student.user.first_name}} {{review.student.user.last_name}}</div>
-                      <div class="text-block-34">Review: <strong>{{review.stars}} Stars</strong></div>
-                    </div>
-                    <p class="paragraph-9">{{review.description}}</p>
+              <div v-for="review in reviews.results" :key="review.id" id="posts">
+                <div class="review_bundle">
+                  <div class="review_item"><img :src="review.student.user.profile_pic" loading="lazy" width="40" sizes="40px" alt="" class="image-12">
+                    <div class="text-block-33">{{review.student.user.first_name}} {{review.student.user.last_name}}</div>
+                    <div class="text-block-34">Review: <strong>{{review.stars}} Stars</strong></div>
                   </div>
+                  <p class="paragraph-9">{{review.description}}</p>
                 </div>
+              </div>
           </div>
         </div>
       </body>
@@ -86,10 +86,6 @@ export default {
     this.data = await fetch(this.url).then(res =>
       res.json()
     )
-    this.url = '/api/tutors/'+this.$route.params.id+'/reviews/'
-    this.reviews = await fetch(this.url).then(res =>
-      res.json()
-    )
   },
   data(){
     return {
@@ -97,6 +93,12 @@ export default {
       data: [],
       reviews: [],
     } 
+  },
+  async created(){
+    const url = '/api/tutors/'+this.$route.params.id+'/reviews'
+    this.reviews = await fetch(url).then(res =>
+      res.json()
+    )
   },
   head() {
     return {

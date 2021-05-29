@@ -127,6 +127,7 @@
                   ability.
                 </p>
               </div>
+              <div style="margin-top: 15px; margin-bottom: 15px; font-family: Poppins, sans-serif; color: #32cd32;">{{message}}</div>
               <div v-for="session in requests" :key="session.id" id="inbox" class="loop">
                   <div class="item">
                     <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profilePic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
@@ -178,7 +179,10 @@ import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
-    return {clicked:false} 
+    return {
+      clicked:false,
+      message: ""
+    } 
   },
   async fetch() {
     await this.fetchSessions('startedSessions')
@@ -224,7 +228,7 @@ export default {
             "accepted": true,
           }),
       })
-      location.reload();
+      this.message = "You have successfully accepted this class!"
     },
     async deny(id){
       const url = '/api/sessions/'+id+'/'
@@ -239,7 +243,7 @@ export default {
             "accepted": false,
           }),
       })
-      location.reload();
+      this.message = "You have successfully denied this class."
     },
     async startclass(id){
       console.log(id)

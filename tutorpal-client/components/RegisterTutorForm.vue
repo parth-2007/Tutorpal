@@ -152,10 +152,10 @@
             aria-label="Default select example"
           >
             <option selected>Select</option>
-            <option value="1">Prefer Not To Say</option>
-            <option value="2">Male</option>
-            <option value="3">Female</option>
-            <option value="4">Other</option>
+            <option value="Prefer Not To Say">Prefer Not To Say</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gender }}</p>
         </div>
