@@ -4,21 +4,18 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from dry_rest_permissions.generics import DRYPermissions
-# from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from register.pagination import MyCursorPagination
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
 from datetime import datetime
 import random
-# from django_filters.rest_framework import DjangoFilterBackend
+from chat.models import Room
 
 
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     permission_classes = [DRYPermissions]
-    pagination_class = MyCursorPagination
 
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
@@ -174,3 +171,13 @@ class SessionViewSet(viewsets.ModelViewSet):
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
                         duration=duration, call_url=result_str)  # 2 query
+
+    def perform_update(self, serializer):
+        if self.request.data.get('accepted', None):
+            tutor = self.request.user.tutor
+            tutor_pk = self.request.user.tutor_pk
+            student = self.session.student
+            student_pk = self.session.student_pk
+            Room.objects.get_or_create(
+                tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
+        return super().perform_update(serializer)
