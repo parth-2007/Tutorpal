@@ -104,9 +104,9 @@ class SessionViewSet(viewsets.ModelViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_student_payment(self, request):
         student_queryset = Session.objects.filter(
-            student__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('tutor', 'tutor__user')
+            student__user=request.user, student_paid=False, canceled=False, accepted=True, free=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
-            tutor__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('student', 'student__user')
+            tutor__user=request.user, student_paid=False, canceled=False, accepted=True, free=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
