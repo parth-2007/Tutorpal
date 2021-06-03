@@ -4,8 +4,7 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
-    <head>
-    </head>
+      <head> </head>
       <body v-if="user.unauthenticated" style="height: 130vh" class="body">
         <div style="height: 170vh" class="section">
           <div
@@ -99,7 +98,10 @@
                       </p>
                     </div>
                   </div>
-                  <div style="margin-top: 0px; margin-bottom: 0px; float: left" class="row">
+                  <div
+                    style="margin-top: 0px; margin-bottom: 0px; float: left"
+                    class="row"
+                  >
                     <div
                       style="position: relative; text-align: center"
                       class="col"
@@ -182,7 +184,8 @@
                       required
                     />
                     <label class="form-check-label" for="toc">
-                      I agree with the <router-link to="/toc">Terms of Service</router-link>
+                      I agree with the
+                      <router-link to="/toc">Terms of Service</router-link>
                     </label>
                     <p style="color: hsla(0, 100%, 64%, 1)">
                       {{ errors.toc }}
@@ -204,9 +207,7 @@
           </div>
         </div>
       </body>
-      <div v-else>
-        404 Not Found
-      </div>
+      <div v-else>404 Not Found</div>
     </html>
   </client-only>
 </template>
@@ -238,18 +239,35 @@ export default {
         birthDate: '',
         global: '',
       },
-      src:"http://localhost:5000/_nuxt/static/register/images/user-2.png"
+      src: 'http://localhost:5000/_nuxt/static/register/images/user-2.png',
     }
   },
   head() {
     return {
       title: 'Student Registration',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/register/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/register/css/2tor4u-2-0.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/register/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/register/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/register/css/2tor4u-2-0.webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/register/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href:
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
+        },
+      ],
     }
   },
   computed: mapGetters({ user: 'getUser' }),
@@ -266,16 +284,13 @@ export default {
     },
     checkErrors() {
       let isError = false
-      // eslint-disable-next-line
       Object.keys(this.errors).forEach((key) => {
         if (this.errors[key].length > 0) {
           isError = true
         }
-        // eslint-disable-next-line
-        console.log(key, isError)
+        // console.log(key, isError)
       })
-      // eslint-disable-next-line
-      console.log(isError)
+      // console.log(isError)
       return isError
     },
     validateData() {
@@ -326,14 +341,11 @@ export default {
       }
     },
     async handleSubmit() {
-      // eslint-disable-next-line
-      console.log('handling submit...')
+      // console.log('handling submit...')
       this.validateData()
-      // eslint-disable-next-line
-      console.log('validating data...')
+      // console.log('validating data...')
       if (!this.checkErrors()) {
-        // eslint-disable-next-line
-        console.log('sending data...')
+        // console.log('sending data...')
         const formData = new FormData()
         const user = {
           email: this.email,
@@ -342,8 +354,7 @@ export default {
           last_name: this.lastName,
         }
         if (this.profilePic) {
-          // eslint-disable-next-line
-          console.log(this.profilePic[0])
+          // console.log(this.profilePic[0])
           formData.append('profile_pic', this.profilePic[0])
         }
         formData.append('user', JSON.stringify(user))
@@ -383,5 +394,4 @@ export default {
     },
   },
 }
-
 </script>
