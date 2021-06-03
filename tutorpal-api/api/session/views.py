@@ -17,13 +17,13 @@ class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     permission_classes = [DRYPermissions]
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        for query in connection.queries:
-            print("\n", query.get("sql"))
-        print('\n# of Queries: {}\n'.format(len(connection.queries)))
-        return response
+    # def dispatch(self, request, *args, **kwargs):
+    #     response = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for query in connection.queries:
+    #         print("\n", query.get("sql"))
+    #     print('\n# of Queries: {}\n'.format(len(connection.queries)))
+    #     return response
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "update", "partial_update"]:
@@ -168,9 +168,11 @@ class SessionViewSet(viewsets.ModelViewSet):
         duration = end - start
         letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
         result_str = ''.join(random.choice(letters) for i in range(30))
+        if data.get('free', False):
+            price = 0
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
-                        duration=duration, call_url=result_str)  # 2 query
+                        duration=duration, call_url=result_str, price=price)  # 2 query
 
     def perform_update(self, serializer):
         if self.request.data.get('accepted', None):
@@ -180,4 +182,6 @@ class SessionViewSet(viewsets.ModelViewSet):
             student_pk = self.session.student_pk
             Room.objects.get_or_create(
                 tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
-        return super().perform_update(serializer)
+            if self.session.free:
+                return serializer.save(student_paid=True, tutor_paid=True)
+        return serializer.save()
