@@ -66,8 +66,14 @@
           </div>
         </div>
       </div>
-      <h1 style="font-family: Poppins; margin-left: 20px; margin-top: 10px; margin-bottom: 10px; font-size: 30px"><strong>Countdown Timer: {{dateToString(timerDisplay)}}</strong></h1>
-      <button @click="endclass()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
+      <div class="columns-2-copy w-row">
+        <div class="column w-col w-col-6">
+            <button @click="endclass()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
+        </div>
+        <div style="float: right; margin-right: 20px">
+            <h1 style="font-family: Poppins; margin-left: 20px; margin-top: 10px; margin-bottom: 10px; font-size:24px; color: black"><strong>Countdown Timer: {{dateToString(timerDisplay)}}</strong></h1>
+        </div>
+      </div>
       <iframe style="width: 100vw; height: 78.5vh;" allow="camera;microphone" :src="'https://meet.jit.si/TutorpalSession'+session.call_url"></iframe>
       </body>
     </html>

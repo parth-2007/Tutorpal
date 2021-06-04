@@ -14,10 +14,10 @@
             <form>
               <div style="margin-top: 20px;" class="mb-3">
                 <label for="feedback" class="form-label">Feedback</label>
-                <textarea style="height:250px;" class="form-control" id="feedback" rows="3"></textarea>
-                <button class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+                <textarea v-model="text" style="height:250px;" class="form-control" id="feedback" rows="3"></textarea>
               </div>
             </form>
+            <button @click="feedbackhandler()" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
           </div>
         </div>
       </body>
@@ -25,6 +25,8 @@
   </client-only>
 </template>
 <script>
+import getCSRF from '../utils/getCSRF'
+
 export default {
   head() {
     return {
@@ -47,5 +49,26 @@ export default {
       ]
     }
   },
+  data(){
+    return{
+      text: ""
+    }
+  },
+  methods: {
+    async feedbackhandler(){
+      const feedbackform = {
+        "text": this.text,
+      }
+      const csrfToken = await getCSRF()
+      await fetch('/api/feedback/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken.success,
+        },
+        body: JSON.stringify(feedbackform),
+      })
+    }
+  }
 }
 </script>

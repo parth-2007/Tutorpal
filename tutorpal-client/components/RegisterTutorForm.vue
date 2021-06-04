@@ -537,7 +537,7 @@ export default {
         availability: '',
         global: '',
       },
-      src:"http://localhost:5000/_nuxt/static/register/images/user-2.png"
+      src:"http://localhost:5000/_nuxt/static/student/images/user-2.png"
     }
   },
   head() {

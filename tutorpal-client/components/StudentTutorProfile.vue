@@ -10,8 +10,8 @@
       </head>
       <body>
         <div id="main">
-          <div :style="updatemodal" class="div-block-22-copy">
-            <div style="border-radius: 8px; padding-bottom: 20px; height: 600px;" class="div-block-23">
+          <div style="z-index: 25" :style="updatemodal" class="div-block-22-copy">
+            <div style="border-radius: 8px; padding-bottom: 20px; height: 85vh; overflow-y:auto;" class="div-block-23">
               <div class="div-block-24"><img @click="updatemodalvalue()" src="../static/student/images/close-1.png" width="20" alt=""></div>
               <h1 style="margin-top: 15px" class="heading-10">Schedule a Class</h1>
               <div class="div-block-25">
@@ -27,7 +27,7 @@
                     </div>
                     <label for="date-time" class="col-2 col-form-label">Subject(specify the topic)</label>
                     <div class="col-10">
-                      <input v-model="subjects" id="duration" class="form-control" required>
+                      <input v-model="subjects" class="form-control" required>
                     </div>
                   </div> 
                   <textarea v-model="description" style="height:250px; margin-top: 25px; margin-bottom: 15px;" class="form-control" id="classdescription" placeholder="Describe what you want to learn, cover, or what you need help with." rows="3" required></textarea>
@@ -48,7 +48,7 @@
                 <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">
                   <div class="name_profile_pic"><img :src="user.profilePic" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
-                    <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
+                    <div>
                         <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                         <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
                         <div class="text-block-20">Student</div>
@@ -108,7 +108,7 @@
             <br><a style="font-family: Poppins;" :href="data.linkedIn" target="_blank"><strong>Linkedin Account:</strong></a>
             </p>
               <a @click="updatemodalvalue()" class="button-9 w-button">Schedule a class</a>
-              <router-link style="margin-left: 20px;" :to="'/chat/'+$route.params.id" class="button-9 w-buttion">Send a message</router-link>
+              <a style="margin-left: 20px;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
           </div>  
           <!-- if already taken class -->
           <div class="div-block-56">
@@ -156,7 +156,7 @@ export default {
     await this.fetchUser()
   },
   async created(){
-    const url = '/api/tutors/'+this.$route.params.id+'/reviews'
+    const url = '/api/tutors/'+this.$route.params.id+'/reviews/'
     this.reviews = await fetch(url).then(res =>
       res.json()
     )
@@ -198,6 +198,25 @@ export default {
     },
     trial(){
       this.free = !this.free
+    },
+    async createroom(){
+      const studentid = this.user.studentPk.toString()
+      console.log(studentid)
+      const room = {
+        "tutor_pk": parseInt(this.$route.params.id),
+        "student_pk": this.user.studentPk,
+      }
+      const csrfToken = await getCSRF()
+      await fetch('/api/rooms/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken.success,
+        },
+        body: JSON.stringify(room),
+      })
+      // const url = '/chat/'+ this.$route.params.id+"/"
+      // this.$router.push(url)
     },
     async addSessionHandler() {
       const sessionDate = (this.date_startTime || '').substring(0, 10)

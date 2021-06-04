@@ -75,7 +75,7 @@
               <router-link
                 to="/password_reset"
                 aria-current="page"
-                style="font-family: Poppins; padding-top: 20px"
+                style="font-family: Poppins; margin-top: 20px; width: auto;"
                 class="link-block w-inline-block w--current"
                 >Forgot Password?</router-link
               >
