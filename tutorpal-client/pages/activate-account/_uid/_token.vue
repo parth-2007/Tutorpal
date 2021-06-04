@@ -17,12 +17,12 @@ export default {
         if (res.status === 200) {
           this.$router.push('/login')
         } else if (res.status >= 400 && res.status < 600) {
-          this.error = 'server error'
+          this.error = 'There has been an error'
         }
         return res.json()
       })
       .catch(() => {
-        return { error: 'client error' }
+        this.error = 'There has been an error'
       })
   },
 }

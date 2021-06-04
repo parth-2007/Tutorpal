@@ -48,7 +48,7 @@
                 {{ errors.email }} {{ errors.password }} {{ errors.global }}
               </p>
               <div style="margin-top: 20px" class="div-block-22">
-                <form style="font-family: Poppins">
+                <form style="font-family: Poppins" @submit="submitHandler">
                   <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
                     <input
@@ -67,15 +67,15 @@
                       v-model="password"
                     />
                   </div>
+                  <button class="button-11 w-button" @click="submitHandler">
+                    Continue
+                  </button>
                 </form>
-                <button class="button-11 w-button" @click="submitHandler()">
-                  Continue
-                </button>
               </div>
               <router-link
-                to="/password_reset"
+                to="/reset-password"
                 aria-current="page"
-                style="font-family: Poppins; margin-top: 20px; width: auto;"
+                style="font-family: Poppins; margin-top: 20px; width: auto"
                 class="link-block w-inline-block w--current"
                 >Forgot Password?</router-link
               >
@@ -91,9 +91,7 @@
           </div>
         </div>
       </body>
-      <div v-else>
-        404 Not Found
-      </div>
+      <div v-else>404 Not Found</div>
     </html>
   </client-only>
 </template>
@@ -163,7 +161,8 @@ export default {
         this.errors.password = ''
       }
     },
-    async submitHandler() {
+    async submitHandler(e) {
+      e.preventDefault()
       this.validateData()
       if (!this.errors.email && !this.errors.password) {
         const formData = new FormData()

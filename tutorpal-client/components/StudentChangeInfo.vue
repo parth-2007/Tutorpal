@@ -87,13 +87,18 @@
                     data-delay="0"
                     class="dropdown-3 w-dropdown"
                   >
-                  <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
-                    <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
-                    <div class="text-block-20">Student</div>
-                  </div>
-                  <nav :style="logout" class="navigation-dropdown-2">
-                    <div class="dropdown-pointer-2">
-                      <div class="dropdown-wrapper-2">
+                    <div
+                      @click="logoutclick()"
+                      class="dropdown-toggle-2-copy w-dropdown-toggle"
+                    >
+                      <div id="name" class="text-block-18">
+                        {{ user.firstName }} {{ user.lastName }}
+                      </div>
+                      <div class="text-block-20">Student</div>
+                    </div>
+                    <nav :style="logout" class="navigation-dropdown-2">
+                      <div class="dropdown-pointer-2">
+                        <div class="dropdown-wrapper-2">
                           <router-link
                             to="/logout"
                             id="logout"
@@ -187,32 +192,99 @@
             </div>
           </div>
         </div>
-        <div style="padding-top: 40px; padding-bottom: 40px; height: 100%" class="body-3">
-          <h1 style="text-align: center; margin-bottom: 15px; font-size: 36px" class="heading-14">Completed Classes</h1>
-          <div v-for="completed in session.results" :key="completed.id" style="background-color: #fff; margin-right: 10%; margin-left: 10%;" class="i">
-            <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
-              <div class="text-block-26">Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}</div>
-              <p class="paragraph-2"><strong class="bold-text">Schedule
-                <br></strong>First Session: {{completed.date}}<br>Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}<br>Duration: {{completed.duration}}<br>Amount: ${{completed.price}}<br>Trial: {{completed.free}}</p>
+        <div
+          style="padding-top: 40px; padding-bottom: 40px; height: 100%"
+          class="body-3"
+        >
+          <h1
+            style="text-align: center; margin-bottom: 15px; font-size: 36px"
+            class="heading-14"
+          >
+            Completed Classes
+          </h1>
+          <div
+            v-for="completed in session.results"
+            :key="completed.id"
+            style="background-color: #fff; margin-right: 10%; margin-left: 10%"
+            class="i"
+          >
+            <div class="div-block-51-copy">
+              <img
+                src="student/images/user-2.png"
+                loading="lazy"
+                width="75"
+                height="75"
+                srcset="
+                  student/images/user-2.png 500w,
+                  student/images/user-2.png 512w
+                "
+                sizes="100px"
+                alt=""
+                class="image-15"
+              />
+              <div class="text-block-26">
+                Tutor: {{ completed.tutor.user.first_name }}
+                {{ completed.tutor.user.last_name }}
+              </div>
+              <p class="paragraph-2">
+                <strong class="bold-text">Schedule <br /></strong>First Session:
+                {{ completed.date }}<br />Tutor:
+                {{ completed.tutor.user.first_name }}
+                {{ completed.tutor.user.last_name }}<br />Duration:
+                {{ completed.duration }}<br />Amount: ${{ completed.price
+                }}<br />Trial: {{ completed.free }}
+              </p>
             </div>
-            <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{completed.description}}</p>
-            <div class="text-block-27-copy">Congratulation! You have finished this class, let us know how it went in your reviews.</div>
-              <div style="font-family: Poppins; margin-left: 10px; margin-top: 15px;">
-                <div style="margin-left: 0px;" class="columns-2-copy w-row">
-                  <div class="w-col w-col-6">
-                      <select ref="select" v-model="stars" style="margin-top: 0px;" class="form-select" id="stars" aria-label="Default select example" required>
-                        <option value="1">1 Star</option>
-                        <option value="2">2 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option selected value="5">5 Stars</option>
-                      </select>
-                      <textarea ref="description" v-model="description" style="height:150px; margin-top: 20px; margin-bottom: 20px;" class="form-control" id="description" placeholder="Enter Description" rows="3" required></textarea>
-                      <button @click="createReview(completed.id, completed.tutor.id)" class="btn btn-primary" name="review">Post Review</button>
-                  </div>
+            <p class="paragraph-2-copy">
+              <strong class="bold-text">Student Information</strong
+              ><br />Description: <strong class="bold-text"> </strong
+              >{{ completed.description }}
+            </p>
+            <div class="text-block-27-copy">
+              Congratulation! You have finished this class, let us know how it
+              went in your reviews.
+            </div>
+            <div
+              style="font-family: Poppins; margin-left: 10px; margin-top: 15px"
+            >
+              <div style="margin-left: 0px" class="columns-2-copy w-row">
+                <div class="w-col w-col-6">
+                  <select
+                    ref="select"
+                    v-model="stars"
+                    style="margin-top: 0px"
+                    class="form-select"
+                    id="stars"
+                    aria-label="Default select example"
+                    required
+                  >
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option selected value="5">5 Stars</option>
+                  </select>
+                  <textarea
+                    ref="description"
+                    v-model="description"
+                    style="height: 150px; margin-top: 20px; margin-bottom: 20px"
+                    class="form-control"
+                    id="description"
+                    placeholder="Enter Description"
+                    rows="3"
+                    required
+                  ></textarea>
+                  <button
+                    @click="createReview(completed.id, completed.tutor.id)"
+                    class="btn btn-primary"
+                    name="review"
+                  >
+                    Post Review
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </body>
     </html>
@@ -226,16 +298,16 @@ import StudentChangeInfoForm from './StudentChangeInfoForm.vue'
 export default {
   components: { StudentChangeInfoForm },
   data() {
-    return { 
+    return {
       clicked: false,
-      clicked1:false, 
+      clicked1: false,
       session: [],
       stars: parseInt(),
       description: '',
     }
   },
-  async fetch(){
-    this.session = await fetch("/api/sessions/finished_sessions/").then(res =>
+  async fetch() {
+    this.session = await fetch('/api/sessions/finished_sessions/').then((res) =>
       res.json()
     )
   },
@@ -275,9 +347,9 @@ export default {
       }
     },
     logout() {
-        return {
-          display: this.clicked1 ? "flex" : "none"
-        }
+      return {
+        display: this.clicked1 ? 'flex' : 'none',
+      }
     },
     ...mapGetters({ student: 'getStudent' }),
     ...mapGetters({ user: 'getUser' }),
@@ -289,42 +361,40 @@ export default {
     updateModalValue() {
       this.clicked = !this.clicked
     },
-    logoutclick(){
+    logoutclick() {
       this.clicked1 = !this.clicked1
     },
-    async createReview(sessionid, tutorid){
-      const csrfToken = await getCSRF()
+    async createReview(sessionid, tutorid) {
+      const csrfToken = await (await getCSRF()).success
       console.log(sessionid)
-      await fetch("/api/reviews/", {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "student": this.user.studentPk,
-            "stars": parseInt(this.stars),
-            "description":this.description,
-            "tutor": tutorid,
-          }),
-      })
-      .then((res) => {
-        let error=null
+      await fetch('/api/reviews/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          student: this.user.studentPk,
+          stars: parseInt(this.stars),
+          description: this.description,
+          tutor: tutorid,
+        }),
+      }).then((res) => {
+        let error = null
         if (res.status === 403) {
-            error = "You have already posted a review for this tutor."
+          error = 'You have already posted a review for this tutor.'
+        } else if (res.status === 500) {
+          error = 'Please check your inputs and make sure they are not empty.'
+        } else if (res.status === 404) {
+          error =
+            'We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
         }
-        else if(res.status === 500) {
-            error = "Please check your inputs and make sure they are not empty."
-        }
-        else if(res.status === 404) {
-            error = "We are dealing with some issues, please try again at a later time. Sorry for the inconvenience."
-        }
-        if(error===null){
+        if (error === null) {
           location.reload()
         }
         alert(error)
-        this.description=""
-        this.stars=undefined
+        this.description = ''
+        this.stars = undefined
       })
     },
     // async handleFormSubmit() {

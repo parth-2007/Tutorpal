@@ -142,7 +142,6 @@ def activate_account(request, uidb64, token):
 def reset_password(request):
     try:
         email = request.data.get("email")
-        print(email)
         user = User.objects.get(email=email)
     except (AttributeError, User.DoesNotExist):
         return Response(data="Invalid email", status=status.HTTP_400_BAD_REQUEST)
