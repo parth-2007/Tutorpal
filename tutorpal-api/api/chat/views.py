@@ -4,6 +4,7 @@ from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
 from dry_rest_permissions.generics import DRYPermissions
 from rest_framework.decorators import action
+from register.models import Tutor, Student
 
 # Create your views here.
 
@@ -51,6 +52,16 @@ class RoomViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = CreateRoomSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        Room.objects.get_or_create(**request.data)
+        req_data = request.data
+        req_data['tutor'] = Tutor.objects.get(pk=req_data.get('tutor_pk'))
+        req_data['student'] = Student.objects.get(
+            pk=req_data.get('student_pk'))
+        room, created = Room.objects.get_or_create(**req_data)
+        # if request.user.has_tutor:
+        #     data = TutorRoomSerializer(room).data
+        # elif request.user.has_student:
+        #     data = StudentRoomSerializer(room).data
+        # else:
+        data = RoomSerializer(room).data
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK, headers=headers)
