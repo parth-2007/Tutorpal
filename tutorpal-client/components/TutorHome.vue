@@ -238,7 +238,7 @@ export default {
             "rejected": true,
           }),
       })
-      // location.reload();
+      location.reload();
     },
     async startclass(id){
       console.log(id)
