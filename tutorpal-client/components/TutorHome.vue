@@ -235,7 +235,7 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            "accepted": false,
+            "rejected": true,
           }),
       })
       location.reload();

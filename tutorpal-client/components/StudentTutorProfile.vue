@@ -108,7 +108,7 @@
             <br><a style="font-family: Poppins;" :href="data.linkedIn" target="_blank"><strong>Linkedin Account:</strong></a>
             </p>
               <a @click="updatemodalvalue()" class="button-9 w-button">Schedule a class</a>
-              <a style="margin-left: 20px;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
+              <a style="margin-left: 20px; cursor: pointer;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
           </div>  
           <!-- if already taken class -->
           <div class="div-block-56">
@@ -204,7 +204,9 @@ export default {
       console.log(studentid)
       const room = {
         "tutor_pk": parseInt(this.$route.params.id),
-        "student_pk": this.user.studentPk,
+        "student_pk": parseInt(this.user.studentPk),
+        "tutor": parseInt(this.$route.params.id),
+        "student": parseInt(this.user.studentPk),
       }
       const csrfToken = await getCSRF()
       await fetch('/api/rooms/', {
@@ -215,8 +217,8 @@ export default {
         },
         body: JSON.stringify(room),
       })
-      // const url = '/chat/'+ this.$route.params.id+"/"
-      // this.$router.push(url)
+      const url = '/chat/'+ this.$route.params.id+"/"
+      this.$router.push(url)
     },
     async addSessionHandler() {
       const sessionDate = (this.date_startTime || '').substring(0, 10)
