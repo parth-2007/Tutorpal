@@ -16,7 +16,7 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = [
-            'tutor', 'student', 'tutor_pk', 'student_pk'
+            'tutor', 'student', 'tutor_pk', 'student_pk', 'id'
         ]
 
 
