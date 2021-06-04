@@ -12,6 +12,14 @@ class RoomSerializer(serializers.ModelSerializer):
         ]
 
 
+class CreateRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = [
+            'tutor', 'student', 'tutor_pk', 'student_pk'
+        ]
+
+
 class StudentRoomSerializer(serializers.ModelSerializer):
     tutor = TutorViewingSerializer(read_only=True)
 

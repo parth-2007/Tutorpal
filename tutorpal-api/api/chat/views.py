@@ -1,5 +1,6 @@
+from django.http import request
 from .models import Room, Message
-from .serializers import StudentRoomSerializer, TutorRoomSerializer, MessageSerializer, RoomSerializer
+from .serializers import StudentRoomSerializer, TutorRoomSerializer, MessageSerializer, RoomSerializer, CreateRoomSerializer
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
 from dry_rest_permissions.generics import DRYPermissions
@@ -24,6 +25,8 @@ class RoomViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_403_FORBIDDEN, data="You are not authenticated")
 
     def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateRoomSerializer
         if self.request.user.has_student:
             return StudentRoomSerializer
         elif self.request.user.has_tutor:
@@ -48,6 +51,6 @@ class RoomViewSet(viewsets.ModelViewSet):
         serializer_class = MessageSerializer(queryset, many=True)
         return Response(serializer_class.data)
 
-    def perform_create(self, serializer):
-        serializer.save(tutor_pk=int(self.request.data.get(
-            'tutor')), student_pk=self.request.user.student_pk)
+    # def perform_create(self, serializer):
+    #     serializer.save(tutor_pk=int(self.request.data.get(
+    #         'tutor')), student_pk=self.request.user.student_pk)
