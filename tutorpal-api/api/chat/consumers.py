@@ -12,7 +12,7 @@ import pytz
 
 class ChatConsumer(AsyncConsumer):
     async def websocket_connect(self, event):
-        print('Connected', event)
+        # print('Connected', event)
         # get my user obj and room obj
         room_id = self.scope['url_route']['kwargs']['room_id']
         room_obj = await self.get_room(room_id)
@@ -28,7 +28,7 @@ class ChatConsumer(AsyncConsumer):
         )
 
     async def websocket_receive(self, event):
-        print('Received', event)
+        # print('Received', event)
         message = event.get("text", None)
         # front_dict = json.loads(front_text)
         # message = front_dict.get("message")
@@ -77,7 +77,7 @@ class ChatConsumer(AsyncConsumer):
         })
 
     async def websocket_disconnect(self, event):
-        print('Disconnected', event)
+        # print('Disconnected', event)
         try:
             for group in self.groups:
                 await self.channel_layer.group_discard(group, self.channel_name)
@@ -104,4 +104,4 @@ class ChatConsumer(AsyncConsumer):
     def check_user_in_room(self, user: User, room: Room) -> bool:
         if room.student.user == user or room.tutor.user == user:
             return True
-        False
+        return False

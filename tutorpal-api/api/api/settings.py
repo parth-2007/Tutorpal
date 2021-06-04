@@ -35,6 +35,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org']
 
 # Application definition
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -133,7 +135,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': os.environ.get('DATABASE_NAME', ''),
+        'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
 
         'USER': os.environ.get('DATABASE_USER', ''),
 
