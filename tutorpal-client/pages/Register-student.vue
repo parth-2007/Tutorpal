@@ -4,7 +4,8 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
-      <head> </head>
+    <head>
+    </head>
       <body v-if="user.unauthenticated" style="height: 130vh" class="body">
         <div style="height: 170vh" class="section">
           <div
@@ -98,10 +99,7 @@
                       </p>
                     </div>
                   </div>
-                  <div
-                    style="margin-top: 0px; margin-bottom: 0px; float: left"
-                    class="row"
-                  >
+                  <div style="margin-top: 0px; margin-bottom: 0px; float: left" class="row">
                     <div
                       style="position: relative; text-align: center"
                       class="col"
@@ -184,8 +182,7 @@
                       required
                     />
                     <label class="form-check-label" for="toc">
-                      I agree with the
-                      <router-link to="/toc">Terms of Service</router-link>
+                      I agree with the <router-link to="/toc">Terms of Service</router-link>
                     </label>
                     <p style="color: hsla(0, 100%, 64%, 1)">
                       {{ errors.toc }}
@@ -207,7 +204,9 @@
           </div>
         </div>
       </body>
-      <div v-else>404 Not Found</div>
+      <div v-else>
+        404 Not Found
+      </div>
     </html>
   </client-only>
 </template>
@@ -215,7 +214,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data() {
     return {
@@ -239,39 +237,18 @@ export default {
         birthDate: '',
         global: '',
       },
-<<<<<<< HEAD
       src:"http://localhost:5000/_nuxt/static/student/images/user-2.png"
-=======
-      src: 'http://localhost:5000/_nuxt/static/register/images/user-2.png',
->>>>>>> a193ef7ccaa0c7dbac745590b96b6f651eefe7be
     }
   },
   head() {
     return {
       title: 'Student Registration',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/register/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/register/css/2tor4u-2-0.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/register/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/register/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:'/register/css/2tor4u-2-0.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href:"/register/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
+      ]
     }
   },
   computed: mapGetters({ user: 'getUser' }),
@@ -288,13 +265,16 @@ export default {
     },
     checkErrors() {
       let isError = false
+      // eslint-disable-next-line
       Object.keys(this.errors).forEach((key) => {
         if (this.errors[key].length > 0) {
           isError = true
         }
-        // console.log(key, isError)
+        // eslint-disable-next-line
+        console.log(key, isError)
       })
-      // console.log(isError)
+      // eslint-disable-next-line
+      console.log(isError)
       return isError
     },
     validateData() {
@@ -303,26 +283,22 @@ export default {
       } else {
         this.errors.global = ''
       }
-
       const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
       } else {
         this.errors.email = ''
       }
-
       if (!emailValidation.test(this.parentEmail)) {
         this.errors.parentEmail = 'Invalid email'
       } else {
         this.errors.parentEmail = ''
       }
-
       if (!this.password.length > 0) {
         this.errors.password = 'Invalid password'
       } else {
         this.errors.password = ''
       }
-
       if (this.password !== this.confirmPassword) {
         this.errors.password = 'Password and Confirm Password must be the same'
         this.errors.confimPassword =
@@ -331,13 +307,11 @@ export default {
         this.errors.password = ''
         this.errors.confirmPassword = ''
       }
-
       if (this.firstName.length < 1) {
         this.errors.firstName = 'Invalid name'
       } else {
         this.errors.firstName = ''
       }
-
       if (this.lastName.length < 1) {
         this.errors.lastName = 'Invalid name'
       } else {
@@ -345,11 +319,14 @@ export default {
       }
     },
     async handleSubmit() {
-      // console.log('handling submit...')
+      // eslint-disable-next-line
+      console.log('handling submit...')
       this.validateData()
-      // console.log('validating data...')
+      // eslint-disable-next-line
+      console.log('validating data...')
       if (!this.checkErrors()) {
-        // console.log('sending data...')
+        // eslint-disable-next-line
+        console.log('sending data...')
         const formData = new FormData()
         const user = {
           email: this.email,
@@ -358,7 +335,8 @@ export default {
           last_name: this.lastName,
         }
         if (this.profilePic) {
-          // console.log(this.profilePic[0])
+          // eslint-disable-next-line
+          console.log(this.profilePic[0])
           formData.append('profile_pic', this.profilePic[0])
         }
         formData.append('user', JSON.stringify(user))
@@ -369,7 +347,6 @@ export default {
             birth_date: this.birthDate,
           })
         )
-
         const data = await fetch('api/auth/register-student/', {
           method: 'POST',
           headers: {
@@ -386,11 +363,9 @@ export default {
           .catch(() => {
             this.errors.global = 'Something went wrong :('
           })
-
         if (data && data.error) {
           this.errors.global = data.error
         }
-
         if (data && data.success === 'Successfully created student') {
           this.$router.push('/checkemail')
         }
