@@ -5,3 +5,4 @@
 venv/
 env/
 **/profile_pics/**
+.env

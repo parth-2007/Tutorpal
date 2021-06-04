@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-# from corsheaders.defaults import default_headers
-# from datetime import timedelta
-# from rest_framework.settings import api_settings
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,12 +23,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$e3o-ktfsfbnk_5z5(gboe+8&@8o%*5y5)5!p^!i3ocb*f@$rr'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY', '$e3o-ktfsfbnk_5z5(gboe+8&@8o%*5y5)5!p^!i3ocb*f@$rr')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org']
 
 
 # Application definition
@@ -48,20 +50,15 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'dry_rest_permissions',
-    # 'rest_framework_simplejwt.token_blacklist',
-    # 'django_filters',
-    'drf_yasg',  # remove in prod
-    'debug_toolbar',  # remove in prod
+
 ]
+if DEBUG:
+    INSTALLED_APPS += ['drf_yasg', 'debug_toolbar']
 
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-
-# REST_PROXY = {
-#     'HOST': 'http://127.0.0.1:8000/loginproxyurl'
-# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,43 +75,16 @@ MIDDLEWARE = [
 
 SITE_DOMAIN = 'http://127.0.0.1:8000'
 
-CORS_ORIGIN_ALLOW_ALL = False  # change later
+CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://localhost:5500',
     'http://127.0.0.1:5500',
+    'http://tutorpal.org'
 ]
 
-# SIMPLE_JWT = {
-#     # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-#     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-#     'ROTATE_REFRESH_TOKENS': False,
-#     'BLACKLIST_AFTER_ROTATION': False,
-#     'UPDATE_LAST_LOGIN': True,
-
-#     'ALGORITHM': 'HS256',
-#     'SIGNING_KEY': SECRET_KEY,
-#     'VERIFYING_KEY': None,
-#     'AUDIENCE': None,
-#     'ISSUER': None,
-
-#     'AUTH_HEADER_TYPES': ('Bearer',),
-#     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-#     'USER_ID_FIELD': 'id',
-#     'USER_ID_CLAIM': 'user_id',
-
-#     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-#     'TOKEN_TYPE_CLAIM': 'token_type',
-
-#     'JTI_CLAIM': 'jti',
-
-#     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-#     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-# }
 
 ROOT_URLCONF = 'api.urls'
 
@@ -163,18 +133,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'tutorpal',
-        # 'NAME': 'posgtres',
+        'NAME': os.environ.get('DATABASE_NAME', ''),
 
-        'USER': '',
-        # 'USER': 'postgres',
+        'USER': os.environ.get('DATABASE_USER', ''),
 
-        'PASSWORD': '',
-        # 'PASSWORD': 'postgres',
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
 
-        'HOST': 'localhost',
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
 
-        'PORT': 5432,
+        'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
 
     }
 
@@ -247,7 +214,5 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
