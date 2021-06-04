@@ -15,8 +15,8 @@
             <form id="form-wrapper">
               <div style="margin-top: 20px;" class="mb-3">
                 <label for="bugs" class="form-label">Bugs</label>
-                <textarea style="height:250px;" class="form-control" id="bugs" rows="3"></textarea>
-                <select style="margin-top: 15px;" class="form-select" id="buglevel" aria-label="Default select example">
+                <textarea v-model="description" style="height:250px;" class="form-control" id="bugs" rows="3"></textarea>
+                <select v-model="level" style="margin-top: 15px;" class="form-select" id="buglevel" aria-label="Default select example">
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -28,9 +28,9 @@
                   <option value="9">9</option>
                   <option value="10">10</option>
                 </select>
-                <button class="btn btn-primary" style="margin-top: 10px;">Submit</button>
               </div>
             </form>
+            <button @click="bugformhandler()" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
           </div>
         </div>
       </body>
@@ -38,6 +38,8 @@
   </client-only>
 </template>
 <script>
+import getCSRF from '../utils/getCSRF'
+
 export default {
   head() {
     return {
@@ -60,5 +62,29 @@ export default {
       ]
     }
   },
+  data(){
+    return{
+      level: "",
+      description: ""
+    }
+  },
+  methods: {
+    async bugformhandler(){
+      const bugform = {
+        "bug": this.description,
+        "level": parseInt(this.level)
+      }
+      const csrfToken = await getCSRF()
+      await fetch('/api/bugs/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken.success,
+        },
+        body: JSON.stringify(bugform),
+      })
+    }
+  }
 }
+ 
 </script>

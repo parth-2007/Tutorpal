@@ -127,7 +127,6 @@
                   ability.
                 </p>
               </div>
-              <div style="margin-top: 15px; margin-bottom: 15px; font-family: Poppins, sans-serif; color: #32cd32;">{{message}}</div>
               <div v-for="session in requests" :key="session.id" id="inbox" class="loop">
                   <div class="item">
                     <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profilePic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
@@ -176,13 +175,9 @@
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data(){
-    return {
-      clicked:false,
-      message: ""
-    } 
+    return {clicked:false} 
   },
   async fetch() {
     await this.fetchSessions('startedSessions')
@@ -228,7 +223,7 @@ export default {
             "accepted": true,
           }),
       })
-      this.message = "You have successfully accepted this class!"
+      location.reload();
     },
     async deny(id){
       const url = '/api/sessions/'+id+'/'
@@ -243,7 +238,7 @@ export default {
             "accepted": false,
           }),
       })
-      this.message = "You have successfully denied this class."
+      location.reload();
     },
     async startclass(id){
       console.log(id)
@@ -268,13 +263,5 @@ export default {
       this.clicked = !this.clicked
     }
   },
-  // var from = new Date(2020, 11, 17, 0, 0, 0, 0);
-  // var check = new Date();
-  // if(check.getTime() <= to.getTime() && check.getTime() >= from.getTime()){
-  //   console.log("inside")
-  // }
-  // else{
-  //   console.log("outside")
-  // }
 }
 </script>

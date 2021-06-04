@@ -75,6 +75,7 @@
                         </div>
                       </div>
                     </div>
+                    <div ref="container"/>
                 </div>
               </div>
             </div>
@@ -215,6 +216,10 @@ export default {
       // console.log('sending: ', this.message)
       this.socket.send(this.message)
       this.message = ''
+      const el = this.$refs.container;
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
     },
     addChatMsg(msg) {
       this.chatMsgs.push(msg)
