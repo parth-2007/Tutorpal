@@ -4,29 +4,26 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from dry_rest_permissions.generics import DRYPermissions
-# from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from register.pagination import MyCursorPagination
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
 from datetime import datetime
 import random
-# from django_filters.rest_framework import DjangoFilterBackend
+from chat.models import Room
 
 
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     permission_classes = [DRYPermissions]
-    pagination_class = MyCursorPagination
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        for query in connection.queries:
-            print("\n", query.get("sql"))
-        print('\n# of Queries: {}\n'.format(len(connection.queries)))
-        return response
+    # def dispatch(self, request, *args, **kwargs):
+    #     response = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for query in connection.queries:
+    #         print("\n", query.get("sql"))
+    #     print('\n# of Queries: {}\n'.format(len(connection.queries)))
+    #     return response
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "update", "partial_update"]:
@@ -107,9 +104,9 @@ class SessionViewSet(viewsets.ModelViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_student_payment(self, request):
         student_queryset = Session.objects.filter(
-            student__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('tutor', 'tutor__user')
+            student__user=request.user, student_paid=False, canceled=False, accepted=True, free=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
-            tutor__user=request.user, student_paid=False, canceled=False, accepted=True).select_related('student', 'student__user')
+            tutor__user=request.user, student_paid=False, canceled=False, accepted=True, free=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
@@ -171,6 +168,20 @@ class SessionViewSet(viewsets.ModelViewSet):
         duration = end - start
         letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
         result_str = ''.join(random.choice(letters) for i in range(30))
+        if data.get('free', False):
+            price = 0
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
-                        duration=duration, call_url=result_str)  # 2 query
+                        duration=duration, call_url=result_str, price=price)  # 2 query
+
+    def perform_update(self, serializer):
+        if self.request.data.get('accepted', None):
+            tutor = self.request.user.tutor
+            tutor_pk = self.request.user.tutor_pk
+            student = self.session.student
+            student_pk = self.session.student_pk
+            Room.objects.get_or_create(
+                tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
+            if self.session.free:
+                return serializer.save(student_paid=True, tutor_paid=True)
+        return serializer.save()

@@ -1,6 +1,8 @@
-- Remove docs
-- Remove Django Debug Toolbar stuff
+- Remove docs (checked)
+- Remove Django Debug Toolbar stuff (checked)
 - Add in proper email stuff
 - Make sure images go to S3 Bucket
 - Add in proper paypal tokens
 - Make sure django and nuxt are in prod settings
+https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+python manage.py check --deploy

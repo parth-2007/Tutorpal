@@ -24,13 +24,13 @@ class UserViewSet(viewsets.GenericViewSet,
     permission_classes = [DRYPermissions]
 
     # @method_decorator(cache_page(60*15))  # may want to edit this
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        for query in connection.queries:
-            print("\nsql query: ", query.get("sql"))
-        print('\n# of Queries: {}\n'.format(len(connection.queries)))
-        return response
+    # def dispatch(self, request, *args, **kwargs):
+    #     response = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for query in connection.queries:
+    #         print("\nsql query: ", query.get("sql"))
+    #     print('\n# of Queries: {}\n'.format(len(connection.queries)))
+    #     return response
 
     def get_object(self):
         # print("# get_object() called")
@@ -83,13 +83,13 @@ class TutorViewSet(viewsets.GenericViewSet,
     ordering = ('-ranking')
 
     # @method_decorator(cache_page(60*15))  # may want to edit this
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        # for query in connection.queries:
-        #     print("sql query: ", query.get("sql"))
-        print('# of Queries: {}'.format(len(connection.queries)))
-        return response
+    # def dispatch(self, request, *args, **kwargs):
+    #     response = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for query in connection.queries:
+    #         print("sql query: ", query.get("sql"))
+    #     print('# of Queries: {}'.format(len(connection.queries)))
+    #     return response
 
     def get_queryset(self):
         ranking = ExpressionWrapper(4 * F('average_reviews') + 2 * F(
@@ -166,13 +166,13 @@ class StudentViewSet(viewsets.GenericViewSet,
     permission_classes = [DRYPermissions]
 
     # @method_decorator(cache_page(60*15))  # may want to edit this
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        # for query in connection.queries:
-        #     print("sql query: ", query.get("sql"))
-        print('# of Queries: {}'.format(len(connection.queries)))
-        return response
+    # def dispatch(self, request, *args, **kwargs):
+    #     response = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for query in connection.queries:
+    #         print("sql query: ", query.get("sql"))
+    #     print('# of Queries: {}'.format(len(connection.queries)))
+    #     return response
 
     def get_object(self):
         if self.action in ["retrieve", "update", "partial_update"]:
@@ -205,13 +205,13 @@ class ReviewViewSet(viewsets.GenericViewSet,
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, CanMakeReview]
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        from django.db import connection
-        for query in connection.queries:
-            print("sql query: ", query.get("sql"))
-        print('# of Queries: {}'.format(len(connection.queries)))
-        return response
+    # def dispatch(self, request, *args, **kwargs):
+    #     response = super().dispatch(request, *args, **kwargs)
+    #     from django.db import connection
+    #     for query in connection.queries:
+    #         print("sql query: ", query.get("sql"))
+    #     print('# of Queries: {}'.format(len(connection.queries)))
+    #     return response
 
     def create(self, request):
         description = request.data.get('description')

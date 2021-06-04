@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 # from corsheaders.defaults import default_headers
-from datetime import timedelta
+# from datetime import timedelta
 # from rest_framework.settings import api_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,7 +28,7 @@ SECRET_KEY = '$e3o-ktfsfbnk_5z5(gboe+8&@8o%*5y5)5!p^!i3ocb*f@$rr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']  # remove star, fix this
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
