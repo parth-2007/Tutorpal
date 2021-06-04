@@ -188,6 +188,7 @@
           </div>
         </div>
         <div style="padding-top: 40px; padding-bottom: 40px; height: 100%" class="body-3">
+          <h1 style="text-align: center; margin-bottom: 15px; font-size: 36px" class="heading-14">Completed Classes</h1>
           <div v-for="completed in session.results" :key="completed.id" style="background-color: #fff; margin-right: 10%; margin-left: 10%;" class="i">
             <div class="div-block-51-copy"><img src="student/images/user-2.png" loading="lazy" width="75" height="75" srcset="student/images/user-2.png 500w, student/images/user-2.png 512w" sizes="100px" alt="" class="image-15">
               <div class="text-block-26">Tutor: {{completed.tutor.user.first_name}} {{completed.tutor.user.last_name}}</div>
