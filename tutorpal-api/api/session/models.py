@@ -40,6 +40,7 @@ class Session(models.Model):
     refund_requested = models.BooleanField(default=False)
     refund_available = models.BooleanField(default=False)
     refunded = models.BooleanField(default=False)
+    refund_description = models.TextField(blank=True)
 
     tutor_emailed = models.BooleanField(default=False)
     student_emailed = models.BooleanField(default=False)
