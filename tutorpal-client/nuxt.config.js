@@ -6,7 +6,7 @@ export default {
         'Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic',
         'Poppins:regular',
         'Roboto:regular',
-      ], //Loads Lato font with weights 400 and 700
+      ], // Loads Lato font with weights 400 and 700
     },
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -20,7 +20,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.jpg' }],
   },
   router: {
-    base: '/'
+    base: '/',
   },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
@@ -43,7 +43,7 @@ export default {
     '@nuxtjs/pwa',
     'nuxt-webfontloader',
   ],
-  
+
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {

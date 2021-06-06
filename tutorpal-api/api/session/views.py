@@ -11,6 +11,57 @@ from register.models import Tutor, Student
 from datetime import datetime
 import random
 from chat.models import Room
+from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
+from paypalpayoutssdk.payouts import PayoutsPostRequest
+from paypalhttp import HttpError
+import os
+
+
+def send_payout(email, price, session_id):
+    # Creating Access Token for Sandbox
+    client_id = os.environ.get('PAYPAL_CLIENT_ID')
+    client_secret = os.environ.get('PAYPAL_CLIENT_SECRET')
+
+    # Creating an environment
+    environment = SandboxEnvironment(
+        client_id=client_id, client_secret=client_secret)
+    client = PayPalHttpClient(environment)
+
+    body = {
+        "sender_batch_header": {
+            "recipient_type": "EMAIL",
+            "email_message": "Your TutorPal Payment",
+            "note": "This is your Tutorpal payment",
+                    "sender_batch_id": f"Payout_{session_id}",
+                    "email_subject": "Your TutorPal Payment"
+        },
+        "items": [{
+            "note": "Your Payout!",
+            "amount": {
+                "currency": "USD",
+                "value": f"{price}"
+            },
+            "receiver": f"{email}",
+            "sender_item_id": "Test_txn_1"
+        }]
+    }
+
+    request = PayoutsPostRequest()
+    request.request_body(body)
+
+    try:
+        # Call API with your client and get a response for your call
+        response = client.execute(request)
+        # If call returns body in response, you can get the deserialized version from the result attribute of the response
+        batch_id = response.result.batch_header.payout_batch_id
+        # print(batch_id)
+        return 'success'
+    except IOError as ioe:
+        print(ioe)
+        if isinstance(ioe, HttpError):
+            # Something went wrong server-side
+            print(ioe.status_code)
+        return 'error'
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -44,7 +95,7 @@ class SessionViewSet(viewsets.ModelViewSet):
         return ReservedSerializer
 
     def get_object(self):
-        if self.action in ["retrieve", "update", "partial_update"]:
+        if self.action in ["retrieve", "update", "partial_update", "pay_tutor"]:
             pk = self.kwargs.get('pk')
             # checks if self.session exists, if not it will call it from the db
             if not hasattr(self, 'session') and self.request.user.has_student:
@@ -157,6 +208,22 @@ class SessionViewSet(viewsets.ModelViewSet):
             tutor__user=request.user, started=True, finished=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
+    @action(detail=True, permission_classes=[IsAuthenticated])
+    def pay_tutor(self, request, pk):
+        self.get_object()
+        if not self.session.tutor_paid and not self.session.free:
+            tutor = self.session.tutor
+            payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
+                                 0 else tutor.user.email, price=self.session.price, session_id=self.session.id)
+            if payout == 'success':
+                self.session.tutor_paid = True
+                self.session.save()
+                return Response(data={'Success': 'Sent payout'}, status=status.HTTP_200_OK)
+            else:
+                return Response(data={'Error': 'Could not send payout for session'}, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response(data={'Error': 'Cannot send payout for session'}, status=status.HTTP_403_FORBIDDEN)
+
     def perform_create(self, serializer):
         data = self.request.data
         tutor = Tutor.objects.select_related("user").get(
@@ -170,6 +237,8 @@ class SessionViewSet(viewsets.ModelViewSet):
         result_str = ''.join(random.choice(letters) for i in range(30))
         if data.get('free', False):
             price = 0
+        else:
+            price = data.get('price')
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
                         duration=duration, call_url=result_str, price=price)  # 2 query
