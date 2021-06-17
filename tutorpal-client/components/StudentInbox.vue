@@ -8,7 +8,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body style="background-color: rgba(65, 168, 211, 0.2); height: 100vh" id="body">
+      <body style="background-color: rgba(65, 168, 211, 0.2); min-height: 100vh" id="body">
         <div id="main">
           <div class="div-block-55">
             <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>

@@ -8,7 +8,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body id="body" style="height: 100vh" class="body-3">
+      <body id="body" style="min-height: 100vh" class="body-3">
         <div id="main">
           <div class="div-block-55">
             <div class="section">
