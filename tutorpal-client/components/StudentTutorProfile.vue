@@ -17,13 +17,14 @@
               <div class="div-block-25">
                 <form id="form-wrapper" style="font-family: Poppins;">
                   <div class="form-group row">
+                    <p style="color: #008000; font-size: 16px">{{predictedprice}}</p>
                     <label for="date-time" class="col-2 col-form-label">Date and Start Time</label>
                     <div class="col-10">
                       <input v-model="date_startTime" class="form-control" type="datetime-local" id="date-time" required>
                     </div>
                     <label for="date-time" class="col-2 col-form-label">Duration in Minutes</label>
                     <div class="col-10">
-                      <input v-model="duration" type="number" id="duration" class="form-control" required>
+                      <input @change="predictprice()" v-model="duration" type="number" id="duration" class="form-control" required>
                     </div>
                     <label for="date-time" class="col-2 col-form-label">Subject(specify the topic)</label>
                     <div class="col-10">
@@ -108,7 +109,7 @@
             <br><a style="font-family: Poppins;" :href="data.linkedIn" target="_blank"><strong>Linkedin Account:</strong></a>
             </p>
               <a @click="updatemodalvalue()" class="button-9 w-button">Schedule a class</a>
-              <a style="margin-left: 20px; cursor: pointer;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
+              <a href="/inbox" style="margin-left: 20px; cursor: pointer;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
           </div>  
           <!-- if already taken class -->
           <div class="div-block-56">
@@ -146,6 +147,7 @@ export default {
       free: false,
       subjects:'',
       reviews: [],
+      predictedprice: ''
     } 
   },
   async fetch() {
@@ -199,6 +201,9 @@ export default {
     trial(){
       this.free = !this.free
     },
+    predictprice(){
+      this.predictedprice = "Predicted Class Amount: " + Math.round((this.data.rates/60)*parseInt(this.duration))+".00";
+    },
     async createroom(){
       const studentid = this.user.studentPk.toString()
       console.log(studentid)
@@ -217,8 +222,6 @@ export default {
         },
         body: JSON.stringify(room),
       })
-      const url = '/chat/'+ this.$route.params.id+"/"
-      this.$router.push(url)
     },
     async addSessionHandler() {
       const sessionDate = (this.date_startTime || '').substring(0, 10)
@@ -278,8 +281,21 @@ export default {
       })
       .then((res) => {
         console.log(res)
+        if(res.status === 400){
+          this.predictedprice = "Oops! Something went wrong, please check your inputs again."
+        }
+        else if(res.status === 500){
+          this.predictedprice = "There seems to be an internal error, we are working on the issue."
+        }
+        else if(res.status === 201){
+          this.predictedprice = "Thank you for successfully creating a session. Good luck!"
+          this.subjects = '';
+          this.free = false;
+          this.description = '';
+          this.duration = '';
+          this.date_startTime = '';
+        }
       })
-      location.reload();
     },
   },
 }

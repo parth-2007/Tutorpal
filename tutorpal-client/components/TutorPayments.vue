@@ -57,7 +57,7 @@
       </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Payments</div>
-        <p class="paragraph">12 hours after your class is completed, you will be paid through your registered email using PayPal. All of your payments will be recorded here. Remember that TutorPal takes a small 10% fee per payment.</p>
+        <p class="paragraph">12 hours after your class is completed, if your student hasn't filed for a refund, you will be paid through your registered email using PayPal. All of your payments will be recorded here. Remember that TutorPal takes a small 10% fee per payment.</p>
       </div>
         <div v-for="session in paymentfinished" :key="session.id" id="paid">
           <div class="div-block-64">
