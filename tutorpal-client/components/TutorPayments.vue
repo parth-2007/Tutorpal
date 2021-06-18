@@ -56,15 +56,18 @@
       </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Payments</div>
-        <p class="paragraph">12 hours after your class is completed, if your student hasn't filed for a refund, you will be paid through your registered email using PayPal. All of your payments will be recorded here. Remember that TutorPal takes a small 10% fee per payment.</p>
+        <p class="paragraph">All of your payments will be recorded here. Remember that TutorPal takes a small 10% fee per payment. Click the "Claim Money" button and you will be paid through email.</p>
       </div>
-        <div v-for="session in paymentfinished" :key="session.id" id="paid">
-          <div class="div-block-64">
-            <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Paid</div>
-            <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>${{session.price}}</div>
-            <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
-            <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
-            <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
+        <div v-for="session in paymentfinished.results" :key="session.id" id="paid">
+          <div v-if="session.refund_requested === false">
+            <div v-if="session.tutor_paid === false" class="div-block-64">
+              <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Paid</div>
+              <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>${{session.price}}</div>
+              <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student.user.first_name}} {{session.student.user.last_name}}</div>
+              <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
+              <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}</div>
+              <button @click="claimMoney(session.id, session)" style="font-family: Poppins; margin-right: 20px; margin-left: 20px; background-color: #008000" class="btn btn-primary">Claim Money</button>
+            </div>
           </div>
         </div>
       <div class="div-block-48-copy">
@@ -87,17 +90,23 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
-    return {clicked:false} 
+    return {
+      clicked:false,
+      paymentfinished: []
+    } 
   },
   async fetch() {
-    await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnStudentPayment')
     await this.fetchUser()
   },
   async created(){
-    await this.fetchSessions('pendingOnStudentPayment')
+    this.paymentfinished = await fetch("/api/sessions/finished_sessions/").then(res =>
+      res.json()
+    )
   },
   head() {
     return {
@@ -106,11 +115,17 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href:
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css',
+        },
       ]
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getUpcoming', }),
+    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment' }),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"
@@ -118,11 +133,36 @@ export default {
     },
   },
   methods: {
-    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
+    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getFinishedSessions']),
     ...mapActions(['fetchUser', 'fetchSessions']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async claimMoney(sessionid, session){
+      let url = '/api/sessions/' +sessionid+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "tutor_paid": true,
+        }),
+      })
+      url = '/api/sessions/' +sessionid+'/pay_tutor/'
+      await fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+      })
+      const copyFinished = this.paymentfinished.results
+      const index = copyFinished.indexOf(session)
+      copyFinished.splice(index,1)
     }
   },
 }

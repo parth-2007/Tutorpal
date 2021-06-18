@@ -1,5 +1,5 @@
 <template>
-  <p>Please refresh if you were not automatically redirect</p>
+  <p>Please refresh if you were not automatically redirected</p>
 </template>
 <script>
 import { mapActions } from 'vuex'

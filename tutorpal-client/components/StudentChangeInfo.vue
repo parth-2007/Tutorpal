@@ -414,6 +414,7 @@ export default {
         },
         body: JSON.stringify({
             "refund_description": this.refundDescription,
+            "refund_requested": true,
         }),
       })
       this.refundDescription = '';
