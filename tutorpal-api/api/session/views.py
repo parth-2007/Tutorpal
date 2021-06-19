@@ -8,13 +8,14 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 from chat.models import Room
 from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
 from paypalpayoutssdk.payouts import PayoutsPostRequest
 from paypalhttp import HttpError
 import os
+from django.db.models import F, ExpressionWrapper, DateTimeField
 
 
 def send_payout(email, price, session_id):
@@ -138,6 +139,7 @@ class SessionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def my_sessions(self, request):
+        # all the sessions of a user
         student_queryset = Session.objects.filter(
             student__user=request.user).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
@@ -146,6 +148,7 @@ class SessionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_tutor(self, request):
+        # tutor didn't reject/accept yet
         student_queryset = Session.objects.filter(
             student__user=request.user, accepted=False, rejected=False, canceled=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
@@ -154,6 +157,7 @@ class SessionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def pending_on_student_payment(self, request):
+        # student didn't pay
         student_queryset = Session.objects.filter(
             student__user=request.user, student_paid=False, canceled=False, accepted=True, free=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
@@ -162,6 +166,7 @@ class SessionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def upcoming(self, request):
+        # class accepted and paid for by student but not started
         student_queryset = Session.objects.filter(
             student__user=request.user, accepted=True, student_paid=True, canceled=False, started=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
@@ -169,31 +174,25 @@ class SessionViewSet(viewsets.ModelViewSet):
         return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
-    def tutor_not_paid(self, request):
-        student_queryset = Session.objects.filter(
-            student__user=request.user, canceled=False, finished=True, tutor_paid=False).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(
-            tutor__user=request.user, canceled=False, finished=True, tutor_paid=False).select_related('student', 'student__user')
-        return self.session_view(request, student_queryset, tutor_queryset)
-
-    @action(detail=False, permission_classes=[IsAuthenticated])
     def past_sessions(self, request):
+        # sessions where tutor was paid
         student_queryset = Session.objects.filter(
             student__user=request.user, finished=True, tutor_paid=True).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
             tutor__user=request.user, finished=True, tutor_paid=True).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
-    def finished_sessions(self, request):
-        student_queryset = Session.objects.filter(
-            student__user=request.user, finished=True).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.filter(
-            tutor__user=request.user, finished=True).select_related('student', 'student__user')
-        return self.session_view(request, student_queryset, tutor_queryset)
+    # @action(detail=False, permission_classes=[IsAuthenticated])
+    # def finished_sessions(self, request):
+    #     student_queryset = Session.objects.filter(
+    #         student__user=request.user, finished=True).select_related('tutor', 'tutor__user')
+    #     tutor_queryset = Session.objects.filter(
+    #         tutor__user=request.user, finished=True).select_related('student', 'student__user')
+    #     return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def canceled_sessions(self, request):
+        # sessions that were cancelled
         student_queryset = Session.objects.filter(
             student__user=request.user, canceled=True).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
@@ -202,16 +201,59 @@ class SessionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def started_sessions(self, request):
+        # started sessions
         student_queryset = Session.objects.filter(
             student__user=request.user, started=True, finished=False).select_related('tutor', 'tutor__user')
         tutor_queryset = Session.objects.filter(
             tutor__user=request.user, started=True, finished=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def tutor_payment_available(self, request):
+        # tutor can claim money
+        # 12 hours after a class ends
+        date_time_expression = ExpressionWrapper(
+            F('time_end') + F('date'), output_field=DateTimeField()
+        )
+        student_queryset = Session.objects.annotate(
+            time_end_dt=date_time_expression).filter(
+            student__user=request.user, canceled=False, finished=True, tutor_paid=False,
+            free=False, refund_requested=False,
+            time_end_dt__lt=datetime.now() - timedelta(hours=12)
+        ).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.annotate(
+            time_end_dt=date_time_expression).filter(
+            tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
+            free=False, refund_requested=False,
+            time_end_dt__lt=datetime.now() - timedelta(hours=12)
+        ).select_related('student', 'student__user')
+        return self.session_view(request, student_queryset, tutor_queryset)
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def refund_available(self, request):
+        # student can get a refund
+        # only available before 12 hours after a class finished
+        date_time_expression = ExpressionWrapper(
+            F('time_end') + F('date'), output_field=DateTimeField()
+        )
+        student_queryset = Session.objects.annotate(
+            time_end_dt=date_time_expression).filter(
+            student__user=request.user, canceled=False, finished=True, tutor_paid=False,
+            free=False, refund_requested=False,
+            time_end_dt__gte=datetime.now() - timedelta(hours=12)
+        ).select_related('tutor', 'tutor__user')
+        tutor_queryset = Session.objects.annotate(
+            time_end_dt=date_time_expression).filter(
+            tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
+            free=False, refund_requested=False,
+            time_end_dt__gte=datetime.now() - timedelta(hours=12)
+        ).select_related('student', 'student__user')
+        return self.session_view(request, student_queryset, tutor_queryset)
+
     @action(detail=True, permission_classes=[IsAuthenticated])
     def pay_tutor(self, request, pk):
         self.get_object()
-        if not self.session.tutor_paid and not self.session.free:
+        if not self.session.tutor_paid and not self.session.free and not self.session.canceled and self.session.finished and not self.session.refund_requested:
             tutor = self.session.tutor
             payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
                                  0 else tutor.user.email, price=self.session.price, session_id=self.session.id)

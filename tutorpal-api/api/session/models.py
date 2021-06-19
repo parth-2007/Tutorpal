@@ -38,7 +38,7 @@ class Session(models.Model):
     tutor_paid = models.BooleanField(default=False)
 
     refund_requested = models.BooleanField(default=False)
-    refund_available = models.BooleanField(default=False)
+    refund_available = models.BooleanField(default=False)  # not needed
     refunded = models.BooleanField(default=False)
     refund_description = models.TextField(blank=True)
 
