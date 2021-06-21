@@ -104,7 +104,7 @@ export default {
     await this.fetchUser()
   },
   async created(){
-    this.paymentfinished = await fetch("/api/sessions/finished_sessions/").then(res =>
+    this.paymentfinished = await fetch("/api/sessions/tutor_payment_available/").then(res =>
       res.json()
     )
   },

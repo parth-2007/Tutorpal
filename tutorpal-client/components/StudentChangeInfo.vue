@@ -279,6 +279,7 @@
             >
               <div style="margin-left: 0px" class="columns-2-copy w-row">
                 <div class="w-col w-col-6">
+                <div>
                   <select
                     ref="select"
                     v-model="stars"
@@ -311,6 +312,7 @@
                   >
                     Post Review
                   </button>
+                </div>
                   <a style="margin-left: 20px; cursor: pointer;" @click="clickrefund(completed.id)" class="button-9 w-buttion">File a refund</a>
                 </div>
               </div>
@@ -341,7 +343,7 @@ export default {
     }
   },
   async fetch() {
-    this.session = await fetch('/api/sessions/finished_sessions/').then((res) =>
+    this.session = await fetch('/api/sessions/refund_available/').then((res) =>
       res.json()
     )
   },
