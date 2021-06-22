@@ -118,7 +118,9 @@ class TutorViewSet(viewsets.GenericViewSet,
     @action(detail=False)
     def search(self, request):
         query = request.GET.get('q')
-        tutor_query = Tutor.objects.annotate(
+        ranking = ExpressionWrapper(4 * F('average_reviews') + 2 * F(
+            'num_reviews') + F('num_classes'), output_field=FloatField())
+        tutor_query = Tutor.objects.annotate(ranking=ranking).annotate(
             search=SearchVector('user__first_name', 'user__last_name', 'occupation',
                                 'rates', 'qualifications', 'subjects', 'what_you_teach', 'education')
         ).filter(search=query).select_related('user')
