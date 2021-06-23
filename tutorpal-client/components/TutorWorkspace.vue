@@ -166,9 +166,8 @@ export default {
     logoutclick(){
       this.clicked = !this.clicked
     },
-    async endclass(id){
-      console.log(id)
-      const url = '/api/sessions/'+this.$route.params.id+'/'
+    async endclass(){
+      let url = '/api/sessions/'+this.$route.params.id+'/'
       const csrfToken = await getCSRF()
       await fetch(url, {
         method: 'PATCH',
@@ -178,7 +177,19 @@ export default {
         },
         body: JSON.stringify({
             "finished": true,
+            "tutor_paid": true,
         }),
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      url = '/api/sessions/' +this.$route.params.id+'/pay_tutor/'
+      await fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
       })
       .then((res) => {
         console.log(res)

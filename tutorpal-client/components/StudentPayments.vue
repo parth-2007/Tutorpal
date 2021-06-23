@@ -61,7 +61,7 @@
             <h1 class="heading"><strong>Payment Information</strong></h1>
             <div class="div-block-65">
               <div class="text-block-23">Payments</div>
-              <p class="paragraph">These classes have been accepted by your tutor but you have not paid yet. Please make sure to pay for your session before it has started.</p>
+              <p class="paragraph">These classes have been accepted by your tutor but you have not paid yet. Please make sure to pay for your session before it has started. Remember that you can cancel your class anytime, even after paying.</p>
             </div>
             <div class="loop">
                 <div v-for="session in paymentpending" :key="session.id" id="paypending">
@@ -101,10 +101,10 @@ import convertTime from '../utils/convertTime'
 
 export default {
   async fetch() {
-    await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnStudentPayment')
   },
   async created (){
-    await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchSessions('upcoming')
     await this.fetchUser()
   },
   data(){

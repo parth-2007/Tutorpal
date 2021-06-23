@@ -24,36 +24,6 @@
             </div>
           </div>
         </div>
-        <div :style="refund" class="div-block-22">
-          <div
-            style="border-radius: 8px; padding-bottom: 20px; height: 550px"
-            class="div-block-23"
-          >
-            <div class="div-block-24">
-              <img
-                @click="clickrefund()"
-                src="../static/student/images/close-1.png"
-                width="20"
-                alt=""
-              />
-            </div>
-            <h1 style="margin-top: 30px" class="heading-10">Refund Request</h1>
-            <div style="font-family: Poppins" class="div-block-25">
-              <label for="firstname" class="form-label">Please provide a well written description of what happened in your class and why you wish to refund. Upon sending this request, our team will carefully read over and approve your request.</label>
-              <textarea
-                ref="description"
-                v-model="refundDescription"
-                style="height: 300px; margin-top: 20px; margin-bottom: 20px;"
-                class="form-control"
-                id="description"
-                placeholder="Enter Description"
-                rows="3"
-                required
-              ></textarea>
-              <button @click="createrefund()" class="btn btn-primary">Send Request</button>
-            </div>
-          </div>
-        </div>
         <div class="div-block-55">
           <div class="section">
             <router-link
@@ -313,7 +283,6 @@
                     Post Review
                   </button>
                 </div>
-                  <a style="margin-left: 20px; cursor: pointer;" @click="clickrefund(completed.id)" class="button-9 w-buttion">File a refund</a>
                 </div>
               </div>
             </div>
@@ -334,16 +303,13 @@ export default {
     return {
       clicked: false,
       clicked1: false,
-      refundclicked: false,
       session: [],
       stars: parseInt(),
       description: '',
-      refundDescription: '',
-      sessionrefundid: '',
     }
   },
   async fetch() {
-    this.session = await fetch('/api/sessions/refund_available/').then((res) =>
+    this.session = await fetch('/api/sessions/past_sessions/').then((res) =>
       res.json()
     )
   },
@@ -387,11 +353,6 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    refund() {
-      return {
-        display: this.refundclicked ? 'flex' : 'none',
-      }
-    },
     ...mapGetters({ student: 'getStudent' }),
     ...mapGetters({ user: 'getUser' }),
   },
@@ -404,28 +365,6 @@ export default {
     },
     logoutclick() {
       this.clicked1 = !this.clicked1
-    },
-    async createrefund(){
-      const url = '/api/sessions/' +this.sessionrefundid+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            "refund_description": this.refundDescription,
-            "refund_requested": true,
-        }),
-      })
-      this.refundDescription = '';
-      this.sessionrefundid=undefined;
-      alert("You have successfully filed this refund request.")
-    },
-    clickrefund(id) {
-      this.refundclicked = !this.refundclicked
-      this.sessionrefundid = id
     },
     async createReview(sessionid, tutorid) {
       const csrfToken = await (await getCSRF()).success
@@ -460,12 +399,6 @@ export default {
         this.stars = undefined
       })
     },
-    // async handleFormSubmit() {
-    //   console.log('hi')
-    //   this.clicked = false
-    //   await this.fetchStudent()
-    //   await this.fetchUser()
-    // },
     ...mapActions(['fetchUser', 'fetchStudent']),
   },
 }
