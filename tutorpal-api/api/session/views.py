@@ -8,14 +8,14 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
-from datetime import datetime, timedelta
+from datetime import datetime
 import random
 from chat.models import Room
 from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
 from paypalpayoutssdk.payouts import PayoutsPostRequest
 from paypalhttp import HttpError
 import os
-from django.db.models import F, ExpressionWrapper, DateTimeField
+# from django.db.models import F, ExpressionWrapper, DateTimeField
 
 
 def send_payout(email, price, session_id):
@@ -208,47 +208,47 @@ class SessionViewSet(viewsets.ModelViewSet):
             tutor__user=request.user, started=True, finished=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
-    def tutor_payment_available(self, request):
-        # tutor can claim money
-        # 12 hours after a class ends
-        date_time_expression = ExpressionWrapper(
-            F('time_end') + F('date'), output_field=DateTimeField()
-        )
-        student_queryset = Session.objects.annotate(
-            time_end_dt=date_time_expression).filter(
-            student__user=request.user, canceled=False, finished=True, tutor_paid=False,
-            free=False, refund_requested=False,
-            time_end_dt__lt=datetime.now() - timedelta(hours=12)
-        ).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.annotate(
-            time_end_dt=date_time_expression).filter(
-            tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
-            free=False, refund_requested=False,
-            time_end_dt__lt=datetime.now() - timedelta(hours=12)
-        ).select_related('student', 'student__user')
-        return self.session_view(request, student_queryset, tutor_queryset)
+    # @action(detail=False, permission_classes=[IsAuthenticated])
+    # def tutor_payment_available(self, request):
+    #     # tutor can claim money
+    #     # 12 hours after a class ends
+    #     date_time_expression = ExpressionWrapper(
+    #         F('time_end') + F('date'), output_field=DateTimeField()
+    #     )
+    #     student_queryset = Session.objects.annotate(
+    #         time_end_dt=date_time_expression).filter(
+    #         student__user=request.user, canceled=False, finished=True, tutor_paid=False,
+    #         free=False, refund_requested=False,
+    #         time_end_dt__lt=datetime.now() - timedelta(hours=12)
+    #     ).select_related('tutor', 'tutor__user')
+    #     tutor_queryset = Session.objects.annotate(
+    #         time_end_dt=date_time_expression).filter(
+    #         tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
+    #         free=False, refund_requested=False,
+    #         time_end_dt__lt=datetime.now() - timedelta(hours=12)
+    #     ).select_related('student', 'student__user')
+    #     return self.session_view(request, student_queryset, tutor_queryset)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
-    def refund_available(self, request):
-        # student can get a refund
-        # only available before 12 hours after a class finished
-        date_time_expression = ExpressionWrapper(
-            F('time_end') + F('date'), output_field=DateTimeField()
-        )
-        student_queryset = Session.objects.annotate(
-            time_end_dt=date_time_expression).filter(
-            student__user=request.user, canceled=False, finished=True, tutor_paid=False,
-            free=False, refund_requested=False,
-            time_end_dt__gte=datetime.now() - timedelta(hours=12)
-        ).select_related('tutor', 'tutor__user')
-        tutor_queryset = Session.objects.annotate(
-            time_end_dt=date_time_expression).filter(
-            tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
-            free=False, refund_requested=False,
-            time_end_dt__gte=datetime.now() - timedelta(hours=12)
-        ).select_related('student', 'student__user')
-        return self.session_view(request, student_queryset, tutor_queryset)
+    # @action(detail=False, permission_classes=[IsAuthenticated])
+    # def refund_available(self, request):
+    #     # student can get a refund
+    #     # only available before 12 hours after a class finished
+    #     date_time_expression = ExpressionWrapper(
+    #         F('time_end') + F('date'), output_field=DateTimeField()
+    #     )
+    #     student_queryset = Session.objects.annotate(
+    #         time_end_dt=date_time_expression).filter(
+    #         student__user=request.user, canceled=False, finished=True, tutor_paid=False,
+    #         free=False, refund_requested=False,
+    #         time_end_dt__gte=datetime.now() - timedelta(hours=12)
+    #     ).select_related('tutor', 'tutor__user')
+    #     tutor_queryset = Session.objects.annotate(
+    #         time_end_dt=date_time_expression).filter(
+    #         tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
+    #         free=False, refund_requested=False,
+    #         time_end_dt__gte=datetime.now() - timedelta(hours=12)
+    #     ).select_related('student', 'student__user')
+    #     return self.session_view(request, student_queryset, tutor_queryset)
 
     @action(detail=True, permission_classes=[IsAuthenticated])
     def pay_tutor(self, request, pk):

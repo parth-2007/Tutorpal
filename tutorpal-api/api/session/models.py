@@ -10,20 +10,16 @@ class Session(models.Model):
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
 
     date = models.DateField(help_text="YYYY-MM-DD")
-    time_start = models.TimeField(
-        help_text="put the time of your session by the 24 hour clock (ex. 10:30am would be 10:30, 10:30pm would be 22:30, 7am would be 07:00)")
-    time_end = models.TimeField(
-        help_text="put the time of your session by the 24 hour clock (ex. 10:30am would be 10:30, 10:30pm would be 22:30, 7am would be 07:00)")
+    time_start = models.TimeField()
+    time_end = models.TimeField()
     duration = models.DurationField(blank=True)
 
-    # duration = models.DurationField(blank=True, null=True)
     price = models.DecimalField(
         blank=True, max_digits=10, decimal_places=2, default=0)
     free = models.BooleanField(default=False)
     description = models.TextField(max_length=500, blank=True)
     subjects = models.CharField(max_length=64, blank=True)
 
-    # call_url = models.URLField(max_length=50, blank=True)
     call_url = models.CharField(max_length=30, blank=True)
 
     accepted = models.BooleanField(default=False)
@@ -37,14 +33,14 @@ class Session(models.Model):
     student_paid = models.BooleanField(default=False)
     tutor_paid = models.BooleanField(default=False)
 
-    refund_requested = models.BooleanField(default=False)
-    refund_available = models.BooleanField(default=False)  # not needed
-    refunded = models.BooleanField(default=False)
-    refund_description = models.TextField(blank=True)
+    # refund_requested = models.BooleanField(default=False)
+    # refund_available = models.BooleanField(default=False)
+    # refunded = models.BooleanField(default=False)
+    # refund_description = models.TextField(blank=True)
 
-    tutor_emailed = models.BooleanField(default=False)
-    student_emailed = models.BooleanField(default=False)
-    parent_emailed = models.BooleanField(default=False)
+    # tutor_emailed = models.BooleanField(default=False)
+    # student_emailed = models.BooleanField(default=False)
+    # parent_emailed = models.BooleanField(default=False)
 
     student_pk = models.IntegerField()
     tutor_pk = models.IntegerField()
