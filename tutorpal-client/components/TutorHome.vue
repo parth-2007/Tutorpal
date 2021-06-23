@@ -158,7 +158,7 @@
             <div class="upcoming_loop">
               <div v-for="session in upcoming" :key="session.id" id="upcoming">
                 <div class="upcoming_item">
-                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
+                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Student: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
                   <button @click="startclass(session.id)" class="button-4 w-button">Start this meeting</button>
                 </div>
               </div>

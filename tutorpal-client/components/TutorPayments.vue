@@ -56,7 +56,7 @@
       </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Payments</div>
-        <p class="paragraph">All of your payments will be recorded here. Remember that TutorPal takes a small 10% fee per payment. Click the "Claim Money" button and you will be paid through email.</p>
+        <p class="paragraph">All of your payments for your finished classes will be recorded here.</p>
       </div>
         <div v-for="session in paymentfinished.results" :key="session.id" id="paid">
           <div v-if="session.refund_requested === false">
@@ -66,13 +66,12 @@
               <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student.user.first_name}} {{session.student.user.last_name}}</div>
               <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
               <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}</div>
-              <button @click="claimMoney(session.id, session)" style="font-family: Poppins; margin-right: 20px; margin-left: 20px; background-color: #008000" class="btn btn-primary">Claim Money</button>
             </div>
           </div>
         </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Unpaid Classes (student)</div>
-        <p class="paragraph">You are not required to start the class until your student has paid for it.</p>
+        <p class="paragraph">You are not required to start this class until your student has paid for it.</p>
       </div>
       <div v-for="session in paymentpending" :key="session.id" id="unpaid">
         <div class="div-block-64">
@@ -90,7 +89,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
-import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
@@ -104,7 +102,7 @@ export default {
     await this.fetchUser()
   },
   async created(){
-    this.paymentfinished = await fetch("/api/sessions/tutor_payment_available/").then(res =>
+    this.paymentfinished = await fetch("/api/sessions/past_sessions/").then(res =>
       res.json()
     )
   },
@@ -139,31 +137,6 @@ export default {
     logoutclick(){
       this.clicked = !this.clicked
     },
-    async claimMoney(sessionid, session){
-      let url = '/api/sessions/' +sessionid+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "tutor_paid": true,
-        }),
-      })
-      url = '/api/sessions/' +sessionid+'/pay_tutor/'
-      await fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-      })
-      const copyFinished = this.paymentfinished.results
-      const index = copyFinished.indexOf(session)
-      copyFinished.splice(index,1)
-    }
   },
 }
 </script>

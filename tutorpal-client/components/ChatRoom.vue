@@ -28,10 +28,6 @@
               loading="lazy"
               width="130"
               height="130"
-              srcset="
-                ../static/student/images/user-2.png 500w,
-                ../static/student/images/user-2.png 512w
-              "
               sizes="74px"
               alt="Student profile picture"
             />
