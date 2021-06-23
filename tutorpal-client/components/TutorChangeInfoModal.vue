@@ -124,11 +124,10 @@
             aria-label="Default select example"
           >
             <option selected>Select</option>
-            <option value="1">Highschooler</option>
-            <option value="2">College Student</option>
-            <option value="3">Bachelors</option>
-            <option value="4">Masters</option>
-            <option value="4">PhD</option>
+            <option value="High School">High School</option>
+            <option value="Bachelors Degree">Bachelors Degree</option>
+            <option value="Masters Degree">Masters Degree</option>
+            <option value="Ph.D.">Ph.D.</option>
           </select>
         </div>
         <div style="padding-left: 0px" class="col">
@@ -285,7 +284,7 @@ export default {
       tutor: {},
       user: {},
       profilePic: null,
-      src:"",
+      src: '',
       errors: {
         email: '',
         firstName: '',
@@ -360,7 +359,8 @@ export default {
         }
       })
 
-      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.user.email)) {
         this.errors.email = 'Invalid email'
       } else {

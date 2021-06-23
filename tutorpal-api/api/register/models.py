@@ -179,9 +179,9 @@ class Tutor(models.Model):
     major = models.CharField(blank=True, max_length=50)
     gender = models.CharField(choices=(("Male", "Male"), ("Female", "Female"), (
         "Other", "Other"), ("Prefer Not To Say", "Prefer Not To Say")), max_length=17)
-    tutor_type = models.CharField(max_length=50)
+    tutor_type = models.CharField(max_length=50, blank=True)
     availability = models.CharField(
-        max_length=500, help_text="Please explain your availability times.")
+        max_length=500, help_text="Please explain your availability times.", blank=True)
     num_classes = models.IntegerField(default=0)
     average_reviews = models.FloatField(default=0.0)
     num_reviews = models.IntegerField(default=0)

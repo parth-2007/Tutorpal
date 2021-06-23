@@ -94,9 +94,9 @@
         <div class="columns-2-copy w-row">
           <div class="column w-col w-col-6">
             <div class="text-block-5">
-              PayPal Email Address (Put the email address you like like to accept
-              payments from. If left blank, this will be set to your default
-              email address)
+              PayPal Email Address (Put the email address you like like to
+              accept payments from. If left blank, this will be set to your
+              default email address)
             </div>
           </div>
           <div class="w-col w-col-6">
@@ -264,10 +264,10 @@
                 aria-label="Default select example"
               >
                 <option selected>Select</option>
-                <option value="High School">Highschooler</option>
-                <option value="Bachelors">Bachelors</option>
-                <option value="Masters">Masters</option>
-                <option value="Ph.D.">PhD</option>
+                <option value="High School">High School</option>
+                <option value="Bachelors Degree">Bachelors Degree</option>
+                <option value="Masters Degree">Masters Degree</option>
+                <option value="Ph.D.">Ph.D.</option>
               </select>
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
             </div>
@@ -462,8 +462,9 @@
             <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
             <label class="form-check-label" for="toc">
               I have read and agree with TutorPal's
-              <router-link to="/toc">Terms of Service</router-link> and will not hold them liable
-              for personal losses. I also acknowldge that TutorPal takes a 10% fee of the payments I receive.
+              <router-link to="/toc">Terms of Service</router-link> and will not
+              hold them liable for personal losses. I also acknowldge that
+              TutorPal takes a 10% fee of the payments I receive.
             </label>
           </div>
         </div>
@@ -537,17 +538,29 @@ export default {
         availability: '',
         global: '',
       },
-      src:"http://localhost:5000/_nuxt/static/student/images/user-2.png"
+      src: 'http://localhost:5000/_nuxt/static/student/images/user-2.png',
     }
   },
   head() {
     return {
       title: 'Tutor Registration',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/registration/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/registration/css/new-registration.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/registration/css/normalize.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/registration/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/registration/css/new-registration.webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/registration/css/normalize.css',
+        },
+      ],
     }
   },
   methods: {
@@ -595,7 +608,8 @@ export default {
         }
       })
 
-      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
       } else {
