@@ -44,6 +44,14 @@ const actions = {
   addSession({ commit, state }, [newSession, sessionName]) {
     commit('setSessions', [[newSession, ...state[sessionName]], sessionName])
   },
+  removeSession({ commit, state }, [session, sessionName]) {
+    const index = state[sessionName].indexOf(session)
+    if (index > -1) {
+      const newArr = [...state[sessionName]]
+      newArr.splice(index, 1)
+      commit('setSessions', [newArr, sessionName])
+    }
+  },
 }
 
 const mutations = {
