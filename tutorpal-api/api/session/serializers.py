@@ -14,8 +14,8 @@ class StudentSessionSerializer(serializers.ModelSerializer):
             'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
             'student_paid', 'tutor_paid',
-            'refund_requested', 'refund_available', 'refunded', 'refund_description',
-            'tutor_emailed', 'student_emailed', 'parent_emailed',
+            # 'tutor_emailed', 'student_emailed', 'parent_emailed',
+            # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
         ]
 
 

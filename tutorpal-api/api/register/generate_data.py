@@ -87,7 +87,7 @@ def generate_sessions(iterations):
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') for i in range(30))
         started = bool(random.randint(0, 1))
         finished = bool(random.randint(0, 1)) if started else False
-        refunded = bool(random.randint(0, 1))
+        # refunded = bool(random.randint(0, 1))
         Session.objects.create(
             student=student,
             tutor=tutor,
@@ -107,9 +107,9 @@ def generate_sessions(iterations):
             accessable=bool(random.randint(0, 1)),
             student_paid=started,
             tutor_paid=finished,
-            refund_requested=refunded,
-            refund_available=bool(random.randint(0, 1)),
-            refunded=refunded,
+            # refund_requested=refunded,
+            # refund_available=bool(random.randint(0, 1)),
+            # refunded=refunded,
             tutor_emailed=started,
             student_emailed=started,
             parent_emailed=started,
