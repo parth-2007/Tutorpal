@@ -40,6 +40,7 @@ class Message(models.Model):
         Room, related_name="messages", on_delete=models.CASCADE)
     message = models.CharField(max_length=128)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    read = models.BooleanField(default=False)
 
     @staticmethod
     def has_read_permission(request):

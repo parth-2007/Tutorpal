@@ -253,7 +253,7 @@ class SessionViewSet(viewsets.ModelViewSet):
     @action(detail=True, permission_classes=[IsAuthenticated])
     def pay_tutor(self, request, pk):
         self.get_object()
-        if not self.session.tutor_paid and not self.session.free and not self.session.canceled and self.session.finished and not self.session.refund_requested:
+        if not self.session.tutor_paid and not self.session.free and not self.session.canceled and self.session.finished:
             tutor = self.session.tutor
             payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
                                  0 else tutor.user.email, price=self.session.price, session_id=self.session.id)
@@ -262,7 +262,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                 self.session.save()
                 return Response(data={'Success': 'Sent payout'}, status=status.HTTP_200_OK)
             else:
-                return Response(data={'Error': 'Could not send payout for session'}, status=status.HTTP_403_FORBIDDEN)
+                return Response(data={'Error': 'There has been an error sending a payout'}, status=status.HTTP_403_FORBIDDEN)
         else:
             return Response(data={'Error': 'Cannot send payout for session'}, status=status.HTTP_403_FORBIDDEN)
 
