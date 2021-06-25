@@ -203,7 +203,7 @@
             Completed Classes
           </h1>
           <div
-            v-for="completed in session.results"
+            v-for="completed in session"
             :key="completed.id"
             style="background-color: #fff; margin-right: 10%; margin-left: 10%"
             class="i"
@@ -223,14 +223,14 @@
                 class="image-15"
               />
               <div class="text-block-26">
-                Tutor: {{ completed.tutor.user.first_name }}
-                {{ completed.tutor.user.last_name }}
+                Tutor: {{ completed.tutor.user.firstName }}
+                {{ completed.tutor.user.lastName }}
               </div>
               <p class="paragraph-2">
                 <strong class="bold-text">Schedule <br /></strong>First Session:
                 {{ completed.date }}<br />Tutor:
-                {{ completed.tutor.user.first_name }}
-                {{ completed.tutor.user.last_name }}<br />Duration:
+                {{ completed.tutor.user.firstName }}
+                {{ completed.tutor.user.lastName }}<br />Duration:
                 {{ completed.duration }}<br />Amount: ${{ completed.price
                 }}<br />Trial: {{ completed.free }}
               </p>
@@ -276,7 +276,7 @@
                     required
                   ></textarea>
                   <button
-                    @click="createReview(completed.id, completed.tutor.id)"
+                    @click="createReview(completed.tutor.id)"
                     class="btn btn-primary"
                     name="review"
                   >
@@ -303,15 +303,12 @@ export default {
     return {
       clicked: false,
       clicked1: false,
-      session: [],
       stars: parseInt(),
       description: '',
     }
   },
   async fetch() {
-    this.session = await fetch('/api/sessions/past_sessions/').then((res) =>
-      res.json()
-    )
+    await this.fetchSessions('pastSessions')
   },
   head() {
     return {
@@ -353,8 +350,7 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ student: 'getStudent' }),
-    ...mapGetters({ user: 'getUser' }),
+    ...mapGetters({ student: 'getStudent', user: 'getUser', session: 'getPastSessions'}),
   },
   async created() {
     await this.fetchUser()
@@ -366,9 +362,8 @@ export default {
     logoutclick() {
       this.clicked1 = !this.clicked1
     },
-    async createReview(sessionid, tutorid) {
-      const csrfToken = await (await getCSRF()).success
-      console.log(sessionid)
+    async createReview(tutorid) {
+      const csrfToken = await getCSRF()
       await fetch('/api/reviews/', {
         method: 'POST',
         headers: {
@@ -399,7 +394,8 @@ export default {
         this.stars = undefined
       })
     },
-    ...mapActions(['fetchUser', 'fetchStudent']),
+    ...mapActions(['fetchUser', 'fetchStudent', 'fetchSessions']),
+    ...mapGetters(['getPastSessions'])
   },
 }
 </script>

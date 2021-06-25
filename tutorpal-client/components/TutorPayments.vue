@@ -58,28 +58,26 @@
         <div class="text-block-23">Payments</div>
         <p class="paragraph">All of your payments for your finished classes will be recorded here.</p>
       </div>
-        <div v-for="session in paymentfinished.results" :key="session.id" id="paid">
-          <div v-if="session.refund_requested === false">
-            <div v-if="session.tutor_paid === false" class="div-block-64">
-              <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Paid</div>
-              <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>${{session.price}}</div>
-              <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student.user.first_name}} {{session.student.user.last_name}}</div>
-              <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
-              <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}</div>
-            </div>
-          </div>
+      <div v-for="session in paymentfinished" :key="session.id" id="paid">
+        <div class="div-block-64">
+          <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Paid</div>
+          <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>${{session.price}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
         </div>
+      </div>
       <div class="div-block-48-copy">
         <div class="text-block-23">Unpaid Classes (student)</div>
         <p class="paragraph">You are not required to start this class until your student has paid for it.</p>
       </div>
-      <div v-for="session in paymentpending.results" :key="session.id" id="unpaid">
+      <div v-for="session in paymentpending" :key="session.id" id="unpaid">
         <div class="div-block-64">
           <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
           <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>${{session.price}}</div>
-          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.last_name : ''}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
           <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
-          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
           <img @click="canceledHandler(session.id, session)" style="cursor: pointer; margin-left: 25px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
         </div>
       </div>
@@ -96,21 +94,14 @@ export default {
   data(){
     return {
       clicked:false,
-      paymentfinished: [],
-      paymentpending: []
     } 
   },
   async fetch() {
-    this.paymentpending = await fetch("/api/sessions/pending_on_student_payment/").then(res =>
-      res.json()
-    )
+    await this.fetchSessions('pastSessions')
     await this.fetchUser()
   },
   async created(){
-    this.paymentfinished = await fetch("/api/sessions/past_sessions/").then(res =>
-      res.json()
-    )
-
+    await this.fetchSessions('pendingOnStudentPayment')
   },
   head() {
     return {
@@ -129,7 +120,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser'}),
+    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getPastSessions'}),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"
@@ -137,8 +128,8 @@ export default {
     },
   },
   methods: {
-    ...mapGetters(['getUser']),
-    ...mapActions(['fetchUser', 'fetchSessions']),
+    ...mapGetters(['getUser',  'getPendingOnStudentPayment', 'getPastSessions']),
+    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
@@ -156,9 +147,7 @@ export default {
             "canceled": true,
           }),
       })
-      const copyPayPending = this.paymentpending.results
-      const index = copyPayPending.indexOf(session)
-      copyPayPending.splice(index,1)
+      this.removeSession([session, 'pendingOnStudentPayment'])
     }
   },
 }

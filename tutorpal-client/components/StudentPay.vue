@@ -188,6 +188,10 @@ export default {
     }
     this.session = data
   },
+  async created(){
+    await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchSessions('upcoming')
+  },
   head() {
     return {
       title: 'Pay',
@@ -217,7 +221,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser' }),
+    ...mapGetters({ user: 'getUser'}),
   },
   mounted() {
     const script = document.createElement('script')
@@ -226,8 +230,8 @@ export default {
     document.body.appendChild(script)
   },
   methods: {
-    ...mapGetters(['getUser']),
-    ...mapActions(['fetchUser']),
+    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
+    ...mapActions(['fetchUser','fetchSessions', 'addSession', 'removeSession']),
     setLoaded() {
       window.paypal
         .Buttons({
@@ -265,6 +269,8 @@ export default {
                 student_paid: true,
               }),
             })
+            this.removeSession([this.session, 'pendingOnStudentPayment'])
+            this.addSession([this.session , 'upcoming'])
             this.$router.push('/payments')
           },
           onError: (err) => {

@@ -176,7 +176,7 @@
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
               <div class="upcoming_loop">
-                <div v-for="session in started" :key="session.id" id="started">
+                <div style="margin-bottom: 50px" v-for="session in started" :key="session.id" id="started">
                   <div class="upcoming_item">
                     <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
                   </div>
@@ -189,10 +189,10 @@
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
               <div class="upcoming_loop">
-                <div v-for="session in upcoming.results" :key="session.id" id="upcoming">
+                <div style="margin-bottom: 50px" v-for="session in upcoming" :key="session.id" id="upcoming">
                   <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="10" alt=""/>
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.first_name : ''}} {{session.tutor !== undefined ? session.tutor.user.last_name : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,6 @@ export default {
   data(){
     return {
       clicked:false,
-      upcoming: [],    
     } 
   },
   async fetch() {
@@ -220,9 +219,7 @@ export default {
     await this.fetchSessions('startedSessions')
   },
   async created(){
-    this.upcoming = await fetch("/api/sessions/upcoming/").then(res =>
-      res.json()
-    )
+    await this.fetchSessions('upcoming')
     await this.fetchUser()
   },
   head() {
@@ -242,11 +239,11 @@ export default {
         display: this.clicked ? "flex" : "none"
       }
     },
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', trending: 'getTrending'}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', trending: 'getTrending', upcoming: 'getUpcoming'}),
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending']),
-    ...mapGetters(['getStartedSessions', 'getUser']),
+    ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending', 'removeSession']),
+    ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
@@ -264,9 +261,7 @@ export default {
             "canceled": true,
           }),
       })
-      const copyUpcoming = this.upcoming.results
-      const index = copyUpcoming.indexOf(session)
-      copyUpcoming.splice(index,1)
+      this.removeSession([session, 'upcoming'])
     }
   },
 

@@ -127,11 +127,11 @@
                   ability.
                 </p>
               </div>
-              <div v-for="session in requests.results" :key="session.id" id="inbox" class="loop">
+              <div v-for="session in requests" :key="session.id" id="inbox" class="loop">
                   <div class="item">
-                    <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profile_pic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
-                    <p style="font-size: 20px; margin-bottom: 15px;" class="paragraph-2">{{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.last_name : ''}}</p>
-                    <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{session.date}}<br>Duration: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Trial: {{session.free}}<br>Amount: ${{session.price}}</p>
+                    <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profilePic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
+                    <p style="font-size: 20px; margin-bottom: 15px;" class="paragraph-2">{{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</p>
+                    <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{session.date}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Trial: {{session.free}}<br>Amount: ${{session.price}}</p>
                     <p class="paragraph-2"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
                     <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
                   <div class="div-block-52"><a @click="accept(session.id, session)" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a @click="deny(session.id, session)" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
@@ -143,7 +143,7 @@
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
               <div class="upcoming_loop">
-                <div v-for="session in started" :key="session.id" id="started">
+                <div style="margin-bottom: 50px" v-for="session in started" :key="session.id" id="started">
                   <div class="upcoming_item">
                     <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Student: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
                   </div>
@@ -156,11 +156,11 @@
             >
             <h1 class="heading-2">Upcoming Classes:</h1>
             <div class="upcoming_loop">
-              <div v-for="session in upcoming.results" :key="session.id" id="upcoming">
+              <div style="margin-bottom: 50px" v-for="session in upcoming" :key="session.id" id="upcoming">
                 <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="12.5" alt=""/>
                 <div class="upcoming_item">
-                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Student: {{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.last_name : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
-                  <button @click="startclass(session.id)" class="button-4 w-button">Start this meeting</button>
+                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Student: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
+                  <button @click="startclass(session.id, session)" class="button-4 w-button">Start this meeting</button>
                 </div>
               </div>
             </div>
@@ -180,21 +180,15 @@ export default {
   data(){
     return {
       clicked:false,
-      requests: [],
-      upcoming: []
     } 
   },
   async fetch() {
     await this.fetchSessions('startedSessions')
-    this.upcoming = await fetch("/api/sessions/upcoming/").then(res =>
-      res.json()
-    )
   },
   async created(){
     await this.fetchUser()
-    this.requests = await fetch("/api/sessions/pending_on_tutor/").then(res =>
-      res.json()
-    )
+    await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnTutor')
   },
   head() {
     return {
@@ -207,7 +201,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions'}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', requests: 'getPendingOnTutor'}),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"
@@ -215,8 +209,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', 'addSession' ]),
-    ...mapGetters(['getStartedSessions', 'getUser',]),
+    ...mapActions(['fetchUser', 'fetchSessions', 'addSession', 'removeSession' ]),
+    ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming', 'getPendingOnTutor']),
     convertTime,
     
     async accept(id,session){
@@ -232,9 +226,7 @@ export default {
             "accepted": true,
           }),
       })
-      const copyRequests = this.requests.results
-      const index = copyRequests.indexOf(session)
-      copyRequests.splice(index,1)
+      this.removeSession([session, 'pendingOnTutor'])
     },
     async deny(id, session){
       const url = '/api/sessions/'+id+'/'
@@ -249,12 +241,9 @@ export default {
             "rejected": true,
           }),
       })
-      const copyRequests = this.requests.results
-      const index = copyRequests.indexOf(session)
-      copyRequests.splice(index,1)
+      this.removeSession([session, 'pendingOnTutor'])
     },
-    async startclass(id){
-      console.log(id)
+    async startclass(id, session){
       const url = '/api/sessions/' +id+'/'
       const csrfToken = await getCSRF()
       await fetch(url, {
@@ -264,13 +253,13 @@ export default {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            "started": true,
+          "started": true,
         }),
       })
       .then((res) => {
-        console.log(res)
+        this.removeSession([session, 'upcoming'])
+        this.addSession([session , 'startedSessions'])
       })
-      location.reload();
     },
     logoutclick(){
       this.clicked = !this.clicked
@@ -288,9 +277,7 @@ export default {
             "canceled": true,
           }),
       })
-      const copyUpcoming = this.upcoming.results
-      const index = copyUpcoming.indexOf(session)
-      copyUpcoming.splice(index,1)
+      this.removeSession([session, 'upcoming'])
     }
   },
 }
