@@ -257,16 +257,13 @@ export default {
           "rejected": false,
           "started": false,
           "finished": false,
-          "accessable": false,
           "canceled": false,
           "student_paid": false,
           "tutor_paid": false,
-          "refund_requested": false,
-          "refund_available": false,
-          "refunded": false,
           "tutor_emailed": false,
           "student_emailed": false,
-          "parent_emailed": false
+          "parent_emailed": false,
+          "accessable": false
       }
       console.log(sessionData)
       const csrfToken = await getCSRF()

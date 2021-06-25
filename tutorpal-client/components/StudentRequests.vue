@@ -67,11 +67,12 @@
                 <div class="text-block-23">Requests</div>
                 <p class="paragraph">These are the requests you have sent to potential tutors who have not accepted yet. Once the tutor has accepted, please check the <router-link to="/payments" class="link-3">payments</router-link> page to pay for the class.</p>
               </div>
-              <div v-for="session in requests" :key="session.id" id="requests" class="loop">
+              <div v-for="session in requests.results" :key="session.id" id="requests" class="loop">
                 <div class="i">
-                  <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
+                  <img @click="canceledHandler(session.id, session)" style="margin-top: 10px; cursor: pointer" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+                  <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profile_pic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
                     <p class="paragraph-2"><strong class="bold-text">Schedule
-                      <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                      <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.first_name : ''}} {{session.tutor !== undefined ? session.tutor.user.last_name : ''}}<br>Duration: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}
                       <br>Amount: ${{session.price}}<br>Trial: {{session.free}}</p>
                   </div>
                   <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
@@ -87,13 +88,19 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
-    return {clicked:false} 
+    return {
+      clicked:false,
+      requests: []
+    } 
   },
   async fetch() {
-    await this.fetchSessions('pendingOnTutor')
+    this.requests = await fetch("/api/sessions/pending_on_tutor/").then(res =>
+      res.json()
+    )
     await this.fetchUser()
   },
   head() {
@@ -112,14 +119,31 @@ export default {
           display: this.clicked ? "flex" : "none"
         }
     },
-    ...mapGetters({ user: 'getUser', requests: 'getPendingOnTutor'}),
+    ...mapGetters({ user: 'getUser',}),
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchSessions']),
-    ...mapGetters(['getPendingOnTutor','getUser']),
+    ...mapGetters(['getUser']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async canceledHandler(id, session){
+      const url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "canceled": true,
+          }),
+      })
+      const copyRequests = this.requests.results
+      const index = copyRequests.indexOf(session)
+      copyRequests.splice(index,1)
     }
   },
 }

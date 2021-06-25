@@ -189,9 +189,10 @@
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
               <div class="upcoming_loop">
-                <div v-for="session in upcoming" :key="session.id" id="upcoming">
+                <div v-for="session in upcoming.results" :key="session.id" id="upcoming">
+                  <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="10" alt=""/>
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.first_name : ''}} {{session.tutor !== undefined ? session.tutor.user.last_name : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
                   </div>
                 </div>
               </div>
@@ -205,17 +206,23 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
-    return {clicked:false} 
+    return {
+      clicked:false,
+      upcoming: [],    
+    } 
   },
   async fetch() {
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
   },
   async created(){
-    await this.fetchSessions('upcoming')
+    this.upcoming = await fetch("/api/sessions/upcoming/").then(res =>
+      res.json()
+    )
     await this.fetchUser()
   },
   head() {
@@ -235,14 +242,31 @@ export default {
         display: this.clicked ? "flex" : "none"
       }
     },
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming', trending: 'getTrending'}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', trending: 'getTrending'}),
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending']),
-    ...mapGetters(['getStartedSessions', 'getUpcoming', 'getUser']),
+    ...mapGetters(['getStartedSessions', 'getUser']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async canceledHandler(id, session){
+      const url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "canceled": true,
+          }),
+      })
+      const copyUpcoming = this.upcoming.results
+      const index = copyUpcoming.indexOf(session)
+      copyUpcoming.splice(index,1)
     }
   },
 

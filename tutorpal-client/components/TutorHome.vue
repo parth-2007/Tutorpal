@@ -156,9 +156,10 @@
             >
             <h1 class="heading-2">Upcoming Classes:</h1>
             <div class="upcoming_loop">
-              <div v-for="session in upcoming" :key="session.id" id="upcoming">
+              <div v-for="session in upcoming.results" :key="session.id" id="upcoming">
+                <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="12.5" alt=""/>
                 <div class="upcoming_item">
-                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Student: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
+                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Student: {{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.last_name : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
                   <button @click="startclass(session.id)" class="button-4 w-button">Start this meeting</button>
                 </div>
               </div>
@@ -179,12 +180,15 @@ export default {
   data(){
     return {
       clicked:false,
-      requests: []
+      requests: [],
+      upcoming: []
     } 
   },
   async fetch() {
     await this.fetchSessions('startedSessions')
-    await this.fetchSessions('upcoming')
+    this.upcoming = await fetch("/api/sessions/upcoming/").then(res =>
+      res.json()
+    )
   },
   async created(){
     await this.fetchUser()
@@ -203,7 +207,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming',}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions'}),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"
@@ -212,7 +216,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchSessions', 'addSession' ]),
-    ...mapGetters(['getStartedSessions', 'getUpcoming', 'getUser',]),
+    ...mapGetters(['getStartedSessions', 'getUser',]),
     convertTime,
     
     async accept(id,session){
@@ -270,6 +274,23 @@ export default {
     },
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async canceledHandler(id, session){
+      const url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "canceled": true,
+          }),
+      })
+      const copyUpcoming = this.upcoming.results
+      const index = copyUpcoming.indexOf(session)
+      copyUpcoming.splice(index,1)
     }
   },
 }

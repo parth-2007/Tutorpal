@@ -265,7 +265,7 @@ export default {
                 student_paid: true,
               }),
             })
-            window.location = "/payments";
+            this.$router.push('/payments')
           },
           onError: (err) => {
             console.warn(err)

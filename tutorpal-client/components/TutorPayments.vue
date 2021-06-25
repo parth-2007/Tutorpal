@@ -73,13 +73,14 @@
         <div class="text-block-23">Unpaid Classes (student)</div>
         <p class="paragraph">You are not required to start this class until your student has paid for it.</p>
       </div>
-      <div v-for="session in paymentpending" :key="session.id" id="unpaid">
+      <div v-for="session in paymentpending.results" :key="session.id" id="unpaid">
         <div class="div-block-64">
           <div class="text-block-43"><strong class="bold-text-7">Status:</strong> Unpaid</div>
           <div class="text-block-43"><strong class="bold-text-8">Amount: </strong>${{session.price}}</div>
-          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.last_name : ''}}</div>
           <div class="text-block-43"><strong class="bold-text-10">Class Date:</strong> {{session.date}}</div>
-          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
+          <div class="text-block-43"><strong class="bold-text-10">Time: </strong>{{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}</div>
+          <img @click="canceledHandler(session.id, session)" style="cursor: pointer; margin-left: 25px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
         </div>
       </div>
       </body>
@@ -89,22 +90,27 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
     return {
       clicked:false,
-      paymentfinished: []
+      paymentfinished: [],
+      paymentpending: []
     } 
   },
   async fetch() {
-    await this.fetchSessions('pendingOnStudentPayment')
+    this.paymentpending = await fetch("/api/sessions/pending_on_student_payment/").then(res =>
+      res.json()
+    )
     await this.fetchUser()
   },
   async created(){
     this.paymentfinished = await fetch("/api/sessions/past_sessions/").then(res =>
       res.json()
     )
+
   },
   head() {
     return {
@@ -123,7 +129,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment' }),
+    ...mapGetters({ user: 'getUser'}),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"
@@ -131,12 +137,29 @@ export default {
     },
   },
   methods: {
-    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getFinishedSessions']),
+    ...mapGetters(['getUser']),
     ...mapActions(['fetchUser', 'fetchSessions']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
     },
+    async canceledHandler(id, session){
+      const url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "canceled": true,
+          }),
+      })
+      const copyPayPending = this.paymentpending.results
+      const index = copyPayPending.indexOf(session)
+      copyPayPending.splice(index,1)
+    }
   },
 }
 </script>
