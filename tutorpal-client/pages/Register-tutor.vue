@@ -100,9 +100,6 @@
         </div>
         <RegisterTutorForm />
       </body>
-      <div v-else>
-        404 Not Found
-      </div>
     </html>
   </client-only>
 </template>

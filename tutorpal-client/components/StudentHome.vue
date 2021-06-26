@@ -119,7 +119,9 @@
                     class="nav-link-4 w-nav-link w--current"
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                    >Messages</router-link
+                    >Messages
+                    <span class="badge">3</span>
+                    </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -176,7 +178,7 @@
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
               <div class="upcoming_loop">
-                <div v-for="session in started" :key="session.id" id="started">
+                <div style="margin-bottom: 50px" v-for="session in started" :key="session.id" id="started">
                   <div class="upcoming_item">
                     <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
                   </div>
@@ -189,7 +191,8 @@
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
               <div class="upcoming_loop">
-                <div v-for="session in upcoming" :key="session.id" id="upcoming">
+                <div style="margin-bottom: 50px" v-for="session in upcoming" :key="session.id" id="upcoming">
+                  <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="10" alt=""/>
                   <div class="upcoming_item">
                     <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
                   </div>
@@ -205,10 +208,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
-    return {clicked:false} 
+    return {
+      clicked:false,
+    } 
   },
   async fetch() {
     await this.fetchTrending()
@@ -235,18 +241,44 @@ export default {
         display: this.clicked ? "flex" : "none"
       }
     },
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming', trending: 'getTrending'}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', trending: 'getTrending', upcoming: 'getUpcoming'}),
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending']),
-    ...mapGetters(['getStartedSessions', 'getUpcoming', 'getUser']),
+    ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending', 'removeSession']),
+    ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming']),
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async canceledHandler(id, session){
+      const url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "canceled": true,
+          }),
+      })
+      this.removeSession([session, 'upcoming'])
     }
   },
 
 }
 </script>
-
-
+<style scoped>
+.badge {
+  position: absolute;
+  top: 13px;
+  right: 3px;
+  padding: 4px 7px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 12px;
+}
+</style>

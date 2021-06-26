@@ -123,7 +123,8 @@
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages</router-link
+                      >Messages
+                      <span class="badge">3</span> </router-link
                     ><router-link
                       to="/requests"
                       class="nav-link-4 w-nav-link w--current"
@@ -215,6 +216,10 @@ export default {
       ],
     }
   },
+  async created() {
+    await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchSessions('upcoming')
+  },
   computed: {
     ...mapGetters({ user: 'getUser' }),
   },
@@ -225,8 +230,13 @@ export default {
     document.body.appendChild(script)
   },
   methods: {
-    ...mapGetters(['getUser']),
-    ...mapActions(['fetchUser']),
+    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
+    ...mapActions([
+      'fetchUser',
+      'fetchSessions',
+      'addSession',
+      'removeSession',
+    ]),
     setLoaded() {
       window.paypal
         .Buttons({
@@ -265,6 +275,8 @@ export default {
                 payment_id: order.id,
               }),
             })
+            this.removeSession([this.session, 'pendingOnStudentPayment'])
+            this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')
           },
           onError: (err) => {
@@ -279,3 +291,16 @@ export default {
   },
 }
 </script>
+<style scoped>
+.badge {
+  position: absolute;
+  top: 13px;
+  right: 3px;
+  padding: 4px 7px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 12px;
+}
+</style>

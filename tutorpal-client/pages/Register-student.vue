@@ -5,10 +5,10 @@
       data-wf-site="5f5844923df4f032aa587322"
     >
       <head> </head>
-      <body v-if="user.unauthenticated" style="height: 130vh" class="body">
+      <body v-if="user.unauthenticated" style="height: 110vh" class="body">
         <div style="height: 170vh" class="section">
           <div
-            style="font-family: Poppins; height: 750px; width: 500px"
+            style="font-family: Poppins; height: 950px; width: 500px"
             class="div-block"
           >
             <div style="margin-top: 15px" class="div-block-4">
@@ -207,7 +207,6 @@
           </div>
         </div>
       </body>
-      <div v-else>404 Not Found</div>
     </html>
   </client-only>
 </template>
@@ -238,7 +237,7 @@ export default {
         birthDate: '',
         global: '',
       },
-      src: 'http://localhost:5000/_nuxt/static/student/images/user-2.png',
+      src: 'https://image.flaticon.com/icons/png/512/149/149071.png',
     }
   },
   head() {
@@ -301,6 +300,11 @@ export default {
       } else {
         this.errors.global = ''
       }
+      const birthday = +new Date(this.birthDate);
+      const age = Math.floor(((Date.now() - birthday) / (31557600000)))
+      if(age < 6){
+        this.errors.birthDate = "Sorry, it seems that you are too young to qualify as a student"
+      }
       const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
@@ -353,8 +357,6 @@ export default {
           last_name: this.lastName,
         }
         if (this.profilePic) {
-          // eslint-disable-next-line
-          console.log(this.profilePic[0])
           formData.append('profile_pic', this.profilePic[0])
         }
         formData.append('user', JSON.stringify(user))

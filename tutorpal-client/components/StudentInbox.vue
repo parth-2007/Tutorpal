@@ -69,10 +69,12 @@
             <!-- gets looped here -->
             <div v-for="contact in contacts" :key="contact.id" class="loop">
                 <div style="padding-top: 5px; padding-bottom: 5px;" class="i-copy">
+                  <span class="badge">3</span>
                   <div class="div-block-51">
                     <div class="div-block-51-copy"><img :src="contact.tutor !== undefined ? contact.tutor.user.profilePic: ''" loading="lazy"  height="60"  width="60" sizes="100px" alt="" class="image-15">
                       <h1 class="heading-12">{{contact.tutor !== undefined ? contact.tutor.user.firstName: '' }} {{contact.tutor !== undefined ? contact.tutor.user.lastName: ''}}</h1>
-                    </div><router-link :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                    </div>
+                    <router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
                 </div>
             </div>
           </div>
@@ -120,5 +122,17 @@ export default {
   },
 }
 </script>
-
+<style scoped>
+.badge {
+  margin-top: 5px;
+  float: right;
+  padding: 4px 7px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 12px;
+  margin-right: 15px;
+}
+</style>
 

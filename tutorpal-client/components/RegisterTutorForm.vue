@@ -538,7 +538,7 @@ export default {
         availability: '',
         global: '',
       },
-      src: 'http://localhost:5000/_nuxt/static/student/images/user-2.png',
+      src: 'https://image.flaticon.com/icons/png/512/149/149071.png',
     }
   },
   head() {
@@ -584,7 +584,11 @@ export default {
       } else {
         this.errors.global = ''
       }
-
+      const birthday = +new Date(this.birthDate);
+      const age = Math.floor(((Date.now() - birthday) / (31557600000)))
+      if(age < 15){
+        this.errors.birthDate = "Sorry, it seems that you are too young to qualify as a tutor"
+      }
       const requiredFields = [
         'email',
         'firstName',

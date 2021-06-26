@@ -85,7 +85,7 @@
             <div class="div-block-6">
               <div data-collapse="none" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
                 <div class="container-2 w-container">
-                  <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link">Explore</router-link><router-link to="/inbox" class="nav-link-4 w-nav-link">Messages</router-link><router-link to="/requests" class="nav-link-4 w-nav-link">Requests</router-link><router-link to="/payments" class="nav-link-4 w-nav-link">Payments</router-link></nav>
+                  <nav role="navigation" class="nav-menu-3 w-nav-menu"><router-link to="/" aria-current="page" class="nav-link-4 w-nav-link">Explore</router-link><router-link to="/inbox" class="nav-link-4 w-nav-link">Messages<span class="badge">3</span></router-link><router-link to="/requests" class="nav-link-4 w-nav-link">Requests</router-link><router-link to="/payments" class="nav-link-4 w-nav-link">Payments</router-link></nav>
                   <div class="menu-button-2 w-nav-button">
                     <div class="icon-2 w-icon-nav-menu"></div>
                   </div>
@@ -257,16 +257,13 @@ export default {
           "rejected": false,
           "started": false,
           "finished": false,
-          "accessable": false,
           "canceled": false,
           "student_paid": false,
           "tutor_paid": false,
-          "refund_requested": false,
-          "refund_available": false,
-          "refunded": false,
           "tutor_emailed": false,
           "student_emailed": false,
-          "parent_emailed": false
+          "parent_emailed": false,
+          "accessable": false
       }
       console.log(sessionData)
       const csrfToken = await getCSRF()
@@ -310,5 +307,16 @@ export default {
   background-color: rgba(0, 0, 0, 0.3);
   -o-object-fit: contain;
     object-fit: contain;
+}
+.badge {
+  position: absolute;
+  top: 13px;
+  right: 3px;
+  padding: 4px 7px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 12px;
 }
 </style>
