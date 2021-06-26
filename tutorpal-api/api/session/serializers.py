@@ -12,11 +12,12 @@ class StudentSessionSerializer(serializers.ModelSerializer):
             'id', 'tutor', 'student_pk',
             'date', 'time_start', 'time_end', 'duration',
             'price', 'free', 'description', 'call_url', 'subjects',
-            'accepted', 'rejected', 'started', 'finished', 'accessable', 'canceled',
-            'student_paid', 'tutor_paid',
+            'accepted', 'rejected', 'started', 'finished', 'canceled',
+            'student_paid', 'tutor_paid', 'payment_id'
             # 'tutor_emailed', 'student_emailed', 'parent_emailed',
             # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
         ]
+        write_only_fields = ['payment_id']
 
 
 class TutorSessionSerializer(serializers.ModelSerializer):

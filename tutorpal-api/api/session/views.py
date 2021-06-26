@@ -13,9 +13,37 @@ import random
 from chat.models import Room
 from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
 from paypalpayoutssdk.payouts import PayoutsPostRequest
+from paypalcheckoutsdk.payments import CapturesRefundRequest
 from paypalhttp import HttpError
 import os
+import json
+from django.conf import settings
 # from django.db.models import F, ExpressionWrapper, DateTimeField
+
+
+def refund_order(capture_id, amount):
+    body = {
+        "amount": {
+            "value": f"{amount}",
+            "currency_code": "USD"
+        }
+    }
+    client = PayPalHttpClient
+    request = CapturesRefundRequest(capture_id)
+    request.prefer("return=representation")
+    request.request_body(body)
+    response = client.execute(request)
+    if settings.DEBUG:
+        print('Status Code:', response.status_code)
+        print('Status:', response.result.status)
+        print('Order ID:', response.result.id)
+        print('Links:')
+        for link in response.result.links:
+            print('\t{}: {}\tCall Type: {}'.format(
+                link.rel, link.href, link.method))
+        json_data = client.object_to_json(response.result)
+        print("json_data: ", json.dumps(json_data, indent=4))
+    return response
 
 
 def send_payout(email, price, session_id):
@@ -54,7 +82,7 @@ def send_payout(email, price, session_id):
         # Call API with your client and get a response for your call
         response = client.execute(request)
         # If call returns body in response, you can get the deserialized version from the result attribute of the response
-        batch_id = response.result.batch_header.payout_batch_id
+        # batch_id = response.result.batch_header.payout_batch_id
         # print(batch_id)
         return 'success'
     except IOError as ioe:
@@ -294,5 +322,8 @@ class SessionViewSet(viewsets.ModelViewSet):
             Room.objects.get_or_create(
                 tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
             if self.session.free:
-                return serializer.save(student_paid=True, tutor_paid=True)
+                return serializer.save(student_paid=True, tutor_paid=True, accepted=True)
+        if self.request.data.get('canceled', None) and self.session.student_paid and not self.session.started:
+            refund_order(self.session.payment_id, self.session.price)
+            return super().perform_update()
         return serializer.save()

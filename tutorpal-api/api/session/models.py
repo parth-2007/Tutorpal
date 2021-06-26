@@ -28,10 +28,11 @@ class Session(models.Model):
 
     started = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
-    accessable = models.BooleanField(default=False)
+    # accessable = models.BooleanField(default=False)
 
     student_paid = models.BooleanField(default=False)
     tutor_paid = models.BooleanField(default=False)
+    payment_id = models.CharField(max_length=50, blank=True, null=True)
 
     # refund_requested = models.BooleanField(default=False)
     # refund_available = models.BooleanField(default=False)
