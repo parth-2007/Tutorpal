@@ -119,7 +119,9 @@
                     class="nav-link-4 w-nav-link w--current"
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                    >Messages</router-link
+                    >Messages
+                    <span class="badge">3</span>
+                    </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -267,5 +269,16 @@ export default {
 
 }
 </script>
-
-
+<style scoped>
+.badge {
+  position: absolute;
+  top: 13px;
+  right: 3px;
+  padding: 4px 7px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 12px;
+}
+</style>

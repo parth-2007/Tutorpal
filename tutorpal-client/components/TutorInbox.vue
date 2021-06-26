@@ -62,10 +62,11 @@
         </div>
         <div v-for="contact in contacts" :key="contact.id" class="loop">
             <div style="padding-bottom: 5px; padding-top: 5px; " class="item-2">
+              <span class="badge">3</span>
               <div class="div-block-78">
                 <div class="div-block-77"><img :src="contact.student !== undefined ? contact.student.user.profilePic: ''" loading="lazy" height="60"  width="60" alt="" class="image-15">
                   <h1 class="heading-12">{{contact.student !== undefined ? contact.student.user.firstName: '' }} {{contact.student !== undefined ? contact.student.user.lastName: ''}}</h1>
-                </div><router-link :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                </div><router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
             </div>
         </div>
       </div>
@@ -111,5 +112,16 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
+.badge {
+  margin-top: 5px;
+  float: right;
+  padding: 2px 8px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 14px;
+  margin-right: 15px;
+}
 </style>

@@ -140,7 +140,9 @@
                     class="nav-link-4 w-nav-link"
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                    >Messages</router-link
+                    >Messages
+                  <span class="badges">3</span> 
+                  </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -409,5 +411,17 @@ export default {
   background-color: rgba(0, 0, 0, 0.3);
   -o-object-fit: contain;
   object-fit: contain;
+}
+
+.badges {
+  position: absolute;
+  top: 13px;
+  right: 3px;
+  padding: 2px 8px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 14px;
 }
 </style>

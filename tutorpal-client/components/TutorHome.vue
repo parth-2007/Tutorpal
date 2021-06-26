@@ -92,7 +92,9 @@
                     class="nav-link-4 w-nav-link w--current"
                     >Requests</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                    >Messages</router-link
+                    >Messages
+                    <span class="badge">3</span>
+                    </router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
                     >Payments</router-link
                   >
@@ -282,3 +284,16 @@ export default {
   },
 }
 </script>
+<style scoped>
+.badge {
+  position: absolute;
+  top: 11px;
+  right: 3px;
+  padding: 2px 8px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 14px;
+}
+</style>
