@@ -6,5 +6,6 @@ router = DefaultRouter()
 router.register(r'sessions', v.SessionViewSet)
 
 urlpatterns = [
-	path('', include(router.urls))
+    path('', include(router.urls)),
+    path('capture_order/<int:id>/', v.api_capture_order)
 ]

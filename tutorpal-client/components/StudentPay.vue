@@ -123,8 +123,7 @@
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages
-                      <span class="badge">3</span> </router-link
+                      >Messages <span class="badge">3</span> </router-link
                     ><router-link
                       to="/requests"
                       class="nav-link-4 w-nav-link w--current"
@@ -259,20 +258,19 @@ export default {
               ],
             })
           },
-          onApprove: async (data, actions) => {
-            const order = await actions.order.capture()
-            console.log(order)
-            const url = '/api/sessions/' + this.$route.params.id + '/'
+          onApprove: async (data) => {
+            // const order = await actions.order.capture()
+            console.log(data.orderID)
+            const url = '/api/capture_order/' + this.$route.params.id + '/'
             const csrfToken = await getCSRF()
             await fetch(url, {
-              method: 'PATCH',
+              method: 'POST',
               headers: {
                 'X-CSRFToken': csrfToken.success,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                student_paid: true,
-                payment_id: order.id,
+                order_id: data.orderID,
               }),
             })
             this.removeSession([this.session, 'pendingOnStudentPayment'])

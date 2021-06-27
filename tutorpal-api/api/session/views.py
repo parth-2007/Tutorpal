@@ -4,93 +4,15 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from dry_rest_permissions.generics import DRYPermissions
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
 from datetime import datetime
 import random
 from chat.models import Room
-from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
-from paypalpayoutssdk.payouts import PayoutsPostRequest
-from paypalcheckoutsdk.payments import CapturesRefundRequest
-from paypalhttp import HttpError
-import os
-import json
-from django.conf import settings
 # from django.db.models import F, ExpressionWrapper, DateTimeField
-
-
-def refund_order(capture_id, amount):
-    body = {
-        "amount": {
-            "value": f"{amount}",
-            "currency_code": "USD"
-        }
-    }
-    client = PayPalHttpClient
-    request = CapturesRefundRequest(capture_id)
-    request.prefer("return=representation")
-    request.request_body(body)
-    response = client.execute(request)
-    if settings.DEBUG:
-        print('Status Code:', response.status_code)
-        print('Status:', response.result.status)
-        print('Order ID:', response.result.id)
-        print('Links:')
-        for link in response.result.links:
-            print('\t{}: {}\tCall Type: {}'.format(
-                link.rel, link.href, link.method))
-        json_data = client.object_to_json(response.result)
-        print("json_data: ", json.dumps(json_data, indent=4))
-    return response
-
-
-def send_payout(email, price, session_id):
-    # Creating Access Token for Sandbox
-    client_id = os.environ.get('PAYPAL_CLIENT_ID')
-    client_secret = os.environ.get('PAYPAL_CLIENT_SECRET')
-
-    # Creating an environment
-    environment = SandboxEnvironment(
-        client_id=client_id, client_secret=client_secret)
-    client = PayPalHttpClient(environment)
-
-    body = {
-        "sender_batch_header": {
-            "recipient_type": "EMAIL",
-            "email_message": "Your TutorPal Payment",
-            "note": "This is your Tutorpal payment",
-                    "sender_batch_id": f"Payout_{session_id}",
-                    "email_subject": "Your TutorPal Payment"
-        },
-        "items": [{
-            "note": "Your Payout!",
-            "amount": {
-                "currency": "USD",
-                "value": f"{price}"
-            },
-            "receiver": f"{email}",
-            "sender_item_id": "Test_txn_1"
-        }]
-    }
-
-    request = PayoutsPostRequest()
-    request.request_body(body)
-
-    try:
-        # Call API with your client and get a response for your call
-        response = client.execute(request)
-        # If call returns body in response, you can get the deserialized version from the result attribute of the response
-        # batch_id = response.result.batch_header.payout_batch_id
-        # print(batch_id)
-        return 'success'
-    except IOError as ioe:
-        print(ioe)
-        if isinstance(ioe, HttpError):
-            # Something went wrong server-side
-            print(ioe.status_code)
-        return 'error'
+from .payments import send_payout, refund_order, capture_order
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -325,5 +247,23 @@ class SessionViewSet(viewsets.ModelViewSet):
                 return serializer.save(student_paid=True, tutor_paid=True, accepted=True)
         if self.request.data.get('canceled', None) and self.session.student_paid and not self.session.started:
             refund_order(self.session.payment_id, self.session.price)
-            return super().perform_update()
-        return serializer.save()
+            return super().perform_update(serializer)
+        return super().perform_update(serializer)
+
+
+@api_view(('POST',))
+def api_capture_order(request, id):
+    try:
+        order_id = request.data.get('order_id', None)
+        if not order_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'order id not given'})
+        session = Session.objects.get(id=id)
+        response = capture_order(order_id)
+        if int(response.status_code) == 201:
+            session.student_paid = True
+            print(response.result.purchase_units[0].payments.captures[0].id)
+            session.payment_id = response.result.purchase_units[0].payments.captures[0].id
+            session.save()
+            return Response(status=status.HTTP_200_OK, data={'success': 'successfully processed payment'})
+    except Session.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'session does not exist'})

@@ -17,7 +17,7 @@ class StudentSessionSerializer(serializers.ModelSerializer):
             # 'tutor_emailed', 'student_emailed', 'parent_emailed',
             # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
         ]
-        write_only_fields = ['payment_id']
+        extra_kwargs = {'payment_id': {'write_only': True}}
 
 
 class TutorSessionSerializer(serializers.ModelSerializer):
