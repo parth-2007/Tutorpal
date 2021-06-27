@@ -1,4 +1,3 @@
-import json
 from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
 from paypalpayoutssdk.payouts import PayoutsPostRequest
 from paypalcheckoutsdk.payments import CapturesRefundRequest

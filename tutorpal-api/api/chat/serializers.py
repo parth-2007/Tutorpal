@@ -1,6 +1,7 @@
 from .models import Room, Message
 from rest_framework import serializers
 from register.serializers import StudentViewingSerializer, TutorViewingSerializer
+from django.db.models import Count, Q
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -20,22 +21,36 @@ class CreateRoomSerializer(serializers.ModelSerializer):
 
 class StudentRoomSerializer(serializers.ModelSerializer):
     tutor = TutorViewingSerializer(read_only=True)
+    unread = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
         fields = [
-            'id', 'tutor_pk', 'student_pk', 'tutor'
+            'id', 'tutor_pk', 'student_pk', 'tutor', 'unread'
         ]
+
+    def get_unread(self, obj):
+        unread_count = Message.objects.filter(room=obj).aggregate(
+            unread=Count('pk', filter=Q(read=False))
+        )
+        return unread_count.get('unread')
 
 
 class TutorRoomSerializer(serializers.ModelSerializer):
     student = StudentViewingSerializer(read_only=True)
+    unread = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
         fields = [
-            'id', 'tutor_pk', 'student_pk', 'student'
+            'id', 'tutor_pk', 'student_pk', 'student', 'unread'
         ]
+
+    def get_unread(self, obj):
+        unread_count = Message.objects.filter(room=obj).aggregate(
+            unread=Count('pk', filter=Q(read=False))
+        )
+        return unread_count.get('unread')
 
 
 class MessageSerializer(serializers.ModelSerializer):
