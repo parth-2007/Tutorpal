@@ -104,7 +104,7 @@ def generate_sessions(iterations):
             canceled=bool(random.randint(0, 1)),
             started=started,
             finished=finished,
-            accessable=bool(random.randint(0, 1)),
+            # accessable=bool(random.randint(0, 1)),
             student_paid=started,
             tutor_paid=finished,
             # refund_requested=refunded,
