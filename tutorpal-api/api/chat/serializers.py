@@ -58,7 +58,7 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = [
-            'id', 'author', 'message', 'timestamp'
+            'id', 'author', 'message', 'timestamp', 'read'
         ]
         # extra_kwargs = {'room': {'write_only': True}, 'author': {
         #     'write_only': True}, 'message': {'write_only': True}}

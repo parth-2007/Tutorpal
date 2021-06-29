@@ -7,12 +7,14 @@ from .models import Room, Message
 from channels import exceptions
 from django.utils import timezone
 import pytz
+# from channels.asgi import get_channel_layer
+# from django.db import transaction
 # from asgiref.sync import sync_to_async
 
 
 class ChatConsumer(AsyncConsumer):
     async def websocket_connect(self, event):
-        # print('Connected', event)
+        print('Connected', event)
         # get my user obj and room obj
         room_id = self.scope['url_route']['kwargs']['room_id']
         room_obj = await self.get_room(room_id)
@@ -26,9 +28,19 @@ class ChatConsumer(AsyncConsumer):
             self.chat_room,
             self.channel_name
         )
+        # await self.read_all_messages()
+        await self.connect_or_disconnect_user()
+        # await self.channel_layer.group_send(
+        #     self.chat_room,
+        #     {
+        #         "type": "user_connect",
+        #         "user_type": "tutor" if self.me_user_obj.has_tutor else "student"
+        #     }
+        # )
 
     async def websocket_receive(self, event):
-        # print('Received', event)
+        print('Received', event)
+        print('here: ', self.channel_layer.group_channels(self.chat_room))
         message = event.get("text", None)
         # front_dict = json.loads(front_text)
         # message = front_dict.get("message")
@@ -50,6 +62,7 @@ class ChatConsumer(AsyncConsumer):
                     'author': me_user_obj.id,
                     'timestamp': str(local_time),
                     'id': message_obj.id,
+                    'read': self.room_obj.student_connected if self.me_user_obj.has_tutor else self.room_obj.tutor_connected
                 }
                 await self.channel_layer.group_send(
                     self.chat_room,
@@ -77,7 +90,7 @@ class ChatConsumer(AsyncConsumer):
         })
 
     async def websocket_disconnect(self, event):
-        # print('Disconnected', event)
+        print('Disconnected', event)
         try:
             for group in self.groups:
                 await self.channel_layer.group_discard(group, self.channel_name)
@@ -85,6 +98,7 @@ class ChatConsumer(AsyncConsumer):
             raise exceptions.InvalidChannelLayerError(
                 "BACKEND is unconfigured or doesn't support groups"
             )
+        await self.connect_or_disconnect_user()
         await self.disconnect(event["code"])
         raise exceptions.StopConsumer()
 
@@ -96,8 +110,9 @@ class ChatConsumer(AsyncConsumer):
     def create_chat_message(self, msg):
         room_obj = self.room_obj
         me_user_obj = self.me_user_obj
+        read = self.room_obj.student_connected if self.me_user_obj.has_tutor else self.room_obj.tutor_connected
         message = Message.objects.create(
-            author=me_user_obj, room=room_obj, message=msg)
+            author=me_user_obj, room=room_obj, message=msg, read=read)
         return message
 
     @database_sync_to_async
@@ -105,3 +120,22 @@ class ChatConsumer(AsyncConsumer):
         if room.student.user == user or room.tutor.user == user:
             return True
         return False
+
+    @database_sync_to_async
+    def connect_or_disconnect_user(self):
+        if self.me_user_obj.has_student:
+            self.room_obj.student_connected = not self.room_obj.student_connected
+        elif self.me_user_obj.has_tutor:
+            self.room_obj.tutor_connected = not self.room_obj.tutor_connected
+        self.room_obj.save()
+
+    @database_sync_to_async
+    def read_all_messages(self):
+        if self.me_user_obj.has_student:
+            unread_messages = Message.objects.filter(
+                room=self.room_obj).exclude(author=self.me_user_obj)
+        else:
+            unread_messages = Message.objects.filter(
+                room=self.room_obj).exclude(author=self.me_user_obj)
+
+        unread_messages.update(read=True)

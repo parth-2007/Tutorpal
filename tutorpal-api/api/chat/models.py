@@ -9,6 +9,8 @@ class Room(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     student_pk = models.IntegerField()
     tutor_pk = models.IntegerField()
+    tutor_connected = models.BooleanField(default=False)
+    student_connected = models.BooleanField(default=False)
 
     @staticmethod
     def has_read_permission(request):

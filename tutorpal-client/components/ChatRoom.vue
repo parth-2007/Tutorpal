@@ -40,41 +40,54 @@
           </div>
         </div>
         <!-- display chat messages -->
-        <div class="chatroomcontainer" style="width: 100%;">
-            <div style="height: 55vh; overflow-y:auto; display:flex; flex-direction:column-reverse;" class="wrapper">
-              <div>
-                <p style="margin-bottom: 15px" class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
-                    <!-- eslint-disable-next-line -->
-                    <div v-for="chatMsg in chatMsgs">
-                      <div :key="chatMsg ? chatMsg.id : null">
-                        <div
-                          :class="
-                            (chatMsg ? chatMsg.author : null) == user.id
-                              ? 'chat_item_here'
-                              : 'chat_item_away'
-                          "
-                        >
-                          <div
-                            :class="
-                              (chatMsg ? chatMsg.author : null) == user.id
-                                ? 'div-block-61-copy'
-                                : 'div-block-61'
-                            "
-                          >
-                            <p class="paragraph-6">
-                              {{ chatMsg ? chatMsg.message : '' }}
-                            </p>
-                            <div class="text-block-40">
-                              <em class="italic-text">{{convertTime2(chatMsg.timestamp)}}</em>
-                            </div>
-                          </div>
-                        </div>
+        <div class="chatroomcontainer" style="width: 100%">
+          <div
+            style="
+              height: 55vh;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column-reverse;
+            "
+            class="wrapper"
+          >
+            <div>
+              <p style="margin-bottom: 15px" class="paragraph-2-copy">
+                This is the beginning of your chat message history with
+                {{ otherUser ? otherUser.firstName : '' }}
+              </p>
+              <!-- eslint-disable-next-line -->
+              <div v-for="chatMsg in chatMsgs">
+                <div :key="chatMsg ? chatMsg.id : null">
+                  <div
+                    :class="
+                      (chatMsg ? chatMsg.author : null) == user.id
+                        ? 'chat_item_here'
+                        : 'chat_item_away'
+                    "
+                  >
+                    <div
+                      :class="
+                        (chatMsg ? chatMsg.author : null) == user.id
+                          ? 'div-block-61-copy'
+                          : 'div-block-61'
+                      "
+                    >
+                      <p class="paragraph-6">
+                        {{ chatMsg ? chatMsg.message : '' }}
+                      </p>
+                      <div class="text-block-40">
+                        <em class="italic-text">{{
+                          convertTime2(chatMsg.timestamp)
+                        }}</em>
                       </div>
                     </div>
-                    <div ref="container"/>
+                  </div>
                 </div>
               </div>
+              <div ref="container" />
             </div>
+          </div>
+        </div>
         <input
           v-model="message"
           style="
@@ -119,8 +132,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
+          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
         },
         {
           rel: 'stylesheet',
@@ -143,7 +155,7 @@ export default {
   computed: {
     ...mapGetters({ user: 'getUser' }),
   },
-  
+
   async created() {
     // console.log('otherUser: ', this.otherUser)
     const response = await loggedInFetch(
@@ -184,7 +196,7 @@ export default {
       // const chatMsgs = this.chatMsgs
 
       this.socket.onmessage = function (e) {
-        // console.log('message', e)
+        console.log('message', e)
         const chatDataMsg = JSON.parse(e.data)
         if (!chatDataMsg.error) {
           // console.log('chatMsgs: ', chatMsgs)
@@ -194,15 +206,15 @@ export default {
         //   console.warn(chatDataMsg)
         // }
       }
-      // this.socket.onopen = (e) => {
-      //   console.log('chatMsgs: ', this.chatMsgs)
-      //   console.log('open', e)
-      // }
-      // this.socket.onerror = (e) => {
-      //   console.log('error', e)
-      // }
+      this.socket.onopen = (e) => {
+        // console.log('chatMsgs: ', this.chatMsgs)
+        console.log('open', e)
+      }
+      this.socket.onerror = (e) => {
+        console.log('error', e)
+      }
       this.socket.onclose = (e) => {
-        // console.log('close', e)
+        console.log('close', e)
         setTimeout(() => {
           this.connect()
         }, 1000)
@@ -212,9 +224,9 @@ export default {
       // console.log('sending: ', this.message)
       this.socket.send(this.message)
       this.message = ''
-      const el = this.$refs.container;
+      const el = this.$refs.container
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "end" });
+        el.scrollIntoView({ behavior: 'smooth', block: 'end' })
       }
     },
     addChatMsg(msg) {
@@ -233,6 +245,6 @@ export default {
   padding-left: 25px;
   padding-right: 25px;
   background-color: #fff;
-  border-radius: 8px;  
+  border-radius: 8px;
 }
 </style>
