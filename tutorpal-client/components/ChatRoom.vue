@@ -41,7 +41,7 @@
         </div>
         <!-- display chat messages -->
         <div class="chatroomcontainer" style="width: 100%;">
-            <div style="height: 55vh; overflow-y:auto; display:flex; flex-direction:column-reverse;" class="wrapper">
+            <div ref="chatcont" @scroll="getNextMessages()" style="height: 55vh; overflow-y:auto; display:flex; flex-direction:column-reverse;" class="wrapper">
               <div>
                 <p style="margin-bottom: 15px" class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
                     <!-- eslint-disable-next-line -->
@@ -110,6 +110,7 @@ export default {
       message: '',
       chatMsgs: [],
       errors: '',
+      response: []
     }
   },
   head() {
@@ -143,20 +144,19 @@ export default {
   computed: {
     ...mapGetters({ user: 'getUser' }),
   },
-  
   async created() {
     // console.log('otherUser: ', this.otherUser)
-    const response = await loggedInFetch(
+    this.response = await loggedInFetch(
       'api/rooms/' + this.$route.params.id + '/messages/'
     )
-    if (response.error) {
+    if (this.response.error) {
       if (
-        response.error === 'client error' ||
-        (response.error === 'server error' && response.status !== 404)
+        this.response.error === 'client error' ||
+        (this.response.error === 'server error' && this.response.status !== 404)
       ) {
         this.errors = 'Something went wrong :('
       }
-      if (response.error === 'server error' && response.status === 404) {
+      if (this.response.error === 'server error' && this.response.status === 404) {
         this.errors = 'Not your chat room'
       }
     } else {
@@ -166,7 +166,7 @@ export default {
       //     wsStart = 'wss://'
       // }
       // const host = loc.host
-      const pastMessages = response.results
+      const pastMessages = this.response.results
       this.chatMsgs = pastMessages.reverse()
     }
     this.connect()
@@ -174,6 +174,26 @@ export default {
   methods: {
     convertTime2,
     // RUN DOCKER AND REDIS !!!!!!
+    async getNextMessages() {
+      const container = this.$refs.chatcont;
+      const pos = container.scrollTop;
+      const maxScrollPosition = container.scrollHeight - container.clientHeight;
+      if (Math.ceil(Math.abs(pos)) === maxScrollPosition) {
+        if(this.response.next !== null){
+          const data = await fetch(this.response.next).then(res =>
+            res.json()
+          )
+          this.response = data
+          const chatMsgs = this.chatMsgs
+          data.results.forEach(function(x){
+            chatMsgs.unshift(x)
+          });
+        }
+        else{
+          console.log("end of message list")
+        }
+      }
+    },
     connect() {
       const chatMsgs = this.chatMsgs
       const endpoint =
