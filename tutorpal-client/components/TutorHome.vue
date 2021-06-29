@@ -203,7 +203,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', requests: 'getPendingOnTutor'}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', requests: 'getPendingOnTutor', upcoming: 'getUpcoming'}),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"

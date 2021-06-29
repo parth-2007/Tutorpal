@@ -155,6 +155,7 @@ export default {
             "canceled": true,
           }),
       })
+      console.log(session)
       this.removeSession([session, 'pendingOnStudentPayment'])
     },
     async canceledHandler2(id, session){
