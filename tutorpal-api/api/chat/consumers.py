@@ -28,7 +28,7 @@ class ChatConsumer(AsyncConsumer):
             self.chat_room,
             self.channel_name
         )
-        # await self.read_all_messages()
+        await self.read_all_messages()
         await self.connect_or_disconnect_user()
         # await self.channel_layer.group_send(
         #     self.chat_room,
@@ -40,7 +40,7 @@ class ChatConsumer(AsyncConsumer):
 
     async def websocket_receive(self, event):
         print('Received', event)
-        print('here: ', self.channel_layer.group_channels(self.chat_room))
+        # print('here: ', self.channel_layer.group_channels(self.chat_room))
         message = event.get("text", None)
         # front_dict = json.loads(front_text)
         # message = front_dict.get("message")
