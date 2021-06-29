@@ -174,6 +174,11 @@ export default {
     }
     this.connect()
   },
+  beforeDestroy() {
+    console.log('unmounted')
+    this.socket.close()
+  },
+  destroyed() {},
   methods: {
     convertTime2,
     // RUN DOCKER AND REDIS !!!!!!
@@ -221,9 +226,13 @@ export default {
       }
       this.socket.onclose = (e) => {
         console.log('close', e)
-        setTimeout(() => {
-          this.connect()
-        }, 1000)
+        // some modal would go here
+        if (this.$route.path.includes('chat')) {
+          alert('This chat session has ended. Please refresh to continue')
+        }
+        // setTimeout(() => {
+        //   this.connect()
+        // }, 1000)
       }
     },
     handleFormSubmit() {

@@ -7,6 +7,7 @@ from .models import Room, Message
 from channels import exceptions
 from django.utils import timezone
 import pytz
+import redis
 # from channels.asgi import get_channel_layer
 # from django.db import transaction
 # from asgiref.sync import sync_to_async
@@ -29,7 +30,11 @@ class ChatConsumer(AsyncConsumer):
             self.channel_name
         )
         await self.read_all_messages()
-        await self.connect_or_disconnect_user()
+        # await self.connect_user()
+        self.redis_client = redis.Redis()
+        print('adding to redis')
+        self.redis_client.sadd(
+            self.chat_room, 'tutor' if self.me_user_obj.has_tutor else 'student')
         # await self.channel_layer.group_send(
         #     self.chat_room,
         #     {
@@ -62,7 +67,7 @@ class ChatConsumer(AsyncConsumer):
                     'author': me_user_obj.id,
                     'timestamp': str(local_time),
                     'id': message_obj.id,
-                    'read': self.room_obj.student_connected if self.me_user_obj.has_tutor else self.room_obj.tutor_connected
+                    'read': message_obj.read
                 }
                 await self.channel_layer.group_send(
                     self.chat_room,
@@ -91,6 +96,10 @@ class ChatConsumer(AsyncConsumer):
 
     async def websocket_disconnect(self, event):
         print('Disconnected', event)
+        print('removing from redis')
+        self.redis_client.srem(
+            self.chat_room, 'tutor' if self.me_user_obj.has_tutor else 'student')
+        await self.disconnect(event["code"])
         try:
             for group in self.groups:
                 await self.channel_layer.group_discard(group, self.channel_name)
@@ -98,8 +107,7 @@ class ChatConsumer(AsyncConsumer):
             raise exceptions.InvalidChannelLayerError(
                 "BACKEND is unconfigured or doesn't support groups"
             )
-        await self.connect_or_disconnect_user()
-        await self.disconnect(event["code"])
+        # await self.disconnect_user()
         raise exceptions.StopConsumer()
 
     @database_sync_to_async
@@ -110,7 +118,8 @@ class ChatConsumer(AsyncConsumer):
     def create_chat_message(self, msg):
         room_obj = self.room_obj
         me_user_obj = self.me_user_obj
-        read = self.room_obj.student_connected if self.me_user_obj.has_tutor else self.room_obj.tutor_connected
+        read = self.redis_client.sismember(
+            self.chat_room, 'student') if self.me_user_obj.has_tutor else self.redis_client.sismember(self.chat_room, 'tutor')
         message = Message.objects.create(
             author=me_user_obj, room=room_obj, message=msg, read=read)
         return message
@@ -122,11 +131,19 @@ class ChatConsumer(AsyncConsumer):
         return False
 
     @database_sync_to_async
-    def connect_or_disconnect_user(self):
+    def connect_user(self):
         if self.me_user_obj.has_student:
-            self.room_obj.student_connected = not self.room_obj.student_connected
+            self.room_obj.student_connected = True
         elif self.me_user_obj.has_tutor:
-            self.room_obj.tutor_connected = not self.room_obj.tutor_connected
+            self.room_obj.tutor_connected = True
+        self.room_obj.save()
+
+    @database_sync_to_async
+    def disconnect_user(self):
+        if self.me_user_obj.has_student:
+            self.room_obj.student_connected = False
+        elif self.me_user_obj.has_tutor:
+            self.room_obj.tutor_connected = False
         self.room_obj.save()
 
     @database_sync_to_async
