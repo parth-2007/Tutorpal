@@ -233,7 +233,9 @@ export default {
       this.socket.onclose = (e) => {
         console.log('close', e)
         // some modal would go here
-        console.log('this chat session has ended, please refresh to continue')
+        if (this.$route.path.includes('chat')) {
+          alert('This chat session has ended. Please refresh to continue')
+        }
         // setTimeout(() => {
         //   this.connect()
         // }, 1000)
