@@ -1,0 +1,6 @@
+{% autoescape off %}
+Hi {{ user.first_name }} {{ user.last_name }},
+
+Your TutorPal session with {{ tutor.user.first_name }} {{ tutor.user.last_name }} has been canceled. 
+Any payments you made will be refunded shortly. If you made a payment and didn't recieve a refund, place contact us.
+{% endautoescape %}

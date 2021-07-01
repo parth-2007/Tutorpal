@@ -1,0 +1,4 @@
+{% autoescape off %}
+Hi {{ user.first_name }} {{ user.last_name }}, you have a request from {{ student.user.first_name }} {{ student.user.last_name }}.
+Go to http://{{ domain }}/ to see the request.
+{% endautoescape %}

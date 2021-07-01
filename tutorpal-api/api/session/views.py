@@ -13,6 +13,10 @@ import random
 from chat.models import Room
 # from django.db.models import F, ExpressionWrapper, DateTimeField
 from .payments import send_payout, refund_order, capture_order
+# email
+from django.core.mail import send_mail, send_mass_mail
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -158,48 +162,6 @@ class SessionViewSet(viewsets.ModelViewSet):
             tutor__user=request.user, started=True, finished=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
-    # @action(detail=False, permission_classes=[IsAuthenticated])
-    # def tutor_payment_available(self, request):
-    #     # tutor can claim money
-    #     # 12 hours after a class ends
-    #     date_time_expression = ExpressionWrapper(
-    #         F('time_end') + F('date'), output_field=DateTimeField()
-    #     )
-    #     student_queryset = Session.objects.annotate(
-    #         time_end_dt=date_time_expression).filter(
-    #         student__user=request.user, canceled=False, finished=True, tutor_paid=False,
-    #         free=False, refund_requested=False,
-    #         time_end_dt__lt=datetime.now() - timedelta(hours=12)
-    #     ).select_related('tutor', 'tutor__user')
-    #     tutor_queryset = Session.objects.annotate(
-    #         time_end_dt=date_time_expression).filter(
-    #         tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
-    #         free=False, refund_requested=False,
-    #         time_end_dt__lt=datetime.now() - timedelta(hours=12)
-    #     ).select_related('student', 'student__user')
-    #     return self.session_view(request, student_queryset, tutor_queryset)
-
-    # @action(detail=False, permission_classes=[IsAuthenticated])
-    # def refund_available(self, request):
-    #     # student can get a refund
-    #     # only available before 12 hours after a class finished
-    #     date_time_expression = ExpressionWrapper(
-    #         F('time_end') + F('date'), output_field=DateTimeField()
-    #     )
-    #     student_queryset = Session.objects.annotate(
-    #         time_end_dt=date_time_expression).filter(
-    #         student__user=request.user, canceled=False, finished=True, tutor_paid=False,
-    #         free=False, refund_requested=False,
-    #         time_end_dt__gte=datetime.now() - timedelta(hours=12)
-    #     ).select_related('tutor', 'tutor__user')
-    #     tutor_queryset = Session.objects.annotate(
-    #         time_end_dt=date_time_expression).filter(
-    #         tutor__user=request.user, canceled=False, finished=True, tutor_paid=False,
-    #         free=False, refund_requested=False,
-    #         time_end_dt__gte=datetime.now() - timedelta(hours=12)
-    #     ).select_related('student', 'student__user')
-    #     return self.session_view(request, student_queryset, tutor_queryset)
-
     @action(detail=True, permission_classes=[IsAuthenticated])
     def pay_tutor(self, request, pk):
         self.get_object()
@@ -234,6 +196,15 @@ class SessionViewSet(viewsets.ModelViewSet):
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
                         duration=duration, call_url=result_str, price=price)  # 2 query
+        email = tutor.user.email
+        current_site = get_current_site(self.request)
+        subject = 'You have a class request'
+        message = render_to_string('session/emails/requested.html', {
+            'user': tutor.user,
+            'domain': current_site.domain,
+            'student': student
+        })
+        send_mail(subject, message, None, [email])
 
     def perform_update(self, serializer):
         if self.request.data.get('accepted', None):
@@ -245,9 +216,27 @@ class SessionViewSet(viewsets.ModelViewSet):
                 tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
             if self.session.free:
                 return serializer.save(student_paid=True, tutor_paid=True, accepted=True)
-        if self.request.data.get('canceled', None) and self.session.student_paid and not self.session.started:
-            refund_order(self.session.payment_id, self.session.price)
-            return super().perform_update(serializer)
+        if self.request.data.get('canceled', None):
+            # current_site = get_current_site(self.request)
+            subject = 'Your tutoring session has been canceled'
+            student_message = render_to_string('session/emails/canceled_student.html', {
+                'user': self.session.student.user,
+                'tutor': self.session.tutor
+                # 'domain': current_site.domain,
+            })
+            student_mail = (subject, student_message, None, [
+                            self.session.student.user.email, self.session.student.parent_email])
+            tutor_message = render_to_string('session/emails/canceled_tutor.html', {
+                'user': self.session.tutor.user,
+                'student': self.session.student
+                # 'domain': current_site.domain,
+            })
+            tutor_mail = (subject, tutor_message, None, [
+                          self.session.tutor.user.email])
+            send_mass_mail((student_mail, tutor_mail))
+            if self.session.student_paid and not self.session.started and not self.session.free and len(self.session.payment_id) > 0:
+                refund_order(self.session.payment_id, self.session.price)
+                return super().perform_update(serializer)
         return super().perform_update(serializer)
 
 
