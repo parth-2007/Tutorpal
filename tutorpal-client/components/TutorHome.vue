@@ -93,7 +93,7 @@
                     >Requests</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                    <span class="badge">3</span>
+                    <span class="badge">{{user.unread}}</span>
                     </router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
                     >Payments</router-link

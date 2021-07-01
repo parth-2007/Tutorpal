@@ -141,7 +141,7 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                  <span class="badges">3</span> 
+                  <span class="badges">{{user.unread}}</span> 
                   </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
