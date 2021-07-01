@@ -67,7 +67,8 @@ class ChatConsumer(AsyncConsumer):
                     'author': me_user_obj.id,
                     'timestamp': str(local_time),
                     'id': message_obj.id,
-                    'read': message_obj.read
+                    'tutor_read': message_obj.tutor_read,
+                    'student_read': message_obj.student_read
                 }
                 await self.channel_layer.group_send(
                     self.chat_room,
@@ -118,10 +119,10 @@ class ChatConsumer(AsyncConsumer):
     def create_chat_message(self, msg):
         room_obj = self.room_obj
         me_user_obj = self.me_user_obj
-        read = self.redis_client.sismember(
-            self.chat_room, 'student') if self.me_user_obj.has_tutor else self.redis_client.sismember(self.chat_room, 'tutor')
         message = Message.objects.create(
-            author=me_user_obj, room=room_obj, message=msg, read=read)
+            author=me_user_obj, room=room_obj, message=msg,
+            tutor_read=self.redis_client.sismember(self.chat_room, 'tutor'),
+            student_read=self.redis_client.sismember(self.chat_room, 'student'))
         return message
 
     @database_sync_to_async
@@ -131,28 +132,15 @@ class ChatConsumer(AsyncConsumer):
         return False
 
     @database_sync_to_async
-    def connect_user(self):
-        if self.me_user_obj.has_student:
-            self.room_obj.student_connected = True
-        elif self.me_user_obj.has_tutor:
-            self.room_obj.tutor_connected = True
-        self.room_obj.save()
-
-    @database_sync_to_async
-    def disconnect_user(self):
-        if self.me_user_obj.has_student:
-            self.room_obj.student_connected = False
-        elif self.me_user_obj.has_tutor:
-            self.room_obj.tutor_connected = False
-        self.room_obj.save()
-
-    @database_sync_to_async
     def read_all_messages(self):
         if self.me_user_obj.has_student:
-            unread_messages = Message.objects.filter(
-                room=self.room_obj).exclude(author=self.me_user_obj)
+            print(Message.objects.filter(
+                room=self.room_obj, student_read=False).exclude(
+                author=self.me_user_obj))
+            Message.objects.filter(
+                room=self.room_obj, student_read=False).exclude(
+                author=self.me_user_obj).update(student_read=True)
         else:
-            unread_messages = Message.objects.filter(
-                room=self.room_obj).exclude(author=self.me_user_obj)
-
-        unread_messages.update(read=True)
+            Message.objects.filter(
+                room=self.room_obj, tutor_read=False).exclude(
+                author=self.me_user_obj).update(tutor_read=True)
