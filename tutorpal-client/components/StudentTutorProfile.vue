@@ -200,9 +200,10 @@ export default {
     },
     trial(){
       this.free = !this.free
+      this.predictedprice = "Predicted Class Amount: $0.00"
     },
     predictprice(){
-      this.predictedprice = "Predicted Class Amount: " + Math.round((this.data.rates/60)*parseInt(this.duration))+".00";
+      this.predictedprice = "Predicted Class Amount: $" + Math.round((this.data.rates/60)*parseInt(this.duration))+".00";
     },
     async createroom(){
       const studentid = this.user.studentPk.toString()

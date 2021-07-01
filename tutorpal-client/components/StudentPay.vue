@@ -160,13 +160,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
-
+import {keysToCamel} from '../utils/changeObjectNaming'
 // require('dotenv').config()
 
 export default {
   data() {
     return {
       session: [],
+      index: '',
       render404: true,
     }
   },
@@ -186,6 +187,8 @@ export default {
     ) {
       this.$router.push('/payments')
     }
+    this.session = keysToCamel(this.session)
+
   },
   head() {
     return {
@@ -219,7 +222,7 @@ export default {
     await this.fetchSessions('upcoming')
   },
   computed: {
-    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getUpcoming' }),
+    ...mapGetters({ user: 'getUser'}),
   },
   mounted() {
     const script = document.createElement('script')
@@ -235,6 +238,7 @@ export default {
       'addSession',
       'removeSession',
     ]),
+    keysToCamel,
     setLoaded() {
       window.paypal
         .Buttons({
@@ -272,6 +276,8 @@ export default {
                 order_id: data.orderID,
               }),
             })
+            const startedSessions = this.getPendingOnStudentPayment()
+            console.log(startedSessions[0], this.session)
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')

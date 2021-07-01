@@ -130,11 +130,11 @@
                 </p>
               </div>
               <div>
-                <div v-for="session in requests.results" :key="session.id" id="inbox" class="loop">
+                <div v-for="session in requests" :key="session.id" id="inbox" class="loop">
                     <div class="item">
-                      <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profile_pic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
-                      <p style="font-size: 20px; margin-bottom: 15px;" class="paragraph-2">{{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</p>
-                      <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{session.date}}<br>Duration: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Trial: {{session.free}}<br>Amount: ${{session.price}}</p>
+                      <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profilePic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
+                      <p style="font-size: 20px; margin-bottom: 15px;" class="paragraph-2">{{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</p>
+                      <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{session.date}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Trial: {{session.free}}<br>Amount: ${{session.price}}</p>
                       <p class="paragraph-2"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
                       <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
                     <div class="div-block-52"><a @click="accept(session.id, session)" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a @click="deny(session.id, session)" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
@@ -185,20 +185,21 @@ export default {
   data(){
     return {
       clicked:false,
-      requests: [],
+      requests1: [],
       next: ''
     } 
   },
   async fetch() {
     await this.fetchSessions('startedSessions')
-    this.requests = await fetch("/api/sessions/pending_on_tutor/").then(res =>
+    this.requests1 = await fetch("/api/sessions/pending_on_tutor/").then(res =>
       res.json()
     )
-    this.next = this.requests.next
+    this.next = this.requests1.next
   },
   async created(){
     await this.fetchUser()
     await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnTutor')
   },
   head() {
     return {
@@ -212,8 +213,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming'}),
-    logout() {
+  ...mapGetters({ user: 'getUser', started: 'getStartedSessions', requests: 'getPendingOnTutor', upcoming: 'getUpcoming'}),    logout() {
         return {
           display: this.clicked ? "flex" : "none"
         }
@@ -225,7 +225,7 @@ export default {
     convertTime,
     async fetchNewMessages(){
       const data = await fetch(this.next).then((res) => res.json())
-      this.requests.results.push(data.results)
+      this.requests1.results.push(data.results)
       this.next = data.next;
     },
     async accept(id,session){
