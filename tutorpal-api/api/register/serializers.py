@@ -1,5 +1,7 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
+from django.db.models import Count, Q
+from chat.models import Message
 # from typing import Dict, Any
 # from django.conf import settings
 
@@ -46,6 +48,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
     # is_tutor = serializers.SerializerMethodField('has_tutor')
     is_student = serializers.BooleanField(source='has_student', read_only=True)
     is_tutor = serializers.BooleanField(source='has_tutor', read_only=True)
+    unread = serializers.SerializerMethodField()
 
     def has_student(self, user: User) -> bool:
         return user.has_student
@@ -53,12 +56,26 @@ class UserOwnerSerializer(serializers.ModelSerializer):
     def has_tutor(self, user: User) -> bool:
         return user.has_tutor
 
+    def get_unread(self, user: User) -> int:
+        if user.has_tutor:
+            unread_count = Message.objects.filter(room__tutor_pk=user.tutor_pk).aggregate(
+                unread=Count('pk', filter=Q(tutor_read=False))
+            )
+            print(unread_count)
+            return unread_count.get('unread')
+        elif user.has_student:
+            unread_count = Message.objects.filter(room__student_pk=user.student_pk).aggregate(
+                unread=Count('pk', filter=Q(student_read=False))
+            )
+            print(unread_count)
+            return unread_count.get('unread')
+
     class Meta:
         model = User
         fields = [
             'id', 'email', 'is_student', 'is_tutor',
             'first_name', 'last_name', 'profile_pic', 'password',
-            'student_pk', 'tutor_pk',
+            'student_pk', 'tutor_pk', 'unread'
         ]
         extra_kwargs = {'password': {'write_only': True}, 'student_pk': {
             'read_only': True}, 'tutor_pk': {'read_only': True}}
