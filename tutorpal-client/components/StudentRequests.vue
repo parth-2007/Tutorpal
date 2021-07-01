@@ -126,19 +126,22 @@ export default {
       this.clicked = !this.clicked
     },
     async canceledHandler(id, session){
-      const url = '/api/sessions/'+id+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "canceled": true,
-          }),
-      })
-      this.removeSession([session, 'pendingOnTutor'])
+      const x = confirm("Please confirm that you wish to cancel this session.")
+      if(x === true){
+        const url = '/api/sessions/'+id+'/'
+        const csrfToken = await getCSRF()
+        await fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "canceled": true,
+            }),
+        })
+        this.removeSession([session, 'pendingOnTutor'])
+      }
     }
   },
 }

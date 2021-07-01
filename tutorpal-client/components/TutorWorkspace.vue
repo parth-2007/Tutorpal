@@ -13,7 +13,24 @@
     <div v-else-if="session.tutor_pk !== user.tutorPk">
         <NotFound></NotFound>
     </div>
-    <body v-else id="body" style="margin-bottom: 0px; background-color: rgba(65, 168, 211, 0.2);" class="body-5">
+    <body v-else id="body" style="background-color: rgba(65, 168, 211, 0.2);" class="body-5">
+      <div :style="updateModal" style="padding-bottom: 0px" class="div-block-22">
+        <div
+          style="
+            border-radius: 8px;
+            padding-bottom: 20px;
+            height: 185px;
+            width: 375px;
+            font-family: Poppins;
+          "
+          class="div-block-23"
+        >
+          <div class="div-block-25">
+            Clicking "confirm" will confirm to us that this class has been finished. You will be paid shortly after. Thank you for tutoring with TutorPal!
+          </div>
+          <button @click="endclass()" style="background-color: green; margin-left: 10px; margin-top: 10px; font-size: 14px;" class="button-10-copy-copy w-button">Confirm</button><button @click="updateModalValue()" style="background-color: #bb0a1e; margin-left: 10px; margin-top: 10px; font-size: 14px" class="button-10-copy-copy w-button">Cancel</button>
+        </div>
+      </div>
       <div id="main">
         <div class="section"><router-link to="/" class="link-block w-inline-block"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
           <div class="div-block-4">
@@ -68,7 +85,7 @@
       </div>
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
-            <button @click="endclass()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
+            <button @click="updateModalValue()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
         </div>
         <div style="float: right; margin-right: 20px">
             <h1 style="font-family: Poppins; margin-left: 20px; margin-top: 10px; margin-bottom: 10px; font-size:24px; color: black"><strong>Countdown Timer: {{dateToString(timerDisplay)}}</strong></h1>
@@ -88,6 +105,7 @@ export default {
   data() {
     return {
       clicked: false,
+      clicked1: false,
       session: [],
       timerCount: "",
       timerDisplay: ""
@@ -159,12 +177,20 @@ export default {
           display: this.clicked ? "flex" : "none"
         }
     },
+    updateModal() {
+      return {
+        display: this.clicked1 ? 'flex' : 'none',
+      }
+    },
     ...mapGetters({ user: 'getUser' }),
   },
   methods: {
     dateToString,
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    updateModalValue() {
+      this.clicked1 = !this.clicked1
     },
     async endclass(){
       let url = '/api/sessions/'+this.$route.params.id+'/'

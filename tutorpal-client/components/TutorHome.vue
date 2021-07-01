@@ -129,15 +129,18 @@
                   ability.
                 </p>
               </div>
-              <div v-for="session in requests" :key="session.id" id="inbox" class="loop">
-                  <div class="item">
-                    <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profilePic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
-                    <p style="font-size: 20px; margin-bottom: 15px;" class="paragraph-2">{{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</p>
-                    <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{session.date}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Trial: {{session.free}}<br>Amount: ${{session.price}}</p>
-                    <p class="paragraph-2"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
-                    <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
-                  <div class="div-block-52"><a @click="accept(session.id, session)" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a @click="deny(session.id, session)" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
+              <div>
+                <div v-for="session in requests.results" :key="session.id" id="inbox" class="loop">
+                    <div class="item">
+                      <div class="div-block-51"><img :src="session.student !== undefined ? session.student.user.profile_pic:''" loading="lazy"  width="60" sizes="64px" alt="" class="image-9"></div>
+                      <p style="font-size: 20px; margin-bottom: 15px;" class="paragraph-2">{{session.student !== undefined ? session.student.user.first_name : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</p>
+                      <p class="paragraph-2"><strong class="bold-text">Class Information<br></strong>First Session: {{session.date}}<br>Duration: {{convertTime(session.time_start)}} - {{convertTime(session.time_end)}}<br>Trial: {{session.free}}<br>Amount: ${{session.price}}</p>
+                      <p class="paragraph-2"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
+                      <div class="text-block-27">Remember, you only have 24 hours from since this request was sent to accept or deny.</div>
+                    <div class="div-block-52"><a @click="accept(session.id, session)" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a @click="deny(session.id, session)" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
+                  </div>
                 </div>
+                <a @click="fetchNewMessages()" v-if="this.next !== null" style="font-family: Poppins; font-size: 14px; color: #41a8d3; text-decoration: underline">Click to view more pending requests</a>
               </div>
             </div>
           </div>
@@ -182,15 +185,20 @@ export default {
   data(){
     return {
       clicked:false,
+      requests: [],
+      next: ''
     } 
   },
   async fetch() {
     await this.fetchSessions('startedSessions')
+    this.requests = await fetch("/api/sessions/pending_on_tutor/").then(res =>
+      res.json()
+    )
+    this.next = this.requests.next
   },
   async created(){
     await this.fetchUser()
     await this.fetchSessions('upcoming')
-    await this.fetchSessions('pendingOnTutor')
   },
   head() {
     return {
@@ -199,11 +207,12 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
       ]
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', requests: 'getPendingOnTutor'}),
+    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', upcoming: 'getUpcoming'}),
     logout() {
         return {
           display: this.clicked ? "flex" : "none"
@@ -214,7 +223,11 @@ export default {
     ...mapActions(['fetchUser', 'fetchSessions', 'addSession', 'removeSession' ]),
     ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming', 'getPendingOnTutor']),
     convertTime,
-    
+    async fetchNewMessages(){
+      const data = await fetch(this.next).then((res) => res.json())
+      this.requests.results.push(data.results)
+      this.next = data.next;
+    },
     async accept(id,session){
       const url = '/api/sessions/'+id+'/'
       const csrfToken = await getCSRF()
@@ -267,19 +280,22 @@ export default {
       this.clicked = !this.clicked
     },
     async canceledHandler(id, session){
-      const url = '/api/sessions/'+id+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "canceled": true,
-          }),
-      })
-      this.removeSession([session, 'upcoming'])
+      const x = confirm("Please confirm that you wish to cancel this session.")
+      if(x === true){
+        const url = '/api/sessions/'+id+'/'
+        const csrfToken = await getCSRF()
+        await fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "canceled": true,
+            }),
+        })
+        this.removeSession([session, 'upcoming'])
+      }
     }
   },
 }

@@ -71,13 +71,10 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div ref="container"/>
                 </div>
               </div>
-              <div ref="container" />
             </div>
-          </div>
-        </div>
         <input
           v-model="message"
           style="
@@ -198,9 +195,6 @@ export default {
             chatMsgs.unshift(x)
           })
         }
-        // else {
-        // console.log('end of message list')
-        // }
       }
     },
     connect() {

@@ -172,7 +172,7 @@ export default {
   },
   async fetch() {
     const url = '/api/sessions/' + this.$route.params.id + '/'
-    const data = await fetch(url).then((res) => {
+    this.session = await fetch(url).then((res) => {
       if (res.status === 500) {
         this.$router.push('/payments')
       }
@@ -180,13 +180,12 @@ export default {
     })
     await this.fetchUser()
     if (
-      data.student_pk !== this.user.studentPk ||
-      data.student_paid === true ||
-      data.accepted === false
+      this.session.student_pk !== this.user.studentPk ||
+      this.session.student_paid === true ||
+      this.session.accepted === false
     ) {
       this.$router.push('/payments')
     }
-    this.session = data
   },
   head() {
     return {
@@ -220,7 +219,7 @@ export default {
     await this.fetchSessions('upcoming')
   },
   computed: {
-    ...mapGetters({ user: 'getUser' }),
+    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getUpcoming' }),
   },
   mounted() {
     const script = document.createElement('script')
@@ -229,7 +228,7 @@ export default {
     document.body.appendChild(script)
   },
   methods: {
-    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
+    ...mapGetters(['getUser',  'getPendingOnStudentPayment', 'getUpcoming']),
     ...mapActions([
       'fetchUser',
       'fetchSessions',

@@ -143,34 +143,40 @@ export default {
       this.clicked = !this.clicked
     },
     async canceledHandler1(id, session){
-      const url = '/api/sessions/'+id+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "canceled": true,
-          }),
-      })
-      this.removeSession([session, 'pendingOnStudentPayment'])
+      const x = confirm("Please confirm that you wish to cancel this session.")
+      if(x === true){
+        const url = '/api/sessions/'+id+'/'
+        const csrfToken = await getCSRF()
+        await fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "canceled": true,
+            }),
+        })
+        this.removeSession([session, 'pendingOnStudentPayment'])
+      }
     },
     async canceledHandler2(id, session){
-      const url = '/api/sessions/'+id+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "canceled": true,
-          }),
-      })
-      this.removeSession([session, 'upcoming'])
+      const x = confirm("Please confirm that you wish to cancel this session.")
+      if(x === true){
+        const url = '/api/sessions/'+id+'/'
+        const csrfToken = await getCSRF()
+        await fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "canceled": true,
+            }),
+        })
+        this.removeSession([session, 'upcoming'])
+      }
     }
   },
 }
