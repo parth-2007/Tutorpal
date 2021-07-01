@@ -172,7 +172,8 @@ export default {
     }
   },
   async fetch() {
-    const url = '/api/sessions/' + this.$route.params.id + '/'
+    const id = parseInt(this.$route.params.id)
+    const url = '/api/sessions/' + id + '/'
     this.session = await fetch(url).then((res) => {
       if (res.status === 500) {
         this.$router.push('/payments')
@@ -187,7 +188,11 @@ export default {
     ) {
       this.$router.push('/payments')
     }
-    this.session = keysToCamel(this.session)
+    this.paymentpending.forEach((x) => {
+      if(x.id === id){
+        this.session = x
+      }
+    });
 
   },
   head() {
@@ -222,7 +227,7 @@ export default {
     await this.fetchSessions('upcoming')
   },
   computed: {
-    ...mapGetters({ user: 'getUser'}),
+    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment'}),
   },
   mounted() {
     const script = document.createElement('script')
@@ -262,9 +267,7 @@ export default {
             })
           },
           onApprove: async (data) => {
-            // const order = await actions.order.capture()
-            console.log(data.orderID)
-            const url = '/api/capture_order/' + this.$route.params.id + '/'
+            let url = '/api/capture_order/' + this.$route.params.id + '/'
             const csrfToken = await getCSRF()
             await fetch(url, {
               method: 'POST',
@@ -276,8 +279,17 @@ export default {
                 order_id: data.orderID,
               }),
             })
-            const startedSessions = this.getPendingOnStudentPayment()
-            console.log(startedSessions[0], this.session)
+            url = '/api/sessions/' + this.$route.params.id + '/'
+            await fetch(url, {
+              method: 'PATCH',
+              headers: {
+                'X-CSRFToken': csrfToken.success,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                student_paid: true,
+              }),
+            })
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')
