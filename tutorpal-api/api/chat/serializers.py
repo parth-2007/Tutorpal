@@ -30,10 +30,9 @@ class StudentRoomSerializer(serializers.ModelSerializer):
         ]
 
     def get_unread(self, obj):
-        unread_count = Message.objects.filter(room=obj).aggregate(
+        unread_count = Message.objects.filter(room=obj).exclude(author=obj.student.user).aggregate(
             unread=Count('pk', filter=Q(student_read=False))
         )
-        print(unread_count)
         return unread_count.get('unread')
 
 
@@ -48,7 +47,7 @@ class TutorRoomSerializer(serializers.ModelSerializer):
         ]
 
     def get_unread(self, obj):
-        unread_count = Message.objects.filter(room=obj).aggregate(
+        unread_count = Message.objects.filter(room=obj).exclude(author=obj.tutor.user).aggregate(
             unread=Count('pk', filter=Q(tutor_read=False))
         )
         return unread_count.get('unread')

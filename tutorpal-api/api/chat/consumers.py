@@ -134,13 +134,16 @@ class ChatConsumer(AsyncConsumer):
     @database_sync_to_async
     def read_all_messages(self):
         if self.me_user_obj.has_student:
-            print(Message.objects.filter(
+            print("unread: ", Message.objects.filter(
                 room=self.room_obj, student_read=False).exclude(
                 author=self.me_user_obj))
             Message.objects.filter(
                 room=self.room_obj, student_read=False).exclude(
                 author=self.me_user_obj).update(student_read=True)
         else:
+            print("unread: ", Message.objects.filter(
+                room=self.room_obj, tutor_read=False).exclude(
+                author=self.me_user_obj))
             Message.objects.filter(
                 room=self.room_obj, tutor_read=False).exclude(
                 author=self.me_user_obj).update(tutor_read=True)

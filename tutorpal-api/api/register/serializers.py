@@ -58,12 +58,12 @@ class UserOwnerSerializer(serializers.ModelSerializer):
 
     def get_unread(self, user: User) -> int:
         if user.has_tutor:
-            unread_count = Message.objects.filter(room__tutor_pk=user.tutor_pk).aggregate(
+            unread_count = Message.objects.filter(room__tutor_pk=user.tutor_pk).exclude(author=user).aggregate(
                 unread=Count('pk', filter=Q(tutor_read=False))
             )
             return unread_count.get('unread')
         elif user.has_student:
-            unread_count = Message.objects.filter(room__student_pk=user.student_pk).aggregate(
+            unread_count = Message.objects.filter(room__student_pk=user.student_pk).exclude(author=user).aggregate(
                 unread=Count('pk', filter=Q(student_read=False))
             )
             return unread_count.get('unread')
