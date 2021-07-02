@@ -62,7 +62,7 @@
         </div>
         <div v-for="contact in contacts" :key="contact.id" class="loop">
             <div style="padding-bottom: 5px; padding-top: 5px; " class="item-2">
-              <span class="badge">{{user.unread}}</span>
+              <span class="badge">{{contact.unread}}</span>
               <div class="div-block-78">
                 <div class="div-block-77"><img :src="contact.student !== undefined ? contact.student.user.profilePic: ''" loading="lazy" height="60"  width="60" alt="" class="image-15">
                   <h1 class="heading-12">{{contact.student !== undefined ? contact.student.user.firstName: '' }} {{contact.student !== undefined ? contact.student.user.lastName: ''}}</h1>
