@@ -19,7 +19,7 @@
         <div style="border-radius: 8px" class="div-block-80">
           <div style="" class="div-block-71">
             <img
-              style="margin-left: auto"
+              style="margin-left: auto; border-radius: 100px"
               :src="
                 otherUser
                   ? otherUser.profilePic
