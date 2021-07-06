@@ -14,19 +14,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import NotFound from '../components/NotFound'
-import StudentAccount from '../components/StudentChangeInfo'
-import TutorAccount from '../components/TutorChangeInfo'
 
 export default {
-  components: {
-    NotFound,
-    StudentAccount,
-    TutorAccount,
-  },
-  head() {
-    return {}
-  },
   computed: mapGetters({ user: 'getUser' }),
   async created() {
     await this.fetchUser()

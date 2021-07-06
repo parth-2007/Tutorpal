@@ -256,10 +256,6 @@
         id="availability"
         placeholder="Mondays, 4:00 PM - 6:00 PM"
       />
-      <!-- <label style="margin-top: 15px" for="password" class="form-label"
-      >Verify Password</label
-    >
-    <input type="password" class="form-control" id="password" required /> -->
     </form>
     <button
       @click="handleSubmit"
@@ -374,7 +370,6 @@ export default {
         this.errors.paypalEmail = 'Invalid email'
       } else {
         this.errors.paypalEmail = ''
-        // this.tutor.paypalEmail = this.user.email
       }
     },
     async handleSubmit() {
@@ -384,11 +379,6 @@ export default {
         (!objectsEqual(this.tutor, this.getTutor()) ||
           !objectsEqual(this.user, this.getUser()))
       ) {
-        // const formData = new FormData()
-        // formData.append(
-        //   'tutor',
-        //   JSON.stringify({ ...this.tutor, user: { ...this.user } })
-        // )
         const csrfToken = await getCSRF()
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
           const formData = new FormData()
@@ -407,7 +397,6 @@ export default {
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,
-              // 'Content-Type': 'multipart/form-data',
             },
             body: formData,
           })
@@ -430,7 +419,6 @@ export default {
               this.updateUser({ ...this.user })
             }
             this.$emit('modalSubmit')
-            // this.errors.global = 'Something went wrong :('
           }
         } else {
           this.errors.global = 'Something went wrong :('

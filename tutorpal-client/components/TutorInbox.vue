@@ -64,7 +64,7 @@
             <div style="padding-bottom: 5px; padding-top: 5px; " class="item-2">
               <span class="badge">{{contact.unread}}</span>
               <div class="div-block-78">
-                <div class="div-block-77"><img :src="contact.student !== undefined ? contact.student.user.profilePic: ''" loading="lazy" height="60"  width="60" alt="" class="image-15">
+                <div class="div-block-77"><img style="border-radius: 100px" :src="contact.student !== undefined ? contact.student.user.profilePic: ''" loading="lazy" height="60"  width="60" alt="" class="image-15">
                   <h1 class="heading-12">{{contact.student !== undefined ? contact.student.user.firstName: '' }} {{contact.student !== undefined ? contact.student.user.lastName: ''}}</h1>
                 </div><router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
             </div>

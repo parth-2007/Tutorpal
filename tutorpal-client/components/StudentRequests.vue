@@ -15,7 +15,7 @@
                 <div class="div-block-4">
                   <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                   <div class="div-block-43">
-                    <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
+                    <div class="name_profile_pic"><img :src="user !== undefined ? user.profilePic:''" id="image" width="60" height="60" sizes="(max-width: 479px) 15vw, (max-width: 767px) 8vw, 60px" alt="" class="image-7">
                       <div data-hover="" data-delay="0" class="dropdown-3 w-dropdown">
                         <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                         <div id="name" class="text-block-18">{{user.firstName}} {{user.lastName}}</div>
@@ -129,11 +129,10 @@ export default {
       const x = confirm("Please confirm that you wish to cancel this session.")
       if(x === true){
         const url = '/api/sessions/'+id+'/'
-        const csrfToken = await getCSRF()
         await fetch(url, {
             method: 'PATCH',
             headers: {
-              'X-CSRFToken': csrfToken.success,
+              'X-CSRFToken': (await getCSRF()).success,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({

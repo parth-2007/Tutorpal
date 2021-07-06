@@ -160,15 +160,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
-import {keysToCamel} from '../utils/changeObjectNaming'
-// require('dotenv').config()
 
 export default {
   data() {
     return {
       session: [],
       index: '',
-      render404: true,
     }
   },
   async fetch() {
@@ -189,11 +186,10 @@ export default {
       this.$router.push('/payments')
     }
     this.paymentpending.forEach((x) => {
-      if(x.id === id){
+      if (x.id === id){
         this.session = x
       }
     });
-
   },
   head() {
     return {
@@ -222,16 +218,17 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment'}),
+  },
   async created() {
     await this.fetchSessions('pendingOnStudentPayment')
     await this.fetchSessions('upcoming')
   },
-  computed: {
-    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment'}),
-  },
   mounted() {
     const script = document.createElement('script')
-    script.src = `https://www.paypal.com/sdk/js?client-id=${'AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ'}`
+    const clientId = 'AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ'
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
     script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
   },
@@ -243,7 +240,6 @@ export default {
       'addSession',
       'removeSession',
     ]),
-    keysToCamel,
     setLoaded() {
       window.paypal
         .Buttons({
@@ -294,8 +290,7 @@ export default {
             this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')
           },
-          onError: (err) => {
-            console.warn(err)
+          onError: () => {
             alert(
               'Sorry, we had an error with processing the payment. Please try again'
             )

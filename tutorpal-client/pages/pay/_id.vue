@@ -1,6 +1,6 @@
 <template>
     <div v-if="user.unauthenticated || user.isTutor">
-      <NotFound></NotFound>
+      <NotFound></NotFound> <!-- Forbidden -->
     </div>
     <div v-else-if="user.isStudent">
       <StudentPay></StudentPay>
@@ -10,9 +10,6 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  head() {
-    return {}
-  },
   computed: mapGetters({ user: 'getUser' }),
   async created() {
     await this.fetchUser()

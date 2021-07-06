@@ -4,7 +4,6 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
-      <head> </head>
       <body v-if="user.unauthenticated" style="height: 110vh" class="body">
         <div style="height: 170vh" class="section">
           <div
@@ -194,14 +193,14 @@
                   <p style="color: hsla(0, 100%, 64%, 1)">
                     {{ errors.global }}
                   </p>
+                  <button
+                    style="margin-bottom: 20px"
+                    class="btn btn-primary"
+                    @submit="handleSubmit()"
+                  >
+                    Register
+                  </button>
                 </form>
-                <button
-                  style="margin-bottom: 20px"
-                  class="btn btn-primary"
-                  @click="handleSubmit()"
-                >
-                  Register
-                </button>
               </div>
             </div>
           </div>
@@ -276,34 +275,30 @@ export default {
     ...mapGetters(['getUser']),
     ...mapActions(['fetchUser']),
     handleFile(e) {
+      // decrease file size before processing
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
     },
     checkErrors() {
       let isError = false
-      // eslint-disable-next-line
       Object.keys(this.errors).forEach((key) => {
         if (this.errors[key].length > 0) {
           isError = true
         }
-        // eslint-disable-next-line
-        console.log(key, isError)
       })
-      // eslint-disable-next-line
-      console.log(isError)
       return isError
     },
     validateData() {
       if (!this.toc) {
-        this.errors.global = 'Please read and agree to toc'
+        this.errors.global = 'Please read and agree to the Terms of Condition'
       } else {
         this.errors.global = ''
       }
       const birthday = +new Date(this.birthDate);
       const age = Math.floor(((Date.now() - birthday) / (31557600000)))
-      if(age < 6){
-        this.errors.birthDate = "Sorry, it seems that you are too young to qualify as a student"
+      if(age < 6) {
+        this.errors.birthDate = "You must at least 6 years old to register as a student"
       }
       const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
@@ -312,17 +307,17 @@ export default {
         this.errors.email = ''
       }
       if (!emailValidation.test(this.parentEmail)) {
-        this.errors.parentEmail = 'Invalid email'
+        this.errors.parentEmail = 'Invalid parent email'
       } else {
         this.errors.parentEmail = ''
       }
-      if (!this.password.length > 0) {
-        this.errors.password = 'Invalid password'
+      if (!this.password.length > 5) {
+        this.errors.password = 'The Password length must be greater than 5 characters'
       } else {
         this.errors.password = ''
       }
       if (this.password !== this.confirmPassword) {
-        this.errors.password = 'Password and Confirm Password must be the same'
+        this.errors.password = 'The Password and Confirm Password must be the same'
         this.errors.confimPassword =
           'Password and Confirm Password must be the same'
       } else {
@@ -330,25 +325,19 @@ export default {
         this.errors.confirmPassword = ''
       }
       if (this.firstName.length < 1) {
-        this.errors.firstName = 'Invalid name'
+        this.errors.firstName = 'Invalid first name'
       } else {
         this.errors.firstName = ''
       }
       if (this.lastName.length < 1) {
-        this.errors.lastName = 'Invalid name'
+        this.errors.lastName = 'Invalid last name'
       } else {
         this.errors.lastName = ''
       }
     },
-    async handleSubmit() {
-      // eslint-disable-next-line
-      console.log('handling submit...')
-      this.validateData()
-      // eslint-disable-next-line
-      console.log('validating data...')
+    async handleSubmit(e) {
+      e.preventDefault()
       if (!this.checkErrors()) {
-        // eslint-disable-next-line
-        console.log('sending data...')
         const formData = new FormData()
         const user = {
           email: this.email,
@@ -370,7 +359,7 @@ export default {
         const data = await fetch('api/auth/register-student/', {
           method: 'POST',
           headers: {
-            'X-CSRFToken': await (await getCSRF()).success,
+            'X-CSRFToken': (await getCSRF()).success,
           },
           body: formData,
         })
@@ -386,7 +375,7 @@ export default {
         if (data && data.error) {
           this.errors.global = data.error
         }
-        if (data && data.success === 'Successfully created student') {
+        if (data && data.success === 'Successfully created student account!') {
           this.$router.push('/checkemail')
         }
       }

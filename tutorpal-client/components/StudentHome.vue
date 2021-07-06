@@ -71,7 +71,7 @@
                     data-delay="0"
                     class="dropdown-3 w-dropdown"
                   >
-                    <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
+                    <div @click="logoutClick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                       <div class="text-block-18" id="name">{{user.firstName}}{{user.lastName}}</div>
                       <div class="text-block-20">Student</div>
                     </div>
@@ -220,10 +220,6 @@ export default {
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
   },
-  async created(){
-    await this.fetchSessions('upcoming')
-    await this.fetchUser()
-  },
   head() {
     return {
       title: 'Home',
@@ -243,28 +239,16 @@ export default {
     },
     ...mapGetters({ user: 'getUser', started: 'getStartedSessions', trending: 'getTrending', upcoming: 'getUpcoming'}),
   },
+  async created(){
+    await this.fetchSessions('upcoming')
+    await this.fetchUser()
+  },
   methods: {
     ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending', 'removeSession']),
     ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming']),
     convertTime,
-    logoutclick(){
+    logoutClick(){
       this.clicked = !this.clicked
-    },
-    async joinSession(id){
-      let url = '/api/sessions/'+id+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "student_joined": true,
-        }),
-      })
-      url = '/sessions/'+id+'/'
-      this.$router.push(url)
     },
     async canceledHandler(id, session){
       const x = confirm("Please confirm that you wish to cancel this session.")

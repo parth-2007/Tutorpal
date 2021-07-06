@@ -157,7 +157,6 @@ T<template>
                 </div>
               </div>
               <p style="padding-top: 20px" class="paragraph-7">
-                <!-- <strong>Member since:</strong> 7/12/2020<br /> -->
                 <strong>Birth Date: </strong>{{ tutor.birthDate }}<br /><strong
                   >Qualification Description: </strong
                 >{{ tutor.qualifications }}<br /><strong>Education:</strong>

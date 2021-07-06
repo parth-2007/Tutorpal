@@ -45,7 +45,7 @@
             <div class="div-block-21">
               <div class="text-block-4">Sign-In</div>
               <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
-                {{ errors.email }} {{ errors.password }} {{ errors.global }}
+                {{ errors.global }}
               </p>
               <div style="margin-top: 20px" class="div-block-22">
                 <form style="font-family: Poppins" @submit="submitHandler">
@@ -58,6 +58,9 @@
                       v-model="email"
                     />
                   </div>
+                  <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
+                    {{ errors.email }}
+                  </p>
                   <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input
@@ -67,6 +70,9 @@
                       v-model="password"
                     />
                   </div>
+                  <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
+                    {{ errors.password }}
+                  </p>
                   <button class="button-11 w-button" @click="submitHandler">
                     Continue
                   </button>
@@ -154,7 +160,7 @@ export default {
       } else {
         this.errors.email = ''
       }
-      if (!this.password.length > 0) {
+      if (!this.password.length > 4) {
         this.errors.password = 'Invalid password'
       } else {
         this.errors.password = ''
@@ -176,15 +182,15 @@ export default {
             },
             body: formData,
           })
-            .then((res) => {
-              if (res.status >= 400 && res.status < 600) {
-                this.errors.global = 'Something went wrong :('
-              }
-              return res.json()
-            })
-            .catch(() => {
+          .then((res) => {
+            if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('
-            })
+            }
+            return res.json()
+          })
+          .catch(() => {
+            this.errors.global = 'Something went wrong :('
+          })
           if (data && data.error) {
             this.errors.global = data.error
           }

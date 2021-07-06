@@ -12,6 +12,7 @@
             aria-label="First name"
             required
           />
+          {{errors.firstName}}
         </div>
         <div style="padding-left: 0px" class="col">
           <label for="lastname" class="form-label">Last Name</label>
@@ -23,6 +24,7 @@
             aria-label="Last name"
             required
           />
+          {{errors.lastName}}
         </div>
       </div>
       <div style="margin-top: 15px" class="mb-3">
@@ -34,6 +36,7 @@
           id="emailaddress"
           required
         />
+        {{erros.email}}
       </div>
       <div style="margin-top: 15px; float: left" class="row">
         <div style="position: relative; text-align: center" class="col">
@@ -79,6 +82,7 @@
           placeholder="Enter Parent Email"
           required
         />
+        {{errors.parentEmail}}
       </div>
       <div class="form-group row">
         <label for="birthdate" class="col-2 col-form-label">Birthdate</label>
@@ -90,16 +94,9 @@
             id="birthdate"
             required
           />
+          {{errors.birthDate}}
         </div>
       </div>
-      <!-- <label for="password" class="form-label">Verify Password</label>
-    <input
-      style="margin-bottom: 15px"
-      type="password"
-      class="form-control"
-      id="password"
-      required
-    /> -->
     </form>
     <button @click="handleSubmit()" class="btn btn-primary">
       Update Information
@@ -158,25 +155,25 @@ export default {
     validateData() {
       const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.user.email)) {
-        this.errors.email = 'Invalid email'
+        this.errors.email = 'Invalid user email'
       } else {
         this.errors.email = ''
       }
 
       if (!emailValidation.test(this.student.parentEmail)) {
-        this.errors.parentEmail = 'Invalid email'
+        this.errors.parentEmail = 'Invalid parent email'
       } else {
         this.errors.parentEmail = ''
       }
 
       if (this.user.firstName.length < 1) {
-        this.errors.firstName = 'Invalid name'
+        this.errors.firstName = 'Invalid first name'
       } else {
         this.errors.firstName = ''
       }
 
       if (this.user.lastName.length < 1) {
-        this.errors.lastName = 'Invalid name'
+        this.errors.lastName = 'Invalid last name'
       } else {
         this.errors.lastName = ''
       }
@@ -207,19 +204,16 @@ export default {
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,
-              // 'Content-Type': 'application/json',
             },
             body: formData,
-          })
-            .then((res) => {
-              if (res.status >= 400 && res.status < 600) {
-                this.errors.global = 'Something went wrong :('
-              }
-              return res.json()
-            })
-            .catch(() => {
+          }).then((res) => {
+            if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('
-            })
+            }
+            return res.json()
+          }).catch(() => {
+            this.errors.global = 'Something went wrong :('
+          })
           if (data && data.error) {
             this.errors.global = data.error
           } else {
@@ -230,7 +224,6 @@ export default {
               this.updateUser({ ...this.user })
             }
             this.$emit('modalSubmit')
-            // this.errors.global = 'Something went wrong :('
           }
         } else {
           this.errors.global = 'Something went wrong :('

@@ -41,6 +41,12 @@
 import getCSRF from '../utils/getCSRF'
 
 export default {
+  data(){
+    return{
+      level: "",
+      description: ""
+    }
+  },
   head() {
     return {
       title: 'Bugs',
@@ -62,18 +68,8 @@ export default {
       ]
     }
   },
-  data(){
-    return{
-      level: "",
-      description: ""
-    }
-  },
   methods: {
     async bugformhandler(){
-      const bugform = {
-        "bug": this.description,
-        "level": parseInt(this.level)
-      }
       const csrfToken = await getCSRF()
       await fetch('/api/bugs/', {
         method: 'POST',
@@ -81,7 +77,10 @@ export default {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken.success,
         },
-        body: JSON.stringify(bugform),
+        body: JSON.stringify({
+          "bug": this.description,
+          "level": parseInt(this.level)
+        }),
       })
     }
   }

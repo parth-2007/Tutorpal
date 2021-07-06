@@ -13,9 +13,6 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  head() {
-    return {}
-  },
   computed: mapGetters({ user: 'getUser' }),
   async created() {
     await this.fetchUser()

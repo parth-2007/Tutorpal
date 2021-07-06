@@ -1,6 +1,6 @@
 <template>
   <div v-if="user.unauthenticated">
-    <NotFound></NotFound>
+    <NotFound></NotFound> <!-- Forbidden -->
   </div>
   <div v-else-if="user.isTutor || user.isStudent">
     <ChatRoom :other-user="otherUser"></ChatRoom>

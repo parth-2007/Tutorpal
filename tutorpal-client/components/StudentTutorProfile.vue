@@ -111,7 +111,6 @@
               <a @click="updatemodalvalue()" class="button-9 w-button">Schedule a class</a>
               <a href="/inbox" style="margin-left: 20px; cursor: pointer;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
           </div>  
-          <!-- if already taken class -->
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
               <div v-for="review in reviews.results" :key="review.id" id="posts">
@@ -157,13 +156,6 @@ export default {
     )
     await this.fetchUser()
   },
-  async created(){
-    const url = '/api/tutors/'+this.$route.params.id+'/reviews/'
-    this.reviews = await fetch(url).then(res =>
-      res.json()
-    )
-    await this.fetchSessions('pendingOnTutor')
-  },
   head() {
     return {
       title: 'Tutor Profile',
@@ -188,7 +180,12 @@ export default {
     },
     ...mapGetters({user: "getUser", pendingOnTutor: 'getPendingOnTutor'})
   },
-
+  async created(){
+    const url = '/api/tutors/'+this.$route.params.id+'/reviews/'
+    this.reviews = await fetch(url).then(res =>
+      res.json()
+    )
+  },
   methods: {
     ...mapGetters(['getUser', 'getPendingOnTutor']),
     ...mapActions(['fetchUser', 'addSession', 'fetchSessions', ]),
@@ -203,11 +200,9 @@ export default {
       this.predictedprice = "Predicted Class Amount: $0.00"
     },
     predictprice(){
-      this.predictedprice = "Predicted Class Amount: $" + Math.round((this.data.rates/60)*parseInt(this.duration))+".00";
+      this.predictedprice = "Predicted Class Amount: $" + ((this.data.rates/60)*parseInt(this.duration));
     },
     async createroom(){
-      const studentid = this.user.studentPk.toString()
-      console.log(studentid)
       const room = {
         "tutor_pk": parseInt(this.$route.params.id),
         "student_pk": parseInt(this.user.studentPk),
@@ -266,7 +261,6 @@ export default {
           "parent_emailed": false,
           "accessable": false
       }
-      console.log(sessionData)
       const csrfToken = await getCSRF()
       this.addSession([sessionData , 'pendingOnTutor'])
       await fetch('/api/sessions/', {
@@ -278,7 +272,6 @@ export default {
         body: JSON.stringify(sessionData),
       })
       .then((res) => {
-        console.log(res)
         if(res.status === 400){
           this.predictedprice = "Oops! Something went wrong, please check your inputs again."
         }

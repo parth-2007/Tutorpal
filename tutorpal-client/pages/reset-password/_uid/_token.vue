@@ -1,5 +1,6 @@
 <template>
   <client-only>
+    <!-- Make this look nice -->
     <form @submit="handleSubmit">
       <input type="password" v-model="password" />
       <input type="password" v-model="confirmPassword" />
@@ -21,17 +22,17 @@ export default {
   methods: {
     async handleSubmit(e) {
       e.preventDefault()
-      if (this.password.length < 1) {
-        this.error = 'Invalid password'
+      if (this.password.length < 5) {
+        this.error = 'Invalid password, password is less than 5 characters long'
       } else if (this.password !== this.confirmPassword) {
-        this.error = 'Password and Confirm password should match'
+        this.error = 'Password and Confirm password should match.'
       } else {
         await fetch(
           `api/auth/password-reset/${this.$route.params.uid}/${this.$route.params.token}/`,
           {
             method: 'POST',
             headers: {
-              'X-CSRFToken': await (await getCSRF()).success,
+              'X-CSRFToken':  (await getCSRF()).success,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ password: this.password }),

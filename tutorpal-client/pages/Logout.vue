@@ -1,4 +1,5 @@
 <template>
+  <!-- make it look nice -->
   <p>Please refresh if you were not automatically redirected</p>
 </template>
 <script>

@@ -105,11 +105,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import RegisterTutorForm from '../components/RegisterTutorForm'
 
 export default {
   name: 'RegisterTutor',
-  components: { RegisterTutorForm },
   head() {
     return {
       title: 'Tutor Registration',

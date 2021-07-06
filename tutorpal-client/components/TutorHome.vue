@@ -140,7 +140,7 @@
                     <div class="div-block-52"><a @click="accept(session.id, session)" style="z-index: 5" aria-current="page" class="button-3 w-button w--current">Accept</a><a @click="deny(session.id, session)" style="z-index: 5" aria-current="page" class="button-3-copy w-button w--current">Deny</a></div>
                   </div>
                 </div>
-                <a @click="fetchNewMessages()" v-if="this.next !== null" style="font-family: Poppins; font-size: 14px; color: #41a8d3; text-decoration: underline">Click to view more pending requests</a>
+                <a @click="fetchNewRequests()" v-if="next !== null" style="font-family: Poppins; font-size: 14px; color: #41a8d3; text-decoration: underline">Click to view more pending requests</a>
               </div>
             </div>
           </div>
@@ -190,16 +190,12 @@ export default {
     } 
   },
   async fetch() {
+    // manually edit state to add pending_on_tutor
     await this.fetchSessions('startedSessions')
     this.requests1 = await fetch("/api/sessions/pending_on_tutor/").then(res =>
       res.json()
     )
     this.next = this.requests1.next
-  },
-  async created(){
-    await this.fetchUser()
-    await this.fetchSessions('upcoming')
-    await this.fetchSessions('pendingOnTutor')
   },
   head() {
     return {
@@ -219,16 +215,21 @@ export default {
         }
     },
   },
+  async created(){
+    await this.fetchUser()
+    await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnTutor')
+  },
   methods: {
     ...mapActions(['fetchUser', 'fetchSessions', 'addSession', 'removeSession' ]),
     ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming', 'getPendingOnTutor']),
     convertTime,
-    async fetchNewMessages(){
+    async fetchNewRequests(){
       const data = await fetch(this.next).then((res) => res.json())
       this.requests1.results.push(data.results)
       this.next = data.next;
     },
-    async accept(id,session){
+    async accept(id, session){
       const url = '/api/sessions/'+id+'/'
       const csrfToken = await getCSRF()
       await fetch(url, {

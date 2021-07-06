@@ -584,10 +584,10 @@ export default {
       } else {
         this.errors.global = ''
       }
-      const birthday = +new Date(this.birthDate);
+      const birthday = new Date(this.birthDate);
       const age = Math.floor(((Date.now() - birthday) / (31557600000)))
       if(age < 15){
-        this.errors.birthDate = "Sorry, it seems that you are too young to qualify as a tutor"
+        this.errors.birthDate = "You must be at least 15 years old to register as a tutor"
       }
       const requiredFields = [
         'email',
@@ -612,14 +612,12 @@ export default {
         }
       })
 
-      const emailValidation =
-        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
       } else {
         this.errors.email = ''
       }
-
       if (
         this.paypalEmail.length > 0 &&
         !emailValidation.test(this.paypalEmail)

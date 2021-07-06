@@ -14,14 +14,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import StudentRequests from '../components/StudentRequests'
-import NotFound from '../components/NotFound'
 
 export default {
-  components: {
-    StudentRequests,
-    NotFound,
-  },
   head() {
     return {
       title: 'Requests'

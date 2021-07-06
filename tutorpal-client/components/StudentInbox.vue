@@ -71,7 +71,7 @@
                 <div style="padding-top: 5px; padding-bottom: 5px;" class="i-copy">
                   <span class="badge">{{contact.unread}}</span>
                   <div class="div-block-51">
-                    <div class="div-block-51-copy"><img :src="contact.tutor !== undefined ? contact.tutor.user.profilePic: ''" loading="lazy"  height="60"  width="60" sizes="100px" alt="" class="image-15">
+                    <div class="div-block-51-copy"><img style="border-radius: 100px" :src="contact.tutor !== undefined ? contact.tutor.user.profilePic: ''" loading="lazy"  height="60"  width="60" sizes="100px" alt="" class="image-15">
                       <h1 class="heading-12">{{contact.tutor !== undefined ? contact.tutor.user.firstName: '' }} {{contact.tutor !== undefined ? contact.tutor.user.lastName: ''}}</h1>
                     </div>
                     <router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
@@ -87,8 +87,8 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data(){
-    return {clicked:false} 
+  data() {
+    return { clicked: false } 
   },
   async fetch() {
     await this.fetchContacts()

@@ -88,7 +88,7 @@
                     class="dropdown-3 w-dropdown"
                   >
                     <div
-                      @click="logoutclick()"
+                      @click="logoutClick()"
                       class="dropdown-toggle-2-copy w-dropdown-toggle"
                     >
                       <div id="name" class="text-block-18">
@@ -305,7 +305,7 @@ export default {
     return {
       clicked: false,
       clicked1: false,
-      stars: parseInt(),
+      stars: 5,
       description: '',
     }
   },
@@ -361,10 +361,10 @@ export default {
     updateModalValue() {
       this.clicked = !this.clicked
     },
-    logoutclick() {
+    logoutClick() {
       this.clicked1 = !this.clicked1
     },
-    async createReview(tutorid) {
+    async createReview(tutorId) {
       const csrfToken = await getCSRF()
       await fetch('/api/reviews/', {
         method: 'POST',
@@ -376,7 +376,7 @@ export default {
           student: this.user.studentPk,
           stars: parseInt(this.stars),
           description: this.description,
-          tutor: tutorid,
+          tutor: tutorId,
         }),
       }).then((res) => {
         let error = null
@@ -388,10 +388,9 @@ export default {
           error =
             'We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
         }
-        if (error === null) {
-          location.reload()
+        if (error) {
+          alert(error)
         }
-        alert(error)
         this.description = ''
         this.stars = undefined
       })

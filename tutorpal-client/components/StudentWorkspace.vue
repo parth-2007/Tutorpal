@@ -76,6 +76,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import getCSRF from '../utils/getCSRF'
 
 export default {
   data() {
@@ -83,18 +84,6 @@ export default {
       clicked: false,
       session: [],
     }
-  },
-  async created(){
-    const url = '/api/sessions/'+this.$route.params.id+"/"
-    this.session = await fetch(url)
-    .then((res) => {
-      if (res.status === 500) {
-          this.$router.push('/')
-      }
-      return res.json()
-    })
-    console.log(this.session)
-    await this.fetchUser()
   },
   head() {
     return {
@@ -127,6 +116,27 @@ export default {
         }
     },
     ...mapGetters({ user: 'getUser' }),
+  },
+  async created(){
+    const url = '/api/sessions/'+this.$route.params.id+"/"
+    this.session = await fetch(url)
+    .then((res) => {
+      if (res.status === 500) {
+          this.$router.push('/')
+      }
+      return res.json()
+    })
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'X-CSRFToken': (await getCSRF()).success,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "student_joined": true,
+      }),
+    })
+    await this.fetchUser()
   },
   methods: {
     logoutclick(){

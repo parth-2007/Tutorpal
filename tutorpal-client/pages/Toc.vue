@@ -86,7 +86,7 @@
             independent businesses engaged by Students, Tutors decide, are
             responsible for and generally control the methods, materials,
             scheduling, frequency, duration and all other aspects of the
-            tutoring they provide.Students are responsible for selecting the
+            tutoring they provide. Students are responsible for selecting the
             right tutor for their needs. In making hiring decisions, Students
             should review and investigate each tutor’s self-reported
             credentials, education, and experience, as well as reviews from

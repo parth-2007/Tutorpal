@@ -89,7 +89,7 @@
       </div>
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
-            <button v-if="this.buttonShow === true" @click="updateModalValue()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">End this Class</button>
+            <button v-if="buttonShow === true" @click="updateModalValue()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">End this Class</button>
         </div>
         <div style="float: right; margin-right: 20px">
             <h1 style="font-family: Poppins; margin-left: 20px; margin-top: 10px; margin-bottom: 10px; font-size:24px; color: black"><strong>Countdown Timer: {{dateToString(timerDisplay)}}</strong></h1>
@@ -116,21 +116,6 @@ export default {
       buttonShow: false
     }
   },
-  async created(){
-    const url = '/api/sessions/'+this.$route.params.id+"/"
-    this.session = await fetch(url)
-    .then((res) => {
-      if (res.status === 500) {
-          this.$router.push('/')
-      }
-      return res.json()
-    })
-    const hms = this.session.duration
-    const a = hms.split(':');
-    const seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
-    this.timerCount = seconds
-    await this.fetchUser()
-  },
   head() {
     return {
       title: 'Tutor Workspace',
@@ -155,30 +140,6 @@ export default {
       ],
     }
   },
-  watch: {
-    timerCount: {
-      handler(value) {
-          if (value > 0) {
-              setTimeout(() => {
-                  this.timerCount--;
-                  if(this.timerCount === 300){
-                    this.buttonShow = true;
-                  }
-              }, 1000);
-          }
-          else if(value===300){
-            alert("There are five minutes remaining in this class. We suggest wrapping things up!")
-          }
-          else if(value===0){
-            alert("This meeting's time is up, please end the meeting shortly.")
-          }
-          const t = new Date(1970, 0, 1); // Epoch
-          t.setSeconds(value)
-          this.timerDisplay = t.toString()
-      },
-      immediate: true // This ensures the watcher is triggered upon creation
-    }
-  },
   computed: {
     logout() {
         return {
@@ -191,6 +152,45 @@ export default {
       }
     },
     ...mapGetters({ user: 'getUser' }),
+  },
+  watch: {
+    timerCount: {
+      handler(value) {
+        if (value > 0) {
+          setTimeout(() => {
+              this.timerCount--;
+              if(this.timerCount === 300){
+                this.buttonShow = true;
+              }
+          }, 1000);
+        }
+        else if(value===300){
+          alert("There are five minutes remaining in this class. We suggest wrapping things up!")
+        }
+        else if(value===0){
+          alert("This meeting's time is up, please end the meeting shortly.")
+        }
+        const t = new Date(1970, 0, 1);
+        t.setSeconds(value)
+        this.timerDisplay = t.toString()
+      },
+      immediate: true
+    }
+  },
+  async created(){
+    const url = '/api/sessions/'+this.$route.params.id+"/"
+    this.session = await fetch(url)
+    .then((res) => {
+      if (res.status === 500) {
+          this.$router.push('/')
+      }
+      return res.json()
+    })
+    const hms = this.session.duration
+    const a = hms.split(':');
+    const seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+    this.timerCount = seconds
+    await this.fetchUser()
   },
   methods: {
     dateToString,
@@ -217,12 +217,9 @@ export default {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            "finished": true,
-            "tutor_paid": true,
+          "finished": true,
+          "tutor_paid": true,
         }),
-      })
-      .then((res) => {
-        console.log(res)
       })
       url = '/api/sessions/' +this.$route.params.id+'/pay_tutor/'
       await fetch(url, {
@@ -231,9 +228,6 @@ export default {
           'X-CSRFToken': csrfToken.success,
           'Content-Type': 'application/json',
         },
-      })
-      .then((res) => {
-        console.log(res)
       })
       this.$router.push('/')
     },

@@ -30,22 +30,22 @@ export default {
         await fetch('api/auth/reset-password/', {
           method: 'POST',
           headers: {
-            'X-CSRFToken': getCSRF(),
+            'X-CSRFToken': (await getCSRF()).success,
           },
           body: formData,
         })
-          .then((res) => {
-            if (res.status === 400) {
-              this.errors = 'This is not an existing email address'
-            } else if (res.status === 200) {
-              this.$router.push('/checkemail')
-            } else if (res.status >= 400 && res.status < 600) {
-              this.errors = 'Something went wrong :('
-            }
-          })
-          .catch(() => {
+        .then((res) => {
+          if (res.status === 400) {
+            this.errors = 'This is not an existing email address'
+          } else if (res.status === 200) {
+            this.$router.push('/checkemail')
+          } else if (res.status >= 400 && res.status < 600) {
             this.errors = 'Something went wrong :('
-          })
+          }
+        })
+        .catch(() => {
+          this.errors = 'Something went wrong :('
+        })
       }
     },
   },

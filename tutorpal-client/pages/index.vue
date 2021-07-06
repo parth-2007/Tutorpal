@@ -14,16 +14,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import MainHome from '../components/MainHome'
-import StudentHome from '../components/StudentHome'
-import TutorHome from '../components/TutorHome'
 
 export default {
-  components: {
-    MainHome,
-    StudentHome,
-    TutorHome,
-  },
   head() {
     return {
       title: 'Home - TutorPal',

@@ -39,7 +39,6 @@
             </div>
           </div>
         </div>
-        <!-- display chat messages -->
         <div class="chatroomcontainer" style="width: 100%;">
             <div ref="chatcont" @scroll="getNextMessages()" style="height: 55vh; overflow-y:auto; display:flex; flex-direction:column-reverse;" class="wrapper">
               <div>
@@ -160,25 +159,17 @@ export default {
         this.response.error === 'server error' &&
         this.response.status === 404
       ) {
-        this.errors = 'Not your chat room'
+        this.errors = 'You are not in this chat room'
       }
     } else {
-      // const loc = window.location
-      // const wsStart = 'ws://'
-      // if (this.$route == 'https:') {
-      //     wsStart = 'wss://'
-      // }
-      // const host = loc.host
       const pastMessages = this.response.results
       this.chatMsgs = pastMessages.reverse()
     }
     this.connect()
   },
   beforeDestroy() {
-    console.log('unmounted')
     this.socket.close()
   },
-  destroyed() {},
   methods: {
     convertTime2,
     // RUN DOCKER AND REDIS !!!!!!
@@ -199,44 +190,21 @@ export default {
     },
     connect() {
       const chatMsgs = this.chatMsgs
-      const endpoint =
-        'ws://localhost:5000/api/ws/chat/' + this.$route.params.id + '/'
-      // const addChatMsg = this.addChatMsg
-
+      const endpoint = 'ws://localhost:5000/api/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
-      // const chatMsgs = this.chatMsgs
-
       this.socket.onmessage = function (e) {
-        console.log('message', e)
         const chatDataMsg = JSON.parse(e.data)
         if (!chatDataMsg.error) {
-          // console.log('chatMsgs: ', chatMsgs)
           chatMsgs.push(chatDataMsg)
         }
-        // else {
-        //   console.warn(chatDataMsg)
-        // }
       }
-      this.socket.onopen = (e) => {
-        // console.log('chatMsgs: ', this.chatMsgs)
-        console.log('open', e)
-      }
-      this.socket.onerror = (e) => {
-        console.log('error', e)
-      }
-      this.socket.onclose = (e) => {
-        console.log('close', e)
-        // some modal would go here
+      this.socket.onclose = () => {
         if (this.$route.path.includes('chat')) {
           alert('This chat session has ended. Please refresh to continue')
         }
-        // setTimeout(() => {
-        //   this.connect()
-        // }, 1000)
       }
     },
     handleFormSubmit() {
-      // console.log('sending: ', this.message)
       this.socket.send(this.message)
       this.message = ''
       const el = this.$refs.container

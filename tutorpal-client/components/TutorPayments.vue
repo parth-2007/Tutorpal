@@ -100,9 +100,6 @@ export default {
     await this.fetchSessions('pastSessions')
     await this.fetchUser()
   },
-  async created(){
-    await this.fetchSessions('pendingOnStudentPayment')
-  },
   head() {
     return {
       title: 'My Payments',
@@ -122,10 +119,13 @@ export default {
   computed: {
     ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getPastSessions'}),
     logout() {
-        return {
-          display: this.clicked ? "flex" : "none"
-        }
+      return {
+        display: this.clicked ? "flex" : "none"
+      }
     },
+  },
+  async created(){
+    await this.fetchSessions('pendingOnStudentPayment')
   },
   methods: {
     ...mapGetters(['getUser',  'getPendingOnStudentPayment', 'getPastSessions']),

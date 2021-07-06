@@ -65,7 +65,7 @@
             </div>
             <div class="loop">
               <div v-for="session in paymentpending" :key="session.id" id="paypending">
-                <img @click="canceledHandler1(session.id, session)" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+                <img @click="canceledHandler(session.id, session, 'pendingOnStudentPayment')" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
                 <div class="i">
                   <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
                     <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
@@ -81,7 +81,7 @@
               <p class="paragraph">Congratulations! All your work is over, now you can sit back and learn from your professional tutor.</p>
             </div>
             <div v-for="session in paymentfinished" :key="session.id" id="paid">
-              <img @click="canceledHandler2(session.id, session)" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+              <img @click="canceledHandler(session.id, session, 'upcoming')" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
               <div class="item-copy">
                 <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
                   <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
@@ -103,17 +103,13 @@ import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
 
 export default {
-  async fetch() {
-    await this.fetchSessions('upcoming')
-  },
-  async created (){
-    await this.fetchSessions('pendingOnStudentPayment')
-    await this.fetchUser()
-  },
   data(){
     return {
       clicked:false,
     } 
+  },
+  async fetch() {
+    await this.fetchSessions('upcoming')
   },
   head() {
     return {
@@ -135,6 +131,10 @@ export default {
     },
     ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment', paymentfinished: 'getUpcoming'}),
   },
+  async created (){
+    await this.fetchSessions('pendingOnStudentPayment')
+    await this.fetchUser()
+  },
   methods: {
     ...mapGetters(['getUser',  'getPendingOnStudentPayment', 'getUpcoming']),
     ...mapActions(['fetchUser', 'fetchSessions', 'removeSession']),
@@ -142,7 +142,7 @@ export default {
     logoutclick(){
       this.clicked = !this.clicked
     },
-    async canceledHandler1(id, session){
+    async canceledHandler(id, session, sessionType) {
       const x = confirm("Please confirm that you wish to cancel this session.")
       if(x === true){
         const url = '/api/sessions/'+id+'/'
@@ -157,27 +157,9 @@ export default {
               "canceled": true,
             }),
         })
-        this.removeSession([session, 'pendingOnStudentPayment'])
+        this.removeSession([session, sessionType])
       }
     },
-    async canceledHandler2(id, session){
-      const x = confirm("Please confirm that you wish to cancel this session.")
-      if(x === true){
-        const url = '/api/sessions/'+id+'/'
-        const csrfToken = await getCSRF()
-        await fetch(url, {
-            method: 'PATCH',
-            headers: {
-              'X-CSRFToken': csrfToken.success,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              "canceled": true,
-            }),
-        })
-        this.removeSession([session, 'upcoming'])
-      }
-    }
   },
 }
 </script>
