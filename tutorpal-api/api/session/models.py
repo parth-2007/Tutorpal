@@ -28,6 +28,7 @@ class Session(models.Model):
 
     started = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
+    student_joined = models.BooleanField(default=False)
     # accessable = models.BooleanField(default=False)
 
     student_paid = models.BooleanField(default=False)
