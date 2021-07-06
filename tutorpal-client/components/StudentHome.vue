@@ -180,7 +180,7 @@
               <div class="upcoming_loop">
                 <div style="margin-bottom: 50px" v-for="session in started" :key="session.id" id="started">
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><router-link :to="'/sessions/'+session.id" class="button-4 w-button">Join Meeting</router-link>
+                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><a @click="joinSession(session.id)" class="button-4 w-button">Join Meeting</a>
                   </div>
                 </div>
               </div>
@@ -249,6 +249,22 @@ export default {
     convertTime,
     logoutclick(){
       this.clicked = !this.clicked
+    },
+    async joinSession(id){
+      let url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "student_joined": true,
+        }),
+      })
+      url = '/sessions/'+id+'/'
+      this.$router.push(url)
     },
     async canceledHandler(id, session){
       const x = confirm("Please confirm that you wish to cancel this session.")

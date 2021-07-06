@@ -19,16 +19,20 @@
           style="
             border-radius: 8px;
             padding-bottom: 20px;
-            height: 185px;
+            height: 240px;
             width: 375px;
             font-family: Poppins;
           "
           class="div-block-23"
         >
-          <div class="div-block-25">
-            Clicking "confirm" will confirm to us that this class has been finished. You will be paid shortly after. Thank you for tutoring with TutorPal!
+          <div v-if="session.student_joined === true" class="div-block-25">
+            <strong>You have {{dateToString(timerDisplay)}} left in this class, are you sure you want to end it?</strong>
+            <br>Clicking "confirm" will confirm to us that this class has been finished. You will be paid shortly after. Thank you for tutoring with TutorPal!
           </div>
-          <button @click="endclass()" style="background-color: green; margin-left: 10px; margin-top: 10px; font-size: 14px;" class="button-10-copy-copy w-button">Confirm</button><button @click="updateModalValue()" style="background-color: #bb0a1e; margin-left: 10px; margin-top: 10px; font-size: 14px" class="button-10-copy-copy w-button">Cancel</button>
+          <div v-else style="margin-left: 10px; margin-top: 10px; margin-right: 10px">
+            Your student has not joined this class, therefore, we are not allowing you to end this class. If there are any issues, please contact us at support@tutorpal.org. We are very sorry for the inconvienence and hope you will continue to tutor on this platform.
+          </div>
+          <button v-if="session.student_joined === true" @click="endclass()" style="background-color: green; margin-left: 10px; margin-top: 10px; font-size: 14px;" class="button-10-copy-copy w-button">Confirm</button><button @click="updateModalValue()" style="background-color: #bb0a1e; margin-left: 10px; margin-top: 10px; font-size: 14px" class="button-10-copy-copy w-button">Cancel</button>
         </div>
       </div>
       <div id="main">
@@ -85,7 +89,7 @@
       </div>
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
-            <button @click="updateModalValue()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">Click here to end the meeting and record its completion</button>
+            <button v-if="this.buttonShow === true" @click="updateModalValue()" class="button-10-copy-copy w-button" style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px; background-color: #bb0a1e">End this Class</button>
         </div>
         <div style="float: right; margin-right: 20px">
             <h1 style="font-family: Poppins; margin-left: 20px; margin-top: 10px; margin-bottom: 10px; font-size:24px; color: black"><strong>Countdown Timer: {{dateToString(timerDisplay)}}</strong></h1>
@@ -108,7 +112,8 @@ export default {
       clicked1: false,
       session: [],
       timerCount: "",
-      timerDisplay: ""
+      timerDisplay: "",
+      buttonShow: false
     }
   },
   async created(){
@@ -156,6 +161,9 @@ export default {
           if (value > 0) {
               setTimeout(() => {
                   this.timerCount--;
+                  if(this.timerCount === 300){
+                    this.buttonShow = true;
+                  }
               }, 1000);
           }
           else if(value===300){
@@ -189,7 +197,14 @@ export default {
     logoutclick(){
       this.clicked = !this.clicked
     },
-    updateModalValue() {
+    async updateModalValue() {
+      this.session = await fetch('/api/sessions/'+this.$route.params.id+"/")
+      .then((res) => {
+        if (res.status === 500) {
+            this.$router.push('/')
+        }
+        return res.json()
+      })
       this.clicked1 = !this.clicked1
     },
     async endclass(){
