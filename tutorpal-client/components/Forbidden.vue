@@ -13,13 +13,13 @@
             <div class="div-block-41">
               <h1 class="heading-3">Oops!</h1>
               <p class="paragraph-8">
-                We can&#x27;t seem to find the page you&#x27;re looking for.
+                You don't have the permission to view this page. Access Denied.
               </p>
-              <div class="text-block-19">Error Code: 404 Not Found</div>
+              <div class="text-block-19">Error Code: 403 Forbidden</div>
             </div>
           </div>
           <div class="w-col w-col-6">
-            <img src="../static/outcast/images/404_image.png" width="600" />
+            <img style="margin-left: 60px" src="../static/outcast/images/no-entry.png" width="490" />
           </div>
         </div>
       </body>

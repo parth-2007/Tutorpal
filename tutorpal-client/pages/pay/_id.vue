@@ -1,6 +1,6 @@
 <template>
     <div v-if="user.unauthenticated || user.isTutor">
-      <NotFound></NotFound> <!-- Forbidden -->
+      <Forbidden></Forbidden> <!-- Forbidden -->
     </div>
     <div v-else-if="user.isStudent">
       <StudentPay></StudentPay>

@@ -11,7 +11,7 @@
         <NotFound></NotFound>
     </div>
     <div v-else-if="session.student_pk !== user.studentPk">
-        <NotFound></NotFound>
+        <Forbidden></Forbidden>
     </div>
     <body v-else id="body" style="margin-bottom: 0px; background-color: rgba(65, 168, 211, 0.2);" class="body-5">
       <div id="main">

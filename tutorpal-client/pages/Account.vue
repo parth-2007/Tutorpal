@@ -1,7 +1,7 @@
 <template>
   <div id="main">
     <div v-if="user.unauthenticated">
-      <NotFound></NotFound>
+      <Forbidden></Forbidden>
     </div>
     <div v-else-if="user.isStudent">
       <StudentAccount></StudentAccount>
