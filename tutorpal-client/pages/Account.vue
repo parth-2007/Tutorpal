@@ -7,7 +7,7 @@
       <StudentAccount></StudentAccount>
     </div>
     <div v-else-if="user.isTutor">
-      <TutorAccount></TutorAccount>
+      <TutorChangeInfo></TutorChangeInfo>
     </div>
   </div>
 </template>
