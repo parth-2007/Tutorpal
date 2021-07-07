@@ -5,7 +5,7 @@
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
     <div v-if="session.student_paid === true && session.started===false">
-        <p>This class has not been started yet, your job as a tutor is to start meetings when the proper times and date occur.</p>
+        <p style="font-size: 18px; font-family: Poppins; margin: 15px">This class has not been started yet, your job as a tutor is to start meetings when the proper times and date occur.</p>
     </div>
     <div v-else-if="session.student_paid === false || session.finished===true">
         <NotFound></NotFound>

@@ -179,6 +179,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { add, sub } from 'timelite/time'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
 export default {
@@ -260,22 +261,35 @@ export default {
       this.removeSession([session, 'pendingOnTutor'])
     },
     async startclass(id, session){
-      const url = '/api/sessions/' +id+'/'
-      const csrfToken = await getCSRF()
-      await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "started": true,
-        }),
-      })
-      .then((res) => {
-        this.removeSession([session, 'upcoming'])
-        this.addSession([session , 'startedSessions'])
-      })
+      const today = new Date();
+      const y = add(['00:06:00', session.timeStart])
+      const x = sub([session.timeStart, '00:06:00'])
+      const start = x[0] * 60 + x[1]
+      const end = y[0] * 60 + y[1]
+      const now = today.getHours() * 60 + today.getMinutes();
+      console.log(start, now, end)
+      const date = today.toISOString().split('T')[0];
+      if(date === session.date && start<now && now<end){
+        const url = '/api/sessions/' +id+'/'
+        const csrfToken = await getCSRF()
+        await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "started": true,
+          }),
+        })
+        .then((res) => {
+          this.removeSession([session, 'upcoming'])
+          this.addSession([session , 'startedSessions'])
+        })
+      }
+      else{
+        alert("You are attempting to start this session too early or too late. You are only allowed to start a class at least 5 minutes prior to the class start time or at most 5 minutes after.")
+      }
     },
     logoutclick(){
       this.clicked = !this.clicked
