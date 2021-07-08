@@ -159,7 +159,7 @@ export default {
         if (value > 0) {
           setTimeout(() => {
               this.timerCount--;
-              if(this.timerCount === 300){
+              if(this.timerCount === 300 || this.timerCount < 300){
                 this.buttonShow = true;
               }
           }, 1000);
@@ -208,28 +208,17 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass(){
-      let url = '/api/sessions/'+this.$route.params.id+'/'
-      const csrfToken = await getCSRF()
+      const url = '/api/finish_session/' +this.$route.params.id + "/"
       await fetch(url, {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
-          'X-CSRFToken': csrfToken.success,
+          'X-CSRFToken': (await getCSRF()).success,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          "finished": true,
-          "tutor_paid": true,
-        }),
+      }).then((res) => {
+        this.$router.push('/')
+        console.log(res)
       })
-      url = '/api/sessions/' +this.$route.params.id+'/pay_tutor/'
-      await fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-      })
-      this.$router.push('/')
     },
     ...mapActions(['fetchUser']),
   },
