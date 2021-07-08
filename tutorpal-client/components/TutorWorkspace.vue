@@ -197,6 +197,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { sub, str } from 'timelite/time'
 import getCSRF from '../utils/getCSRF'
 import dateToString from '../utils/dateToString'
 
@@ -279,10 +280,24 @@ export default {
       }
       return res.json()
     })
-    const hms = this.session.duration
+    const time = new Date();
+    let hours = time.getHours()
+    let minutes = time.getMinutes()
+    let seconds = time.getSeconds()
+    if(hours<10){
+      hours = '0'+hours.toString()
+    } 
+    else if(minutes<10){
+      minutes = '0'+minutes.toString()
+    }
+    else if(seconds<10){
+      seconds = '0'+seconds.toString()
+    }
+    const now = hours+":"+minutes+":"+seconds
+    const hms = str(sub([this.session.time_end, now]))
     const a = hms.split(':')
-    const seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    this.timerCount = seconds
+    const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
+    this.timerCount = timerSeconds
     await this.fetchUser()
   },
   methods: {
@@ -311,7 +326,6 @@ export default {
         },
       }).then(() => {
         this.$router.push('/')
-        // console.log(res)
       })
     },
     ...mapActions(['fetchUser']),
