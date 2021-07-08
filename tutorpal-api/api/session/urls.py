@@ -7,5 +7,6 @@ router.register(r'sessions', v.SessionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('capture_order/<int:id>/', v.api_capture_order)
+    path('capture_order/<int:id>/', v.api_capture_order),
+    path('finish_session/<int:id>/', v.finish_session)
 ]

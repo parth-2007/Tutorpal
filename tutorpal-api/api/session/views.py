@@ -1,3 +1,6 @@
+import re
+
+from django.core import exceptions
 from .models import Session
 from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
 from rest_framework import viewsets, status
@@ -8,7 +11,8 @@ from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
-from datetime import datetime
+from datetime import datetime, time, timedelta
+from django.utils import timezone
 import random
 from chat.models import Room
 # from django.db.models import F, ExpressionWrapper, DateTimeField
@@ -17,6 +21,7 @@ from .payments import send_payout, refund_order, capture_order
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
+from django.views.decorators.csrf import csrf_protect
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -207,7 +212,7 @@ class SessionViewSet(viewsets.ModelViewSet):
         send_mail(subject, message, None, [email])
 
     def perform_update(self, serializer):
-        if self.request.data.get('accepted', None):
+        if self.request.data.get('accepted', False):
             tutor = self.request.user.tutor
             tutor_pk = self.request.user.tutor_pk
             student = self.session.student
@@ -216,7 +221,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                 tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
             if self.session.free:
                 return serializer.save(student_paid=True, tutor_paid=True, accepted=True)
-        if self.request.data.get('canceled', None):
+        if self.request.data.get('canceled', False):
             # current_site = get_current_site(self.request)
             subject = 'Your tutoring session has been canceled'
             student_message = render_to_string('session/emails/canceled_student.html', {
@@ -236,10 +241,11 @@ class SessionViewSet(viewsets.ModelViewSet):
             send_mass_mail((student_mail, tutor_mail))
             if self.session.student_paid and not self.session.started and not self.session.free and len(self.session.payment_id) > 0:
                 refund_order(self.session.payment_id, self.session.price)
-                return super().perform_update(serializer)
+                # return super().perform_update(serializer)
         return super().perform_update(serializer)
 
 
+@csrf_protect
 @api_view(('POST',))
 def api_capture_order(request, id):
     try:
@@ -256,3 +262,39 @@ def api_capture_order(request, id):
             return Response(status=status.HTTP_200_OK, data={'success': 'successfully processed payment'})
     except Session.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'session does not exist'})
+
+
+@csrf_protect
+@api_view()
+def finish_session(request, id):
+    try:
+        session = Session.objects.get(id=id)  # fetch the object
+    except exceptions.ObjectDoesNotExist:
+        return Response(data={'Error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
+    if request.user.has_tutor and not session.finished and not session.canceled and request.user.is_authenticated and session.tutor_pk == request.user.tutor_pk:  # you need to be able to end it
+        if session.student_joined:  # if student joins they have to wait until 5 mins before the class_end time
+            if session.time_end < timezone.now() - timezone.timedelta(minutes=5):
+                return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
+        # if they didn't join they need to wait 20 mins, then they can end
+        elif datetime.combine(session.date, session.time_start) + timezone.timedelta(minutes=20) > timezone.make_naive(timezone.now()):
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
+        if not session.tutor_paid and not session.free:  # the session was paid
+            tutor = session.tutor
+            payout_price = session.price * 0.9651 - 0.49  # paypal fees
+            payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
+                                 0 else tutor.user.email, price=payout_price, session_id=session.id)
+            if payout == 'success':  # payout was successful
+                session.tutor_paid = True
+                session.finished = True
+                session.save()
+                return Response(data={'Success': 'Sent payout and ended session'}, status=status.HTTP_200_OK)
+            else:
+                session.finished = True
+                session.save()
+                return Response(data={'Error': 'There has been an error sending a payout, but the session was ended'}, status=status.HTTP_403_FORBIDDEN)
+        else:  # session was free
+            session.finished = True
+            session.save()
+            return Response(data={'Success': 'Ended Session'}, status=status.HTTP_403_FORBIDDEN)
+    else:
+        return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)

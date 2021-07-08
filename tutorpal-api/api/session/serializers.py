@@ -17,7 +17,9 @@ class StudentSessionSerializer(serializers.ModelSerializer):
             # 'tutor_emailed', 'student_emailed', 'parent_emailed',
             # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
         ]
-        extra_kwargs = {'payment_id': {'write_only': True}}
+        extra_kwargs = {'payment_id': {'write_only': True},
+                        'student_paid': {'read_only': True},
+                        'finished': {'read_only': True}}
 
 
 class TutorSessionSerializer(serializers.ModelSerializer):
@@ -34,6 +36,7 @@ class TutorSessionSerializer(serializers.ModelSerializer):
             # 'tutor_emailed', 'student_emailed', 'parent_emailed',
             # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
         ]
+        extra_kwargs = {'student_paid': {'read_only': True}}
 
 
 class ReservedSerializer(serializers.ModelSerializer):
