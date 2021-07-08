@@ -70,8 +70,13 @@
                     data-delay="0"
                     class="dropdown-3 w-dropdown"
                   >
-                    <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
-                      <div class="text-block-18" id="name">{{user.firstName}}{{user.lastName}}</div>
+                    <div
+                      @click="logoutclick()"
+                      class="dropdown-toggle-2-copy w-dropdown-toggle"
+                    >
+                      <div class="text-block-18" id="name">
+                        {{ user.firstName }} {{ user.lastName }}
+                      </div>
                       <div class="text-block-20">Student</div>
                     </div>
                     <nav :style="logout" class="navigation-dropdown-2">
@@ -119,8 +124,7 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                    <span class="badge">{{user.unread}}</span>
-                    </router-link
+                    <span class="badge">{{ user.unread }}</span> </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -158,15 +162,51 @@
               </div>
               <div class="trending">
                 <div v-for="tutor of trending" :key="tutor.id" id="trending">
-                  <router-link :to="'/tutors/'+tutor.id" class="link-block-2 w-inline-block">
-                    <div style="line-height: 14px;" class="div-block-54"><img :src="tutor.user !== undefined ? tutor.user.profilePic:'' " loading="lazy" width="38" height="38" sizes="38px" alt="" class="image-5">
-                      <div class="text-block-21"><strong class="bold-text-3">{{tutor.user!== undefined ? tutor.user.firstName:''}} {{tutor.user !== undefined ? tutor.user.lastName:''}}</strong></div>
-                          <div class="text-block-21-copy">Subject: {{tutor.subjects}}</div>
-                          <div class="text-block-21-copy-2">Price: ${{tutor.rates}} hourly</div>
-                          <div class="text-block-21-copy-2">Degree: {{tutor.education}}</div>
-                          <div class="text-block-21-copy-2">Education: {{tutor.major}} at {{tutor.school}}, GPA of {{tutor.gpa}}</div>
-                          <div class="text-block-21-copy-2">Reviews: {{tutor.averageReviews}} Stars</div>
-                          <div class="text-block-21-copy-2">Occupation: {{tutor.occupation}}</div>
+                  <router-link
+                    :to="'/tutors/' + tutor.id"
+                    class="link-block-2 w-inline-block"
+                  >
+                    <div style="line-height: 14px" class="div-block-54">
+                      <img
+                        :src="
+                          tutor.user !== undefined ? tutor.user.profilePic : ''
+                        "
+                        loading="lazy"
+                        width="38"
+                        height="38"
+                        sizes="38px"
+                        alt=""
+                        class="image-5"
+                      />
+                      <div class="text-block-21">
+                        <strong class="bold-text-3"
+                          >{{
+                            tutor.user !== undefined ? tutor.user.firstName : ''
+                          }}
+                          {{
+                            tutor.user !== undefined ? tutor.user.lastName : ''
+                          }}</strong
+                        >
+                      </div>
+                      <div class="text-block-21-copy">
+                        Subject: {{ tutor.subjects }}
+                      </div>
+                      <div class="text-block-21-copy-2">
+                        Price: ${{ tutor.rates }} hourly
+                      </div>
+                      <div class="text-block-21-copy-2">
+                        Degree: {{ tutor.education }}
+                      </div>
+                      <div class="text-block-21-copy-2">
+                        Education: {{ tutor.major }} at {{ tutor.school }}, GPA
+                        of {{ tutor.gpa }}
+                      </div>
+                      <div class="text-block-21-copy-2">
+                        Reviews: {{ tutor.averageReviews }} Stars
+                      </div>
+                      <div class="text-block-21-copy-2">
+                        Occupation: {{ tutor.occupation }}
+                      </div>
                     </div>
                   </router-link>
                 </div>
@@ -177,9 +217,39 @@
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
               <div class="upcoming_loop">
-                <div style="margin-bottom: 50px" v-for="session in started" :key="session.id" id="started">
+                <div
+                  style="margin-bottom: 50px"
+                  v-for="session in started"
+                  :key="session.id"
+                  id="started"
+                >
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>Class Description: {{session.description}}‍<br></p><a @click="joinSession(session.id)" class="button-4 w-button">Join Meeting</a>
+                    <p class="paragraph-3">
+                      Date: {{ session.date }}<br />Time:
+                      {{ convertTime(session.timeStart) }} -
+                      {{ convertTime(session.timeEnd) }}<br />Tutor:
+                      {{
+                        session.tutor !== undefined
+                          ? session.tutor.user.firstName
+                          : ''
+                      }}
+                      {{
+                        session.tutor !== undefined
+                          ? session.tutor.user.lastName
+                          : ''
+                      }}<br />Subject:
+                      {{
+                        session.tutor !== undefined
+                          ? session.tutor.subjects
+                          : ''
+                      }}<br />Class Description:
+                      {{ session.description }}‍<br />
+                    </p>
+                    <a
+                      @click="joinSession(session.id)"
+                      class="button-4 w-button"
+                      >Join Meeting</a
+                    >
                   </div>
                 </div>
               </div>
@@ -190,10 +260,48 @@
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
               <div class="upcoming_loop">
-                <div style="margin-bottom: 50px" v-for="session in upcoming" :key="session.id" id="upcoming">
-                  <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="10" alt=""/>
+                <div
+                  style="margin-bottom: 50px"
+                  v-for="session in upcoming"
+                  :key="session.id"
+                  id="upcoming"
+                >
+                  <img
+                    @click="canceledHandler(session.id, session)"
+                    style="cursor: pointer"
+                    src="../static/student/images/close-1.png"
+                    align="right"
+                    width="10"
+                    alt=""
+                  />
                   <div class="upcoming_item">
-                    <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Subject: {{session.tutor!==undefined ? session.tutor.subjects:''}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class.</strong></p>
+                    <p class="paragraph-3">
+                      Date: {{ session.date }}<br />Time:
+                      {{ convertTime(session.timeStart) }} -
+                      {{ convertTime(session.timeEnd) }}<br />Tutor:
+                      {{
+                        session.tutor !== undefined
+                          ? session.tutor.user.firstName
+                          : ''
+                      }}
+                      {{
+                        session.tutor !== undefined
+                          ? session.tutor.user.lastName
+                          : ''
+                      }}<br />Subject:
+                      {{
+                        session.tutor !== undefined
+                          ? session.tutor.subjects
+                          : ''
+                      }}<br />‍Class Description:
+                      {{ session.description }}‍<br /><strong
+                        style="margin-top: 10px"
+                        class="bold-text-2"
+                        >Don&#x27;t worry if you can&#x27;t keep track of your
+                        classes, we send an email 10 minutes prior to the
+                        beginning of the class.</strong
+                      >
+                    </p>
                   </div>
                 </div>
               </div>
@@ -209,10 +317,10 @@ import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
 export default {
-  data(){
+  data() {
     return {
-      clicked:false,
-    } 
+      clicked: false,
+    }
   },
   async fetch() {
     await this.fetchTrending()
@@ -222,34 +330,60 @@ export default {
     return {
       title: 'Home',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+      ],
     }
   },
   computed: {
     logout() {
       return {
-        display: this.clicked ? "flex" : "none"
+        display: this.clicked ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser', started: 'getStartedSessions', trending: 'getTrending', upcoming: 'getUpcoming'}),
+    ...mapGetters({
+      user: 'getUser',
+      started: 'getStartedSessions',
+      trending: 'getTrending',
+      upcoming: 'getUpcoming',
+    }),
   },
-  async created(){
+  async created() {
     await this.fetchSessions('upcoming')
     await this.fetchUser()
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending', 'removeSession']),
+    ...mapActions([
+      'fetchUser',
+      'fetchSessions',
+      'fetchTrending',
+      'removeSession',
+    ]),
     ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming']),
     convertTime,
-    logoutclick(){
+    logoutclick() {
       this.clicked = !this.clicked
     },
-    async joinSession(id){
-      let url = '/api/sessions/'+id+'/'
+    async joinSession(id) {
+      let url = '/api/sessions/' + id + '/'
       const csrfToken = await getCSRF()
       await fetch(url, {
         method: 'PATCH',
@@ -258,30 +392,30 @@ export default {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "student_joined": true,
+          student_joined: true,
         }),
       })
-      url = '/sessions/'+id+'/'
+      url = '/sessions/' + id + '/'
       this.$router.push(url)
     },
-    async canceledHandler(id, session){
-      const x = confirm("Please confirm that you wish to cancel this session.")
-      if(x === true){
-        const url = '/api/sessions/'+id+'/'
+    async canceledHandler(id, session) {
+      const x = confirm('Please confirm that you wish to cancel this session.')
+      if (x === true) {
+        const url = '/api/sessions/' + id + '/'
         const csrfToken = await getCSRF()
         await fetch(url, {
-            method: 'PATCH',
-            headers: {
-              'X-CSRFToken': csrfToken.success,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              "canceled": true,
-            }),
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            canceled: true,
+          }),
         })
         this.removeSession([session, 'upcoming'])
       }
-    }
+    },
   },
 }
 </script>

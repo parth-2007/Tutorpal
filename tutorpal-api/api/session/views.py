@@ -275,7 +275,7 @@ def finish_session(request, id):
             if datetime.combine(session.date, session.time_end) - timedelta(minutes=5) > timezone.make_naive(timezone.now()):
                 return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
         # if they didn't join they need to wait 20 mins, then they can end
-        elif datetime.combine(session.date, session.time_start) + timezone.timedelta(minutes=20) > timezone.make_naive(timezone.now()):
+        elif datetime.combine(session.date, session.time_start) + timezone.timedelta(minutes=20) > timezone.make_naive(timezone.now()) or datetime.combine(session.date, session.time_end) - timedelta(minutes=5) > timezone.make_naive(timezone.now()):
             return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
         if not session.tutor_paid and not session.free:  # the session was paid
             tutor = session.tutor

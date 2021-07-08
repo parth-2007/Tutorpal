@@ -19,7 +19,11 @@
             </div>
             <div style="margin-top: 20px" class="div-block-3">
               <div>
-                <form method="post" enctype="multipart/form-data">
+                <form
+                  method="post"
+                  enctype="multipart/form-data"
+                  @submit="handleSubmit"
+                >
                   <div class="row">
                     <div class="col">
                       <label for="firstname" class="form-label"
@@ -196,7 +200,7 @@
                   <button
                     style="margin-bottom: 20px"
                     class="btn btn-primary"
-                    @submit="handleSubmit()"
+                    type="submit"
                   >
                     Register
                   </button>
@@ -261,8 +265,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
+          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
         },
       ],
     }
@@ -295,12 +298,14 @@ export default {
       } else {
         this.errors.global = ''
       }
-      const birthday = +new Date(this.birthDate);
-      const age = Math.floor(((Date.now() - birthday) / (31557600000)))
-      if(age < 6) {
-        this.errors.birthDate = "You must at least 6 years old to register as a student"
+      const birthday = +new Date(this.birthDate)
+      const age = Math.floor((Date.now() - birthday) / 31557600000)
+      if (age < 6) {
+        this.errors.birthDate =
+          'You must at least 6 years old to register as a student'
       }
-      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
       } else {
@@ -312,12 +317,14 @@ export default {
         this.errors.parentEmail = ''
       }
       if (!this.password.length > 5) {
-        this.errors.password = 'The Password length must be greater than 5 characters'
+        this.errors.password =
+          'The Password length must be greater than 5 characters'
       } else {
         this.errors.password = ''
       }
       if (this.password !== this.confirmPassword) {
-        this.errors.password = 'The Password and Confirm Password must be the same'
+        this.errors.password =
+          'The Password and Confirm Password must be the same'
         this.errors.confimPassword =
           'Password and Confirm Password must be the same'
       } else {
@@ -374,8 +381,7 @@ export default {
           })
         if (data && data.error) {
           this.errors.global = data.error
-        }
-        if (data && data.success === 'Successfully created student account!') {
+        } else {
           this.$router.push('/checkemail')
         }
       }
