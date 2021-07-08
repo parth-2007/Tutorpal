@@ -1,4 +1,3 @@
-from django.middleware.csrf import CsrfViewMiddleware
 from django.core import exceptions
 from .models import Session
 from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
@@ -283,8 +282,8 @@ def finish_session(request, id):
             payout_price = math.floor(
                 ((float(session.price) * 0.9651) - 0.49) * 100) / 100
             if payout_price > 0:
-                payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
-                                     0 else tutor.user.email, price=payout_price, session_id=session.id)
+                payout = send_payout(email=tutor.paypal_email if len(
+                    tutor.paypal_email) > 0 else tutor.user.email, price=payout_price, session_id=session.id)
                 if payout == 'success':  # payout was successful
                     session.tutor_paid = True
                     session.finished = True
