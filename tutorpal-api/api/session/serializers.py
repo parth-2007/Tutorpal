@@ -13,13 +13,17 @@ class StudentSessionSerializer(serializers.ModelSerializer):
             'date', 'time_start', 'time_end', 'duration',
             'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'canceled',
-            'student_paid', 'tutor_paid', 'payment_id', 'student_joined'
-            # 'tutor_emailed', 'student_emailed', 'parent_emailed',
-            # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
+            'student_paid', 'payment_id', 'student_joined'
         ]
-        extra_kwargs = {'payment_id': {'write_only': True},
-                        'student_paid': {'read_only': True},
-                        'finished': {'read_only': True}}
+        read_only_fields = ['student_paid', 'finished', 'call_url',
+                            'accepted', 'rejected', 'started', 'finished']
+        extra_kwargs = {'payment_id': {'write_only': True}}
+
+    def update(self, instance, validated_data):
+        instance.student_joined = validated_data.get(
+            'student_joined', instance.student_joined)
+        instance.save()
+        return super().update(instance, validated_data)
 
 
 class TutorSessionSerializer(serializers.ModelSerializer):
@@ -33,10 +37,13 @@ class TutorSessionSerializer(serializers.ModelSerializer):
             'price', 'free', 'description', 'call_url', 'subjects',
             'accepted', 'rejected', 'started', 'finished', 'canceled',
             'student_paid', 'tutor_paid', 'student_joined'
-            # 'tutor_emailed', 'student_emailed', 'parent_emailed',
-            # 'refund_requested', 'refund_available', 'refunded', 'refund_description',
         ]
-        extra_kwargs = {'student_paid': {'read_only': True}}
+        read_only_fields = [
+            'id', 'student', 'tutor_pk',
+            'date', 'time_start', 'time_end', 'duration',
+            'price', 'free', 'description', 'call_url', 'subjects',
+            'student_paid', 'tutor_paid', 'student_joined'
+        ]
 
 
 class ReservedSerializer(serializers.ModelSerializer):
