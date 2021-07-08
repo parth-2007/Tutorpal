@@ -1,5 +1,4 @@
-import re
-
+from django.middleware.csrf import CsrfViewMiddleware
 from django.core import exceptions
 from .models import Session
 from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
@@ -11,7 +10,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from django.db.models.query import QuerySet
 from register.models import Tutor, Student
-from datetime import datetime, time, timedelta
+from datetime import datetime, timedelta
 from django.utils import timezone
 import random
 from chat.models import Room
@@ -21,7 +20,7 @@ from .payments import send_payout, refund_order, capture_order
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, requires_csrf_token
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -167,21 +166,21 @@ class SessionViewSet(viewsets.ModelViewSet):
             tutor__user=request.user, started=True, finished=False).select_related('student', 'student__user')
         return self.session_view(request, student_queryset, tutor_queryset)
 
-    @action(detail=True, permission_classes=[IsAuthenticated])
-    def pay_tutor(self, request, pk):
-        self.get_object()
-        if not self.session.tutor_paid and not self.session.free and not self.session.canceled and self.session.finished:
-            tutor = self.session.tutor
-            payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
-                                 0 else tutor.user.email, price=self.session.price, session_id=self.session.id)
-            if payout == 'success':
-                self.session.tutor_paid = True
-                self.session.save()
-                return Response(data={'Success': 'Sent payout'}, status=status.HTTP_200_OK)
-            else:
-                return Response(data={'Error': 'There has been an error sending a payout'}, status=status.HTTP_403_FORBIDDEN)
-        else:
-            return Response(data={'Error': 'Cannot send payout for session'}, status=status.HTTP_403_FORBIDDEN)
+    # @action(detail=True, permission_classes=[IsAuthenticated])
+    # def pay_tutor(self, request, pk):
+    #     self.get_object()
+    #     if not self.session.tutor_paid and not self.session.free and not self.session.canceled and self.session.finished:
+    #         tutor = self.session.tutor
+    #         payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
+    #                              0 else tutor.user.email, price=self.session.price, session_id=self.session.id)
+    #         if payout == 'success':
+    #             self.session.tutor_paid = True
+    #             self.session.save()
+    #             return Response(data={'Success': 'Sent payout'}, status=status.HTTP_200_OK)
+    #         else:
+    #             return Response(data={'Error': 'There has been an error sending a payout'}, status=status.HTTP_403_FORBIDDEN)
+    #     else:
+    #         return Response(data={'Error': 'Cannot send payout for session'}, status=status.HTTP_403_FORBIDDEN)
 
     def perform_create(self, serializer):
         data = self.request.data
@@ -260,20 +259,21 @@ def api_capture_order(request, id):
             session.payment_id = response.result.purchase_units[0].payments.captures[0].id
             session.save()
             return Response(status=status.HTTP_200_OK, data={'success': 'successfully processed payment'})
+        else:
+            return Response(status=status.HTTP_200_OK, data={'error': 'payment did not process correctly'})
     except Session.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'session does not exist'})
 
 
-@csrf_protect
-@api_view()
+@api_view(('POST',))
 def finish_session(request, id):
     try:
         session = Session.objects.get(id=id)  # fetch the object
     except exceptions.ObjectDoesNotExist:
         return Response(data={'Error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
-    if request.user.has_tutor and not session.finished and not session.canceled and request.user.is_authenticated and session.tutor_pk == request.user.tutor_pk:  # you need to be able to end it
+    if request.user.has_tutor and not session.finished and not session.canceled and request.user.is_authenticated and session.tutor_pk == request.user.tutor_pk and session.started:  # you need to be able to end it
         if session.student_joined:  # if student joins they have to wait until 5 mins before the class_end time
-            if session.time_end < timezone.now() - timezone.timedelta(minutes=5):
+            if datetime.combine(session.date, session.time_end) - timedelta(minutes=5) > timezone.make_naive(timezone.now()):
                 return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
         # if they didn't join they need to wait 20 mins, then they can end
         elif datetime.combine(session.date, session.time_start) + timezone.timedelta(minutes=20) > timezone.make_naive(timezone.now()):
