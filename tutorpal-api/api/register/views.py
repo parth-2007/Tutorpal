@@ -214,7 +214,7 @@ def update_tutor(request):
 def update_student(request):
     partial = True if request.method == "PATCH" else False
     student_data = request.data.get('student')
-    student_data = json.loads('student_data')
+    student_data = json.loads(student_data)
     user_data = request.data.get('user')
     user_data = json.loads(user_data)
     profile_pic = request.FILES.get('profile_pic', None)
