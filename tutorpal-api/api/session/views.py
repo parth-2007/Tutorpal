@@ -280,18 +280,23 @@ def finish_session(request, id):
             return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
         if not session.tutor_paid and not session.free:  # the session was paid
             tutor = session.tutor
-            payout_price = session.price * 0.9651 - 0.49  # paypal fees
-            payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
-                                 0 else tutor.user.email, price=payout_price, session_id=session.id)
-            if payout == 'success':  # payout was successful
-                session.tutor_paid = True
-                session.finished = True
-                session.save()
-                return Response(data={'Success': 'Sent payout and ended session'}, status=status.HTTP_200_OK)
+            payout_price = float(session.price) * 0.9651 - 0.49  # paypal fees
+            if payout_price > 0:
+                payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
+                                     0 else tutor.user.email, price=payout_price, session_id=session.id)
+                if payout == 'success':  # payout was successful
+                    session.tutor_paid = True
+                    session.finished = True
+                    session.save()
+                    return Response(data={'Success': 'Sent payout and ended session'}, status=status.HTTP_200_OK)
+                else:
+                    session.finished = True
+                    session.save()
+                    return Response(data={'Error': 'There has been an error sending a payout, but the session was ended'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 session.finished = True
                 session.save()
-                return Response(data={'Error': 'There has been an error sending a payout, but the session was ended'}, status=status.HTTP_403_FORBIDDEN)
+                return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0'}, status=status.HTTP_200_OK)
         else:  # session was free
             session.finished = True
             session.save()
