@@ -164,7 +164,7 @@
               <div style="margin-bottom: 50px" v-for="session in upcoming" :key="session.id" id="upcoming">
                 <img @click="canceledHandler(session.id, session)" style="cursor: pointer" src="../static/student/images/close-1.png" align="right" width="12.5" alt=""/>
                 <div class="upcoming_item">
-                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Student: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍<br><strong style="margin-top: 10px;" class="bold-text-2">Don&#x27;t worry if you can&#x27;t keep track of your classes, we send an email 10 minutes prior to the beginning of the class. Only start these classes on the exact data and times as specified in the class description.</strong></p>
+                  <p class="paragraph-3">Date: {{session.date}}<br>Time: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}<br>Student: {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}<br>Subject: {{session.subjects}}<br>‍Class Description: {{session.description}}‍</p>
                   <button @click="startclass(session.id, session)" class="button-4 w-button">Start this meeting</button>
                 </div>
               </div>
@@ -267,7 +267,6 @@ export default {
       const start = x[0] * 60 + x[1]
       const end = y[0] * 60 + y[1]
       const now = today.getHours() * 60 + today.getMinutes();
-      console.log(start, now, end)
       const date = today.toISOString().split('T')[0];
       if(date === session.date && start<now && now<end){
         const url = '/api/sessions/' +id+'/'

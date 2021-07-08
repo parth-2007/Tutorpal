@@ -1,4 +1,3 @@
-
 <template>
   <client-only>
     <html
@@ -71,7 +70,7 @@
                     data-delay="0"
                     class="dropdown-3 w-dropdown"
                   >
-                    <div @click="logoutClick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
+                    <div @click="logoutclick()" class="dropdown-toggle-2-copy w-dropdown-toggle">
                       <div class="text-block-18" id="name">{{user.firstName}}{{user.lastName}}</div>
                       <div class="text-block-20">Student</div>
                     </div>
@@ -209,7 +208,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data(){
     return {
@@ -247,8 +245,24 @@ export default {
     ...mapActions(['fetchUser', 'fetchSessions', 'fetchTrending', 'removeSession']),
     ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming']),
     convertTime,
-    logoutClick(){
+    logoutclick(){
       this.clicked = !this.clicked
+    },
+    async joinSession(id){
+      let url = '/api/sessions/'+id+'/'
+      const csrfToken = await getCSRF()
+      await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "student_joined": true,
+        }),
+      })
+      url = '/sessions/'+id+'/'
+      this.$router.push(url)
     },
     async canceledHandler(id, session){
       const x = confirm("Please confirm that you wish to cancel this session.")
@@ -269,7 +283,6 @@ export default {
       }
     }
   },
-
 }
 </script>
 <style scoped>

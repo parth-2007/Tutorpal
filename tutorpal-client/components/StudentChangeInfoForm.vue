@@ -36,7 +36,7 @@
           id="emailaddress"
           required
         />
-        {{erros.email}}
+        {{errors.email}}
       </div>
       <div style="margin-top: 15px; float: left" class="row">
         <div style="position: relative; text-align: center" class="col">

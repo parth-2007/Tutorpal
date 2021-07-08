@@ -4,7 +4,7 @@
       <Forbidden></Forbidden>
     </div>
     <div v-else-if="user.isStudent">
-      <StudentAccount></StudentAccount>
+      <StudentChangeInfo></StudentChangeInfo>
     </div>
     <div v-else-if="user.isTutor">
       <TutorChangeInfo></TutorChangeInfo>

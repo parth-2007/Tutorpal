@@ -1,4 +1,3 @@
-
 <template>
   <client-only>
     <html
@@ -111,6 +110,7 @@
               <a @click="updatemodalvalue()" class="button-9 w-button">Schedule a class</a>
               <a href="/inbox" style="margin-left: 20px; cursor: pointer;" @click="createroom()" class="button-9 w-buttion">Send a message</a>
           </div>  
+          <!-- if already taken class -->
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
               <div v-for="review in reviews.results" :key="review.id" id="posts">
@@ -132,7 +132,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import { add, str } from 'timelite/time'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data(){
     return {
@@ -185,6 +184,7 @@ export default {
     this.reviews = await fetch(url).then(res =>
       res.json()
     )
+    await this.fetchSessions('pendingOnTutor')
   },
   methods: {
     ...mapGetters(['getUser', 'getPendingOnTutor']),
