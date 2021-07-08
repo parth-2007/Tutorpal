@@ -13,6 +13,7 @@ from register.models import Tutor, Student
 from datetime import datetime, timedelta
 from django.utils import timezone
 import random
+import math
 from chat.models import Room
 # from django.db.models import F, ExpressionWrapper, DateTimeField
 from .payments import send_payout, refund_order, capture_order
@@ -20,7 +21,6 @@ from .payments import send_payout, refund_order, capture_order
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
-from django.views.decorators.csrf import csrf_protect, requires_csrf_token
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -244,7 +244,6 @@ class SessionViewSet(viewsets.ModelViewSet):
         return super().perform_update(serializer)
 
 
-@csrf_protect
 @api_view(('POST',))
 def api_capture_order(request, id):
     try:
@@ -280,7 +279,9 @@ def finish_session(request, id):
             return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
         if not session.tutor_paid and not session.free:  # the session was paid
             tutor = session.tutor
-            payout_price = float(session.price) * 0.9651 - 0.49  # paypal fees
+            # paypal fees and round
+            payout_price = math.floor(
+                ((float(session.price) * 0.9651) - 0.49) * 100) / 100
             if payout_price > 0:
                 payout = send_payout(email=tutor.paypal_email if len(tutor.paypal_email) >
                                      0 else tutor.user.email, price=payout_price, session_id=session.id)
