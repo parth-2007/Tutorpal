@@ -86,7 +86,7 @@
                 >Forgot Password?</router-link
               >
               <div class="text-block-6">
-                By continuing, you agree to tutorPal&#x27;s
+                By continuing, you agree to TutorPal&#x27;s
                 <router-link to="/toc">Terms of Conditions.</router-link>
               </div>
             </div>

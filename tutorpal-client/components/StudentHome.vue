@@ -316,6 +316,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
+
 export default {
   data() {
     return {
@@ -323,6 +324,7 @@ export default {
     }
   },
   async fetch() {
+    console.log(process.env.DATABASE_NAME)
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
   },
