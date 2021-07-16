@@ -1,6 +1,14 @@
 <template>
   <div id="main">
-    <MainHome></MainHome>
+    <div v-if="user.unauthenticated">
+      <MainHome></MainHome>
+    </div>
+    <div v-else-if="user.isStudent">
+      <StudentHome></StudentHome>
+    </div>
+    <div v-else-if="user.isTutor">
+      <TutorHome></TutorHome>
+    </div>
   </div>
 </template>
 
