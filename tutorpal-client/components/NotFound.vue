@@ -19,7 +19,7 @@
             </div>
           </div>
           <div class="w-col w-col-6">
-            <img src="../static/outcast/images/404_image.png" width="600" />
+            <!-- <img src="../static/outcast/images/404_image.png" width="600" /> -->
           </div>
         </div>
       </body>
