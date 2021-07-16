@@ -247,7 +247,7 @@
       <div class="footer-copy" style="position: static">
         <div class="columns-2 w-row">
           <div class="column-8 w-col w-col-3">
-            <router-link to="/bugs" class="link-3">Buzs</router-link>
+            <router-link to="/bugs" class="link-3">Bugs</router-link>
           </div>
           <div class="column-9 w-col w-col-3">
             <router-link to="/team" class="link-3">Team</router-link>
