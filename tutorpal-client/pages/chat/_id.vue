@@ -1,13 +1,10 @@
 <template>
-  <div v-if="user.unauthenticated">
-    <NotFound></NotFound> <!-- Forbidden -->
-  </div>
-  <div v-else-if="user.isTutor || user.isStudent">
+  <div v-if="user.isTutor || user.isStudent">
     <ChatRoom :other-user="otherUser"></ChatRoom>
   </div>
-  <!-- <div v-else-if="user.isStudent">
-    <StudentChat :other-user="otherUser"></StudentChat>
-  </div> -->
+  <div v-else>
+    <Forbidden></Forbidden>
+   <div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
