@@ -1,14 +1,14 @@
 <template>
   <div id="main">
-    <div v-if="user.unauthenticated">
-      <Forbidden></Forbidden>
-    </div>
-    <div v-else-if="user.isStudent">
+    <div v-if="user.isStudent">
       <StudentRequests></StudentRequests>
     </div>
     <div v-else-if="user.isTutor">
       <NotFound></NotFound>
     </div>
+    <div v-else>
+      <Forbidden></Forbidden>
+     </div>
   </div>
 </template>
 
