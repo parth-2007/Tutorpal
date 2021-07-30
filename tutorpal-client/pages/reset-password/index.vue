@@ -1,14 +1,7 @@
 <template>
   <client-only>
   <div>
-    <form style="margin-left: 25px; margin-top: 25px; font-family: Poppins; " @submit="onSubmit">
-      <p style="font-size: 16px; color: #bb0a1e;" v-if="errors">{{ errors }}</p>
-      <p v-if="show" style="font-size: 16px; color: green;">We have sent an email with information to reset your account's password. It will be in your inbox shortly</p>
-      <div style="width: 600px" class="input-group mb-3">
-        <input v-model="email" type="text" class="form-control" placeholder="Enter the email of your account">
-        <button style="margin-left: 5px" class="btn btn-primary" @click="onSubmit">Submit</button>    
-      </div>
-    </form>
+    <NotFound></NotFound>
   </div>
   </client-only>
 </template>
