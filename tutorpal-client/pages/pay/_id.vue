@@ -1,13 +1,10 @@
 <template>
-    <div v-if="user.isTutor">
-      <Forbidden></Forbidden>
-    </div>
     <div v-else-if="user.isStudent">
       <StudentPay></StudentPay>
     </div>
     <div v-else>
       <Forbidden></Forbidden>
-     <div
+    <div
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
