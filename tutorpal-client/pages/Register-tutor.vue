@@ -7,7 +7,11 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body v-if="user.unauthenticated">
+      <div v-if="user.isStudent">
+      </div>
+      <div v-else-if="user.isTutor">
+      </div>
+      <body v-else>
         <div class="div-block">
           <router-link
             to="/"
