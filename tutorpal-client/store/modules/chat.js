@@ -12,12 +12,12 @@ const getters = {
 const actions = {
   async fetchContacts({ commit, state }) {
     if (state.contacts.unfetched) {
-      const contacts = await loggedInFetch(`api/rooms/`)
+      const contacts = await loggedInFetch(`https://api.tutorpal.org/rooms/`)
       commit('setContacts', keysToCamel(contacts.results))
     }
   },
   async refreshContacts({ commit }) {
-    const contacts = await loggedInFetch(`api/rooms/`)
+    const contacts = await loggedInFetch(`https://api.tutorpal.org/rooms/`)
     commit('setContacts', keysToCamel(contacts.results))
   },
   updateContacts({ commit, state }, contact) {
