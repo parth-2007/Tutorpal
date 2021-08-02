@@ -4,7 +4,7 @@
   </div>
   <div v-else>
     <Forbidden></Forbidden>
-   <div>
+   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'

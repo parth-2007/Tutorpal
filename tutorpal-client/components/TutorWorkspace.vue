@@ -273,7 +273,7 @@ export default {
     },
   },
   async created() {
-    const url = '/api/sessions/' + this.$route.params.id + '/'
+    const url = 'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
     this.session = await fetch(url).then((res) => {
       if (res.status === 500) {
         this.$router.push('/')
@@ -307,7 +307,7 @@ export default {
     },
     async updateModalValue() {
       this.session = await fetch(
-        '/api/sessions/' + this.$route.params.id + '/'
+        'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
       ).then((res) => {
         if (res.status === 500) {
           this.$router.push('/')
@@ -317,7 +317,7 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass() {
-      const url = '/api/finish_session/' + this.$route.params.id + '/'
+      const url = 'https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
       await fetch(url, {
         method: 'POST',
         headers: {

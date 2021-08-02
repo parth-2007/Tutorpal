@@ -170,7 +170,7 @@ export default {
   },
   async fetch() {
     const id = parseInt(this.$route.params.id)
-    const url = '/api/sessions/' + id + '/'
+    const url = 'https://api.tutorpal.org/sessions/' + id + '/'
     this.session = await fetch(url).then((res) => {
       if (res.status === 500) {
         this.$router.push('/payments')

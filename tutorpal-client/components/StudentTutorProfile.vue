@@ -350,7 +350,7 @@ export default {
     }
   },
   async fetch() {
-    this.url = '/api/tutors/' + this.$route.params.id + '/'
+    this.url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/'
     this.data = await fetch(this.url).then((res) => res.json())
     await this.fetchUser()
   },
@@ -395,7 +395,7 @@ export default {
     ...mapGetters({ user: 'getUser', pendingOnTutor: 'getPendingOnTutor' }),
   },
   async created() {
-    const url = '/api/tutors/' + this.$route.params.id + '/reviews/'
+    const url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/reviews/'
     this.reviews = await fetch(url).then((res) => res.json())
     await this.fetchSessions('pendingOnTutor')
   },
@@ -425,7 +425,7 @@ export default {
         student: parseInt(this.user.studentPk),
       }
       const csrfToken = await getCSRF()
-      await fetch('/api/rooms/', {
+      await fetch('https://api.tutorpal.org/rooms/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -479,7 +479,7 @@ export default {
       }
       const csrfToken = await getCSRF()
       this.addSession([sessionData, 'pendingOnTutor'])
-      await fetch('/api/sessions/', {
+      await fetch('https://api.tutorpal.org/sessions/', {
         method: 'POST',
         headers: {
           'X-CSRFToken': csrfToken.success,

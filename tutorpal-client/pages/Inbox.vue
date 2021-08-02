@@ -1,5 +1,5 @@
 <template>
-  <div v-else-if="user.isStudent">
+  <div v-if="user.isStudent">
     <StudentInbox></StudentInbox>
   </div>
   <div v-else-if="user.isTutor">

@@ -118,7 +118,7 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   async created(){
-    const url = '/api/sessions/'+this.$route.params.id+"/"
+    const url = 'https://api.tutorpal.org/sessions/'+this.$route.params.id+"/"
     this.session = await fetch(url)
     .then((res) => {
       if (res.status === 500) {

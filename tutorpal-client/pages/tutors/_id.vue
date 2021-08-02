@@ -1,6 +1,6 @@
 <template>
   <div id="main">
-    <div v-else-if="user.isStudent">
+    <div v-if="user.isStudent">
       <StudentTutorProfile></StudentTutorProfile>
     </div>
     <div v-else>

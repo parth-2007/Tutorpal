@@ -367,7 +367,7 @@ export default {
             birth_date: this.birthDate,
           })
         )
-        const data = await fetch('api/auth/register-student/', {
+        const data = await fetch('https://api.tutorpal.org/auth/register-student/', {
           method: 'POST',
           headers: {
             'X-CSRFToken': (await getCSRF()).success,

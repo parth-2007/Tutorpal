@@ -385,7 +385,7 @@ export default {
       this.clicked = !this.clicked
     },
     async joinSession(id) {
-      let url = '/api/sessions/' + id + '/'
+      let url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
       await fetch(url, {
         method: 'PATCH',

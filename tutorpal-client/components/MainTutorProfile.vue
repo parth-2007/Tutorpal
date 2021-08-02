@@ -95,7 +95,7 @@ export default {
     } 
   },
   async fetch() {
-    const url = '/api/tutors/'+this.$route.params.id+'/'
+    const url = 'https://api.tutorpal.org/tutors/'+this.$route.params.id+'/'
     this.data = await fetch(this.url).then(res =>
       res.json()
     )

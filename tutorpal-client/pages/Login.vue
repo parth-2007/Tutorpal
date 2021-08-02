@@ -179,7 +179,7 @@ export default {
         formData.append('password', this.password)
         const csrfToken = await getCSRF()
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
-          const data = await fetch('api/auth/login/', {
+          const data = await fetch('https://api.tutorpal.org/auth/login/', {
             method: 'POST',
             headers: {
               'X-CSRFToken': csrfToken.success,

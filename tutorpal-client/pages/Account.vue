@@ -6,7 +6,7 @@
     <div v-else-if="user.isTutor">
       <TutorChangeInfo></TutorChangeInfo>
     </div>
-    <div v-else">
+    <div v-else>
       <NotFound></NotFound>
     </div>
   </div>
