@@ -1,12 +1,9 @@
 <template>
   <div id="main">
-    <div v-if="user.unauthenticated">
-      <MainTutorProfile></MainTutorProfile>
-    </div>
     <div v-else-if="user.isStudent">
       <StudentTutorProfile></StudentTutorProfile>
     </div>
-    <div v-else-if="user.isTutor">
+    <div v-else>
       <MainTutorProfile></MainTutorProfile>
     </div>
   </div>

@@ -1,13 +1,13 @@
 <template>
   <div id="main">
-    <div v-if="user.unauthenticated">
-      <Forbidden></Forbidden>
-    </div>
-    <div v-else-if="user.isStudent">
+    <div v-if="user.isStudent">
       <StudentChangeInfo></StudentChangeInfo>
     </div>
     <div v-else-if="user.isTutor">
       <TutorChangeInfo></TutorChangeInfo>
+    </div>
+    <div v-else">
+      <NotFound></NotFound>
     </div>
   </div>
 </template>
