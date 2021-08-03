@@ -14,13 +14,14 @@
       <body v-else>
         <div class="div-block">
           <router-link
+            style="margin-top: 0px; margin-bottom: -30px"
             to="/"
-            aria-current="page"
-            class="link-block w-inline-block w--current"
+            class="link-block w-inline-block"
             ><img
-              src="../static/student/images/logo.jpg"
-              width="200"
+              src="../static/main/images/logo.jpg"
+              width="250"
               alt=""
+              class="image"
           /></router-link>
           <div class="columns w-row">
             <div class="column-2 w-col w-col-6">
