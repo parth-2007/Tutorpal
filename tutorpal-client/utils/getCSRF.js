@@ -19,7 +19,7 @@ const getCSRF = async () => {
   if (csrfToken !== null && csrfToken !== undefined) {
     return { success: csrfToken }
   } else {
-    const resp = await fetch('api/auth/ensure-csrf/')
+    const resp = await fetch('https://api.tutorpal.org/auth/ensure-csrf/')
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {
           return { error: 'server error' }
