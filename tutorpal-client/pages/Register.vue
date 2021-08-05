@@ -74,9 +74,8 @@
               />
               <h1 class="heading-7">Become a student</h1>
               <p class="paragraph-7">
-                School education is not as strong as before? Have loads of
-                homework coming in? Need to prepare for a competition? We
-                provide a variety of services here at TutorPal. It does NOT cost
+                Have loads of homework coming in? Need to prepare for a competition? We
+                provide a variety of services here at TutorPal. It does not cost
                 to register an account as a student. Gain access to these
                 services in the click of a button.
               </p></router-link
