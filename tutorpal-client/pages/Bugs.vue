@@ -7,7 +7,17 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/main/images/logo.jpg" loading="lazy" width="250" srcset="../static/main/images/logo-p-500.jpeg 500w, ../static/main/images/logo-p-800.jpeg 800w, ../static/main/images/logo-p-1080.jpeg 1080w, ../static/main/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, 250px" alt="" class="image"></router-link>
+      <body>
+        <router-link
+          style="margin-top: 0px; margin-bottom: -30px"
+          to="/"
+          class="link-block w-inline-block"
+          ><img
+            src="../static/main/images/logo.jpg"
+            width="250"
+            alt=""
+            class="image"
+        /></router-link>
         <div style="height: auto; font-family: Poppins; padding-bottom: 0x; border-color: skyblue; border-width: 2.5px;" class="div-block">
           <div>
             <h1 style="font-size: 30px;"><strong>Bug Reports</strong></h1>
