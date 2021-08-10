@@ -8,7 +8,17 @@
         <meta charset="utf-8" />
       </head>
       <body>
-          <div class="div-block-3"><router-link to="/" class="w-inline-block"><img src="../static/main/images/logo.jpg" loading="lazy" width="307" srcset="../static/main/images/logo-p-500.jpeg 500w, ../static/main/images/logo-p-800.jpeg 800w, ../static/main/images/logo-p-1080.jpeg 1080w, ../static/main/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 27vw, (max-width: 991px) 24vw, (max-width: 1439px) 21vw, (max-width: 1919px) 16vw, 13vw" alt="" class="image-14"></router-link>
+          <div class="div-block-3">
+            <router-link
+              style="margin-top: 0px; margin-bottom: -30px"
+              to="/"
+              class="link-block w-inline-block"
+              ><img
+                src="../static/main/images/logo.jpg"
+                width="250"
+                alt=""
+                class="image"
+            /></router-link>
             <div class="div-block-4"><router-link to="/login" class="link-2-copy">login</router-link></div><router-link to="/register" class="button w-button">register</router-link></div>
           <div data-w-id="f0d0fabc-c4a9-309e-3cfe-1d2993a9c551" class="div-block-24">
           <img 
