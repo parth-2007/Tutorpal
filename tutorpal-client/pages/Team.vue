@@ -12,10 +12,10 @@
             <div class="div-block-4"><router-link to="/login" class="link-2-copy">login</router-link></div><router-link to="/register" class="button w-button">register</router-link></div>
           <div data-w-id="f0d0fabc-c4a9-309e-3cfe-1d2993a9c551" class="div-block-24">
           <img 
-            src="../static/main/images/stuff-p-800.jpeg" 
+            src="../static/main/images/team_pic.jpg" 
             loading="lazy" 
             width="639" 
-            srcset="../static/main/images/stuff-p-800-p-500.jpeg 500w, ../static/main/images/stuff-p-800.jpeg 800w" 
+            srcset="../static/main/images/team_pic.jpg 500w, ../static/main/images/team_pic.jpg 800w" 
             class="image-13"
           >
           </div>
