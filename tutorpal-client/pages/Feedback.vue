@@ -7,7 +7,17 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/main/images/logo.jpg" loading="lazy" width="250" srcset="../static/main/images/logo-p-500.jpeg 500w, ../static/main/images/logo-p-800.jpeg 800w, ../static/main/images/logo-p-1080.jpeg 1080w, ../static/main/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, 250px" alt="" class="image"></router-link>
+      <body>
+        <router-link
+          style="margin-top: 0px; margin-bottom: -30px"
+          to="/"
+          class="link-block w-inline-block"
+          ><img
+            src="../static/main/images/logo.jpg"
+            width="250"
+            alt=""
+            class="image"
+        /></router-link>
         <div style="height: auto; font-family: Poppins; padding-bottom: 20px; border-width: 2px; border-color: skyblue;" class="div-block">
           <div>
             Please let us know what user feedback you have so we can continue to improve our product. We will work on these immediately, if you would like to report a bug, please do so <router-link to="/bugs">here</router-link> 
@@ -59,6 +69,7 @@ export default {
       e.preventDefault()
       await fetch('/api/feedback/', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': (await getCSRF()).success,

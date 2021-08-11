@@ -1,12 +1,12 @@
 <template>
-    <div v-if="user.unauthenticated">
-      <Forbidden></Forbidden>
-    </div>
-    <div v-else-if="user.isStudent">
+    <div v-if="user.isStudent">
       <StudentWorkspace></StudentWorkspace>
     </div>
     <div v-else-if="user.isTutor">
       <TutorWorkspace></TutorWorkspace>
+    </div>
+    <div v-else>
+      <Forbidden></Forbidden>
     </div>
 </template>
 <script>

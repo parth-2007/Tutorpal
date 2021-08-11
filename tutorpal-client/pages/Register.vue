@@ -7,22 +7,21 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body>
+      <div v-if="user.isStudent">
+      </div>
+      <div v-else-if="user.isTutor">
+      </div>
+      <body v-else>
         <div class="div-block-3">
-          <router-link to="/" class="w-inline-block"
+          <router-link
+            style="margin-top: 0px; margin-bottom: -30px"
+            to="/"
+            class="link-block w-inline-block"
             ><img
               src="../static/main/images/logo.jpg"
-              loading="lazy"
-              width="307"
-              srcset="
-                ../static/main/images/logo-p-500.jpeg   500w,
-                ../static/main/images/logo-p-800.jpeg   800w,
-                ../static/main/images/logo-p-1080.jpeg 1080w,
-                ../static/main/images/logo.jpg         1432w
-              "
-              sizes="(max-width: 479px) 100vw, (max-width: 767px) 27vw, (max-width: 991px) 24vw, (max-width: 1439px) 21vw, (max-width: 1919px) 16vw, 13vw"
+              width="250"
               alt=""
-              class="image-14"
+              class="image"
           /></router-link>
           <div class="div-block-4">
             <router-link to="/login" class="link-2-copy">login</router-link>
@@ -75,9 +74,8 @@
               />
               <h1 class="heading-7">Become a student</h1>
               <p class="paragraph-7">
-                School education is not as strong as before? Have loads of
-                homework coming in? Need to prepare for a competition? We
-                provide a variety of services here at TutorPal. It does NOT cost
+                Have loads of homework coming in? Need to prepare for a competition? We
+                provide a variety of services here at TutorPal. It does not cost
                 to register an account as a student. Gain access to these
                 services in the click of a button.
               </p></router-link
@@ -89,6 +87,8 @@
   </client-only>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   head() {
     return {
@@ -100,6 +100,14 @@ export default {
       ]
     }
   },
+  computed: mapGetters({ user: 'getUser' }),
+  async created() {
+    await this.fetchUser()
+  },
+  methods: {
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser']),
+  }
 }
 
 </script>

@@ -316,6 +316,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
+
 export default {
   data() {
     return {
@@ -323,6 +324,7 @@ export default {
     }
   },
   async fetch() {
+    console.log(process.env.DATABASE_NAME)
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
   },
@@ -383,9 +385,10 @@ export default {
       this.clicked = !this.clicked
     },
     async joinSession(id) {
-      let url = '/api/sessions/' + id + '/'
+      let url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
       await fetch(url, {
+        credentials: 'include',
         method: 'PATCH',
         headers: {
           'X-CSRFToken': csrfToken.success,
@@ -405,6 +408,7 @@ export default {
         const csrfToken = await getCSRF()
         await fetch(url, {
           method: 'PATCH',
+          credentials: 'include',
           headers: {
             'X-CSRFToken': csrfToken.success,
             'Content-Type': 'application/json',

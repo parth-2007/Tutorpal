@@ -170,7 +170,7 @@ export default {
   },
   async fetch() {
     const id = parseInt(this.$route.params.id)
-    const url = '/api/sessions/' + id + '/'
+    const url = 'https://api.tutorpal.org/sessions/' + id + '/'
     this.session = await fetch(url).then((res) => {
       if (res.status === 500) {
         this.$router.push('/payments')
@@ -266,6 +266,7 @@ export default {
             let url = '/api/capture_order/' + this.$route.params.id + '/'
             const csrfToken = await getCSRF()
             await fetch(url, {
+              credentials: 'include',
               method: 'POST',
               headers: {
                 'X-CSRFToken': csrfToken.success,
@@ -277,6 +278,7 @@ export default {
             })
             url = '/api/sessions/' + this.$route.params.id + '/'
             await fetch(url, {
+              credentials: 'include',
               method: 'PATCH',
               headers: {
                 'X-CSRFToken': csrfToken.success,

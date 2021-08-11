@@ -7,22 +7,21 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body v-if="user.unauthenticated" class="body">
+      <div v-if="user.isStudent">
+      </div>
+      <div v-else-if="user.isTutor">
+      </div>
+      <body v-else class="body">
         <div class="div-block-3">
-          <router-link style="z-index: 2" to="/" class="w-inline-block"
+          <router-link
+            style="margin-top: 0px; margin-bottom: -30px"
+            to="/"
+            class="link-block w-inline-block"
             ><img
               src="../static/main/images/logo.jpg"
-              loading="lazy"
-              width="307"
-              srcset="
-                ../static/main/images/logo-p-500.jpeg   500w,
-                ../static/main/images/logo-p-800.jpeg   800w,
-                ../static/main/images/logo-p-1080.jpeg 1080w,
-                ../static/main/images/logo.jpg         1432w
-              "
-              sizes="(max-width: 479px) 100vw, (max-width: 767px) 27vw, (max-width: 991px) 24vw, (max-width: 1439px) 21vw, (max-width: 1919px) 16vw, 13vw"
+              width="250"
               alt=""
-              class="image-14"
+              class="image"
           /></router-link>
           <div class="div-block-4">
             <router-link
@@ -86,7 +85,7 @@
                 >Forgot Password?</router-link
               >
               <div class="text-block-6">
-                By continuing, you agree to tutorPal&#x27;s
+                By continuing, you agree to TutorPal&#x27;s
                 <router-link to="/toc">Terms of Conditions.</router-link>
               </div>
             </div>
@@ -121,28 +120,10 @@ export default {
     return {
       title: 'Login',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/homepage-12.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-        {
-          type: 'text/js',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js',
-        },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href: '/main/css/homepage-12.webflow.css' },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/normalize.css" },
+        { rel: "stylesheet", type: "text/css", href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
       ],
     }
   },
@@ -174,34 +155,32 @@ export default {
         formData.append('email', this.email)
         formData.append('password', this.password)
         const csrfToken = await getCSRF()
-        if (csrfToken.success !== null && csrfToken.success !== undefined) {
-          const data = await fetch('api/auth/login/', {
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': csrfToken.success,
-            },
-            body: formData,
-          })
-          .then((res) => {
-            if (res.status >= 400 && res.status < 600) {
-              this.errors.global = 'Something went wrong :('
-            }
-            return res.json()
-          })
-          .catch(() => {
+        const data = await fetch('https://api.tutorpal.org/auth/login/', {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            
+          },
+          body: formData,
+        })
+        .then((res) => {
+          if (res.status >= 400 && res.status < 600) {
             this.errors.global = 'Something went wrong :('
-          })
-          if (data && data.error) {
-            this.errors.global = data.error
           }
-          if (data && data.success === 'Successfully logged in user') {
-            await this.refreshUser()
-            await this.refreshTutor()
-            await this.refreshStudent()
-            this.$router.push('/')
-          }
-        } else {
+          return res.json()
+        })
+        .catch(() => {
           this.errors.global = 'Something went wrong :('
+        })
+        if (data && data.error) {
+          this.errors.global = data.error
+        }
+        if (data && data.success === 'Successfully logged in user') {
+          await this.refreshUser()
+          await this.refreshTutor()
+          await this.refreshStudent()
+          this.$router.push('/')
         }
       }
     },

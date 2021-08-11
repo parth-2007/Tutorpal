@@ -117,7 +117,7 @@ export default {
     }
   },
   async fetch() {
-    this.url = 'api/tutors/search/?q=' + this.$route.query.q + '/'
+    this.url = 'https://api.tutorpal.org/tutors/search/?q=' + this.$route.query.q + '/'
     this.data = await fetch(this.url).then((res) => res.json())
   },
   head() {

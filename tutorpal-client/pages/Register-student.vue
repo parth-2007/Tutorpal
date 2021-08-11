@@ -4,7 +4,11 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
-      <body v-if="user.unauthenticated" style="height: 110vh" class="body">
+      <div v-if="user.isStudent">
+      </div>
+      <div v-else-if="user.isTutor">
+      </div>
+      <body v-else style="height: 110vh" class="body">
         <div style="height: 170vh" class="section">
           <div
             style="font-family: Poppins; height: 950px; width: 500px"
@@ -247,26 +251,10 @@ export default {
     return {
       title: 'Student Registration',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/register/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/register/css/2tor4u-2-0.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/register/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
+        { rel: 'stylesheet', type: 'text/css', href: '/register/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/register/css/2tor4u-2-0.webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/register/css/normalize.css' },
+        { rel: "stylesheet", type: "text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
       ],
     }
   },
@@ -282,6 +270,12 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
+      if (e.target.files[0].size > 100000){
+        this.errors.profilePic = "File size is too high! Please upload a file less than 100 Kilobytes"
+      }
+      else{
+        this.errors.profilePic = ""
+      }
     },
     checkErrors() {
       let isError = false
@@ -363,7 +357,8 @@ export default {
             birth_date: this.birthDate,
           })
         )
-        const data = await fetch('api/auth/register-student/', {
+        const data = await fetch('https://api.tutorpal.org/auth/register-student/', {
+          credentials: 'include',
           method: 'POST',
           headers: {
             'X-CSRFToken': (await getCSRF()).success,

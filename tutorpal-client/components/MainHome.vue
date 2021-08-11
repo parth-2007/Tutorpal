@@ -22,7 +22,7 @@
               width="25"
               height="25"
               srcset="
-                ../static/main/images/search-1-p-500.png 500w,
+                ../static/main/images/search-1.png 500w,
                 ../static/main/images/search-1.png       512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"

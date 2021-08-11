@@ -11,6 +11,7 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/pwa": "^3.3.5",
     "bootstrap": "^4.6.0",
     "core-js": "^3.9.1",

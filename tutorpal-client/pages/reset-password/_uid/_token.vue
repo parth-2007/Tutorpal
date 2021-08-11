@@ -37,6 +37,7 @@ export default {
         await fetch(
           `api/auth/password-reset/${this.$route.params.uid}/${this.$route.params.token}/`,
           {
+            credentials: 'include',
             method: 'POST',
             headers: {
               'X-CSRFToken':  (await getCSRF()).success,
