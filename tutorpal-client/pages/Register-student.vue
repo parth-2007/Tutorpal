@@ -364,21 +364,20 @@ export default {
           },
           body: formData,
         })
-        .then((res) => {
-          if (res.status >= 400 && res.status < 600) {
+          .then((res) => {
+            if (res.status >= 400 && res.status < 600) {
+              this.errors.global = 'Something went wrong :('
+            }
+            return res.json()
+          })
+          .catch(() => {
             this.errors.global = 'Something went wrong :('
-          }
-          else if(res.status === 200) {
-            this.$router.push('/checkemail')
-          }
-          return res.json()
-        })
-        .catch(() => {
-          this.errors.global = 'Something went wrong :('
-        })
+          })
         if (data && data.error) {
           this.errors.global = data.error
-        } 
+        } else {
+          this.$router.push('/checkemail')
+        }
       }
     },
   },
