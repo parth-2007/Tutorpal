@@ -358,6 +358,7 @@ export default {
           })
         )
         const data = await fetch('https://api.tutorpal.org/auth/register-student/', {
+          credentials: 'include',
           method: 'POST',
           headers: {
             'X-CSRFToken': (await getCSRF()).success,

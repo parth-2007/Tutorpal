@@ -427,6 +427,7 @@ export default {
       const csrfToken = await getCSRF()
       await fetch('https://api.tutorpal.org/rooms/', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken.success,
@@ -481,6 +482,7 @@ export default {
       this.addSession([sessionData, 'pendingOnTutor'])
       await fetch('https://api.tutorpal.org/sessions/', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'X-CSRFToken': csrfToken.success,
           'Content-Type': 'application/json',

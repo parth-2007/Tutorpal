@@ -686,6 +686,7 @@ export default {
         formData.append('tutor', JSON.stringify(tutor))
 
         const data = await fetch('https://api.tutorpal.org/auth/register-tutor/', {
+          credentials: 'include',
           method: 'POST',
           headers: {
             'X-CSRFToken': getCSRF(),

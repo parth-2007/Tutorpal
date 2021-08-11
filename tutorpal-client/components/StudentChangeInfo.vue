@@ -367,6 +367,7 @@ export default {
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
       await fetch('https://api.tutorpal.org/reviews/', {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'X-CSRFToken': csrfToken.success,

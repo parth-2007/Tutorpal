@@ -320,6 +320,7 @@ export default {
       const url = 'https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
       await fetch(url, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'X-CSRFToken': (await getCSRF()).success,
           'Content-Type': 'application/json',

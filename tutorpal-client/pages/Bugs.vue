@@ -83,6 +83,7 @@ export default {
       const csrfToken = await getCSRF()
       await fetch('/api/bugs/', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken.success,

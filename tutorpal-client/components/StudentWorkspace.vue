@@ -128,6 +128,7 @@ export default {
     })
     await fetch(url, {
       method: 'PATCH',
+      credentials: 'include',
       headers: {
         'X-CSRFToken': (await getCSRF()).success,
         'Content-Type': 'application/json',

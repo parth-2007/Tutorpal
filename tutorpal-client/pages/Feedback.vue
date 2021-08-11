@@ -69,6 +69,7 @@ export default {
       e.preventDefault()
       await fetch('/api/feedback/', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': (await getCSRF()).success,

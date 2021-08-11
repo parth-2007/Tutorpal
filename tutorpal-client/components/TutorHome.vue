@@ -235,6 +235,7 @@ export default {
       const csrfToken = await getCSRF()
       await fetch(url, {
           method: 'PATCH',
+          credentials: 'include',
           headers: {
             'X-CSRFToken': csrfToken.success,
             'Content-Type': 'application/json',
@@ -250,6 +251,7 @@ export default {
       const csrfToken = await getCSRF()
       await fetch(url, {
           method: 'PATCH',
+          credentials: 'include',
           headers: {
             'X-CSRFToken': csrfToken.success,
             'Content-Type': 'application/json',
@@ -273,6 +275,7 @@ export default {
         const csrfToken = await getCSRF()
         await fetch(url, {
           method: 'PATCH',
+          credentials: 'include',
           headers: {
             'X-CSRFToken': csrfToken.success,
             'Content-Type': 'application/json',
@@ -299,6 +302,7 @@ export default {
         const url = 'https://api.tutorpal.org/sessions/'+id+'/'
         const csrfToken = await getCSRF()
         await fetch(url, {
+            credentials: 'include',
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,

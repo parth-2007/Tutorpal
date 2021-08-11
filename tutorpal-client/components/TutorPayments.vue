@@ -141,6 +141,7 @@ export default {
         const csrfToken = await getCSRF()
         await fetch(url, {
             method: 'PATCH',
+            credentials: 'include',
             headers: {
               'X-CSRFToken': csrfToken.success,
               'Content-Type': 'application/json',

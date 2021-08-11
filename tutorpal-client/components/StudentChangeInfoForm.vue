@@ -201,6 +201,7 @@ export default {
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
           const data = await fetch('https://api.tutorpal.org/auth/update-student/', {
+            credentials: 'include',
             method: 'PATCH',
             headers: {
               'X-CSRFToken': csrfToken.success,
