@@ -155,34 +155,30 @@ export default {
         formData.append('email', this.email)
         formData.append('password', this.password)
         const csrfToken = await getCSRF()
-        if (csrfToken.success !== null && csrfToken.success !== undefined) {
-          const data = await fetch('https://api.tutorpal.org/auth/login/', {
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': csrfToken.success,
-            },
-            body: formData,
-          })
-          .then((res) => {
-            if (res.status >= 400 && res.status < 600) {
-              this.errors.global = 'Something went wrong :('
-            }
-            return res.json()
-          })
-          .catch(() => {
+        const data = await fetch('https://api.tutorpal.org/auth/login/', {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+          },
+          body: formData,
+        })
+        .then((res) => {
+          if (res.status >= 400 && res.status < 600) {
             this.errors.global = 'Something went wrong :('
-          })
-          if (data && data.error) {
-            this.errors.global = data.error
           }
-          if (data && data.success === 'Successfully logged in user') {
-            await this.refreshUser()
-            await this.refreshTutor()
-            await this.refreshStudent()
-            this.$router.push('/')
-          }
-        } else {
+          return res.json()
+        })
+        .catch(() => {
           this.errors.global = 'Something went wrong :('
+        })
+        if (data && data.error) {
+          this.errors.global = data.error
+        }
+        if (data && data.success === 'Successfully logged in user') {
+          await this.refreshUser()
+          await this.refreshTutor()
+          await this.refreshStudent()
+          this.$router.push('/')
         }
       }
     },
