@@ -6,3 +6,8 @@ venv/
 env/
 **/profile_pics/**
 .env
+env_backup.txt
+.python-version
+zappa_settings.json
+zappa_settings_backup.json
+api_gateway_policy.json

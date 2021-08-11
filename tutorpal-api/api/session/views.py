@@ -20,6 +20,7 @@ from .payments import send_payout, refund_order, capture_order
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -207,7 +208,7 @@ class SessionViewSet(viewsets.ModelViewSet):
             'domain': current_site.domain,
             'student': student
         })
-        send_mail(subject, message, None, [email])
+        send_mail(subject, message, settings.EMAIL_FROM, [email])
 
     def perform_update(self, serializer):
         if self.request.data.get('accepted', False):
@@ -234,7 +235,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                 'student': self.session.student
                 # 'domain': current_site.domain,
             })
-            tutor_mail = (subject, tutor_message, None, [
+            tutor_mail = (subject, tutor_message, settings.EMAIL_FROM, [
                           self.session.tutor.user.email])
             send_mass_mail((student_mail, tutor_mail))
             if self.session.student_paid and not self.session.started and not self.session.free and len(self.session.payment_id) > 0:

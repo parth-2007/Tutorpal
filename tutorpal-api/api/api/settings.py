@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get(
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org', 'api.tutorpal.org', 'www.tutorpal.org']
 
 
 # Application definition
@@ -52,10 +52,10 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'dry_rest_permissions',
-
+    'storages'
 ]
-if DEBUG:
-    INSTALLED_APPS += ['drf_yasg', 'debug_toolbar']
+# if DEBUG and os.environ.get('RUN_ENV', 'local') != 'aws':
+#     INSTALLED_APPS += ['drf_yasg', 'debug_toolbar']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -63,30 +63,44 @@ INTERNAL_IPS = [
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'session.middleware.timezonemiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
-
-SITE_DOMAIN = 'http://127.0.0.1:8000'
+# if DEBUG:
+#     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-    'http://localhost:5500',
-    'http://127.0.0.1:5500',
-    'http://tutorpal.org'
-]
+if os.environ.get('RUN_ENV', 'local') == 'aws':
+    CORS_ALLOWED_ORIGINS = [
+        'https://tutorpal.org',
+        'https://api.tutorpal.org',
+        'https://www.tutorpal.org',
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+    ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://www.tutorpal.org',
+    'http://localhost:3000'
+]
+CORS_ALLOW_CREDENTIALS = True
+
+if os.environ.get('RUN_ENV', 'local') == 'aws':
+    CSRF_COOKIE_DOMAIN = "www.tutorpal.org"
+    SESSION_COOKIE_DOMAIN = "www.tutorpal.org"
 
 ROOT_URLCONF = 'api.urls'
 
@@ -110,44 +124,50 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 ASGI_APPLICATION = "api.routing.application"
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+
+if os.environ.get('REDIS_HOST', None):
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [(os.environ['REDIS_HOST'], int(os.environ['REDIS_PORT']))],
+            },
         },
-    },
-}
+    }
 
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-# 	'default': {
-# 		'ENGINE': 'django.db.backends.sqlite3',
-# 		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-# 	}
-# }
-DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
-
-        'USER': os.environ.get('DATABASE_USER', ''),
-
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
-
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-
-        'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
-
+if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-
-}
+elif os.environ.get('DATABASE_NAME', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
+            'USER': os.environ.get('DATABASE_USER', ''),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+            'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+            'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -190,22 +210,23 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# if DEBUG:
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # remove for production
-# else:
-# 	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if os.environ.get("EMAIL_USERNAME", None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+    # EMAIL_BACKEND = 'django_ses.SESBackend'
+    # AWS_SES_ACCESS_KEY_ID = os.environ['AWS_SES_ACCESS_KEY_ID']
+    # AWS_SES_SECRET_ACCESS_KEY = os.environ['AWS_SES_SECRET_ACCESS_KEY']
+    # AWS_SES_REGION_NAME = 'us-west-1'
+    # AWS_SES_REGION_ENDPOINT = 'email.us-west-1.amazonaws.com'
+    EMAIL_FROM = "dev@tutorpal.org"
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'email-smtp.us-west-1.amazonaws.com'
+    EMAIL_PORT = os.environ.get("EMAIL_PORT")
+    EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_FROM = None
 EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'the2tor4u@gmail.com'
-# EMAIL_HOST_PASSWORD = 'Fm46*2UKb8QR'
-# EMAIL_PORT = 587
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': '127.0.0.1:11211',
-#     }
-# }
 
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
@@ -217,4 +238,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ] if DEBUG else ['rest_framework.renderers.JSONRenderer']
 }
+
+if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_S3_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_S3_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_QUERYSTRING_AUTH = True # adds long querystring, remove in prod
+    AWS_S3_SIGNATURE_VERSION = 's3v4'

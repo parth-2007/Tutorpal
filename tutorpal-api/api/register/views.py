@@ -16,6 +16,8 @@ from django.contrib.auth import update_session_auth_hash
 import json
 from django.db.utils import IntegrityError
 from .serializers import TutorOwnerSerializer, StudentOwnerSerializer, UserOwnerSerializer
+from django.conf import settings
+import os
 
 
 @ensure_csrf_cookie
@@ -55,6 +57,8 @@ def register_student(request):
         user = User(**user_data)
         user.set_password(password)
         if pfp is not None:
+            if pfp.size > 100000: # 100kb
+                return Response(data={'error': 'image size too big'}, status=status.HTTP_400_BAD_REQUEST)
             user.profile_pic = pfp
         student = Student(**student_data)
         user.save()
@@ -68,13 +72,15 @@ def register_student(request):
     email = user.email
     current_site = get_current_site(request)
     subject = 'Confirm Your Email for TutorPal'
+    if os.environ.get('RUN_ENV', 'local') == 'aws':
+        url = f'https://www.tutorpal.org/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
+    else:
+        url = f'http://{current_site.domain}/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
     message = render_to_string('register/emails/confirm_email.html', {
         'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user)
+        'url': url
     })
-    send_mail(subject, message, None, [email])
+    send_mail(subject, message, settings.EMAIL_FROM, [email])
 
     response = Response(
         data={'success': 'Successfully created student'}, status=status.HTTP_201_CREATED)
@@ -96,6 +102,8 @@ def register_tutor(request):
         user = User(**user_data)
         user.set_password(password)
         if pfp is not None:
+            if pfp.size > 100000: # 100kb
+                return Response(data={'error': 'image size too big'}, status=status.HTTP_400_BAD_REQUEST)
             user.profile_pic = pfp
         tutor = Tutor(**tutor_data)
         user.save()
@@ -109,13 +117,15 @@ def register_tutor(request):
     email = user.email
     current_site = get_current_site(request)
     subject = 'Confirm Your Email for TutorPal'
+    if os.environ.get('RUN_ENV', 'local') == 'aws':
+        url = f'https://www.tutorpal.org/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
+    else:
+        url = f'http://{current_site.domain}/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
     message = render_to_string('register/emails/confirm_email.html', {
         'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user)
+        'url': url
     })
-    send_mail(subject, message, None, [email])
+    send_mail(subject, message, settings.EMAIL_FROM, [email])
 
     response = Response(data={'success': 'Successfully created tutor'},
                         status=status.HTTP_201_CREATED)
@@ -148,13 +158,15 @@ def reset_password(request):
 
     current_site = get_current_site(request)
     subject = 'Confirm Your Email for TutorPal'
-    message = render_to_string('register/emails/reset_password.html', {
+    if os.environ.get('RUN_ENV', 'local') == 'aws':
+        url = f'https://www.tutorpal.org/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
+    else:
+        url = f'http://{current_site.domain}/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
+    message = render_to_string('register/emails/confirm_email.html', {
         'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': password_reset_token.make_token(user)
+        'url': url
     })
-    send_mail(subject, message, None, [email])
+    send_mail(subject, message, settings.EMAIL_FROM, [email])
 
     return Response('Sent email', status.HTTP_200_OK)
 
