@@ -92,15 +92,14 @@ else:
         'http://127.0.0.1:5500',
     ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://www.tutorpal.org',
-    'http://localhost:3000'
-]
+CSRF_TRUSTED_ORIGINS = ['https://www.tutorpal.org'] if os.environ.get('RUN_ENV', 'local') == 'aws' else ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
 
 if os.environ.get('RUN_ENV', 'local') == 'aws':
     CSRF_COOKIE_DOMAIN = "www.tutorpal.org"
     SESSION_COOKIE_DOMAIN = "www.tutorpal.org"
+    CSRF_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SAMESITE = 'None'
 
 ROOT_URLCONF = 'api.urls'
 
