@@ -102,7 +102,7 @@
  
 <script type="text/javascript">
 import { mapGetters, mapActions } from 'vuex'
-import getCSRF from '../utils/getCSRF'
+// import getCSRF from '../utils/getCSRF'
 
 export default {
   data() {
@@ -154,7 +154,21 @@ export default {
         const formData = new FormData()
         formData.append('email', this.email)
         formData.append('password', this.password)
-        const csrfToken = await getCSRF()
+        const csrfToken  = (name) => {
+          let cookieValue = null
+          if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';')
+            for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim()
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === name + '=') {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                break
+              }
+            }
+          }
+          return cookieValue
+        }
         const data = await fetch('https://api.tutorpal.org/auth/login/', {
           credentials: 'include',
           method: 'POST',
