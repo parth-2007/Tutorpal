@@ -4,7 +4,6 @@ from django.contrib.auth.models import PermissionsMixin, BaseUserManager, Abstra
 # from django.dispatch import receiver
 # import os
 # from django.conf import settings
-from PIL import Image
 from datetime import timedelta
 # from dry_rest_permissions.generics import authenticated_users
 
@@ -95,14 +94,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
 
-    def save(self, *args, **kwargs):
-        super().save()
-        img = Image.open(self.profile_pic.path)
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     if self.profile_pic:
+    #         print(self.profile_pic)
+    #         img = Image.open(self.profile_pic.path)
 
-        if img.height > 128 or img.width > 128:
-            output_size = (128, 128)
-            img.thumbnail(output_size)
-            img.save(self.profile_pic.path)
+    #         if img.height > 128 or img.width > 128:
+    #             output_size = (128, 128)
+    #             img.thumbnail(output_size)
+
+    #             img.save(self.profile_pic.path)
 
     @staticmethod
     def has_read_permission(request):
