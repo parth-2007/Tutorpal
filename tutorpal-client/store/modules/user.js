@@ -12,16 +12,16 @@ const getters = {
 const actions = {
   async fetchUser({ commit, state }) {
     if (state.user.unfetched) {
-      const user = await loggedInFetch('https://api.tutorpal.org/users/me')
+      const user = await loggedInFetch('https://api.tutorpal.org/users/me/')
       commit('setUser', keysToCamel(user))
     }
   },
   async refreshUser({ commit }) {
-    const user = await loggedInFetch('https://api.tutorpal.org/users/me')
+    const user = await loggedInFetch('https://api.tutorpal.org/users/me/')
     commit('setUser', keysToCamel(user))
   },
   async logoutUser({ commit }) {
-    await fetch('api/auth/logout/')
+    await fetch('https://api.tutorpal.org/auth/logout/')
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {
           return { error: 'server error' }

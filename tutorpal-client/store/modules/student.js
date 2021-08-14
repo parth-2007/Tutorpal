@@ -12,12 +12,14 @@ const getters = {
 const actions = {
   async fetchStudent({ commit, state }) {
     if (state.student.unfetched) {
-      const student = await loggedInFetch('https://api.tutorpal.org/students/me')
+      const student = await loggedInFetch(
+        'https://api.tutorpal.org/students/me/'
+      )
       commit('setStudent', keysToCamel(student))
     }
   },
   async refreshStudent({ commit }) {
-    const student = await loggedInFetch('https://api.tutorpal.org/students/me')
+    const student = await loggedInFetch('https://api.tutorpal.org/students/me/')
     commit('setStudent', keysToCamel(student))
   },
   logoutStudent({ commit }) {

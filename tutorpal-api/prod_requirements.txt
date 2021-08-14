@@ -13,3 +13,4 @@ redis==3.5.3
 django-storages==1.11.1
 zappa==0.53.0
 zappa-django-utils==0.4.1
+django-ses==2.2.1

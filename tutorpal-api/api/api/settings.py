@@ -92,14 +92,16 @@ else:
         'http://127.0.0.1:5500',
     ]
 
-CSRF_TRUSTED_ORIGINS = ['https://www.tutorpal.org'] if os.environ.get('RUN_ENV', 'local') == 'aws' else ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['https://www.tutorpal.org', 'https://api.tutorpal.org', 'https://tutorpal.org'] if os.environ.get('RUN_ENV', 'local') == 'aws' else ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
 
 if os.environ.get('RUN_ENV', 'local') == 'aws':
-    CSRF_COOKIE_DOMAIN = "www.tutorpal.org"
-    SESSION_COOKIE_DOMAIN = "www.tutorpal.org"
+    CSRF_COOKIE_DOMAIN = ".tutorpal.org"
+    SESSION_COOKIE_DOMAIN = ".tutorpal.org"
     CSRF_COOKIE_SAMESITE = 'None'
     SESSION_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'api.urls'
 
@@ -209,18 +211,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-if os.environ.get("EMAIL_USERNAME", None) and os.environ.get('RUN_ENV', 'local') == 'aws':
-    # EMAIL_BACKEND = 'django_ses.SESBackend'
-    # AWS_SES_ACCESS_KEY_ID = os.environ['AWS_SES_ACCESS_KEY_ID']
-    # AWS_SES_SECRET_ACCESS_KEY = os.environ['AWS_SES_SECRET_ACCESS_KEY']
-    # AWS_SES_REGION_NAME = 'us-west-1'
-    # AWS_SES_REGION_ENDPOINT = 'email.us-west-1.amazonaws.com'
+if os.environ.get("AWS_SES_ACCESS_KEY_ID", None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+    EMAIL_BACKEND = 'django_ses.SESBackend'
+    AWS_SES_ACCESS_KEY_ID = os.environ['AWS_SES_ACCESS_KEY_ID']
+    AWS_SES_SECRET_ACCESS_KEY = os.environ['AWS_SES_SECRET_ACCESS_KEY']
+    AWS_SES_REGION_NAME = 'us-west-1'
+    AWS_SES_REGION_ENDPOINT = 'email.us-west-1.amazonaws.com'
     EMAIL_FROM = "dev@tutorpal.org"
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'email-smtp.us-west-1.amazonaws.com'
-    EMAIL_PORT = os.environ.get("EMAIL_PORT")
-    EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
-    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # EMAIL_HOST = 'email-smtp.us-west-1.amazonaws.com'
+    # EMAIL_PORT = os.environ.get("EMAIL_PORT")
+    # EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
+    # EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_FROM = None
