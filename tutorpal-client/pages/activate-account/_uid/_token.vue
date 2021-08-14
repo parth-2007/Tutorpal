@@ -11,7 +11,7 @@ export default {
   },
   async created() {
     await fetch(
-      `api/auth/activate-account/${this.$route.params.uid}/${this.$route.params.token}/`
+      `https://api.tutorpal.org/auth/activate-account/${this.$route.params.uid}/${this.$route.params.token}/`
     )
       .then((res) => {
         if (res.status === 200) {
