@@ -1,5 +1,7 @@
 const loggedInFetch = async (url) => {
-  const data = await fetch(url)
+  const data = await fetch(url, {
+    credentials: 'include',
+  })
     .then((res) => {
       if (res.status === 403 || res.status === 404) {
         return { unauthenticated: true }
