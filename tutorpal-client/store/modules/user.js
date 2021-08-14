@@ -21,7 +21,9 @@ const actions = {
     commit('setUser', keysToCamel(user))
   },
   async logoutUser({ commit }) {
-    await fetch('https://api.tutorpal.org/auth/logout/')
+    await fetch('https://api.tutorpal.org/auth/logout/', {
+      credentials: 'include',
+    })
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {
           return { error: 'server error' }
