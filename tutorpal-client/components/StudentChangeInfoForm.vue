@@ -137,11 +137,16 @@ export default {
   methods: {
     ...mapActions(['fetchStudent', 'fetchUser', 'updateStudent', 'updateUser']),
     ...mapGetters(['getUser', 'getStudent']),
-
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
+      if (e.target.files[0].size > 100000){
+        this.errors.profilePic = "File size is too high! Please upload a file less than 100 Kilobytes"
+      }
+      else{
+        this.errors.profilePic = ""
+      }
     },
     checkErrors() {
       let isError = false

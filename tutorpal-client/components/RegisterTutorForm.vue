@@ -151,11 +151,10 @@
             id="gender"
             aria-label="Default select example"
           >
-            <option selected>Select</option>
-            <option value="Prefer Not To Say">Prefer Not To Say</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
+            <option value="Prefer Not To Say">Prefer Not To Say</option>
           </select>
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gender }}</p>
         </div>
@@ -169,8 +168,7 @@
         <div class="columns-2 w-row">
           <div class="column w-col w-col-6">
             <div class="text-block-5">
-              Occupation (If none, or highschooler please type "highschooler" or
-              "student".)
+              Occupation (If unemployed or in school, please type "none")
             </div>
           </div>
           <div class="w-col w-col-6">
@@ -263,7 +261,6 @@
                 id="education"
                 aria-label="Default select example"
               >
-                <option selected>Select</option>
                 <option value="High School">High School</option>
                 <option value="Bachelors Degree">Bachelors Degree</option>
                 <option value="Masters Degree">Masters Degree</option>
