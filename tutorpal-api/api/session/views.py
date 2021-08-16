@@ -1,4 +1,5 @@
 from django.core import exceptions
+from django.http import request
 from .models import Session
 from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
 from rest_framework import viewsets, status
@@ -25,7 +26,8 @@ from django.conf import settings
 
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
-    permission_classes = [DRYPermissions]
+    # permission_classes = [DRYPermissions]
+    permission_classes = []
 
     # def dispatch(self, request, *args, **kwargs):
     #     response = super().dispatch(request, *args, **kwargs)
@@ -36,33 +38,38 @@ class SessionViewSet(viewsets.ModelViewSet):
     #     return response
 
     def get_serializer_class(self):
-        if self.action in ["retrieve", "update", "partial_update"]:
-            pk = self.kwargs.get('pk')
-            # checks if self.session exists, if not it will call it from the db
-            if not hasattr(self, 'session') and self.request.user.has_student:
-                self.session = Session.objects.select_related(
-                    'tutor', 'tutor__user').get(pk=pk)
-            elif not hasattr(self, 'session') and self.request.user.has_tutor:
-                self.session = Session.objects.select_related(
-                    'student', 'student__user').get(pk=pk)
-            if self.session.tutor_pk == self.request.user.tutor_pk:
-                return TutorSessionSerializer
-            elif self.session.student_pk == self.request.user.student_pk:
+        if self.request.user.is_authenticated:
+            if self.action in ["retrieve", "update", "partial_update"]:
+                pk = self.kwargs.get('pk')
+                # checks if self.session exists, if not it will call it from the db
+                if not hasattr(self, 'session') and self.request.user.has_student:
+                    self.session = Session.objects.select_related(
+                        'tutor', 'tutor__user').get(pk=pk)
+                elif not hasattr(self, 'session') and self.request.user.has_tutor:
+                    self.session = Session.objects.select_related(
+                        'student', 'student__user').get(pk=pk)
+                if self.session.tutor_pk == self.request.user.tutor_pk:
+                    return TutorSessionSerializer
+                elif self.session.student_pk == self.request.user.student_pk:
+                    return StudentSessionSerializer
+            elif self.action == "create":
                 return StudentSessionSerializer
-        if self.action == "create":
-            return StudentSessionSerializer
         return ReservedSerializer
 
     def get_object(self):
         if self.action in ["retrieve", "update", "partial_update", "pay_tutor"]:
             pk = self.kwargs.get('pk')
             # checks if self.session exists, if not it will call it from the db
-            if not hasattr(self, 'session') and self.request.user.has_student:
-                self.session = Session.objects.select_related(
-                    'tutor', 'tutor__user').get(pk=pk)
-            elif not hasattr(self, 'session') and self.request.user.has_tutor:
-                self.session = Session.objects.select_related(
-                    'student', 'student__user').get(pk=pk)
+            if self.request.user.is_authenticated:
+                if not hasattr(self, 'session') and self.request.user.has_tutor:
+                    self.session = Session.objects.select_related(
+                        'student', 'student__user').get(pk=pk)
+                elif not hasattr(self, 'session') and self.request.user.has_student:
+                    self.session = Session.objects.select_related(
+                        'tutor', 'tutor__user').get(pk=pk)
+            else:
+                if not hasattr(self, 'session'):
+                   self.session = Session.objects.get(pk=pk) 
             return self.session
         else:
             return super().get_object()
