@@ -273,27 +273,28 @@ export default {
     },
   },
   async created() {
-    const url = 'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
-    this.session = await fetch(url).then((res) => {
+    const url =
+      'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
+    this.session = await fetch(url, {
+      credentials: 'include',
+    }).then((res) => {
       if (res.status === 500) {
         this.$router.push('/')
       }
       return res.json()
     })
-    const time = new Date();
+    const time = new Date()
     let hours = time.getHours()
     let minutes = time.getMinutes()
     let seconds = time.getSeconds()
-    if(hours<10){
-      hours = '0'+hours.toString()
-    } 
-    else if(minutes<10){
-      minutes = '0'+minutes.toString()
+    if (hours < 10) {
+      hours = '0' + hours.toString()
+    } else if (minutes < 10) {
+      minutes = '0' + minutes.toString()
+    } else if (seconds < 10) {
+      seconds = '0' + seconds.toString()
     }
-    else if(seconds<10){
-      seconds = '0'+seconds.toString()
-    }
-    const now = hours+":"+minutes+":"+seconds
+    const now = hours + ':' + minutes + ':' + seconds
     const hms = str(sub([this.session.time_end, now]))
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
@@ -307,7 +308,10 @@ export default {
     },
     async updateModalValue() {
       this.session = await fetch(
-        'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
+        'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/',
+        {
+          credentials: 'include',
+        }
       ).then((res) => {
         if (res.status === 500) {
           this.$router.push('/')
@@ -317,7 +321,8 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass() {
-      const url = 'https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
+      const url =
+        'https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
       await fetch(url, {
         method: 'POST',
         credentials: 'include',

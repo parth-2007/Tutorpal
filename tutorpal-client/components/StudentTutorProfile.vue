@@ -351,7 +351,9 @@ export default {
   },
   async fetch() {
     this.url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/'
-    this.data = await fetch(this.url).then((res) => res.json())
+    this.data = await fetch(this.url, {
+      credentials: 'include',
+    }).then((res) => res.json())
     await this.fetchUser()
   },
   head() {
@@ -395,8 +397,11 @@ export default {
     ...mapGetters({ user: 'getUser', pendingOnTutor: 'getPendingOnTutor' }),
   },
   async created() {
-    const url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/reviews/'
-    this.reviews = await fetch(url).then((res) => res.json())
+    const url =
+      'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/reviews/'
+    this.reviews = await fetch(url, {
+      credentials: 'include',
+    }).then((res) => res.json())
     await this.fetchSessions('pendingOnTutor')
   },
   methods: {
