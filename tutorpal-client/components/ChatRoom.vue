@@ -39,41 +39,56 @@
             </div>
           </div>
         </div>
-        <div class="chatroomcontainer" style="width: 100%;">
-            <div ref="chatcont" @scroll="getNextMessages()" style="height: 55vh; overflow-y:auto; display:flex; flex-direction:column-reverse;" class="wrapper">
-              <div>
-                <p style="margin-bottom: 15px" class="paragraph-2-copy">This is the beginning of your chat message history with {{ otherUser ? otherUser.firstName : '' }}</p>
-                    <!-- eslint-disable-next-line -->
-                    <div v-for="chatMsg in chatMsgs">
-                      <div :key="chatMsg ? chatMsg.id : null">
-                        <div
-                          :class="
-                            (chatMsg ? chatMsg.author : null) == user.id
-                              ? 'chat_item_here'
-                              : 'chat_item_away'
-                          "
-                        >
-                          <div
-                            :class="
-                              (chatMsg ? chatMsg.author : null) == user.id
-                                ? 'div-block-61-copy'
-                                : 'div-block-61'
-                            "
-                          >
-                            <p class="paragraph-6">
-                              {{ chatMsg ? chatMsg.message : '' }}
-                            </p>
-                            <div class="text-block-40">
-                              <em class="italic-text">{{convertTime2(chatMsg.timestamp)}}</em>
-                            </div>
-                          </div>
-                        </div>
+        <div class="chatroomcontainer" style="width: 100%">
+          <div
+            ref="chatcont"
+            @scroll="getNextMessages()"
+            style="
+              height: 55vh;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column-reverse;
+            "
+            class="wrapper"
+          >
+            <div>
+              <p style="margin-bottom: 15px" class="paragraph-2-copy">
+                This is the beginning of your chat message history with
+                {{ otherUser ? otherUser.firstName : '' }}
+              </p>
+              <!-- eslint-disable-next-line -->
+              <div v-for="chatMsg in chatMsgs">
+                <div :key="chatMsg ? chatMsg.id : null">
+                  <div
+                    :class="
+                      (chatMsg ? chatMsg.author : null) == user.id
+                        ? 'chat_item_here'
+                        : 'chat_item_away'
+                    "
+                  >
+                    <div
+                      :class="
+                        (chatMsg ? chatMsg.author : null) == user.id
+                          ? 'div-block-61-copy'
+                          : 'div-block-61'
+                      "
+                    >
+                      <p class="paragraph-6">
+                        {{ chatMsg ? chatMsg.message : '' }}
+                      </p>
+                      <div class="text-block-40">
+                        <em class="italic-text">{{
+                          convertTime2(chatMsg.timestamp)
+                        }}</em>
                       </div>
                     </div>
-                    <div ref="container"/>
+                  </div>
                 </div>
               </div>
+              <div ref="container" />
             </div>
+          </div>
+        </div>
         <input
           v-model="message"
           style="
@@ -179,7 +194,9 @@ export default {
       const maxScrollPosition = container.scrollHeight - container.clientHeight
       if (Math.ceil(Math.abs(pos)) === maxScrollPosition) {
         if (this.response.next !== null) {
-          const data = await fetch(this.response.next).then((res) => res.json())
+          const data = await fetch(this.response.next, {
+            credentials: 'include',
+          }).then((res) => res.json())
           this.response = data
           const chatMsgs = this.chatMsgs
           data.results.forEach(function (x) {
@@ -190,7 +207,8 @@ export default {
     },
     connect() {
       const chatMsgs = this.chatMsgs
-      const endpoint = 'ws://localhost:5000/api/ws/chat/' + this.$route.params.id + '/'
+      const endpoint =
+        'ws://localhost:5000/api/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
         const chatDataMsg = JSON.parse(e.data)

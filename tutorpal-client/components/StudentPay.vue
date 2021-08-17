@@ -123,7 +123,8 @@
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages <span class="badge">{{user.unread}}</span> </router-link
+                      >Messages
+                      <span class="badge">{{ user.unread }}</span> </router-link
                     ><router-link
                       to="/requests"
                       class="nav-link-4 w-nav-link w--current"
@@ -171,7 +172,9 @@ export default {
   async fetch() {
     const id = parseInt(this.$route.params.id)
     const url = 'https://api.tutorpal.org/sessions/' + id + '/'
-    this.session = await fetch(url).then((res) => {
+    this.session = await fetch(url, {
+      credentials: 'include',
+    }).then((res) => {
       if (res.status === 500) {
         this.$router.push('/payments')
       }
@@ -186,10 +189,10 @@ export default {
       this.$router.push('/payments')
     }
     this.paymentpending.forEach((x) => {
-      if (x.id === id){
+      if (x.id === id) {
         this.session = x
       }
-    });
+    })
   },
   head() {
     return {
@@ -219,7 +222,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'getUser', paymentpending: 'getPendingOnStudentPayment'}),
+    ...mapGetters({
+      user: 'getUser',
+      paymentpending: 'getPendingOnStudentPayment',
+    }),
   },
   async created() {
     await this.fetchSessions('pendingOnStudentPayment')
@@ -227,13 +233,14 @@ export default {
   },
   mounted() {
     const script = document.createElement('script')
-    const clientId = 'AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ'
+    const clientId =
+      'AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ'
     script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
     script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
   },
   methods: {
-    ...mapGetters(['getUser',  'getPendingOnStudentPayment', 'getUpcoming']),
+    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
     ...mapActions([
       'fetchUser',
       'fetchSessions',

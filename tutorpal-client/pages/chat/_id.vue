@@ -4,7 +4,7 @@
   </div>
   <div v-else>
     <Forbidden></Forbidden>
-   </div>
+  </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -22,7 +22,10 @@ export default {
   async created() {
     await this.fetchUser()
     const response = await loggedInFetch(
-      'api/rooms/' + this.$route.params.id + '/'
+      'api/rooms/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
     )
     if (response.error) {
       if (
