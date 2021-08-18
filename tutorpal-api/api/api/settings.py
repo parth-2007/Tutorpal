@@ -252,6 +252,6 @@ if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and os.environ.get('RUN_ENV', 'l
     AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = 'api.s3storage.SecurityTokenWorkaroundS3Boto3Storage'
     AWS_QUERYSTRING_AUTH = False # adds long querystring, remove in prod
     AWS_S3_SIGNATURE_VERSION = 's3v4'
