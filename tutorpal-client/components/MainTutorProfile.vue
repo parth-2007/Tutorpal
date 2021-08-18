@@ -9,74 +9,6 @@
     </head>
     <body>
       <div id="main">
-        <div class="div-block-22-copy">
-          <div
-            style="border-radius: 8px; padding-bottom: 20px; height: 600px"
-            class="div-block-23"
-          >
-            <div class="div-block-24">
-              <img
-                src="../static/student/images/close-1.png"
-                width="20"
-                alt=""
-              />
-            </div>
-            <h1 class="heading-10">Schedule a Class</h1>
-            <div class="div-block-25">
-              <form id="form-wrapper" style="font-family: Poppins">
-                <div class="form-group row">
-                  <label for="date-time" class="col-2 col-form-label"
-                    >Date and Start Time</label
-                  >
-                  <div class="col-10">
-                    <input
-                      class="form-control"
-                      type="datetime-local"
-                      id="date-time"
-                      required
-                    />
-                  </div>
-                  <label for="date-time" class="col-2 col-form-label"
-                    >Duration in Minutes</label
-                  >
-                  <div class="col-10">
-                    <input
-                      type="number"
-                      id="duration"
-                      class="form-control"
-                      required
-                    />
-                  </div>
-                </div>
-                <textarea
-                  style="height: 250px; margin-top: 25px; margin-bottom: 15px"
-                  class="form-control"
-                  id="classdescription"
-                  placeholder="Describe what you want to learn, cover, or what you need help with."
-                  rows="3"
-                  required
-                ></textarea>
-                <div
-                  style="margin-top: 15px; margin-bottom: 15px"
-                  class="form-check"
-                >
-                  <input
-                    class="form-check-input"
-                    nam="checkbox"
-                    type="checkbox"
-                    id="trial"
-                  />
-                  <label class="form-check-label" for="trial">
-                    I want this class to be a trial class
-                  </label>
-                </div>
-                <button class="btn btn-primary" name="session">
-                  Send request
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
         <div class="div-block-55">
           <div class="section">
             <router-link
@@ -97,7 +29,7 @@
                 alt=""
             /></router-link>
             <div class="div-block-4">
-              <form action="search_student.html" class="stuff w-form">
+              <form action="/search" class="stuff w-form">
                 <img
                   src="../static/student/images/search-1.png"
                   loading="lazy"
@@ -128,29 +60,6 @@
           </div>
         </div>
         <div class="div-block-70">
-          <div class="div-block-71">
-            <img
-              :src="data.user !== undefined ? data.user.profile_pic : ''"
-              loading="lazy"
-              width="74"
-              height="74"
-              sizes="74px"
-              alt=""
-            />
-            <div class="div-block-72">
-              <h1 class="heading-3" id="subjects">{{ data.subjects }}</h1>
-              <div class="div-block-68">
-                <div class="text-block-32">
-                  <strong id="fullname" class="bold-text-8"
-                    >{{ data.user !== undefined ? data.user.first_name : '' }}
-                    {{
-                      data.user !== undefined ? data.user.last_name : ''
-                    }}</strong
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
           <p style="padding-top: 20px" class="paragraph-8">
             <strong>Degree: </strong>{{ data.education }}<br />
             <strong>Birthdate: </strong>{{ data.birth_date }}<br /><strong
@@ -236,7 +145,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/webflow.css',
+          href: '/student/css/webflow.css',
         },
         {
           rel: 'stylesheet',
@@ -246,7 +155,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/normalize.css',
+          href: '/student/css/normalize.css',
         },
       ],
     }

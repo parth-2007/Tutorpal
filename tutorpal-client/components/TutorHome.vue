@@ -321,7 +321,6 @@ export default {
     }
   },
   async fetch() {
-    // manually edit state to add pending_on_tutor
     await this.fetchSessions('startedSessions')
     this.requests1 = await fetch('https://api.tutorpal.org/sessions/pending_on_tutor/', {
       credentials: 'include',
@@ -332,7 +331,7 @@ export default {
     return {
       title: 'Home',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
         {
           rel: 'stylesheet',
           type: 'text/css',
@@ -341,7 +340,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/normalize.css',
+          href: '/tutor/css/normalize.css',
         },
         {
           rel: 'stylesheet',

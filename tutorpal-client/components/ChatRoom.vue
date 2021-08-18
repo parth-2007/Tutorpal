@@ -139,7 +139,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/webflow.css',
+          href: '/student/css/webflow.css',
         },
         {
           rel: 'stylesheet',
@@ -149,7 +149,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/normalize.css',
+          href: '/student/css/normalize.css',
         },
       ],
     }

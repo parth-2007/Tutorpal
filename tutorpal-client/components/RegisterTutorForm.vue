@@ -545,7 +545,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/webflow.css',
+          href: '/registration/css/webflow.css',
         },
         {
           rel: 'stylesheet',
@@ -555,7 +555,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/main/css/normalize.css',
+          href: '/registration/css/normalize.css',
         },
       ],
     }

@@ -104,9 +104,9 @@ export default {
     return {
       title: 'My Payments',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
         {
           rel: 'stylesheet',
           type: 'text/css',
