@@ -13,21 +13,14 @@
         <div class="div-block-55">
           <div class="section">
             <router-link
+              style="margin-top: 0px; margin-bottom: -30px"
               to="/"
-              aria-current="page"
-              class="link-block w-inline-block w--current"
+              class="link-block w-inline-block"
               ><img
-                src="../static/student/images/logo.jpg"
-                loading="lazy"
-                width="200"
-                srcset="
-                  ../static/student/images/logo-p-500.jpeg   500w,
-                  ../static/student/images/logo-p-800.jpeg   800w,
-                  ../static/student/images/logo-p-1080.jpeg 1080w,
-                  ../static/student/images/logo.jpg         1432w
-                "
-                sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw"
+                src="../static/main/images/logo.jpg"
+                width="250"
                 alt=""
+                class="image"
             /></router-link>
             <div class="div-block-4">
               <form action="/search" class="stuff w-form">
@@ -46,7 +39,6 @@
                 /><input
                   type="search"
                   class="search-3 w-input"
-                  maxlength="256"
                   name="q"
                   placeholder="Search by subject"
                   id="search"
@@ -62,58 +54,59 @@
         </div>
         <div class="div-block-70">
           <p style="padding-top: 20px" class="paragraph-8">
-            <strong>Degree: </strong>{{ tutordata.education }}<br />
-            <strong>Birthdate: </strong>{{ tutordata.birth_date }}<br /><strong
+            <strong>Degree: </strong>{{ data.education }}<br /><strong
+              >Birthdate: </strong
+            >{{ data.birth_date }}<br /><strong
               >Qualification Description: </strong
-            >{{ tutordata.qualifications }}<br />
-            <strong>Education: </strong>{{ tutordata.major }} at {{ tutordata.school }},
-            GPA of {{ tutordata.gpa }}<br />
-            <strong>Professional Experience: </strong
-            >{{ tutordata.prof_exp }} years<br /><strong
+            >{{ data.qualifications }}<br />
+            <strong>Education: </strong>{{ data.major }} at {{ data.school }},
+            GPA of {{ data.gpa }}<br /><strong
+              >Professional Experience: </strong
+            >{{ data.prof_exp }} years<br /><strong
               >Teaching Experience: </strong
-            >{{ tutordata.teach_exp }} years<br />
+            >{{ data.teach_exp }} years<br />
             <strong>Average Review:</strong>
-            {{ tutordata.average_reviews }} Stars<br />
-            <strong>Occupation: </strong>{{ tutordata.occupation }}<br />
-            <strong>Gender: </strong>{{ tutordata.gender }}<br />
-            <strong>Price: </strong>${{ tutordata.rates }} hourly <br />
-            <strong>Bio: </strong>{{ tutordata.bio }}<br />
-            <strong>Course Description: </strong>{{ tutordata.what_you_teach }}<br />
-            <strong>Availability: </strong>{{ tutordata.availability }}<br />
-            <a
+            {{ data.average_reviews }} Stars<br /><strong>Occupation: </strong
+            >{{ data.occupation }}<br /><strong>Gender: </strong
+            >{{ data.gender }}<br />
+            <strong>Price: </strong>${{ data.rates }} hourly <br /><strong
+              >Bio: </strong
+            >{{ data.bio }}<br /><strong>Course Description: </strong
+            >{{ data.what_you_teach }}<br /><strong>Availability: </strong
+            >{{ data.availability }} <br /><a
               style="font-family: Poppins"
-              :href="tutordata.linkedIn"
+              :href="data.linkedIn"
               target="_blank"
               ><strong>Linkedin Account:</strong></a
             >
           </p>
         </div>
         <div class="div-block-56">
-          <h1 class="heading-11">Reviews</h1>
-          <div v-for="review in reviews.results" :key="review.id" id="posts">
-            <div class="review_bundle">
-              <div class="review_item">
-                <img
-                  :src="review.student.user.profile_pic"
-                  loading="lazy"
-                  width="40"
-                  sizes="40px"
-                  alt=""
-                  class="image-12"
-                />
-                <div class="text-block-33">
-                  {{ review.student.user.first_name }}
-                  {{ review.student.user.last_name }}
+            <h1 class="heading-11">Reviews</h1>
+            <div v-for="review in reviews.results" :key="review.id" id="posts">
+              <div class="review_bundle">
+                <div class="review_item">
+                  <img
+                    :src="review.student.user.profile_pic"
+                    loading="lazy"
+                    width="40"
+                    sizes="40px"
+                    alt=""
+                    class="image-12"
+                  />
+                  <div class="text-block-33">
+                    {{ review.student.user.first_name }}
+                    {{ review.student.user.last_name }}
+                  </div>
+                  <div class="text-block-34">
+                    Review: <strong>{{ review.stars }} Stars</strong>
+                  </div>
                 </div>
-                <div class="text-block-34">
-                  Review: <strong>{{ review.stars }} Stars</strong>
-                </div>
+                <p class="paragraph-9">{{ review.description }}</p>
               </div>
-              <p class="paragraph-9">{{ review.description }}</p>
             </div>
           </div>
         </div>
-      </div>
     </body>
   </html>
   </client-only>
@@ -139,6 +132,7 @@ export default {
     return {
       title: 'Tutor Profile',
       link: [
+        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },

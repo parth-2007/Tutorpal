@@ -298,7 +298,6 @@
               >Send a message</a
             >
           </div>
-          <!-- if already taken class -->
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
             <div v-for="review in reviews.results" :key="review.id" id="posts">
