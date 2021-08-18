@@ -323,7 +323,7 @@ export default {
   async fetch() {
     // manually edit state to add pending_on_tutor
     await this.fetchSessions('startedSessions')
-    this.requests1 = await fetch('/api/sessions/pending_on_tutor/', {
+    this.requests1 = await fetch('https://api.tutorpal.org/sessions/pending_on_tutor/', {
       credentials: 'include',
     }).then((res) => res.json())
     this.next = this.requests1.next
@@ -407,7 +407,7 @@ export default {
       this.removeSession([session, 'pendingOnTutor'])
     },
     async deny(id, session) {
-      const url = '/api/sessions/' + id + '/'
+      const url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
       await fetch(url, {
         method: 'PATCH',
@@ -431,7 +431,7 @@ export default {
       const now = today.getHours() * 60 + today.getMinutes()
       const date = today.toISOString().split('T')[0]
       if (date === session.date && start < now && now < end) {
-        const url = '/api/sessions/' + id + '/'
+        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
         await fetch(url, {
           method: 'PATCH',
