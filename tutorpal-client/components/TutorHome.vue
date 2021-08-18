@@ -430,6 +430,7 @@ export default {
       const end = y[0] * 60 + y[1]
       const now = today.getHours() * 60 + today.getMinutes()
       const date = today.toISOString().split('T')[0]
+      console.log(y,x,start,now, end,date, session.date)
       if (date === session.date && start < now && now < end) {
         const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
