@@ -426,11 +426,16 @@ export default {
       const today = new Date()
       const y = add(['00:06:00', session.timeStart])
       const x = sub([session.timeStart, '00:06:00'])
+
       const start = x[0] * 60 + x[1]
       const end = y[0] * 60 + y[1]
       const now = today.getHours() * 60 + today.getMinutes()
-      const date = today.toISOString().split('T')[0]
-      console.log(y,x,start,now, end,date, session.date)
+
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      const date = yyyy + '-' + mm + '-' + dd;
+      
       if (date === session.date && start < now && now < end) {
         const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
