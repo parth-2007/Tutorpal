@@ -323,7 +323,7 @@ export default {
   async fetch() {
     // manually edit state to add pending_on_tutor
     await this.fetchSessions('startedSessions')
-    this.requests1 = await fetch('/api/sessions/pending_on_tutor/', {
+    this.requests1 = await fetch('https://api.tutorpal.org/sessions/pending_on_tutor/', {
       credentials: 'include',
     }).then((res) => res.json())
     this.next = this.requests1.next
@@ -332,7 +332,7 @@ export default {
     return {
       title: 'Home',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
         {
           rel: 'stylesheet',
           type: 'text/css',
@@ -341,7 +341,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/tutor/css/normalize.css',
+          href: '/main/css/normalize.css',
         },
         {
           rel: 'stylesheet',
@@ -407,7 +407,7 @@ export default {
       this.removeSession([session, 'pendingOnTutor'])
     },
     async deny(id, session) {
-      const url = '/api/sessions/' + id + '/'
+      const url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
       await fetch(url, {
         method: 'PATCH',
@@ -426,12 +426,18 @@ export default {
       const today = new Date()
       const y = add(['00:06:00', session.timeStart])
       const x = sub([session.timeStart, '00:06:00'])
+
       const start = x[0] * 60 + x[1]
       const end = y[0] * 60 + y[1]
       const now = today.getHours() * 60 + today.getMinutes()
-      const date = today.toISOString().split('T')[0]
+
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      const date = yyyy + '-' + mm + '-' + dd;
+
       if (date === session.date && start < now && now < end) {
-        const url = '/api/sessions/' + id + '/'
+        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
         await fetch(url, {
           method: 'PATCH',

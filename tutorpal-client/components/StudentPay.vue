@@ -206,7 +206,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/student/css/webflow.css',
+          href: '/main/css/webflow.css',
         },
         {
           rel: 'stylesheet',
@@ -216,7 +216,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/student/css/normalize.css',
+          href: '/main/css/normalize.css',
         },
       ],
     }
@@ -270,7 +270,7 @@ export default {
             })
           },
           onApprove: async (data) => {
-            let url = '/api/capture_order/' + this.$route.params.id + '/'
+            let url = 'https://api.tutorpal.org/capture_order/' + this.$route.params.id + '/'
             const csrfToken = await getCSRF()
             await fetch(url, {
               credentials: 'include',
@@ -283,7 +283,7 @@ export default {
                 order_id: data.orderID,
               }),
             })
-            url = '/api/sessions/' + this.$route.params.id + '/'
+            url = 'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
             await fetch(url, {
               credentials: 'include',
               method: 'PATCH',

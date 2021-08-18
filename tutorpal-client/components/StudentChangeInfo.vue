@@ -320,7 +320,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/student/css/webflow.css',
+          href: '/main/css/webflow.css',
         },
         {
           rel: 'stylesheet',
@@ -330,7 +330,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/student/css/normalize.css',
+          href: '/main/css/normalize.css',
         },
         {
           rel: 'stylesheet',
