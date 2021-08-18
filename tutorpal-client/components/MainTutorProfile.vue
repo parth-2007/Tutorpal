@@ -115,13 +115,13 @@
 export default {
   data() {
     return {
-      tutordata: [],
+      data: [],
       reviews: [],
     }
   },
   async fetch() {
     const url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/'
-    this.tutordata = await fetch(url, {
+    this.data = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
     this.reviews = await fetch(url + 'reviews/', {
