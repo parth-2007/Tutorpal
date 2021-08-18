@@ -332,7 +332,7 @@ export default {
     return {
       title: 'Home',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
         {
           rel: 'stylesheet',
           type: 'text/css',
@@ -341,7 +341,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/tutor/css/normalize.css',
+          href: '/main/css/normalize.css',
         },
         {
           rel: 'stylesheet',
@@ -435,7 +435,7 @@ export default {
       const mm = String(today.getMonth() + 1).padStart(2, '0');
       const yyyy = today.getFullYear();
       const date = yyyy + '-' + mm + '-' + dd;
-      
+
       if (date === session.date && start < now && now < end) {
         const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()

@@ -209,7 +209,7 @@ export default {
     return {
       title: 'Account Information',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
         {
           rel: 'stylesheet',
           type: 'text/css',
@@ -218,7 +218,7 @@ export default {
         {
           rel: 'stylesheet',
           type: 'text/css',
-          href: '/tutor/css/normalize.css',
+          href: '/main/css/normalize.css',
         },
         {
           rel: 'stylesheet',
