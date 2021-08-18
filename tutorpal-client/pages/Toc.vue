@@ -368,9 +368,9 @@ export default {
     return {
       title: 'Terms of Conditions',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
   },
