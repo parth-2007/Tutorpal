@@ -133,7 +133,7 @@
                   ability.
                 </p>
               </div>
-              <div>
+              <div v-if="requests!==[]">
                 <div
                   v-for="session in requests"
                   :key="session.id"
