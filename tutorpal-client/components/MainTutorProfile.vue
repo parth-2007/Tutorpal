@@ -61,24 +61,24 @@
         </div>
         <div class="div-block-70">
           <p style="padding-top: 20px" class="paragraph-8">
-            <strong>Degree: </strong>{{ data.education }}<br />
-            <strong>Birthdate: </strong>{{ data.birth_date }}<br /><strong
+            <strong>Degree: </strong>{{ tutordata.education }}<br />
+            <strong>Birthdate: </strong>{{ tutordata.birth_date }}<br /><strong
               >Qualification Description: </strong
-            >{{ data.qualifications }}<br />
-            <strong>Education: </strong>{{ data.major }} at {{ data.school }},
-            GPA of {{ data.gpa }}<br />
+            >{{ tutordata.qualifications }}<br />
+            <strong>Education: </strong>{{ tutordata.major }} at {{ tutordata.school }},
+            GPA of {{ tutordata.gpa }}<br />
             <strong>Professional Experience: </strong
-            >{{ data.prof_exp }} years<br /><strong
+            >{{ tutordata.prof_exp }} years<br /><strong
               >Teaching Experience: </strong
-            >{{ data.teach_exp }} years<br />
+            >{{ tutordata.teach_exp }} years<br />
             <strong>Average Review:</strong>
-            {{ data.average_reviews }} Stars<br />
-            <strong>Occupation: </strong>{{ data.occupation }}<br />
-            <strong>Gender: </strong>{{ data.gender }}<br />
-            <strong>Price: </strong>${{ data.rates }} hourly <br />
-            <strong>Bio: </strong>{{ data.bio }}<br />
-            <strong>Course Description: </strong>{{ data.what_you_teach }}<br />
-            <strong>Availability: </strong>{{ data.availability }}<br />
+            {{ tutordata.average_reviews }} Stars<br />
+            <strong>Occupation: </strong>{{ tutordata.occupation }}<br />
+            <strong>Gender: </strong>{{ tutordata.gender }}<br />
+            <strong>Price: </strong>${{ tutordata.rates }} hourly <br />
+            <strong>Bio: </strong>{{ tutordata.bio }}<br />
+            <strong>Course Description: </strong>{{ tutordata.what_you_teach }}<br />
+            <strong>Availability: </strong>{{ tutordata.availability }}<br />
             <a
               style="font-family: Poppins"
               :href="data.linkedIn"
@@ -120,13 +120,13 @@
 export default {
   data() {
     return {
-      dats: [],
+      tutordata: [],
       reviews: [],
     }
   },
   async fetch() {
     const url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/'
-    this.data = await fetch(this.url, {
+    this.tutordata = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
     this.reviews = await fetch(url + 'reviews/', {

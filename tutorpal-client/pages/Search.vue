@@ -52,7 +52,7 @@
             />
           </form>
           <div
-            v-for="tutor in data.results"
+            v-for="tutor in tutordata.results"
             :key="tutor.id"
             style="margin-bottom: 20px"
             id="posts"
@@ -95,7 +95,7 @@
                   {{ tutor.gpa }}
                 </div>
                 <div class="text-block-21-copy-2">
-                  Reviews: {{ tutor.averageReviews }} Stars
+                  Reviews: {{ tutor.average_reviews }} Stars
                 </div>
                 <div class="text-block-21-copy-2">
                   Occupation: {{ tutor.occupation }}
@@ -112,14 +112,12 @@
 export default {
   data() {
     return {
-      data: [],
-      url: '',
+      tutordata: [],
     }
   },
   async fetch() {
-    this.url =
-      'https://api.tutorpal.org/tutors/search/?q=' + this.$route.query.q + '/'
-    this.data = await fetch(this.url, {
+    const url ='https://api.tutorpal.org/tutors/search/?q=' + this.$route.query.q + '/'
+    this.tutordata = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
   },
