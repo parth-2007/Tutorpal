@@ -81,7 +81,7 @@
             <strong>Availability: </strong>{{ tutordata.availability }}<br />
             <a
               style="font-family: Poppins"
-              :href="data.linkedIn"
+              :href="tutordata.linkedIn"
               target="_blank"
               ><strong>Linkedin Account:</strong></a
             >
