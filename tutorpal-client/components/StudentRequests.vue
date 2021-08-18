@@ -128,7 +128,7 @@ export default {
     async canceledHandler(id, session){
       const x = confirm("Please confirm that you wish to cancel this session.")
       if(x === true){
-        const url = '/api/sessions/'+id+'/'
+        const url = 'https://api.tutorpal.org/sessions/'+id+'/'
         await fetch(url, {
             method: 'PATCH',
             credentials: 'include',

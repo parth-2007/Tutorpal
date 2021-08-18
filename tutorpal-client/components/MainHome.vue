@@ -15,7 +15,7 @@
           <h1 class="heading">
             Find tutors around the globe,<br />in an instant
           </h1>
-          <form action="search_main.html" class="stuff w-form">
+          <form action="/search" class="stuff w-form">
             <img
               src="../static/main/images/search-1.png"
               loading="lazy"

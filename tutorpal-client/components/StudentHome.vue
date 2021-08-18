@@ -324,7 +324,6 @@ export default {
     }
   },
   async fetch() {
-    console.log(process.env.DATABASE_NAME)
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
   },
@@ -404,7 +403,7 @@ export default {
     async canceledHandler(id, session) {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
-        const url = '/api/sessions/' + id + '/'
+        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
         await fetch(url, {
           method: 'PATCH',
