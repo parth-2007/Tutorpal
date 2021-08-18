@@ -26,8 +26,8 @@ from django.conf import settings
 
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
-    # permission_classes = [DRYPermissions]
-    permission_classes = []
+    permission_classes = [DRYPermissions]
+    # permission_classes = []
 
     # def dispatch(self, request, *args, **kwargs):
     #     response = super().dispatch(request, *args, **kwargs)
