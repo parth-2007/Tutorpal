@@ -53,6 +53,31 @@
           </div>
         </div>
         <div class="div-block-70">
+          <div class="div-block-71">
+              <img
+                :src="data.user !== undefined ? data.user.profile_pic : ''"
+                loading="lazy"
+                width="74"
+                height="74"
+                sizes="74px"
+                alt=""
+              />
+              <div class="div-block-72">
+                <h1 class="heading-3" id="subjects">{{ data.subjects }}</h1>
+                <div class="div-block-68">
+                  <div class="text-block-32">
+                    <strong id="fullname" class="bold-text-8"
+                      >{{
+                        data.user !== undefined ? data.user.first_name : ''
+                      }}
+                      {{
+                        data.user !== undefined ? data.user.last_name : ''
+                      }}</strong
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
           <p style="padding-top: 20px" class="paragraph-8">
             <strong>Degree: </strong>{{ data.education }}<br /><strong
               >Birthdate: </strong
