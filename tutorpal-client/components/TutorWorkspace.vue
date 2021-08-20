@@ -244,7 +244,7 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser', pastSessions: 'getPastSessions' }),
+    ...mapGetters({ user: 'getUser', pastSessions: 'getPastSessions', startedSessions: 'getStartedSessions' }),
   },
   watch: {
     timerCount: {
@@ -299,6 +299,7 @@ export default {
     this.timerCount = timerSeconds
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
+    await this.fetchSessions('startedSessions')
   },
   methods: {
     dateToString,
@@ -329,12 +330,13 @@ export default {
           'Content-Type': 'application/json',
         },
       }).then(() => {
-        this.removeSession([this.session, 'pastSessions'])
+        this.removeSession([this.session, 'startedSessions'])
+        this.addSession([this.session, 'pastSessions'])
         this.$router.push('/')
       })
     },
-    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession',]),
-    ...mapGetters(['getPastSessions'])
+    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession', 'addSession']),
+    ...mapGetters(['getPastSessions', 'getStartedSessions'])
   },
 }
 </script>
