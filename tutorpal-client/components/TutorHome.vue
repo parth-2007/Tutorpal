@@ -367,6 +367,7 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
     await this.fetchSessions('pendingOnTutor')
+    console.log()
   },
   methods: {
     ...mapActions([
@@ -423,8 +424,8 @@ export default {
     },
     async startclass(id, session) {
       const today = new Date()
-      const y = add(['00:06:00', session.timeStart])
-      const x = sub([session.timeStart, '00:06:00'])
+      const y = add(['00:10:00', session.timeStart])
+      const x = sub([session.timeStart, '00:10:00'])
 
       const start = x[0] * 60 + x[1]
       const end = y[0] * 60 + y[1]
@@ -454,7 +455,7 @@ export default {
         })
       } else {
         alert(
-          'You are attempting to start this session too early or too late. You are only allowed to start a class at least 5 minutes prior to the class start time or at most 5 minutes after.'
+          'You are attempting to start this session too early or too late. You are only allowed to start a class at 10 minutes prior to the class start time or at most 10 minutes after.'
         )
       }
     },

@@ -205,7 +205,7 @@
             Completed Classes
           </h1>
           <div
-            v-for="completed in session"
+            v-for="completed in pastSessions"
             :key="completed.id"
             style="background-color: #fff; margin-right: 10%; margin-left: 10%"
             class="i"
@@ -243,7 +243,7 @@
               >{{ completed.description }}
             </p>
             <div class="text-block-27-copy">
-              Congratulation! You have finished this class, let us know how it
+              Congratulations! You have finished this class, let us know how it
               went in your reviews.
             </div>
             <div
@@ -309,9 +309,6 @@ export default {
       description: '',
     }
   },
-  async fetch() {
-    await this.fetchSessions('pastSessions')
-  },
   head() {
     return {
       show: false,
@@ -335,10 +332,12 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ student: 'getStudent', user: 'getUser', session: 'getPastSessions'}),
+    ...mapGetters({ student: 'getStudent', user: 'getUser', pastSessions: 'getPastSessions'}),
   },
   async created() {
     await this.fetchUser()
+    await this.fetchSessions('pastSessions')
+    console.log(this.pastSessions)
   },
   methods: {
     updateModalValue() {

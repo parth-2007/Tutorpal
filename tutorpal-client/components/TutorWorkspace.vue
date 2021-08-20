@@ -13,10 +13,8 @@
       <div
         v-else-if="session.student_paid === false || session.finished === true"
       >
-        <NotFound></NotFound>
       </div>
       <div v-else-if="session.tutor_pk !== user.tutorPk">
-        <Forbidden></Forbidden>
       </div>
       <body
         v-else
@@ -246,7 +244,7 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser' }),
+    ...mapGetters({ user: 'getUser', pastSessions: 'getPastSessions' }),
   },
   watch: {
     timerCount: {
@@ -254,13 +252,13 @@ export default {
         if (value > 0) {
           setTimeout(() => {
             this.timerCount--
-            if (this.timerCount === 300 || this.timerCount < 300) {
+            if (this.timerCount === 600 || this.timerCount < 600) {
               this.buttonShow = true
             }
           }, 1000)
-        } else if (value === 300) {
+        } else if (value === 600) {
           alert(
-            'There are five minutes remaining in this class. We suggest wrapping things up!'
+            'There are ten minutes remaining in this class. We suggest wrapping things up!'
           )
         } else if (value === 0) {
           alert("This meeting's time is up, please end the meeting shortly.")
@@ -300,6 +298,7 @@ export default {
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
     this.timerCount = timerSeconds
     await this.fetchUser()
+    await this.fetchSessions('pastSessions')
   },
   methods: {
     dateToString,
@@ -321,8 +320,7 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass() {
-      const url =
-        'https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
+      const url ='https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
       await fetch(url, {
         method: 'POST',
         credentials: 'include',
@@ -331,10 +329,12 @@ export default {
           'Content-Type': 'application/json',
         },
       }).then(() => {
+        this.removeSession([this.session, 'pastSessions'])
         this.$router.push('/')
       })
     },
-    ...mapActions(['fetchUser']),
+    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession',]),
+    ...mapGetters(['getPastSessions'])
   },
 }
 </script>

@@ -5,15 +5,12 @@
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
       <div v-if="session.student_paid === true && session.started === false">
-        <NotStarted></NotStarted>
       </div>
       <div
         v-else-if="session.student_paid === false || session.finished === true"
       >
-        <NotFound></NotFound>
       </div>
       <div v-else-if="session.student_pk !== user.studentPk">
-        <Forbidden></Forbidden>
       </div>
       <body
         v-else
