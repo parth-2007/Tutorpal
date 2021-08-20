@@ -320,7 +320,7 @@ export default {
       next: '',
     }
   },
-  async fetch() {
+  async created() {
     await this.fetchSessions('startedSessions')
     this.requests1 = await fetch('https://api.tutorpal.org/sessions/pending_on_tutor/', {
       credentials: 'include',
@@ -363,11 +363,11 @@ export default {
       }
     },
   },
-  async created() {
+  async beforeCreate() {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
+    console.log(this.requests)
     await this.fetchSessions('pendingOnTutor')
-    console.log()
   },
   methods: {
     ...mapActions([
