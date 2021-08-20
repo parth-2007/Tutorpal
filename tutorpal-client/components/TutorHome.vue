@@ -363,7 +363,7 @@ export default {
       }
     },
   },
-  async beforeCreate() {
+  async fetch() {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
     console.log(this.requests)
