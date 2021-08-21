@@ -282,3 +282,6 @@ export default {
 }
 
 </script>
+<style scoped>
+@import "https://www.tutorpal.org/main/css/homepage-12.webflow.css";
+</style>
