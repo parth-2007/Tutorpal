@@ -6,7 +6,7 @@
     >
     <head>
       <meta charset="utf-8" />
-      <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css">
+      <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css" media="print" onload="this.media='all'">
     </head>
       <div v-if="session.student_paid === true && session.started === false">
         <p style="font-size: 18px; font-family: Poppins; margin: 15px">

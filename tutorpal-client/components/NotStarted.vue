@@ -6,7 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css">
+        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css" media="print" onload="this.media='all'">
       </head>
       <body style="background-color: rgba(65, 168, 211, 0.2); height: 100vh; padding-top: 60px;">
         <div style="width: 80vw; height: 80vh; background-color:white;border-width:0px; margin-top: 0px;" class="div-block-80">

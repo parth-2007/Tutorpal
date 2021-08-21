@@ -2,7 +2,7 @@
   <client-only>
     <head>
       <meta charset="utf-8" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
     </head>
     <form
       style="font-family: Poppins; margin-top: 25px; margin-left: 25px"

@@ -6,6 +6,8 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://www.tutorpal.org/registration/css/new-registration.webflow.css" media="print" onload="this.media='all'">
       </head>
       <div v-if="user.isStudent">
       </div>
@@ -116,9 +118,6 @@ export default {
   head() {
     return {
       title: 'Tutor Registration',
-      link: [
-        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-      ]
     }
   },
   computed: mapGetters({ user: 'getUser' }),

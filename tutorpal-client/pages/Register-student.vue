@@ -6,8 +6,8 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://www.tutorpal.org/register/css/2tor4u-2-0.webflow.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://www.tutorpal.org/register/css/2tor4u-2-0.webflow.css" media="print" onload="this.media='all'">
       </head>
       <div v-if="user.isStudent">
       </div>

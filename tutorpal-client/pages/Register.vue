@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css" media="print" onload="this.media='all'">
       </head>
       <div v-if="user.isStudent">
       </div>
@@ -95,7 +96,6 @@ export default {
       title: 'Register',
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/main/css/homepage-12.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
