@@ -279,7 +279,7 @@ export default {
     const link = document.createElement('link');
     link.rel = 'stylesheet';       
     link.type = 'text/css';
-    link.href = 'style.css';
+    link.href = 'https://www.tutorpal.org/main/css/homepage-12.webflow.css';
     document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
 }
