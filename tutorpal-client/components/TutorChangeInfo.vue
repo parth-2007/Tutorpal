@@ -4,6 +4,11 @@ T<template>
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css">
+      </head>
       <body>
         <div :style="updateModal" class="div-block-22">
           <div
@@ -175,12 +180,6 @@ T<template>
                 per hour <br /><strong>Bio: </strong>{{ tutor.bio
                 }}<br /><strong>Course Description: </strong
                 >{{ tutor.whatYouTeach }}<br />
-                <!-- <a
-                v-if="tutor.linkedIn.length > 0"
-                :href="tutor.linkedIn"
-                target="_blank"
-                ><strong>Linkedin Account:</strong>
-              </a> -->
                 <a
                   @click="updateModalValue"
                   class="button-10-copy-copy w-button"
@@ -209,23 +208,8 @@ export default {
     return {
       title: 'Account Information',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/tutor-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/normalize.css" },
       ],
     }
   },

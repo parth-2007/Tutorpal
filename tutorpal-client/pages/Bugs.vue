@@ -6,6 +6,8 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://www.tutorpal.org/outcast/css/last-project-afcf8d.webflow.css">
       </head>
       <body>
         <router-link
@@ -61,15 +63,8 @@ export default {
     return {
       title: 'Bugs',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
   },

@@ -4,6 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+    <head>
+      <meta charset="utf-8" />
+      <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css">
+    </head>
     <body id="body" style="min-height: 100vh" class="body-2">
       <div id="main">
         <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
@@ -89,9 +93,8 @@ export default {
     return {
       title: 'Inbox',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/tutor/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/tutor/css/tutor-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/tutor/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
   },

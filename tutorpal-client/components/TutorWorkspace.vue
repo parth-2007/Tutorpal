@@ -4,6 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+    <head>
+      <meta charset="utf-8" />
+      <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css">
+    </head>
       <div v-if="session.student_paid === true && session.started === false">
         <p style="font-size: 18px; font-family: Poppins; margin: 15px">
           This class has not been started yet, your job as a tutor is to start
@@ -214,23 +218,9 @@ export default {
     return {
       title: 'Tutor Workspace',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/tutor-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+      ]
     }
   },
   computed: {

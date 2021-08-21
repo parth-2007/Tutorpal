@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css">
       </head>
       <body>
           <div class="div-block-3">
@@ -41,7 +42,6 @@ export default {
       title: 'Our team',
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/main/css/homepage-12.webflow.css' },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }

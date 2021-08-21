@@ -1,5 +1,4 @@
 <template>
-  <!-- make it look nice -->
   <div style="font-family: Poppins; margin-top: 60px">
     <h1 style="font-size: 28px; text-align: center;">Please refresh if you were not automatically redirected</h1>
     <p style="font-size: 16px; text-align: center;">Or click here: <router-link to="/" style="font-family: Poppins; color: #41a8d3;">Continue</router-link></p>

@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css">
       </head>
       <body id="body" style="min-height: 100vh" class="body">
         <div id="main">
@@ -331,22 +332,8 @@ export default {
     return {
       title: 'Home',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/tutor/css/webflow.css' },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/tutor-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/normalize.css" },
       ],
     }
   },
