@@ -4,6 +4,10 @@
       data-wf-page="5f5844923df4f0c1c6587323"
       data-wf-site="5f5844923df4f032aa587322"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css">
+      </head>
       <div class="section-2">
         <div class="div-block-5">
           <div class="div-block-3-copy">
@@ -270,9 +274,8 @@ export default {
     return {
       title: 'Home - TutorPal',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"./main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'./main/css/homepage-12.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"./main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
   },
