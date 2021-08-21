@@ -12,7 +12,21 @@
       <body style="background-color: rgba(65, 168, 211, 0.2); min-height: 100vh" id="body">
         <div id="main">
           <div class="div-block-55">
-            <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
+            <div class="section">
+            <router-link to="/" class="link-block-3 w-inline-block"
+              ><img
+                src="../static/student/images/logo.jpg"
+                loading="lazy"
+                width="200"
+                srcset="
+                  ../static/student/images/logo.jpg  500w,
+                  ../static/student/images/logo.jpg  800w,
+                  ../static/student/images/logo.jpg 1080w,
+                  ../static/student/images/logo.jpg 1432w
+                "
+                sizes="200px"
+                alt=""
+            /></router-link>
               <div class="div-block-4">
                 <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">

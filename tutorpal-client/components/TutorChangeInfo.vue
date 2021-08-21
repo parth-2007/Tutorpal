@@ -42,9 +42,9 @@ T<template>
                 loading="lazy"
                 width="260"
                 srcset="
-                  ../static/tutor/images/logo-p-500.jpeg   500w,
-                  ../static/tutor/images/logo-p-800.jpeg   800w,
-                  ../static/tutor/images/logo-p-1080.jpeg 1080w,
+                  ../static/tutor/images/logo.jpg   500w,
+                  ../static/tutor/images/logo.jpg   800w,
+                  ../static/tutor/images/logo.jpg 1080w,
                   ../static/tutor/images/logo.jpg         1432w
                 "
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"

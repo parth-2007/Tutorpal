@@ -10,7 +10,21 @@
     </head>
     <body id="body" style="min-height: 100vh" class="body-4">
       <div id="main">
-        <div class="section"><router-link to="/" class="link-block w-inline-block"><img src="../static/tutor/images/logo.jpg" loading="lazy" width="260" srcset="../static/tutor/images/logo-p-500.jpeg 500w, ../static/tutor/images/logo-p-800.jpeg 800w, ../static/tutor/images/logo-p-1080.jpeg 1080w, ../static/tutor/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
+        <div class="section">
+          <router-link to="/" class="link-block w-inline-block"
+              ><img
+                src="../static/tutor/images/logo.jpg"
+                loading="lazy"
+                width="260"
+                srcset="
+                  ../static/tutor/images/logo.jpg   500w,
+                  ../static/tutor/images/logo.jpg   800w,
+                  ../static/tutor/images/logo.jpg 1080w,
+                  ../static/tutor/images/logo.jpg         1432w
+                "
+                sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"
+                alt=""
+            /></router-link>
           <div class="div-block-4">
             <div class="div-block-43">
               <div class="name_profile_pic"><img :src="user.profilePic" id="image" width="60" height="60" sizes="60px" alt="" class="image-7">
