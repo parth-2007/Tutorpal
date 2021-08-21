@@ -276,10 +276,11 @@ export default {
     }
   },
   mounted() {
-    const style = document.createElement('style');
-    style.src = "https://www.tutorpal.org/main/css/homepage-12.webflow.css"
-    style.addEventListener('load', this.setLoaded)
-    document.body.appendChild(style)
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';       
+    link.type = 'text/css';
+    link.href = 'style.css';
+    document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
 }
 
