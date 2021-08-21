@@ -276,12 +276,10 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"https://www.tutorpal.org/main/css/homepage-12.webflow.css" },
       ]
     }
   },
 }
 
 </script>
-<style scoped>
-@import "https://www.tutorpal.org/main/css/homepage-12.webflow.css";
-</style>
