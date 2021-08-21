@@ -7,7 +7,7 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://www.tutorpal.org/student/css/student-main.webflow.css" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="/student/css/student-main.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body style="background-color: rgba(65, 168, 211, 0.2); min-height: 100vh" id="body">
         <div id="main">

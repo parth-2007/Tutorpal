@@ -6,7 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://www.tutorpal.org/student/css/student-main.webflow.css" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="/student/css/student-main.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div style="margin-left: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"

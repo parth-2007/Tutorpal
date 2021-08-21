@@ -6,7 +6,7 @@
     >
     <head>
       <meta charset="utf-8" />
-      <link rel="stylesheet" href="https://www.tutorpal.org/tutor/css/tutor-main.webflow.css" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="/tutor/css/tutor-main.webflow.css" media="none" onload="if(media!='all')media='all'">
     </head>
     <body id="body" style="min-height: 100vh" class="body-2">
       <div id="main">
