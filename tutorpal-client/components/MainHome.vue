@@ -4,10 +4,6 @@
       data-wf-page="5f5844923df4f0c1c6587323"
       data-wf-site="5f5844923df4f032aa587322"
     >
-      <head>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css">
-      </head>
       <div class="section-2">
         <div class="div-block-5">
           <div class="div-block-3-copy">
@@ -278,6 +274,12 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
+  },
+  mounted() {
+    const style = document.createElement('style');
+    style.src = "https://www.tutorpal.org/main/css/homepage-12.webflow.css"
+    style.addEventListener('load', this.setLoaded)
+    document.body.appendChild(style)
   },
 }
 
