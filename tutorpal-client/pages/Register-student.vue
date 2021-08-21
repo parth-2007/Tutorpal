@@ -4,6 +4,11 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://www.tutorpal.org/register/css/2tor4u-2-0.webflow.css">
+      </head>
       <div v-if="user.isStudent">
       </div>
       <div v-else-if="user.isTutor">
@@ -251,10 +256,8 @@ export default {
     return {
       title: 'Student Registration',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: './register/css/webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: './register/css/2tor4u-2-0.webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: './register/css/normalize.css' },
-        { rel: "stylesheet", type: "text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/normalize.css' },
       ],
     }
   },

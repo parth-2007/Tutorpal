@@ -4,6 +4,10 @@
       data-wf-page="5f5844923df4f0c1c6587323"
       data-wf-site="5f5844923df4f032aa587322"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/student/css/student-main.webflow.css">
+      </head>
       <div style="margin-left: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
           ><img
@@ -125,9 +129,8 @@ export default {
     return {
       title: 'Find a Tutor',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/main/css/normalize.css' },
       ],
     }
   },
