@@ -6,10 +6,8 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://www.tutorpal.org/main/css/homepage-12.webflow.css">
-        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/normalize.css">
-        <link rel="stylesheet" href="https://www.tutorpal.org/main/css/webflow.css">
       </head>
       <div v-if="user.isStudent">
       </div>
@@ -125,7 +123,6 @@ export default {
       title: 'Login',
       link: [
         { rel:"stylesheet", type:"text/css", href: "/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href: '/main/css/homepage-12.webflow.css' },
         { rel:"stylesheet", type:"text/css", href: "/main/css/normalize.css" },
       ],
     }
