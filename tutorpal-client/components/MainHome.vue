@@ -6,7 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
+        <!-- <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'"> -->
       </head>
       <div class="section-2">
         <div class="div-block-5">
@@ -282,3 +282,4 @@ export default {
 }
 
 </script>
+<style scoped src="https://www.tutorpal.org/main/css/homepage-12.webflow.css"></style>
