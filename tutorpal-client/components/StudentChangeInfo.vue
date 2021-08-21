@@ -4,6 +4,11 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/student/css/student-main.webflow.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+      </head>
       <body>
         <div :style="updatemodal" class="div-block-22">
           <div
@@ -318,17 +323,6 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
-  },
-  beforeMount() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';       
-    link.type = 'text/css';
-    link.href = 'https://www.tutorpal.org/student/css/student-main.webflow.css';
-    const link1 = document.createElement('link');
-    link1.rel = 'stylesheet';       
-    link1.type = 'text/css';
-    link1.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css';
-    document.getElementsByTagName('HEAD')[0].appendChild(link, link1);
   },
   computed: {
     updatemodal() {

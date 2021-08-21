@@ -7,6 +7,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://www.tutorpal.org/student/css/student-main.webflow.css">
       </head>
       <body id="body" style="min-height: 100vh" class="body-3">
         <div id="main">
@@ -202,13 +203,6 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
-  },
-  beforeMount() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = 'https://www.tutorpal.org/student/css/student-main.webflow.css';
-    document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
   computed: {
     ...mapGetters({

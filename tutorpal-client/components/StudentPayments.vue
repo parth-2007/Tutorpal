@@ -4,6 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+    <head>
+      <meta charset="utf-8" />
+      <link rel="stylesheet" href="https://www.tutorpal.org/student/css/student-main.webflow.css">
+    </head>
     <body id="body" style="min-height: 100vh" class="body-3">
         <div id="main">
           <div class="div-block-55">
@@ -120,13 +124,6 @@ export default {
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
-  },
-  beforeMount() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = 'https://www.tutorpal.org/student/css/student-main.webflow.css';
-    document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
   computed: {
     logout() {
