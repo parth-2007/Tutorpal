@@ -156,7 +156,6 @@ export default {
         formData.append('email', this.email)
         formData.append('password', this.password)
         const csrfToken = await getCSRF()
-        console.log(csrfToken)
         const data = await fetch('https://api.tutorpal.org/auth/login/', {
           credentials: 'include',
           method: 'POST',

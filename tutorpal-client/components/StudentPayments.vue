@@ -116,11 +116,17 @@ export default {
       show: false,
       title: 'My Payments',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
+  },
+  beforeMount() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = 'https://www.tutorpal.org/student/css/student-main.webflow.css';
+    document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
   computed: {
     logout() {

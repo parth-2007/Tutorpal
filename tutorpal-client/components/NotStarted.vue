@@ -18,11 +18,17 @@ export default {
     return {
       title: 'Class Not Started',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
+  },
+  beforeMount() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';       
+    link.type = 'text/css';
+    link.href = 'https://www.tutorpal.org/main/css/homepage-12.webflow.css';
+    document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
 }
 </script>

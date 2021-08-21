@@ -131,26 +131,8 @@ export default {
     return {
       title: `Chat with ${this.otherUser.firstName}`,
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/student-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/normalize.css',
-        },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href: "/main/css/normalize.css" },
       ],
     }
   },
@@ -159,7 +141,6 @@ export default {
   },
 
   async created() {
-    // console.log('otherUser: ', this.otherUser)
     this.response = await loggedInFetch(
       'api/rooms/' + this.$route.params.id + '/messages/'
     )
@@ -184,6 +165,17 @@ export default {
   },
   beforeDestroy() {
     this.socket.close()
+  },
+  beforeMount() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';       
+    link.type = 'text/css';
+    link.href = 'https://www.tutorpal.org/student/css/student-main.webflow.css';
+    const link1 = document.createElement('link');
+    link1.rel = 'stylesheet';       
+    link1.type = 'text/css';
+    link1.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css';
+    document.getElementsByTagName('HEAD')[0].appendChild(link, link1);
   },
   methods: {
     convertTime2,

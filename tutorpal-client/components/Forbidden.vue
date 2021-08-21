@@ -30,13 +30,19 @@
 export default {
   head() {
     return {
-      title: '404 Not Found',
+      title: '404 Forbidden',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
+  },
+  beforeMount() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';       
+    link.type = 'text/css';
+    link.href = 'https://www.tutorpal.org/outcast/css/last-project-afcf8d.webflow.css';
+    document.getElementsByTagName('HEAD')[0].appendChild(link);
   },
 }
 </script>
