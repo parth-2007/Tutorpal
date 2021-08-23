@@ -273,12 +273,20 @@ export default {
     return {
       title: 'Home - TutorPal',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/homepage-12.webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/homepage-12.webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
       ]
     }
   },
+  beforeMount() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';       
+    link.type = 'text/css';
+    link.href = '/main/css/homepage-12.webflow.css';
+    document.getElementsByTagName('HEAD')[0].appendChild(link);
+  },
 }
+
 
 </script>
