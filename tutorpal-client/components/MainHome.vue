@@ -6,7 +6,6 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div class="section-2">
         <div class="div-block-5">
@@ -276,7 +275,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href:"https://www.tutorpal.org/main/css/homepage-12.webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/main/css/homepage-12.webflow.css" },
       ]
     }
   },
