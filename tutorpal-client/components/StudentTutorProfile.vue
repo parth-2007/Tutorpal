@@ -494,7 +494,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .div-block-22-copy {
   position: fixed;
   z-index: 21;

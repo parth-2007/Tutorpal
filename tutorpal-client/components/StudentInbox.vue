@@ -137,15 +137,15 @@ export default {
 </script>
 <style scoped>
 .badge {
-  margin-top: 5px;
-  float: right;
+  position: absolute;
+  top: 11px;
+  right: 3px;
   padding: 4px 7px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
-  font-size: 12px;
-  margin-right: 15px;
+  font-size: 14px;
 }
 </style>
 

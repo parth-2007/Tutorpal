@@ -293,13 +293,13 @@ export default {
 <style scoped>
 .badge {
   position: absolute;
-  top: 13px;
+  top: 11px;
   right: 3px;
   padding: 4px 7px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
-  font-size: 12px;
+  font-size: 14px;
 }
 </style>
