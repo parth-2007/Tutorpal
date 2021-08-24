@@ -7,25 +7,24 @@
       <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/outcast/css/last-project-afcf8d.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body>
         <router-link
           style="margin-top: 0px; margin-bottom: -30px"
           to="/"
-          class="link-block w-inline-block"
+          class="outcastlink-block w-inline-block"
           ><img
             src="../static/student/images/logo.jpg"
             width="250"
             alt=""
-            class="image"
+            class="outcastimage"
         /></router-link>
-        <div style="height: auto; font-family: Poppins; padding-bottom: 0x; border-color: skyblue; border-width: 2.5px;" class="div-block">
+        <div style="height: auto; font-family: Poppins; padding-bottom: 0x; border-color: skyblue; border-width: 2.5px;" class="outcastdiv-block">
           <div>
             <h1 style="font-size: 30px;"><strong>Bug Reports</strong></h1>
             Please let us know what bugs you are facing so we can fix them immediately. We use this information to immediately fix issues we have not yet come across. If you have any feedback, please do so <router-link to="/feedback">here</router-link>
             <form id="form-wrapper">
-              <div style="margin-top: 20px;" class="mb-3">
+              <div style="margin-top: 20px;" class="outcastmb-3">
                 <label for="bugs" class="form-label">Bugs</label>
                 <textarea v-model="description" style="height:250px;" class="form-control" id="bugs" rows="3"></textarea>
                 <select v-model="level" style="margin-top: 15px;" class="form-select" id="buglevel" aria-label="Default select example">
@@ -65,6 +64,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" },
       ]
     }
   },

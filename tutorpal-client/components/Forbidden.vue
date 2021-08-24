@@ -6,20 +6,19 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/outcast/css/last-project-afcf8d.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body>
-        <router-link to="/" class="link-block-4 w-inline-block"
+        <router-link to="/" class="outcastlink-block-4 w-inline-block"
           ><img src="../static/student/images/logo.jpg" loading="lazy" width="200" alt=""
         /></router-link>
-        <div class="columns-6 w-row">
-          <div class="column-6 w-col w-col-6">
-            <div class="div-block-41">
-              <h1 class="heading-3">Oops!</h1>
-              <p class="paragraph-8">
+        <div class="outcastcolumns-6 w-row">
+          <div class="outcastcolumn-6 w-col w-col-6">
+            <div class="outcastdiv-block-41">
+              <h1 class="outcastheading-3">Oops!</h1>
+              <p class="outcastparagraph-8">
                 You don't have the permission to view this page. Access Denied.
               </p>
-              <div class="text-block-19">Error Code: 403 Forbidden</div>
+              <div class="outcasttext-block-19">Error Code: 403 Forbidden</div>
             </div>
           </div>
           <div class="w-col w-col-6">
