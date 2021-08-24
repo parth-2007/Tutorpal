@@ -7,7 +7,6 @@ T<template>
       <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
-        <link rel="stylesheet" href="/tutor/css/tutor-main.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body>
         <div :style="updateModal" class="tutordiv-block-22">
@@ -210,6 +209,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href: "/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href: "/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ],
     }
   },
@@ -248,7 +248,7 @@ export default {
 }
 </script>
 <style>
-.div-block-22 {
+.tutordiv-block-22 {
   position: fixed;
   z-index: 21;
   width: 100vw;
@@ -258,7 +258,7 @@ export default {
   -o-object-fit: contain;
   object-fit: contain;
 }
-.badge {
+.tutorbadge {
   position: absolute;
   top: 11px;
   right: 3px;

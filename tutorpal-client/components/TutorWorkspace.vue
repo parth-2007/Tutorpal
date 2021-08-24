@@ -6,7 +6,6 @@
     >
     <head>
       <meta charset="utf-8" />
-      <link rel="stylesheet" href="/tutor/css/tutor-main.webflow.css" media="none" onload="if(media!='all')media='all'">
     </head>
       <div v-if="session.student_paid === true && session.started === false">
         <p style="font-size: 18px; font-family: Poppins; margin: 15px">
@@ -220,6 +219,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
   },
@@ -331,7 +331,7 @@ export default {
 }
 </script>
 <style>
-.div-block-80 {
+.tutordiv-block-80 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

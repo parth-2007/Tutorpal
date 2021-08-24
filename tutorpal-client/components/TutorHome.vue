@@ -6,7 +6,6 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/tutor/css/tutor-main.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body id="body" style="min-height: 100vh" class="tutorbody">
         <div id="main">
@@ -108,8 +107,8 @@
             </div>
           </div>
         </div>
-        <div class="tutorcolumns-4 w-row">
-          <div class="tutorw-col w-col-8">
+        <div class="columns-4 w-row">
+          <div class="w-col w-col-8">
             <div class="tutordiv-block-44">
               <div class="tutordiv-block-45">
                 <img
@@ -331,6 +330,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href: "/student/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href: "/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ],
     }
   },
@@ -469,7 +469,7 @@ export default {
 }
 </script>
 <style scoped>
-.badge {
+.tutorbadge {
   position: absolute;
   top: 11px;
   right: 3px;
