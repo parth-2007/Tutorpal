@@ -20,7 +20,7 @@
             to="/"
             class="link-block w-inline-block"
             ><img
-              src="../static/main/images/logo.jpg"
+              src="../static/student/images/logo.jpg"
               width="250"
               alt=""
               class="image"
@@ -89,14 +89,14 @@
             </div>
             <div style="margin-top: 20px" class="w-col w-col-6">
               <img
-                src="../static/main/images/girl_raising_hand.jpg"
+                src="../static/student/images/girl_raising_hand.jpg"
                 width="620"
                 srcset="
-                  ../static/main/images/girl_raising_hand.jpg 500w,
-                  ../static/main/images/girl_raising_hand.jpg 800w,
-                  ../static/main/images/girl_raising_hand.jpg 1080w,
-                  ../static/main/images/girl_raising_hand.jpg 1600w,
-                  ../static/main/images/girl_raising_hand.jpg 1805w
+                  ../static/student/images/girl_raising_hand.jpg 500w,
+                  ../static/student/images/girl_raising_hand.jpg 800w,
+                  ../static/student/images/girl_raising_hand.jpg 1080w,
+                  ../static/student/images/girl_raising_hand.jpg 1600w,
+                  ../static/student/images/girl_raising_hand.jpg 1805w
                 "
                 sizes="(max-width: 479px) 71vw, (max-width: 767px) 73vw, 42vw"
                 alt=""

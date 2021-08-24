@@ -10,7 +10,7 @@
       </head>
       <body>
         <router-link to="/" class="link-block-4 w-inline-block"
-          ><img src="../static/main/images/logo.jpg" loading="lazy" width="200" alt=""
+          ><img src="../static/student/images/logo.jpg" loading="lazy" width="200" alt=""
         /></router-link>
         <div class="columns-6 w-row">
           <div class="column-6 w-col w-col-6">

@@ -13,44 +13,44 @@
       </div>
       <div v-else-if="user.isTutor">
       </div>
-      <body v-else class="body">
-        <div class="div-block-3">
+      <body v-else class="homebody">
+        <div class="homediv-block-3">
           <router-link
             style="margin-top: 0px; margin-bottom: -30px"
             to="/"
-            class="link-block w-inline-block"
+            class="homelink-block w-inline-block"
             ><img
-              src="../static/main/images/logo.jpg"
+              src="../static/student/images/logo.jpg"
               width="250"
               alt=""
-              class="image"
+              class="homeimage"
           /></router-link>
-          <div class="div-block-4">
+          <div class="homediv-block-4">
             <router-link
               style="z-index: 2"
               to="/login"
               aria-current="page"
-              class="link-2-copy w--current"
+              class="homelink-2-copy w--current"
               >login</router-link
             >
           </div>
-          <router-link style="z-index: 2" to="/register" class="button w-button"
+          <router-link style="z-index: 2" to="/register" class="homebutton w-button"
             >register</router-link
           >
         </div>
         <div
           style="margin-top: 200px; margin-bottom: 40px"
-          class="div-block-23"
+          class="homediv-block-23"
         >
-          <div class="div-block-20">
-            <div class="div-block-21">
-              <div class="text-block-4">Sign-In</div>
+          <div class="homediv-block-20">
+            <div class="homediv-block-21">
+              <div class="hometext-block-4">Sign-In</div>
               <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
                 {{ errors.global }}
               </p>
-              <div style="margin-top: 20px" class="div-block-22">
+              <div style="margin-top: 20px" class="homediv-block-22">
                 <form style="font-family: Poppins" @submit="submitHandler">
-                  <div class="mb-3">
+                  <div class="homemb-3">
                     <label for="email" class="form-label">Email address</label>
                     <input
                       type="email"
@@ -62,7 +62,7 @@
                   <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
                     {{ errors.email }}
                   </p>
-                  <div class="mb-3">
+                  <div class="homemb-3">
                     <label for="password" class="form-label">Password</label>
                     <input
                       type="password"
@@ -74,7 +74,7 @@
                   <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
                     {{ errors.password }}
                   </p>
-                  <button class="button-11 w-button" @click="submitHandler">
+                  <button class="homebutton-11 w-button" @click="submitHandler">
                     Continue
                   </button>
                 </form>
@@ -83,16 +83,16 @@
                 to="/reset-password"
                 aria-current="page"
                 style="font-family: Poppins; margin-top: 20px; width: auto"
-                class="link-block w-inline-block w--current"
+                class="homelink-block w-inline-block w--current"
                 >Forgot Password?</router-link
               >
-              <div class="text-block-6">
+              <div class="hometext-block-6">
                 By continuing, you agree to TutorPal&#x27;s
                 <router-link to="/toc">Terms of Conditions.</router-link>
               </div>
             </div>
-            <div class="text-block-7">New to TutorPal?</div>
-            <router-link to="/register" class="button-12 w-button"
+            <div class="hometext-block-7">New to TutorPal?</div>
+            <router-link to="/register" class="homebutton-12 w-button"
               >Create an account</router-link
             >
           </div>
@@ -124,6 +124,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href: "/main/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href: "/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ],
     }
   },

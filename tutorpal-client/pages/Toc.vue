@@ -14,7 +14,7 @@
           to="/"
           class="link-block w-inline-block"
           ><img
-            src="../static/main/images/logo.jpg"
+            src="../static/student/images/logo.jpg"
             width="250"
             alt=""
             class="image"

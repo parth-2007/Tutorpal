@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="/outcast/css/last-project-afcf8d.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body>
-        <router-link to="/" class="link-block-4 w-inline-block"><img src="../static/main/images/logo.jpg" loading="lazy" width="200" alt=""/></router-link>
+        <router-link to="/" class="link-block-4 w-inline-block"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" alt=""/></router-link>
         <div class="columns-6 w-row">
           <div class="column-6 w-col w-col-6">
             <div class="div-block-41">

@@ -7,33 +7,33 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <div class="section-2">
-        <div class="div-block-5">
-          <div class="div-block-3-copy">
-            <div class="div-block-4">
-              <router-link to="/login" class="link-2">login</router-link>
+      <div class="homesection-2">
+        <div class="homediv-block-5">
+          <div class="homediv-block-3-copy">
+            <div class="homediv-block-4">
+              <router-link to="/login" class="homelink-2">login</router-link>
             </div>
-            <router-link to="/register" class="button w-button">register</router-link>
+            <router-link to="/register" class="homebutton w-button">register</router-link>
           </div>
-          <h1 class="heading">
+          <h1 class="homeheading">
             Find tutors around the globe,<br />in an instant
           </h1>
-          <form action="/search" class="stuff w-form">
+          <form action="/search" class="homestuff w-form">
             <img
-              src="../static/main/images/search-1.png"
+              src="../static/student/images/search-1.png"
               loading="lazy"
               width="25"
               height="25"
               srcset="
-                ../static/main/images/search-1.png 500w,
-                ../static/main/images/search-1.png       512w
+                ../static/student/images/search-1.png 500w,
+                ../static/student/images/search-1.png       512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
               alt=""
-              class="image-2"
+              class="homeimage-2"
             /><input
               type="search"
-              class="search-3 w-input"
+              class="homesearch-3 w-input"
               name="q"
               placeholder="Search by subject"
               id="search"
@@ -41,121 +41,121 @@
             /><input
               type="submit"
               value="Search"
-              class="button-8 _100 _5px-left w-button"
+              class="homebutton-8 _100 _5px-left w-button"
             />
           </form>
         </div>
       </div>
       <div
         data-w-id="fcb88f42-41a3-67cf-c3d6-d08c30f1625c"
-        class="columns w-row"
+        class="homecolumns w-row"
       >
-        <div class="column-7 w-col w-col-2">
-          <div class="div-block-11">
+        <div class="homecolumn-7 w-col w-col-2">
+          <div class="homediv-block-11">
             <img
-              src="../static/main/images/notes.png"
+              src="../static/student/images/notes.png"
               loading="lazy"
               width="70"
               alt=""
-              class="image-10"
+              class="homeimage-10"
             />
-            <div class="text-block-2">HOMEWORK <br />HELP</div>
+            <div class="hometext-block-2">HOMEWORK <br />HELP</div>
           </div>
         </div>
-        <div class="column-6 w-col w-col-2">
-          <div class="div-block-11">
+        <div class="homecolumn-6 w-col w-col-2">
+          <div class="homediv-block-11">
             <img
-              src="../static/main/images/trophy.png"
+              src="../static/student/images/trophy.png"
               loading="lazy"
               width="70"
               srcset="
-                ../static/main/images/trophy-p-500.png 500w,
-                ../static/main/images/trophy.png         512w
+                ../static/student/images/trophy-p-500.png 500w,
+                ../static/student/images/trophy.png         512w
               "
               sizes="70px"
               alt=""
-              class="image-9"
+              class="homeimage-9"
             />
-            <div class="text-block-2">COMPETITION <br />PREP</div>
+            <div class="hometext-block-2">COMPETITION <br />PREP</div>
           </div>
         </div>
-        <div class="column-5 w-col w-col-2">
-          <div class="div-block-11">
+        <div class="homecolumn-5 w-col w-col-2">
+          <div class="homediv-block-11">
             <img
-              src="../static/main/images/files-and-folders.png"
+              src="../static/student/images/files-and-folders.png"
               loading="lazy"
               width="70"
               alt=""
-              class="image-8"
+              class="homeimage-8"
             />
-            <div class="text-block-2">PROFESSIONAL<br />TUTORS</div>
+            <div class="hometext-block-2">PROFESSIONAL<br />TUTORS</div>
           </div>
         </div>
-        <div class="column-2 w-col w-col-2">
-          <div class="div-block-11">
+        <div class="homecolumn-2 w-col w-col-2">
+          <div class="homediv-block-11">
             <img
-              src="../static/main/images/student.png"
+              src="../static/student/images/student.png"
               loading="lazy"
               width="70"
               alt=""
-              class="image-6"
+              class="homeimage-6"
             />
-            <div class="text-block-2">FLEXIBLE <br />SCHEDULES</div>
+            <div class="hometext-block-2">FLEXIBLE <br />SCHEDULES</div>
           </div>
         </div>
-        <div class="column-3 w-col w-col-2">
-          <div class="div-block-11">
+        <div class="homecolumn-3 w-col w-col-2">
+          <div class="homediv-block-11">
             <img
-              src="../static/main/images/school.png"
+              src="../static/student/images/school.png"
               loading="lazy"
               width="70"
               srcset="
-                ../static/main/images/school-p-500.png 500w,
-                ../static/main/images/school.png       512w
+                ../static/student/images/school-p-500.png 500w,
+                ../static/student/images/school.png       512w
               "
               sizes="70px"
               alt=""
-              class="image-5"
+              class="homeimage-5"
             />
-            <div class="text-block-2">INSTANT<br />CLASSES</div>
+            <div class="hometext-block-2">INSTANT<br />CLASSES</div>
           </div>
         </div>
-        <div class="column-4 w-col w-col-2">
-          <div class="div-block-11">
+        <div class="homecolumn-4 w-col w-col-2">
+          <div class="homediv-block-11">
             <img
-              src="../static/main/images/research.png"
+              src="../static/student/images/research.png"
               loading="lazy"
               width="70"
               srcset="
-                ../static/main/images/research-p-500.png 500w,
-                ../static/main/images/research.png       512w
+                ../static/student/images/research-p-500.png 500w,
+                ../static/student/images/research.png       512w
               "
               sizes="70px"
               alt=""
-              class="image-7"
+              class="homeimage-7"
             />
-            <div class="text-block-2">LEARN NEW TOPICS ONLINE</div>
+            <div class="hometext-block-2">LEARN NEW TOPICS ONLINE</div>
           </div>
         </div>
       </div>
-      <div class="div-block-14">
-        <h1 class="heading-4">What makes us so special?</h1>
-        <div class="w-layout-grid grid">
-          <div class="div-block-15">
+      <div class="homediv-block-14">
+        <h1 class="homeheading-4">What makes us so special?</h1>
+        <div class="homew-layout-grid grid">
+          <div class="homediv-block-15">
             <img
-              src="../static/main/images/coin.png"
+              src="../static/student/images/coin.png"
               loading="lazy"
               width="80"
               srcset="
-                ../static/main/images/coin-p-500.png 500w,
-                ../static/main/images/coin.png       512w
+                ../static/student/images/coin-p-500.png 500w,
+                ../static/student/images/coin.png       512w
               "
               sizes="80px"
               alt=""
             />
-            <div class="div-block-16">
-              <h1 class="heading-5">Affordability</h1>
-              <p class="paragraph-3">
+            <div class="homediv-block-16">
+              <h1 class="homeheading-5">Affordability</h1>
+              <p class="homeparagraph-3">
                 Our service is affordable and does not request payment in
                 monthly installments, simply based on the classes taken. We do
                 not take any commission, so you can expect an hour class to
@@ -163,42 +163,42 @@
               </p>
             </div>
           </div>
-          <div class="div-block-15">
+          <div class="homediv-block-15">
             <img
-              src="../static/main/images/person.png"
+              src="../static/student/images/person.png"
               loading="lazy"
               width="80"
               srcset="
-                ../static/main/images/person-p-500.png 500w,
-                ../static/main/images/person.png       512w
+                ../static/student/images/person-p-500.png 500w,
+                ../static/student/images/person.png       512w
               "
               sizes="80px"
               alt=""
             />
-            <div class="div-block-16">
-              <h1 class="heading-5">Qualified Tutors</h1>
-              <p class="paragraph-2">
+            <div class="homediv-block-16">
+              <h1 class="homeheading-5">Qualified Tutors</h1>
+              <p class="homeparagraph-2">
                 The tutoring website offers a wide range of tutors in subjects,
                 along with diversity. You can expect scholars ranging from high
                 school toppers to college professors.<br />
               </p>
             </div>
           </div>
-          <div class="div-block-15">
+          <div class="homediv-block-15">
             <img
-              src="../static/main/images/ocean.png"
+              src="../static/student/images/ocean.png"
               loading="lazy"
               width="80"
               srcset="
-                ../static/main/images/ocean-p-500.png 500w,
-                ../static/main/images/ocean.png       512w
+                ../static/student/images/ocean-p-500.png 500w,
+                ../static/student/images/ocean.png       512w
               "
               sizes="80px"
               alt=""
             />
-            <div class="div-block-16">
-              <h1 class="heading-5">Variety of subjects</h1>
-              <p class="paragraph-5">
+            <div class="homediv-block-16">
+              <h1 class="homeheading-5">Variety of subjects</h1>
+              <p class="homeparagraph-5">
                 The service consists of a varietal of classes, from kindergarten
                 mathematics to AP Calculus AB/BC, taught by tutors from all
                 backgrounds and diversity. It also includes non-academic
@@ -207,16 +207,16 @@
               </p>
             </div>
           </div>
-          <div class="div-block-15">
+          <div class="homediv-block-15">
             <img
-              src="../static/main/images/gear.png"
+              src="../static/student/images/gear.png"
               loading="lazy"
               width="80"
               alt=""
             />
-            <div class="div-block-16">
-              <h1 class="heading-5">Simple</h1>
-              <p class="paragraph-4">
+            <div class="homediv-block-16">
+              <h1 class="homeheading-5">Simple</h1>
+              <p class="homeparagraph-4">
                 tutorPal is straightforward, simple, and convenient. This
                 implies the scarce amount of ineffective and aesthetic
                 functions. Our goal is to prioritize customers’ time into
@@ -227,8 +227,8 @@
           </div>
         </div>
       </div>
-      <div class="div-block-19">
-        <p class="paragraph-6">
+      <div class="homediv-block-19">
+        <p class="homeparagraph-6">
           TutorPal is the most reliable tutoring platform, designed to help and
           teach fundamental and advanced subjects or topics for a suitable
           price. The platform has been enhanced to accommodate parental and
@@ -247,19 +247,19 @@
           ><br />
         </p>
       </div>
-      <div class="footer-copy" style="position: static">
-        <div class="columns-2 w-row">
-          <div class="column-8 w-col w-col-3">
-            <router-link to="/bugs" class="link-3">Bugs</router-link>
+      <div class="homefooter-copy" style="position: static">
+        <div class="homecolumns-2 w-row">
+          <div class="homecolumn-8 w-col w-col-3">
+            <router-link to="/bugs" class="homelink-3">Bugs</router-link>
           </div>
-          <div class="column-9 w-col w-col-3">
-            <router-link to="/team" class="link-3">Team</router-link>
+          <div class="homecolumn-9 w-col w-col-3">
+            <router-link to="/team" class="homelink-3">Team</router-link>
           </div>
-          <div class="column-10 w-col w-col-3">
-            <router-link to="/toc" class="link-3">Terms of service</router-link>
+          <div class="homecolumn-10 w-col w-col-3">
+            <router-link to="/toc" class="homelink-3">Terms of service</router-link>
           </div>
-          <div class="column-11 w-col w-col-3">
-            <router-link to="/feedback" class="link-3">User Feedback</router-link>
+          <div class="homecolumn-11 w-col w-col-3">
+            <router-link to="/feedback" class="homelink-3">User Feedback</router-link>
           </div>
         </div>
       </div>
@@ -267,26 +267,16 @@
   </client-only>
 </template>
 <script>
-
 export default {
   head() {
     return {
       title: 'Home - TutorPal',
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/homepage-12.webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" }
       ]
     }
   },
-  beforeMount() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';       
-    link.type = 'text/css';
-    link.href = '/main/css/homepage-12.webflow.css';
-    document.getElementsByTagName('HEAD')[0].appendChild(link);
-  },
 }
-
-
 </script>

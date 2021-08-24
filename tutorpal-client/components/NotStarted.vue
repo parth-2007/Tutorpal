@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body style="background-color: rgba(65, 168, 211, 0.2); height: 100vh; padding-top: 60px;">
-        <div style="width: 80vw; height: 80vh; background-color:white;border-width:0px; margin-top: 0px;" class="div-block-80">
+        <div style="width: 80vw; height: 80vh; background-color:white;border-width:0px; margin-top: 0px;" class="homediv-block-80">
           <h1 style="font-family: Poppins;">We are very sorry but your class has not started yet.</h1>
         </div>
       </body>
@@ -24,6 +24,7 @@ export default {
       link: [
         { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
         { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" },
       ]
     }
   },

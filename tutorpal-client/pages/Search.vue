@@ -29,13 +29,13 @@
             class="stuff w-form"
           >
             <img
-              src="../static/main/images/search-1.png"
+              src="../static/student/images/search-1.png"
               loading="lazy"
               width="25"
               height="25"
               srcset="
-                ../static/main/images/search-1-p-500.png 500w,
-                ../static/main/images/search-1.png       512w
+                ../static/student/images/search-1-p-500.png 500w,
+                ../static/student/images/search-1.png       512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
               alt=""
@@ -133,12 +133,8 @@ export default {
       ],
     }
   },
-  beforeMount() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';       
-    link.type = 'text/css';
-    link.href = '/student/css/student-main.webflow.css';
-    document.getElementsByTagName('HEAD')[0].appendChild(link);
-  },
 }
 </script>
+<style scoped>
+@import "https://www.tutorpal.org/student/css/student-main.webflow.css";
+</style>
