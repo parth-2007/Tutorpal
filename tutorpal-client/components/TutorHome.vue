@@ -8,10 +8,10 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" href="/tutor/css/tutor-main.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
-      <body id="body" style="min-height: 100vh" class="body">
+      <body id="body" style="min-height: 100vh" class="tutorbody">
         <div id="main">
-          <div class="section">
-            <router-link to="/" class="link-block w-inline-block"
+          <div class="tutorsection">
+            <router-link to="/" class="tutorlink-block w-inline-block"
               ><img
                 src="../static/tutor/images/logo.jpg"
                 loading="lazy"
@@ -25,9 +25,9 @@
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"
                 alt=""
             /></router-link>
-            <div class="div-block-4">
-              <div class="div-block-43">
-                <div class="name_profile_pic">
+            <div class="tutordiv-block-4">
+              <div class="tutordiv-block-43">
+                <div class="tutorname_profile_pic">
                   <img
                     :src="user.profilePic"
                     id="image"
@@ -35,40 +35,40 @@
                     height="60"
                     sizes="60px"
                     alt=""
-                    class="image-7"
+                    class="tutorimage-7"
                   />
                   <div
                     data-hover=""
                     data-delay="0"
-                    class="dropdown-3 w-dropdown"
+                    class="tutordropdown-3 w-dropdown"
                   >
                     <div
                       @click="logoutclick()"
-                      class="dropdown-toggle-2-copy w-dropdown-toggle"
+                      class="tutordropdown-toggle-2-copy w-dropdown-toggle"
                     >
-                      <div id="name" class="text-block-18">
+                      <div id="name" class="tutortext-block-18">
                         {{ user.firstName }} {{ user.lastName }}
                       </div>
-                      <div class="text-block-20">Tutor</div>
+                      <div class="tutortext-block-20">Tutor</div>
                     </div>
-                    <nav :style="logout" class="navigation-dropdown-2">
-                      <div class="dropdown-pointer-2">
-                        <div class="dropdown-wrapper-2">
+                    <nav :style="logout" class="tutornavigation-dropdown-2">
+                      <div class="tutordropdown-pointer-2">
+                        <div class="tutordropdown-wrapper-2">
                           <router-link
                             to="/logout"
                             id="logout"
-                            class="dropdown-link-2 w-inline-block"
+                            class="tutordropdown-link-2 w-inline-block"
                           >
-                            <div class="nav-content-wrap-2">
-                              <div class="dropdown-title-2">Logout</div>
+                            <div class="tutornav-content-wrap-2">
+                              <div class="tutordropdown-title-2">Logout</div>
                             </div>
                           </router-link>
                           <router-link
                             to="/account"
-                            class="dropdown-link-2 w-inline-block"
+                            class="tutordropdown-link-2 w-inline-block"
                           >
-                            <div class="nav-content-wrap-2">
-                              <div class="dropdown-title-2">Account</div>
+                            <div class="tutornav-content-wrap-2">
+                              <div class="tutordropdown-title-2">Account</div>
                             </div>
                           </router-link>
                         </div>
@@ -79,39 +79,39 @@
               </div>
             </div>
           </div>
-          <div class="div-block-6">
+          <div class="tutordiv-block-6">
             <div
               data-collapse="none"
               data-animation="default"
               data-duration="400"
               role="banner"
-              class="navbar-2 w-nav"
+              class="tutornavbar-2 w-nav"
             >
-              <div class="container-2 w-container">
-                <nav role="navigation" class="nav-menu-3 w-nav-menu">
+              <div class="tutorcontainer-2 w-container">
+                <nav role="navigation" class="tutornav-menu-3 w-nav-menu">
                   <router-link
                     to="/"
                     aria-current="page"
-                    class="nav-link-4 w-nav-link w--current"
+                    class="tutornav-link-4 w-nav-link w--current"
                     >Requests</router-link
-                  ><router-link to="/inbox" class="nav-link-4 w-nav-link"
+                  ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
                     >Messages
-                    <span class="badge">{{ user.unread }}</span> </router-link
-                  ><router-link to="/payments" class="nav-link-4 w-nav-link"
+                    <span class="tutorbadge">{{ user.unread }}</span> </router-link
+                  ><router-link to="/payments" class="tutornav-link-4 w-nav-link"
                     >Payments</router-link
                   >
                 </nav>
-                <div class="menu-button-2 w-nav-button">
-                  <div class="icon-2 w-icon-nav-menu"></div>
+                <div class="tutormenu-button-2 w-nav-button">
+                  <div class="tutoricon-2 w-icon-nav-menu"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="columns-4 w-row">
-          <div class="w-col w-col-8">
-            <div class="div-block-44">
-              <div class="div-block-45">
+        <div class="tutorcolumns-4 w-row">
+          <div class="tutorw-col w-col-8">
+            <div class="tutordiv-block-44">
+              <div class="tutordiv-block-45">
                 <img
                   src="../static/tutor/images/question.png"
                   loading="lazy"
@@ -119,14 +119,14 @@
                   alt=""
                 /><a
                   href="mailto:the2tor4u@gmail.com?subject=Website%20Email"
-                  class="link-2"
+                  class="tutorlink-2"
                   >Need help? Send us an email</a
                 >
               </div>
-              <h1 class="heading">Student Requests</h1>
-              <div class="div-block-48">
-                <div class="text-block-23">Inbox</div>
-                <p class="paragraph">
+              <h1 class="tutorheading">Student Requests</h1>
+              <div class="tutordiv-block-48">
+                <div class="tutortext-block-23">Inbox</div>
+                <p class="tutorparagraph">
                   Please accept or deny these requests based off of your comfort
                   ability.
                 </p>
@@ -136,10 +136,10 @@
                   v-for="session in requests"
                   :key="session.id"
                   id="inbox"
-                  class="loop"
+                  class="tutorloop"
                 >
-                  <div class="item">
-                    <div class="div-block-51">
+                  <div class="tutoritem">
+                    <div class="tutordiv-block-51">
                       <img
                         :src="
                           session.student !== undefined
@@ -150,12 +150,12 @@
                         width="60"
                         sizes="64px"
                         alt=""
-                        class="image-9"
+                        class="tutorimage-9"
                       />
                     </div>
                     <p
                       style="font-size: 20px; margin-bottom: 15px"
-                      class="paragraph-2"
+                      class="tutorparagraph-2"
                     >
                       {{
                         session.student !== undefined
@@ -168,34 +168,34 @@
                           : ''
                       }}
                     </p>
-                    <p class="paragraph-2">
-                      <strong class="bold-text">Class Information<br /></strong
+                    <p class="tutorparagraph-2">
+                      <strong class="tutorbold-text">Class Information<br /></strong
                       >First Session: {{ session.date }}<br />Duration:
                       {{ convertTime(session.timeStart) }} -
                       {{ convertTime(session.timeEnd) }}<br />Trial:
                       {{ session.free }}<br />Amount: ${{ session.price }}
                     </p>
-                    <p class="paragraph-2">
-                      <strong class="bold-text">Student Information</strong
-                      ><br />Description: <strong class="bold-text"> </strong
+                    <p class="tutorparagraph-2">
+                      <strong class="tutorbold-text">Student Information</strong
+                      ><br />Description: <strong class="tutorbold-text"> </strong
                       >{{ session.description }}
                     </p>
-                    <div class="text-block-27">
+                    <div class="tutortext-block-27">
                       Remember, you only have 24 hours from since this request
                       was sent to accept or deny.
                     </div>
-                    <div class="div-block-52">
+                    <div class="tutordiv-block-52">
                       <a
                         @click="accept(session.id, session)"
                         style="z-index: 5"
                         aria-current="page"
-                        class="button-3 w-button w--current"
+                        class="tutorbutton-3 w-button w--current"
                         >Accept</a
                       ><a
                         @click="deny(session.id, session)"
                         style="z-index: 5"
                         aria-current="page"
-                        class="button-3-copy w-button w--current"
+                        class="tutorbutton-3-copy w-button w--current"
                         >Deny</a
                       >
                     </div>
@@ -215,18 +215,18 @@
               </div>
             </div>
           </div>
-          <div class="column-15 w-col w-col-4">
-            <div style="margin-bottom: 20px" class="div-block-53">
-              <h1 class="heading-2">Starting:</h1>
-              <div class="upcoming_loop">
+          <div class="tutorcolumn-15 w-col w-col-4">
+            <div style="margin-bottom: 20px" class="tutordiv-block-53">
+              <h1 class="tutorheading-2">Starting:</h1>
+              <div class="tutorupcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in started"
                   :key="session.id"
                   id="started"
                 >
-                  <div class="upcoming_item">
-                    <p class="paragraph-3">
+                  <div class="tutorupcoming_item">
+                    <p class="tutorparagraph-3">
                       Date: {{ session.date }}<br />Time:
                       {{ convertTime(session.timeStart) }} -
                       {{ convertTime(session.timeEnd) }}<br />Student:
@@ -244,7 +244,7 @@
                     </p>
                     <router-link
                       :to="'/sessions/' + session.id"
-                      class="button-4 w-button"
+                      class="tutorbutton-4 w-button"
                       >Join Meeting</router-link
                     >
                   </div>
@@ -253,10 +253,10 @@
             </div>
             <div
               style="height: 300px; margin-bottom: 20px"
-              class="div-block-53"
+              class="tutordiv-block-53"
             >
-              <h1 class="heading-2">Upcoming Classes:</h1>
-              <div class="upcoming_loop">
+              <h1 class="tutorheading-2">Upcoming Classes:</h1>
+              <div class="tutorupcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in upcoming"
@@ -271,8 +271,8 @@
                     width="12.5"
                     alt=""
                   />
-                  <div class="upcoming_item">
-                    <p class="paragraph-3">
+                  <div class="tutorupcoming_item">
+                    <p class="tutorparagraph-3">
                       Date: {{ session.date }}<br />Time:
                       {{ convertTime(session.timeStart) }} -
                       {{ convertTime(session.timeEnd) }}<br />Student:
@@ -290,7 +290,7 @@
                     </p>
                     <button
                       @click="startclass(session.id, session)"
-                      class="button-4 w-button"
+                      class="tutorbutton-4 w-button"
                     >
                       Start this meeting
                     </button>

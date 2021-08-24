@@ -24,12 +24,12 @@
         v-else
         id="body"
         style="background-color: rgba(65, 168, 211, 0.2)"
-        class="body-5"
+        class="tutorbody-5"
       >
         <div
           :style="updateModal"
           style="padding-bottom: 0px"
-          class="div-block-22"
+          class="tutordiv-block-22"
         >
           <div
             style="
@@ -39,9 +39,9 @@
               width: 375px;
               font-family: Poppins;
             "
-            class="div-block-23"
+            class="tutordiv-block-23"
           >
-            <div v-if="session.student_joined === true" class="div-block-25">
+            <div v-if="session.student_joined === true" class="tutordiv-block-25">
               <strong
                 >You have {{ dateToString(timerDisplay) }} left in this class,
                 are you sure you want to end it?</strong
@@ -69,7 +69,7 @@
                 margin-top: 10px;
                 font-size: 14px;
               "
-              class="button-10-copy-copy w-button"
+              class="tutorbutton-10-copy-copy w-button"
             >
               Confirm</button
             ><button
@@ -80,15 +80,15 @@
                 margin-top: 10px;
                 font-size: 14px;
               "
-              class="button-10-copy-copy w-button"
+              class="tutorbutton-10-copy-copy w-button"
             >
               Cancel
             </button>
           </div>
         </div>
         <div id="main">
-          <div class="section">
-            <router-link to="/" class="link-block w-inline-block"
+          <div class="tutorsection">
+            <router-link to="/" class="tutorlink-block w-inline-block"
               ><img
                 src="../static/tutor/images/logo.jpg"
                 loading="lazy"
@@ -102,9 +102,9 @@
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"
                 alt=""
             /></router-link>
-            <div class="div-block-4">
-              <div class="div-block-43">
-                <div class="name_profile_pic">
+            <div class="tutordiv-block-4">
+              <div class="tutordiv-block-43">
+                <div class="tutorname_profile_pic">
                   <img
                     :src="user.profilePic"
                     id="image"
@@ -112,40 +112,40 @@
                     height="60"
                     sizes="60px"
                     alt=""
-                    class="image-7"
+                    class="tutorimage-7"
                   />
                   <div
                     data-hover=""
                     data-delay="0"
-                    class="dropdown-3 w-dropdown"
+                    class="tutordropdown-3 w-dropdown"
                   >
                     <div
                       @click="logoutclick()"
-                      class="dropdown-toggle-2-copy w-dropdown-toggle"
+                      class="tutordropdown-toggle-2-copy w-dropdown-toggle"
                     >
-                      <div id="name" class="text-block-18">
+                      <div id="name" class="tutortext-block-18">
                         {{ user.firstName }} {{ user.lastName }}
                       </div>
-                      <div class="text-block-20">Tutor</div>
+                      <div class="tutortext-block-20">Tutor</div>
                     </div>
-                    <nav :style="logout" class="navigation-dropdown-2">
-                      <div class="dropdown-pointer-2">
-                        <div class="dropdown-wrapper-2">
+                    <nav :style="logout" class="tutornavigation-dropdown-2">
+                      <div class="tutordropdown-pointer-2">
+                        <div class="tutordropdown-wrapper-2">
                           <router-link
                             to="/logout"
                             id="logout"
-                            class="dropdown-link-2 w-inline-block"
+                            class="tutordropdown-link-2 w-inline-block"
                           >
-                            <div class="nav-content-wrap-2">
-                              <div class="dropdown-title-2">Logout</div>
+                            <div class="tutornav-content-wrap-2">
+                              <div class="tutordropdown-title-2">Logout</div>
                             </div>
                           </router-link>
                           <router-link
                             to="/account"
-                            class="dropdown-link-2 w-inline-block"
+                            class="tutordropdown-link-2 w-inline-block"
                           >
-                            <div class="nav-content-wrap-2">
-                              <div class="dropdown-title-2">Account</div>
+                            <div class="tutornav-content-wrap-2">
+                              <div class="tutordropdown-title-2">Account</div>
                             </div>
                           </router-link>
                         </div>
@@ -157,12 +157,12 @@
             </div>
           </div>
         </div>
-        <div class="columns-2-copy w-row">
-          <div class="column w-col w-col-6">
+        <div class="tutorcolumns-2-copy w-row">
+          <div class="tutorcolumn w-col w-col-6">
             <button
               v-if="buttonShow === true"
               @click="updateModalValue()"
-              class="button-10-copy-copy w-button"
+              class="tutorbutton-10-copy-copy w-button"
               style="
                 margin-top: 10px;
                 margin-bottom: 10px;
