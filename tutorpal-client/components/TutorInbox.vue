@@ -107,8 +107,8 @@ export default {
     return {
       title: 'Inbox',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
       ]
     }
   },

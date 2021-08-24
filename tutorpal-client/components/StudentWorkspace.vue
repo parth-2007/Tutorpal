@@ -6,7 +6,6 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/student/css/student-main.webflow.css" media="none" onload="if(media!='all')media='all'">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div v-if="session.student_paid === true && session.started === false">
@@ -147,8 +146,9 @@ export default {
     return {
       title: 'Student Workspace',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
   },

@@ -6,7 +6,6 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body style="background-color: rgba(65, 168, 211, 0.2); height: 100vh; padding-top: 60px;">
         <div style="width: 80vw; height: 80vh; background-color:white;border-width:0px; margin-top: 0px;" class="homediv-block-80">
@@ -22,8 +21,8 @@ export default {
     return {
       title: 'Class Not Started',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
         { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" },
       ]
     }

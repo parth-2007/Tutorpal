@@ -7,7 +7,6 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/student/css/student-main.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <body id="body" style="min-height: 100vh" class="body-3">
           <div id="main">
@@ -118,8 +117,9 @@ export default {
   head() {
     return {
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
   },

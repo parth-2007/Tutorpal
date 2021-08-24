@@ -128,13 +128,11 @@ export default {
     return {
       title: 'Find a Tutor',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/main/css/normalize.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/normalize.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/student-main.webflow.css' },
       ],
     }
   },
 }
 </script>
-<style scoped>
-@import "https://www.tutorpal.org/student/css/student-main.webflow.css";
-</style>
