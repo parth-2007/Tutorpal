@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user.unfetched===true" id="main">
+  <div v-if="user.unfetched===undefined" id="main">
     <div v-if="user.isStudent">
       <StudentChangeInfo></StudentChangeInfo>
     </div>
