@@ -80,7 +80,7 @@
               <div class="text-block-23">Payments</div>
               <p class="paragraph">These classes have been accepted by your tutor but you have not paid yet. Please make sure to pay for your session before it has started. Remember that you can cancel your class anytime, even after paying.</p>
             </div>
-            <div class="loop">
+            <div v-if="paymentpending.unfetched === undefined" class="loop">
               <div v-for="session in paymentpending" :key="session.id" id="paypending">
                 <img @click="canceledHandler(session.id, session, 'pendingOnStudentPayment')" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
                 <div class="i">
@@ -97,15 +97,17 @@
               <div class="text-block-23">Paid Classes</div>
               <p class="paragraph">Congratulations! All your work is over, now you can sit back and learn from your professional tutor.</p>
             </div>
-            <div v-for="session in paymentfinished" :key="session.id" id="paid">
-              <img @click="canceledHandler(session.id, session, 'upcoming')" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
-              <div class="item-copy">
-                <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
-                  <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
-                  <br>Amount: <strong class="bold-text-7">${{session.price}}</strong><br>Trial: {{session.free}}</p>
+            <div v-if="paymentfinished.unfetched === undefined">
+              <div v-for="session in paymentfinished" :key="session.id" id="paid">
+                <img @click="canceledHandler(session.id, session, 'upcoming')" style="margin-top: 10px; cursor: pointer; margin-right: 10px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+                <div class="item-copy">
+                  <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
+                    <p class="paragraph-2"><strong class="bold-text">Schedule<br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                    <br>Amount: <strong class="bold-text-7">${{session.price}}</strong><br>Trial: {{session.free}}</p>
+                  </div>
+                  <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
+                  <div class="text-block-27-copy">Thank you for paying for your session!</div>
                 </div>
-                <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
-                <div class="text-block-27-copy">Thank you for paying for your session!</div>
               </div>
             </div>
           </div>

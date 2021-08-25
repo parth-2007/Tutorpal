@@ -17,7 +17,7 @@ export default {
     this.logoutUser()
     this.logoutStudent()
     this.logoutTutor()
-    this.$router.push('/loading')
+    this.$router.push('/')
   },
   methods: {
     ...mapActions(['logoutUser', 'logoutTutor', 'logoutStudent']),

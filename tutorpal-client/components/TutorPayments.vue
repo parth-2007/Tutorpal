@@ -75,27 +75,31 @@
         <div class="tutortext-block-23">Payments</div>
         <p class="tutorparagraph">All of your payments for your finished classes will be recorded here.</p>
       </div>
-      <div v-for="session in paymentfinished" :key="session.id" id="paid">
-        <div class="tutordiv-block-64">
-          <div class="tutortext-block-43"><strong class="tutorbold-text-7">Status:</strong> Paid</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-8">Amount: </strong>${{session.price}}</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-10">Class Date:</strong> {{session.date}}</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
+      <div v-if="paymentfinished.unfetched === undefined">
+        <div v-for="session in paymentfinished" :key="session.id" id="paid">
+          <div class="tutordiv-block-64">
+            <div class="tutortext-block-43"><strong class="tutorbold-text-7">Status:</strong> Paid</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-8">Amount: </strong>${{session.price}}</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-10">Class Date:</strong> {{session.date}}</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
+          </div>
         </div>
       </div>
       <div class="tutordiv-block-48-copy">
         <div class="tutortext-block-23">Unpaid Classes (student)</div>
         <p class="tutorparagraph">You are not required to start this class until your student has paid for it.</p>
       </div>
-      <div v-for="session in paymentpending" :key="session.id" id="unpaid">
-        <div class="tutordiv-block-64">
-          <div class="tutortext-block-43"><strong class="tutorbold-text-7">Status:</strong> Unpaid</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-8">Amount: </strong>${{session.price}}</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-10">Class Date:</strong> {{session.date}}</div>
-          <div class="tutortext-block-43"><strong class="tutorbold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
-          <img @click="canceledHandler(session.id, session)" style="cursor: pointer; margin-left: 25px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+      <div v-if="paymentpending.unfetched === undefined">
+        <div v-for="session in paymentpending" :key="session.id" id="unpaid">
+          <div class="tutordiv-block-64">
+            <div class="tutortext-block-43"><strong class="tutorbold-text-7">Status:</strong> Unpaid</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-8">Amount: </strong>${{session.price}}</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-10">Student:</strong> {{session.student !== undefined ? session.student.user.firstName : ''}} {{session.student !== undefined ? session.student.user.lastName : ''}}</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-10">Class Date:</strong> {{session.date}}</div>
+            <div class="tutortext-block-43"><strong class="tutorbold-text-10">Time: </strong>{{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}</div>
+            <img @click="canceledHandler(session.id, session)" style="cursor: pointer; margin-left: 25px" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+          </div>
         </div>
       </div>
       </body>

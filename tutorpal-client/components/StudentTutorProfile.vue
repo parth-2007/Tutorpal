@@ -232,7 +232,7 @@
               </div>
             </div>
           </div>
-          <div class="div-block-70">
+          <div  v-if="data!==[]" class="div-block-70">
             <div class="div-block-71">
               <img
                 :src="data.user !== undefined ? data.user.profile_pic : ''"
@@ -299,26 +299,28 @@
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div v-for="review in reviews.results" :key="review.id" id="posts">
-              <div class="review_bundle">
-                <div class="review_item">
-                  <img
-                    :src="review.student.user.profile_pic"
-                    loading="lazy"
-                    width="40"
-                    sizes="40px"
-                    alt=""
-                    class="image-12"
-                  />
-                  <div class="text-block-33">
-                    {{ review.student.user.first_name }}
-                    {{ review.student.user.last_name }}
+            <div v-if="reviews!==[]">
+              <div v-for="review in reviews.results" :key="review.id" id="posts">
+                <div class="review_bundle">
+                  <div class="review_item">
+                    <img
+                      :src="review.student.user.profile_pic"
+                      loading="lazy"
+                      width="40"
+                      sizes="40px"
+                      alt=""
+                      class="image-12"
+                    />
+                    <div class="text-block-33">
+                      {{ review.student.user.first_name }}
+                      {{ review.student.user.last_name }}
+                    </div>
+                    <div class="text-block-34">
+                      Review: <strong>{{ review.stars }} Stars</strong>
+                    </div>
                   </div>
-                  <div class="text-block-34">
-                    Review: <strong>{{ review.stars }} Stars</strong>
-                  </div>
+                  <p class="paragraph-9">{{ review.description }}</p>
                 </div>
-                <p class="paragraph-9">{{ review.description }}</p>
               </div>
             </div>
           </div>

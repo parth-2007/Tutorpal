@@ -80,8 +80,8 @@
               <div class="text-block-23">Messages</div>
               <p class="paragraph">View all of your contacts here on the messages page, click the buttons to reach the chatroom</p>
             </div>
-            <!-- gets looped here -->
-            <div v-for="contact in contacts" :key="contact.id" class="loop">
+            <div v-if="contacts.unfetched === undefined">
+              <div v-for="contact in contacts" :key="contact.id" class="loop">
                 <div style="padding-top: 5px; padding-bottom: 5px; padding-right:15px" class="i-copy">
                   <span class="tutorbadge">{{contact.unread}}</span>
                   <div class="div-block-51">
@@ -90,6 +90,7 @@
                     </div>
                     <router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="tutorlink-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
                 </div>
+              </div>
             </div>
           </div>
         </div>

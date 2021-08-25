@@ -81,16 +81,18 @@
                 <div class="text-block-23">Requests</div>
                 <p class="paragraph">These are the requests you have sent to potential tutors who have not accepted yet. Once the tutor has accepted, please check the <router-link to="/payments" class="link-3">payments</router-link> page to pay for the class.</p>
               </div>
-              <div v-for="session in requests" :key="session.id" id="requests" class="loop">
-                <div class="i">
-                  <img @click="canceledHandler(session.id, session)" style="margin-top: 10px; cursor: pointer" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
-                  <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
-                    <p class="paragraph-2"><strong class="bold-text">Schedule
-                      <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
-                      <br>Amount: ${{session.price}}<br>Trial: {{session.free}}</p>
+              <div v-if="requests.unfetched === undefined">
+                <div v-for="session in requests" :key="session.id" id="requests" class="loop">
+                  <div class="i">
+                    <img @click="canceledHandler(session.id, session)" style="margin-top: 10px; cursor: pointer" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+                    <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
+                      <p class="paragraph-2"><strong class="bold-text">Schedule
+                        <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                        <br>Amount: ${{session.price}}<br>Trial: {{session.free}}</p>
+                    </div>
+                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
+                    <div class="text-block-27">This tutor has not accepted your request yet.</div>
                   </div>
-                  <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
-                  <div class="text-block-27">This tutor has not accepted your request yet.</div>
                 </div>
               </div>
             </div>

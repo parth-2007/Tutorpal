@@ -157,7 +157,7 @@
                   learning from.
                 </p>
               </div>
-              <div class="trending">
+              <div v-if="trending.unfetched === undefined" class="trending">
                 <div v-for="tutor of trending" :key="tutor.id" id="trending">
                   <router-link
                     :to="'/tutors/' + tutor.id"
@@ -213,7 +213,7 @@
           <div class="column-15 w-col w-col-4">
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
-              <div class="upcoming_loop">
+              <div v-if="started.unfetched === undefined" class="upcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in started"
@@ -256,7 +256,7 @@
               class="div-block-53"
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
-              <div class="upcoming_loop">
+              <div v-if="upcoming.unfetched === undefined" class="upcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in upcoming"

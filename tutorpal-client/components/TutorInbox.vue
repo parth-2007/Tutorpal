@@ -77,7 +77,8 @@
           <div class="tutortext-block-23">Messages</div>
           <p class="tutorparagraph">View all of your contacts here on the messages page, click the buttons to reach the chatroom</p>
         </div>
-        <div v-for="contact in contacts" :key="contact.id" class="tutorloop">
+        <div v-if="contacts.unfetched === undefined">
+          <div v-for="contact in contacts" :key="contact.id" class="tutorloop">
             <div style="padding-bottom: 5px; padding-top: 5px; " class="tutoritem-2">
               <span class="tutorbadge">{{contact.unread}}</span>
               <div class="tutordiv-block-78">
@@ -85,6 +86,7 @@
                   <h1 class="tutorheading-12">{{contact.student !== undefined ? contact.student.user.firstName: '' }} {{contact.student !== undefined ? contact.student.user.lastName: ''}}</h1>
                 </div><router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="tutorlink-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
             </div>
+          </div>
         </div>
       </div>
       </body>
