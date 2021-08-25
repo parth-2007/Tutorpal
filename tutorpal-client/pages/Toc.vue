@@ -11,19 +11,19 @@
         <router-link
           style="margin-top: 0px; margin-bottom: -30px"
           to="/"
-          class="link-block w-inline-block"
+          class="outcastlink-block w-inline-block"
           ><img
-            src="../static/main/images/logo.jpg"
+            src="../static/student/images/logo.jpg"
             width="250"
             alt=""
-            class="image"
+            class="outcastimage"
         /></router-link>
-        <div class="div-block">
-          <div class="text-block">TutorPal Terms and Conditions</div>
-          <div class="text-block-2">
-            <em class="italic-text">Last Updated: August 17, 2020</em><br />
+        <div class="outcastdiv-block">
+          <div class="outcasttext-block">TutorPal Terms and Conditions</div>
+          <div class="outcasttext-block-2">
+            <em class="outcastitalic-text">Last Updated: August 17, 2020</em><br />
           </div>
-          <p class="paragraph-2">
+          <p class="outcastparagraph-2">
             These Terms of Use (“Terms”) govern your use of the TutorPal website
             (“Site”) at www.tutorpal.org, any mobile device application or any
             other means provided or authorized by TutorPal Inc. (“TutorPal”).
@@ -164,7 +164,7 @@
             misdemeanor charges of any kind, including without limitation
             sexual, child abuse or domestic violence offenses.<br />
           </p>
-          <p class="paragraph-3">
+          <p class="outcastparagraph-3">
             TutorPal may revise the Eligibility Conditions from time to time and
             require new conditions and certifications. Continued use of the Site
             constitutes agreement with and acceptance of any new Eligibility
@@ -348,7 +348,7 @@
             substantive laws, without regard to choice-of-law rules, of the
             State of California.<br />
           </p>
-          <p class="paragraph-4">
+          <p class="outcastparagraph-4">
             18. Entire agreement<br />‍<br />These Terms constitute the entire
             agreement between you and TutorPal relating to their subject matter,
             and cancel and supersede any prior versions of the Terms. You may
@@ -368,9 +368,9 @@ export default {
     return {
       title: 'Terms of Conditions',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/outcast/css/last-project-afcf8d.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/outcast/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" },
       ]
     }
   },

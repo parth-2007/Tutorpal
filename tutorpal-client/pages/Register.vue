@@ -6,50 +6,51 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div v-if="user.isStudent">
       </div>
       <div v-else-if="user.isTutor">
       </div>
       <body v-else>
-        <div class="div-block-3">
+        <div class="homediv-block-3">
           <router-link
             style="margin-top: 0px; margin-bottom: -30px"
             to="/"
-            class="link-block w-inline-block"
+            class="homelink-block w-inline-block"
             ><img
-              src="../static/main/images/logo.jpg"
+              src="../static/student/images/logo.jpg"
               width="250"
               alt=""
-              class="image"
+              class="homeimage"
           /></router-link>
-          <div class="div-block-4">
-            <router-link to="/login" class="link-2-copy">login</router-link>
+          <div class="homediv-block-4">
+            <router-link to="/login" class="homelink-2-copy">login</router-link>
           </div>
           <router-link
             to="/register"
             aria-current="page"
-            class="button w-button w--current"
+            class="homebutton w-button w--current"
             >register</router-link
           >
         </div>
         
-        <div class="columns-3 w-row">
-          <div class="column-13 w-col w-col-6">
-            <router-link to="/register-tutor" class="link-block-2 w-inline-block"
+        <div class="homecolumns-3 w-row">
+          <div class="homecolumn-13 w-col w-col-6">
+            <router-link to="/register-tutor" class="homelink-block-2 w-inline-block"
               ><img
-                src="../static/main/images/partners.png"
+                src="../static/student/images/partners.png"
                 loading="lazy"
                 width="150"
                 srcset="
-                  ../static/main/images/partners-p-500.png 500w,
-                  ../static/main/images/partners.png       512w
+                  ../static/student/images/partners-p-500.png 500w,
+                  ../static/student/images/partners.png       512w
                 "
                 sizes="150px"
                 alt=""
               />
-              <h1 class="heading-7">Become a tutor</h1>
-              <p class="paragraph-7">
+              <h1 class="homeheading-7">Become a tutor</h1>
+              <p class="homeparagraph-7">
                 Join our community at TutorPal by becoming a tutor to spread
                 your passion and knowledge with many other students while making
                 a profit at the same time. We do not take any commission, so
@@ -59,21 +60,21 @@
               </p></router-link
             >
           </div>
-          <div class="column-13 w-col w-col-6">
-            <router-link to="/register-student" class="link-block-2 w-inline-block"
+          <div class="homecolumn-13 w-col w-col-6">
+            <router-link to="/register-student" class="homelink-block-2 w-inline-block"
               ><img
-                src="../static/main/images/student-1.png"
+                src="../static/student/images/student-1.png"
                 loading="lazy"
                 width="150"
                 srcset="
-                  ../static/main/images/student-1-p-500.png 500w,
-                  ../static/main/images/student-1.png       512w
+                  ../static/student/images/student-1-p-500.png 500w,
+                  ../static/student/images/student-1.png       512w
                 "
                 sizes="150px"
                 alt=""
               />
-              <h1 class="heading-7">Become a student</h1>
-              <p class="paragraph-7">
+              <h1 class="homeheading-7">Become a student</h1>
+              <p class="homeparagraph-7">
                 Have loads of homework coming in? Need to prepare for a competition? We
                 provide a variety of services here at TutorPal. It does not cost
                 to register an account as a student. Gain access to these
@@ -94,9 +95,9 @@ export default {
     return {
       title: 'Register',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/main/css/homepage-12.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
   },

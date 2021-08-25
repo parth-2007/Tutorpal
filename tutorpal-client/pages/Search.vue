@@ -4,6 +4,9 @@
       data-wf-page="5f5844923df4f0c1c6587323"
       data-wf-site="5f5844923df4f032aa587322"
     >
+      <head>
+        <meta charset="utf-8" />
+      </head>
       <div style="margin-left: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
           ><img
@@ -26,13 +29,13 @@
             class="stuff w-form"
           >
             <img
-              src="../static/main/images/search-1.png"
+              src="../static/student/images/search-1.png"
               loading="lazy"
               width="25"
               height="25"
               srcset="
-                ../static/main/images/search-1-p-500.png 500w,
-                ../static/main/images/search-1.png       512w
+                ../static/student/images/search-1-p-500.png 500w,
+                ../static/student/images/search-1.png       512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
               alt=""
@@ -52,7 +55,7 @@
             />
           </form>
           <div
-            v-for="tutor in data.results"
+            v-for="tutor in tutordata.results"
             :key="tutor.id"
             style="margin-bottom: 20px"
             id="posts"
@@ -95,7 +98,7 @@
                   {{ tutor.gpa }}
                 </div>
                 <div class="text-block-21-copy-2">
-                  Reviews: {{ tutor.averageReviews }} Stars
+                  Reviews: {{ tutor.average_reviews }} Stars
                 </div>
                 <div class="text-block-21-copy-2">
                   Occupation: {{ tutor.occupation }}
@@ -112,14 +115,12 @@
 export default {
   data() {
     return {
-      data: [],
-      url: '',
+      tutordata: [],
     }
   },
   async fetch() {
-    this.url =
-      'https://api.tutorpal.org/tutors/search/?q=' + this.$route.query.q + '/'
-    this.data = await fetch(this.url, {
+    const url ='https://api.tutorpal.org/tutors/search/?q=' + this.$route.query.q + '/'
+    this.tutordata = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
   },
@@ -127,21 +128,9 @@ export default {
     return {
       title: 'Find a Tutor',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/student-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/normalize.css',
-        },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/normalize.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/student-main.webflow.css' },
       ],
     }
   },

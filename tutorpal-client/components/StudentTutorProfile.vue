@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
       </head>
       <body>
         <div id="main">
@@ -109,21 +110,18 @@
           </div>
           <div class="div-block-55">
             <div class="section">
-              <router-link
-                to="/"
-                aria-current="page"
-                class="link-block w-inline-block w--current"
+              <router-link to="/" class="link-block-3 w-inline-block"
                 ><img
                   src="../static/student/images/logo.jpg"
                   loading="lazy"
                   width="200"
                   srcset="
-                    ../static/student/images/logo-p-500.jpeg   500w,
-                    ../static/student/images/logo-p-800.jpeg   800w,
-                    ../static/student/images/logo-p-1080.jpeg 1080w,
-                    ../static/student/images/logo.jpg         1432w
+                    ../static/student/images/logo.jpg  500w,
+                    ../static/student/images/logo.jpg  800w,
+                    ../static/student/images/logo.jpg 1080w,
+                    ../static/student/images/logo.jpg 1432w
                   "
-                  sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw"
+                  sizes="200px"
                   alt=""
               /></router-link>
               <div class="div-block-4">
@@ -234,7 +232,7 @@
               </div>
             </div>
           </div>
-          <div class="div-block-70">
+          <div  v-if="data!==[]" class="div-block-70">
             <div class="div-block-71">
               <img
                 :src="data.user !== undefined ? data.user.profile_pic : ''"
@@ -281,6 +279,7 @@
               >{{ data.bio }}<br /><strong>Course Description: </strong
               >{{ data.what_you_teach }}<br /><strong>Availability: </strong
               >{{ data.availability }} <br /><a
+                v-if="data.linkedIn!==''"
                 style="font-family: Poppins"
                 :href="data.linkedIn"
                 target="_blank"
@@ -298,29 +297,30 @@
               >Send a message</a
             >
           </div>
-          <!-- if already taken class -->
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div v-for="review in reviews.results" :key="review.id" id="posts">
-              <div class="review_bundle">
-                <div class="review_item">
-                  <img
-                    :src="review.student.user.profile_pic"
-                    loading="lazy"
-                    width="40"
-                    sizes="40px"
-                    alt=""
-                    class="image-12"
-                  />
-                  <div class="text-block-33">
-                    {{ review.student.user.first_name }}
-                    {{ review.student.user.last_name }}
+            <div v-if="reviews!==[]">
+              <div v-for="review in reviews.results" :key="review.id" id="posts">
+                <div class="review_bundle">
+                  <div class="review_item">
+                    <img
+                      :src="review.student.user.profile_pic"
+                      loading="lazy"
+                      width="40"
+                      sizes="40px"
+                      alt=""
+                      class="image-12"
+                    />
+                    <div class="text-block-33">
+                      {{ review.student.user.first_name }}
+                      {{ review.student.user.last_name }}
+                    </div>
+                    <div class="text-block-34">
+                      Review: <strong>{{ review.stars }} Stars</strong>
+                    </div>
                   </div>
-                  <div class="text-block-34">
-                    Review: <strong>{{ review.stars }} Stars</strong>
-                  </div>
+                  <p class="paragraph-9">{{ review.description }}</p>
                 </div>
-                <p class="paragraph-9">{{ review.description }}</p>
               </div>
             </div>
           </div>
@@ -360,27 +360,10 @@ export default {
     return {
       title: 'Tutor Profile',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/student-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/normalize.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+      ]
     }
   },
   computed: {
@@ -514,7 +497,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .div-block-22-copy {
   position: fixed;
   z-index: 21;

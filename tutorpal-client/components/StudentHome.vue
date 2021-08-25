@@ -10,21 +10,18 @@
       <body id="body" style="min-height: 100vh" class="body">
         <div class="div-block-55">
           <div class="section">
-            <router-link
-              to="/"
-              aria-current="page"
-              class="link-block w-inline-block w--current"
+            <router-link to="/" class="link-block-3 w-inline-block"
               ><img
                 src="../static/student/images/logo.jpg"
                 loading="lazy"
-                width="260"
+                width="200"
                 srcset="
-                  ../static/student/images/logo-p-500.jpeg   500w,
-                  ../static/student/images/logo-p-800.jpeg   800w,
-                  ../static/student/images/logo-p-1080.jpeg 1080w,
-                  ../static/student/images/logo.jpg         1432w
+                  ../static/student/images/logo.jpg  500w,
+                  ../static/student/images/logo.jpg  800w,
+                  ../static/student/images/logo.jpg 1080w,
+                  ../static/student/images/logo.jpg 1432w
                 "
-                sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw"
+                sizes="200px"
                 alt=""
             /></router-link>
             <div class="div-block-4">
@@ -160,7 +157,7 @@
                   learning from.
                 </p>
               </div>
-              <div class="trending">
+              <div v-if="trending.unfetched === undefined" class="trending">
                 <div v-for="tutor of trending" :key="tutor.id" id="trending">
                   <router-link
                     :to="'/tutors/' + tutor.id"
@@ -216,7 +213,7 @@
           <div class="column-15 w-col w-col-4">
             <div style="margin-bottom: 20px" class="div-block-53">
               <h1 class="heading-2">Starting:</h1>
-              <div class="upcoming_loop">
+              <div v-if="started.unfetched === undefined" class="upcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in started"
@@ -259,7 +256,7 @@
               class="div-block-53"
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
-              <div class="upcoming_loop">
+              <div v-if="upcoming.unfetched === undefined" class="upcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in upcoming"
@@ -324,7 +321,6 @@ export default {
     }
   },
   async fetch() {
-    console.log(process.env.DATABASE_NAME)
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
   },
@@ -332,27 +328,10 @@ export default {
     return {
       title: 'Home',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/student-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/normalize.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+      ]
     }
   },
   computed: {
@@ -404,7 +383,7 @@ export default {
     async canceledHandler(id, session) {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
-        const url = '/api/sessions/' + id + '/'
+        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
         await fetch(url, {
           method: 'PATCH',
@@ -426,13 +405,13 @@ export default {
 <style scoped>
 .badge {
   position: absolute;
-  top: 13px;
+  top: 11px;
   right: 3px;
   padding: 4px 7px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
-  font-size: 12px;
+  font-size: 14px;
 }
 </style>

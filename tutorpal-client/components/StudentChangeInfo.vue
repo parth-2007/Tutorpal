@@ -4,6 +4,10 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+      </head>
       <body>
         <div :style="updatemodal" class="div-block-22">
           <div
@@ -26,23 +30,20 @@
         </div>
         <div class="div-block-55">
           <div class="section">
-            <router-link
-              to="/"
-              aria-current="page"
-              class="link-block w-inline-block w--current"
-              ><img
-                src="../static/student/images/logo.jpg"
-                loading="lazy"
-                width="200"
-                srcset="
-                  ../static/student/images/logo-p-500.jpeg   500w,
-                  ../static/student/images/logo-p-800.jpeg   800w,
-                  ../static/student/images/logo-p-1080.jpeg 1080w,
-                  ../static/student/images/logo.jpg         1432w
-                "
-                sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw"
-                alt=""
-            /></router-link>
+            <router-link to="/" class="link-block-3 w-inline-block"
+          ><img
+            src="../static/student/images/logo.jpg"
+            loading="lazy"
+            width="200"
+            srcset="
+              ../static/student/images/logo.jpg  500w,
+              ../static/student/images/logo.jpg  800w,
+              ../static/student/images/logo.jpg 1080w,
+              ../static/student/images/logo.jpg 1432w
+            "
+            sizes="200px"
+            alt=""
+        /></router-link>
             <div class="div-block-4">
               <form action="/search" class="stuff w-form">
                 <img
@@ -141,7 +142,7 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                  <span class="badges">{{user.unread}}</span> 
+                  <span class="badge">{{user.unread}}</span> 
                   </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
@@ -205,7 +206,7 @@
             Completed Classes
           </h1>
           <div
-            v-for="completed in session"
+            v-for="completed in pastSessions"
             :key="completed.id"
             style="background-color: #fff; margin-right: 10%; margin-left: 10%"
             class="i"
@@ -243,7 +244,7 @@
               >{{ completed.description }}
             </p>
             <div class="text-block-27-copy">
-              Congratulation! You have finished this class, let us know how it
+              Congratulations! You have finished this class, let us know how it
               went in your reviews.
             </div>
             <div
@@ -309,36 +310,15 @@ export default {
       description: '',
     }
   },
-  async fetch() {
-    await this.fetchSessions('pastSessions')
-  },
   head() {
     return {
       show: false,
       title: 'Account Information',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/student-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href:
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+      ]
     }
   },
   computed: {
@@ -352,10 +332,12 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ student: 'getStudent', user: 'getUser', session: 'getPastSessions'}),
+    ...mapGetters({ student: 'getStudent', user: 'getUser', pastSessions: 'getPastSessions'}),
   },
   async created() {
     await this.fetchUser()
+    await this.fetchSessions('pastSessions')
+    console.log(this.pastSessions)
   },
   methods: {
     updateModalValue() {
@@ -413,7 +395,7 @@ export default {
   object-fit: contain;
 }
 
-.badges {
+.badge {
   position: absolute;
   top: 13px;
   right: 3px;

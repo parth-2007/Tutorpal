@@ -11,7 +11,21 @@
       <body style="background-color: rgba(65, 168, 211, 0.2); min-height: 100vh" id="body">
         <div id="main">
           <div class="div-block-55">
-            <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
+            <div class="section">
+            <router-link to="/" class="link-block-3 w-inline-block"
+              ><img
+                src="../static/student/images/logo.jpg"
+                loading="lazy"
+                width="200"
+                srcset="
+                  ../static/student/images/logo.jpg  500w,
+                  ../static/student/images/logo.jpg  800w,
+                  ../static/student/images/logo.jpg 1080w,
+                  ../static/student/images/logo.jpg 1432w
+                "
+                sizes="200px"
+                alt=""
+            /></router-link>
               <div class="div-block-4">
                 <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                 <div class="div-block-43">
@@ -66,16 +80,17 @@
               <div class="text-block-23">Messages</div>
               <p class="paragraph">View all of your contacts here on the messages page, click the buttons to reach the chatroom</p>
             </div>
-            <!-- gets looped here -->
-            <div v-for="contact in contacts" :key="contact.id" class="loop">
-                <div style="padding-top: 5px; padding-bottom: 5px;" class="i-copy">
-                  <span class="badge">{{contact.unread}}</span>
+            <div v-if="contacts.unfetched === undefined">
+              <div v-for="contact in contacts" :key="contact.id" class="loop">
+                <div style="padding-top: 5px; padding-bottom: 5px; padding-right:15px" class="i-copy">
+                  <span class="tutorbadge">{{contact.unread}}</span>
                   <div class="div-block-51">
                     <div class="div-block-51-copy"><img style="border-radius: 100px" :src="contact.tutor !== undefined ? contact.tutor.user.profilePic: ''" loading="lazy"  height="60"  width="60" sizes="100px" alt="" class="image-15">
                       <h1 class="heading-12">{{contact.tutor !== undefined ? contact.tutor.user.firstName: '' }} {{contact.tutor !== undefined ? contact.tutor.user.lastName: ''}}</h1>
                     </div>
-                    <router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="link-block-3 w-inline-block"><img src="../static/student/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
+                    <router-link style="margin-right: -10px" :to="'/chat/'+contact.id" class="tutorlink-block-3 w-inline-block"><img src="../static/tutor/images/chat.png" loading="lazy" width="40" alt=""></router-link></div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -88,7 +103,9 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
-    return { clicked: false } 
+    return { 
+      clicked: false 
+    } 
   },
   async fetch() {
     await this.fetchContacts()
@@ -98,10 +115,9 @@ export default {
     return {
       title: 'Inbox',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
   },
@@ -123,16 +139,15 @@ export default {
 }
 </script>
 <style scoped>
-.badge {
+.tutorbadge {
   margin-top: 5px;
   float: right;
-  padding: 4px 7px;
+  padding: 2px 8px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
-  font-size: 12px;
+  font-size: 14px;
   margin-right: 15px;
 }
 </style>
-

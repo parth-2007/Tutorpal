@@ -4,24 +4,28 @@
       data-wf-page="5f59b13f87c4474926e0f928"
       data-wf-site="5f5844923df4f032aa587322"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" media="print" onload="this.media='all'">
+      </head>
       <div v-if="user.isStudent">
       </div>
       <div v-else-if="user.isTutor">
       </div>
-      <body v-else style="height: 110vh" class="body">
-        <div style="height: 170vh" class="section">
+      <body v-else style="min-height: 100vh" class="registerbody">
+        <div style="height: 150vh" class="registersection">
           <div
-            style="font-family: Poppins; height: 950px; width: 500px"
-            class="div-block"
+            style="font-family: Poppins; width: 500px"
+            class="registerdiv-block"
           >
-            <div style="margin-top: 15px" class="div-block-4">
-              <h1 class="heading">Create a student account</h1>
+            <div style="margin-top: 15px" class="registerdiv-block-4">
+              <h1 class="registerheading">Create a student account</h1>
             </div>
-            <div class="div-block-2">
-              <div class="text-block">Already have an account?</div>
-              <router-link to="/login" class="link">Sign In</router-link>
+            <div class="registerdiv-block-2">
+              <div class="registertext-block">Already have an account?</div>
+              <router-link to="/login" class="registerlink">Sign In</router-link>
             </div>
-            <div style="margin-top: 20px" class="div-block-3">
+            <div style="margin-top: 20px" class="registerdiv-block-3">
               <div>
                 <form
                   method="post"
@@ -251,10 +255,9 @@ export default {
     return {
       title: 'Student Registration',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/register/css/webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/register/css/2tor4u-2-0.webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/register/css/normalize.css' },
-        { rel: "stylesheet", type: "text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/webflow.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/normalize.css' },
+        { rel: 'stylesheet', type: 'text/css', href: '/student/css/student-main.webflow.css' },
       ],
     }
   },

@@ -4,6 +4,9 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+    <head>
+      <meta charset="utf-8" />
+    </head>
       <div v-if="session.student_paid === true && session.started === false">
         <p style="font-size: 18px; font-family: Poppins; margin: 15px">
           This class has not been started yet, your job as a tutor is to start
@@ -13,21 +16,19 @@
       <div
         v-else-if="session.student_paid === false || session.finished === true"
       >
-        <NotFound></NotFound>
       </div>
       <div v-else-if="session.tutor_pk !== user.tutorPk">
-        <Forbidden></Forbidden>
       </div>
       <body
         v-else
         id="body"
         style="background-color: rgba(65, 168, 211, 0.2)"
-        class="body-5"
+        class="tutorbody-5"
       >
         <div
           :style="updateModal"
           style="padding-bottom: 0px"
-          class="div-block-22"
+          class="tutordiv-block-22"
         >
           <div
             style="
@@ -37,9 +38,9 @@
               width: 375px;
               font-family: Poppins;
             "
-            class="div-block-23"
+            class="tutordiv-block-23"
           >
-            <div v-if="session.student_joined === true" class="div-block-25">
+            <div v-if="session.student_joined === true" class="tutordiv-block-25">
               <strong
                 >You have {{ dateToString(timerDisplay) }} left in this class,
                 are you sure you want to end it?</strong
@@ -67,7 +68,7 @@
                 margin-top: 10px;
                 font-size: 14px;
               "
-              class="button-10-copy-copy w-button"
+              class="tutorbutton-10-copy-copy w-button"
             >
               Confirm</button
             ><button
@@ -78,15 +79,15 @@
                 margin-top: 10px;
                 font-size: 14px;
               "
-              class="button-10-copy-copy w-button"
+              class="tutorbutton-10-copy-copy w-button"
             >
               Cancel
             </button>
           </div>
         </div>
         <div id="main">
-          <div class="section">
-            <router-link to="/" class="link-block w-inline-block"
+          <div class="tutorsection">
+            <router-link to="/" class="tutorlink-block w-inline-block"
               ><img
                 src="../static/tutor/images/logo.jpg"
                 loading="lazy"
@@ -100,9 +101,9 @@
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"
                 alt=""
             /></router-link>
-            <div class="div-block-4">
-              <div class="div-block-43">
-                <div class="name_profile_pic">
+            <div class="tutordiv-block-4">
+              <div class="tutordiv-block-43">
+                <div class="tutorname_profile_pic">
                   <img
                     :src="user.profilePic"
                     id="image"
@@ -110,40 +111,40 @@
                     height="60"
                     sizes="60px"
                     alt=""
-                    class="image-7"
+                    class="tutorimage-7"
                   />
                   <div
                     data-hover=""
                     data-delay="0"
-                    class="dropdown-3 w-dropdown"
+                    class="tutordropdown-3 w-dropdown"
                   >
                     <div
                       @click="logoutclick()"
-                      class="dropdown-toggle-2-copy w-dropdown-toggle"
+                      class="tutordropdown-toggle-2-copy w-dropdown-toggle"
                     >
-                      <div id="name" class="text-block-18">
+                      <div id="name" class="tutortext-block-18">
                         {{ user.firstName }} {{ user.lastName }}
                       </div>
-                      <div class="text-block-20">Tutor</div>
+                      <div class="tutortext-block-20">Tutor</div>
                     </div>
-                    <nav :style="logout" class="navigation-dropdown-2">
-                      <div class="dropdown-pointer-2">
-                        <div class="dropdown-wrapper-2">
+                    <nav :style="logout" class="tutornavigation-dropdown-2">
+                      <div class="tutordropdown-pointer-2">
+                        <div class="tutordropdown-wrapper-2">
                           <router-link
                             to="/logout"
                             id="logout"
-                            class="dropdown-link-2 w-inline-block"
+                            class="tutordropdown-link-2 w-inline-block"
                           >
-                            <div class="nav-content-wrap-2">
-                              <div class="dropdown-title-2">Logout</div>
+                            <div class="tutornav-content-wrap-2">
+                              <div class="tutordropdown-title-2">Logout</div>
                             </div>
                           </router-link>
                           <router-link
                             to="/account"
-                            class="dropdown-link-2 w-inline-block"
+                            class="tutordropdown-link-2 w-inline-block"
                           >
-                            <div class="nav-content-wrap-2">
-                              <div class="dropdown-title-2">Account</div>
+                            <div class="tutornav-content-wrap-2">
+                              <div class="tutordropdown-title-2">Account</div>
                             </div>
                           </router-link>
                         </div>
@@ -155,12 +156,12 @@
             </div>
           </div>
         </div>
-        <div class="columns-2-copy w-row">
-          <div class="column w-col w-col-6">
+        <div class="tutorcolumns-2-copy w-row">
+          <div class="tutorcolumn w-col w-col-6">
             <button
               v-if="buttonShow === true"
               @click="updateModalValue()"
-              class="button-10-copy-copy w-button"
+              class="tutorbutton-10-copy-copy w-button"
               style="
                 margin-top: 10px;
                 margin-bottom: 10px;
@@ -216,23 +217,10 @@ export default {
     return {
       title: 'Tutor Workspace',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/main/css/webflow.css' },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/tutor/css/tutor-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+      ]
     }
   },
   computed: {
@@ -246,7 +234,7 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser' }),
+    ...mapGetters({ user: 'getUser', pastSessions: 'getPastSessions', startedSessions: 'getStartedSessions' }),
   },
   watch: {
     timerCount: {
@@ -254,13 +242,13 @@ export default {
         if (value > 0) {
           setTimeout(() => {
             this.timerCount--
-            if (this.timerCount === 300 || this.timerCount < 300) {
+            if (this.timerCount === 600 || this.timerCount < 600) {
               this.buttonShow = true
             }
           }, 1000)
-        } else if (value === 300) {
+        } else if (value === 600) {
           alert(
-            'There are five minutes remaining in this class. We suggest wrapping things up!'
+            'There are ten minutes remaining in this class. We suggest wrapping things up!'
           )
         } else if (value === 0) {
           alert("This meeting's time is up, please end the meeting shortly.")
@@ -300,6 +288,8 @@ export default {
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
     this.timerCount = timerSeconds
     await this.fetchUser()
+    await this.fetchSessions('pastSessions')
+    await this.fetchSessions('startedSessions')
   },
   methods: {
     dateToString,
@@ -321,8 +311,7 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass() {
-      const url =
-        'https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
+      const url ='https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
       await fetch(url, {
         method: 'POST',
         credentials: 'include',
@@ -331,15 +320,18 @@ export default {
           'Content-Type': 'application/json',
         },
       }).then(() => {
+        this.removeSession([this.session, 'startedSessions'])
+        this.addSession([this.session, 'pastSessions'])
         this.$router.push('/')
       })
     },
-    ...mapActions(['fetchUser']),
+    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession', 'addSession']),
+    ...mapGetters(['getPastSessions', 'getStartedSessions'])
   },
 }
 </script>
 <style>
-.div-block-80 {
+.tutordiv-block-80 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

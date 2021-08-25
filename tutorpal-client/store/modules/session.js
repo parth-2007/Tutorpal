@@ -23,7 +23,7 @@ const getters = {
   getFinishedSessions: (state) => state.finishedSessions,
   getCanceledSessions: (state) => state.canceledSessions,
   getStartedSessions: (state) => state.startedSessions,
-  getPastSessions: (state) => state.pastClasses,
+  getPastSessions: (state) => state.pastSessions,
 }
 
 const actions = {

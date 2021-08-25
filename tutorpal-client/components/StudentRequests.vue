@@ -11,7 +11,21 @@
       <body id="body" style="min-height: 100vh" class="body-3">
           <div id="main">
             <div class="div-block-55">
-              <div class="section"><router-link to="/" aria-current="page" class="link-block w-inline-block w--current"><img src="../static/student/images/logo.jpg" loading="lazy" width="200" srcset="../static/student/images/logo-p-500.jpeg 500w, ../static/student/images/logo-p-800.jpeg 800w, ../static/student/images/logo-p-1080.jpeg 1080w, ../static/student/images/logo.jpg 1432w" sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw" alt=""></router-link>
+              <div class="section">
+                <router-link to="/" class="link-block-3 w-inline-block"
+                  ><img
+                    src="../static/student/images/logo.jpg"
+                    loading="lazy"
+                    width="200"
+                    srcset="
+                      ../static/student/images/logo.jpg  500w,
+                      ../static/student/images/logo.jpg  800w,
+                      ../static/student/images/logo.jpg 1080w,
+                      ../static/student/images/logo.jpg 1432w
+                    "
+                    sizes="200px"
+                    alt=""
+                /></router-link>
                 <div class="div-block-4">
                   <form action="/search" class="stuff w-form"><img src="../static/student/images/search-1.png" loading="lazy" width="25" height="25" srcset="../static/student/images/search-1-p-500.png 500w, ../static/student/images/search-1.png 512w" sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw" alt="" class="image-2"><input type="search" class="search-3 w-input" maxlength="256" name="q" placeholder="Search by subject" id="search" required=""><input type="submit" value="Search" class="button-8 _100 _5px-left w-button"></form>
                   <div class="div-block-43">
@@ -67,16 +81,18 @@
                 <div class="text-block-23">Requests</div>
                 <p class="paragraph">These are the requests you have sent to potential tutors who have not accepted yet. Once the tutor has accepted, please check the <router-link to="/payments" class="link-3">payments</router-link> page to pay for the class.</p>
               </div>
-              <div v-for="session in requests" :key="session.id" id="requests" class="loop">
-                <div class="i">
-                  <img @click="canceledHandler(session.id, session)" style="margin-top: 10px; cursor: pointer" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
-                  <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
-                    <p class="paragraph-2"><strong class="bold-text">Schedule
-                      <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
-                      <br>Amount: ${{session.price}}<br>Trial: {{session.free}}</p>
+              <div v-if="requests.unfetched === undefined">
+                <div v-for="session in requests" :key="session.id" id="requests" class="loop">
+                  <div class="i">
+                    <img @click="canceledHandler(session.id, session)" style="margin-top: 10px; cursor: pointer" src="../static/student/images/close-1.png" align="right" width="15" alt=""/>
+                    <div class="div-block-51-copy"><img :src="session.tutor !== undefined ? session.tutor.user.profilePic:''" loading="lazy" width="75" height="75" sizes="100px" alt="" class="image-15">
+                      <p class="paragraph-2"><strong class="bold-text">Schedule
+                        <br></strong>First Session: {{session.date}}<br>Tutor: {{session.tutor !== undefined ? session.tutor.user.firstName : ''}} {{session.tutor !== undefined ? session.tutor.user.lastName : ''}}<br>Duration: {{convertTime(session.timeStart)}} - {{convertTime(session.timeEnd)}}
+                        <br>Amount: ${{session.price}}<br>Trial: {{session.free}}</p>
+                    </div>
+                    <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
+                    <div class="text-block-27">This tutor has not accepted your request yet.</div>
                   </div>
-                  <p class="paragraph-2-copy"><strong class="bold-text">Student Information</strong><br>Description: <strong class="bold-text"> </strong>{{session.description}}</p>
-                  <div class="text-block-27">This tutor has not accepted your request yet.</div>
                 </div>
               </div>
             </div>
@@ -103,10 +119,9 @@ export default {
   head() {
     return {
       link: [
-        { rel:"stylesheet", type:"text/css", href:"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:'/student/css/student-main.webflow.css' },
-        { rel:"stylesheet", type:"text/css", href:"/main/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
   },
@@ -128,7 +143,7 @@ export default {
     async canceledHandler(id, session){
       const x = confirm("Please confirm that you wish to cancel this session.")
       if(x === true){
-        const url = '/api/sessions/'+id+'/'
+        const url = 'https://api.tutorpal.org/sessions/'+id+'/'
         await fetch(url, {
             method: 'PATCH',
             credentials: 'include',
@@ -149,14 +164,13 @@ export default {
 <style scoped>
 .badge {
   position: absolute;
-  top: 13px;
+  top: 11px;
   right: 3px;
   padding: 4px 7px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
-  font-size: 12px;
+  font-size: 14px;
 }
 </style>
-

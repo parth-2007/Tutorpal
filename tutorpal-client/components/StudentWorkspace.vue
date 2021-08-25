@@ -4,16 +4,17 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
+      <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+      </head>
       <div v-if="session.student_paid === true && session.started === false">
-        <NotStarted></NotStarted>
       </div>
       <div
         v-else-if="session.student_paid === false || session.finished === true"
       >
-        <NotFound></NotFound>
       </div>
       <div v-else-if="session.student_pk !== user.studentPk">
-        <Forbidden></Forbidden>
       </div>
       <body
         v-else
@@ -24,21 +25,18 @@
         <div id="main">
           <div class="div-block-55">
             <div class="section">
-              <router-link
-                to="/"
-                aria-current="page"
-                class="link-block w-inline-block w--current"
+              <router-link to="/" class="link-block-3 w-inline-block"
                 ><img
                   src="../static/student/images/logo.jpg"
                   loading="lazy"
                   width="200"
                   srcset="
-                    ../static/student/images/logo-p-500.jpeg   500w,
-                    ../static/student/images/logo-p-800.jpeg   800w,
-                    ../static/student/images/logo-p-1080.jpeg 1080w,
-                    ../static/student/images/logo.jpg         1432w
+                    ../static/student/images/logo.jpg  500w,
+                    ../static/student/images/logo.jpg  800w,
+                    ../static/student/images/logo.jpg 1080w,
+                    ../static/student/images/logo.jpg 1432w
                   "
-                  sizes="(max-width: 479px) 100vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, (max-width: 1439px) 20vw, (max-width: 1919px) 15vw, 12vw"
+                  sizes="200px"
                   alt=""
               /></router-link>
               <div class="div-block-4">
@@ -148,27 +146,10 @@ export default {
     return {
       title: 'Student Workspace',
       link: [
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/student-main.webflow.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/main/css/normalize.css',
-        },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-        },
-      ],
+        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
+        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
+        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+      ]
     }
   },
   computed: {
