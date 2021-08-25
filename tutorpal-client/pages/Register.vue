@@ -6,7 +6,6 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div v-if="user.isStudent">
       </div>
