@@ -83,7 +83,7 @@
             <!-- gets looped here -->
             <div v-for="contact in contacts" :key="contact.id" class="loop">
                 <div style="padding-top: 5px; padding-bottom: 5px; padding-right:15px" class="i-copy">
-                  <span class="badge">{{contact.unread}}</span>
+                  <span class="tutorbadge">{{contact.unread}}</span>
                   <div class="div-block-51">
                     <div class="div-block-51-copy"><img style="border-radius: 100px" :src="contact.tutor !== undefined ? contact.tutor.user.profilePic: ''" loading="lazy"  height="60"  width="60" sizes="100px" alt="" class="image-15">
                       <h1 class="heading-12">{{contact.tutor !== undefined ? contact.tutor.user.firstName: '' }} {{contact.tutor !== undefined ? contact.tutor.user.lastName: ''}}</h1>
@@ -102,7 +102,9 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
-    return { clicked: false } 
+    return { 
+      clicked: false 
+    } 
   },
   async fetch() {
     await this.fetchContacts()
@@ -136,16 +138,15 @@ export default {
 }
 </script>
 <style scoped>
-.badge {
-  position: absolute;
-  top: 11px;
-  right: 3px;
-  padding: 4px 7px;
+.tutorbadge {
+  margin-top: 5px;
+  float: right;
+  padding: 2px 8px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
   font-size: 14px;
+  margin-right: 15px;
 }
 </style>
-
