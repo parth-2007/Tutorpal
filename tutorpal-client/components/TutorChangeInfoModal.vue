@@ -41,7 +41,6 @@
           id="gender"
           aria-label="Default select example"
         >
-          <option selected>Select</option>
           <option value="1">Prefer Not To Say</option>
           <option value="2">Male</option>
           <option value="3">Female</option>

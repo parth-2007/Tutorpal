@@ -1,5 +1,5 @@
 <template>
-  <no-ssr>
+  <client-only>
     <html
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
@@ -27,7 +27,7 @@
         </div>
       </body>
     </html>
-  </no-ssr>
+  </client-only>
 </template>
 <script>
 export default {
