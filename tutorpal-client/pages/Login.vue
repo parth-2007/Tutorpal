@@ -184,7 +184,7 @@ export default {
           await this.refreshUser()
           await this.refreshTutor()
           await this.refreshStudent()
-          this.$router.push('/')
+          this.$router.push('/loading')
         }
       }
     },
