@@ -142,7 +142,7 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                  <span class="badge">{{user.unread}}</span> 
+                  <span class="tutorbadge">{{user.unread}}</span> 
                   </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
@@ -395,9 +395,9 @@ export default {
   object-fit: contain;
 }
 
-.badge {
+.tutorbadge {
   position: absolute;
-  top: 13px;
+  top: 11px;
   right: 3px;
   padding: 2px 8px;
   border-radius: 1000px;
