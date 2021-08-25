@@ -39,7 +39,7 @@ export const keysToSnake = (o) => {
     const n = {}
 
     Object.keys(o).forEach((k) => {
-      if (k in doNotConvert) {
+      if (doNotConvert.includes(k)) {
         n[k] = keysToSnake(o[k])
       } else {
         n[toSnake(k)] = keysToSnake(o[k])
