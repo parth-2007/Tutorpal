@@ -7,11 +7,12 @@
       <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
-        <link rel="stylesheet" href="/main/css/homepage-12.webflow.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div v-if="user.isStudent">
+          <Loader></Loader>
       </div>
       <div v-else-if="user.isTutor">
+          <Loader></Loader>
       </div>
       <body v-else class="homebody">
         <div class="homediv-block-3">

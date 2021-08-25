@@ -352,6 +352,7 @@ export default {
     await this.fetchSessions('upcoming')
     console.log(this.requests)
     await this.fetchSessions('pendingOnTutor')
+    console.log(this.requests)
   },
   methods: {
     ...mapActions([
