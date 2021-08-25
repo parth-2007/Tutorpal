@@ -22,6 +22,7 @@ from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
+import os
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -202,17 +203,24 @@ class SessionViewSet(viewsets.ModelViewSet):
         result_str = ''.join(random.choice(letters) for i in range(30))
         if data.get('free', False):
             price = 0
+            free = True
         else:
             price = data.get('price')
+            free = False
+        if data.get('price', 0) == 0:
+            free = True
         serializer.save(student=student, student_pk=self.request.user.student_pk,
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
-                        duration=duration, call_url=result_str, price=price)  # 2 query
+                        duration=duration, call_url=result_str, price=price, free=free)  # 2 query
         email = tutor.user.email
-        current_site = get_current_site(self.request)
+        if os.environ.get('RUN_ENV', 'local') == 'aws':
+            domain = 'https://tutorpal.org/'
+        else:
+            domain = get_current_site(self.request).domain
         subject = 'You have a class request'
         message = render_to_string('session/emails/requested.html', {
             'user': tutor.user,
-            'domain': current_site.domain,
+            'domain': domain,
             'student': student
         })
         send_mail(subject, message, settings.EMAIL_FROM, [email])
@@ -235,7 +243,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                 'tutor': self.session.tutor
                 # 'domain': current_site.domain,
             })
-            student_mail = (subject, student_message, None, [
+            student_mail = (subject, student_message, settings.EMAIL_FROM, [
                             self.session.student.user.email, self.session.student.parent_email])
             tutor_message = render_to_string('session/emails/canceled_tutor.html', {
                 'user': self.session.tutor.user,
