@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div v-if="!user.unfetched" id="main">
     <div v-if="user.isStudent">
       <StudentHome></StudentHome>
     </div>
@@ -9,6 +9,9 @@
     <div v-else>
       <MainHome></MainHome>
     </div>
+  </div>
+  <div v-else>
+    <Loader></Loader>
   </div>
 </template>
 

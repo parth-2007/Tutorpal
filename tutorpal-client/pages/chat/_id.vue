@@ -1,9 +1,14 @@
 <template>
-  <div v-if="user.isTutor || user.isStudent">
-    <ChatRoom :other-user="otherUser"></ChatRoom>
+  <div v-if="!user.unfetched" id="main">
+    <div v-if="user.isTutor || user.isStudent">
+      <ChatRoom :other-user="otherUser"></ChatRoom>
+    </div>
+    <div v-else>
+      <Forbidden></Forbidden>
+    </div>
   </div>
   <div v-else>
-    <Forbidden></Forbidden>
+    <Loader></Loader>
   </div>
 </template>
 <script>

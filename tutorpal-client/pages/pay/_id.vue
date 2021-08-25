@@ -1,10 +1,15 @@
 <template>
+  <div v-if="!user.unfetched" id="main">
     <div v-if="user.isStudent">
       <StudentPay></StudentPay>
     </div>
     <div v-else>
       <Forbidden></Forbidden>
     </div>
+  </div>
+  <div v-else>
+    <Loader></Loader>
+  </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'

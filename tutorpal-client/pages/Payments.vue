@@ -1,12 +1,17 @@
 <template>
-  <div v-if="user.isStudent">
-    <StudentPayments></StudentPayments>
-  </div>
-  <div v-else-if="user.isTutor">
-    <TutorPayments></TutorPayments>
+  <div v-if="!user.unfetched" id="main">
+    <div v-if="user.isStudent">
+      <StudentPayments></StudentPayments>
+    </div>
+    <div v-else-if="user.isTutor">
+      <TutorPayments></TutorPayments>
+    </div>
+    <div v-else>
+      <NotFound></NotFound>
+    </div>
   </div>
   <div v-else>
-    <NotFound></NotFound>
+    <Loader></Loader>
   </div>
 </template>
 
