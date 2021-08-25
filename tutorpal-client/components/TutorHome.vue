@@ -130,7 +130,7 @@
                   ability.
                 </p>
               </div>
-              <div>
+              <div v-if="requests.unfetched === undefined">
                 <div
                   v-for="session in requests"
                   :key="session.id"
@@ -217,7 +217,7 @@
           <div class="tutorcolumn-15 w-col w-col-4">
             <div style="margin-bottom: 20px" class="tutordiv-block-53">
               <h1 class="tutorheading-2">Starting:</h1>
-              <div class="tutorupcoming_loop">
+              <div v-if="started.unfetched===undefined" class="tutorupcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in started"
@@ -255,7 +255,7 @@
               class="tutordiv-block-53"
             >
               <h1 class="tutorheading-2">Upcoming Classes:</h1>
-              <div class="tutorupcoming_loop">
+              <div v-if="upcoming.unfetched===undefined" class="tutorupcoming_loop">
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in upcoming"
@@ -350,9 +350,7 @@ export default {
   async fetch() {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
-    console.log(this.requests.unfetched)
     await this.fetchSessions('pendingOnTutor')
-    console.log(this.requests.unfetched)
   },
   methods: {
     ...mapActions([
