@@ -279,6 +279,7 @@
               >{{ data.bio }}<br /><strong>Course Description: </strong
               >{{ data.what_you_teach }}<br /><strong>Availability: </strong
               >{{ data.availability }} <br /><a
+                v-if="data.linkedIn!==''"
                 style="font-family: Poppins"
                 :href="data.linkedIn"
                 target="_blank"
