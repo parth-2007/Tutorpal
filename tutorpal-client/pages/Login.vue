@@ -9,10 +9,10 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
       </head>
       <div v-if="user.isStudent">
-          <Loader></Loader>
+        <Forbidden/>
       </div>
       <div v-else-if="user.isTutor">
-          <Loader></Loader>
+        <Forbidden/>
       </div>
       <body v-else class="homebody">
         <div class="homediv-block-3">
@@ -105,9 +105,11 @@
  
 <script type="text/javascript">
 import { mapGetters, mapActions } from 'vuex'
+import Forbidden from '../components/Forbidden.vue'
 import getCSRF from '../utils/getCSRF'
 
 export default {
+  components: { Forbidden },
   data() {
     return {
       email: '',

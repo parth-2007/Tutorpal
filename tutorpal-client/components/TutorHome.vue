@@ -350,9 +350,9 @@ export default {
   async fetch() {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
-    console.log(this.requests)
+    console.log(this.requests.unfetched)
     await this.fetchSessions('pendingOnTutor')
-    console.log(this.requests)
+    console.log(this.requests.unfetched)
   },
   methods: {
     ...mapActions([
