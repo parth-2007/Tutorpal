@@ -34,10 +34,14 @@ export const keysToCamel = (o) => {
 }
 
 export const keysToSnake = (o) => {
+  const doNotConvert = ['linkedIn']
   if (isObject(o)) {
     const n = {}
 
     Object.keys(o).forEach((k) => {
+      if (k in doNotConvert) {
+        n[k] = keysToSnake(o[k])
+      }
       n[toSnake(k)] = keysToSnake(o[k])
     })
 
