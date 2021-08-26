@@ -21,7 +21,7 @@
         /></router-link>
         <div style="height: auto; font-family: Poppins; padding-bottom: 20px; border-width: 2px; border-color: skyblue;" class="outcastdiv-block">
           <div>
-            Please let us know what user feedback you have so we can continue to improve our product. We will work on these immediately, if you would like to report a bug, please do so <router-link to="/bugs">here</router-link> 
+            Please provide any user feedback you may have so we can continue to improve the platform. We will work on these suggestions immediately. If you would like to report a bug, please do so <router-link to="/bugs">here</router-link> 
             <form>
               <div style="margin-top: 20px;" class="outcastmb-3">
                 <label for="feedback" class="form-label">Feedback</label>
