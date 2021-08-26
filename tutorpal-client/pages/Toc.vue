@@ -21,18 +21,19 @@
         <div class="outcastdiv-block">
           <div class="outcasttext-block">TutorPal Terms and Conditions</div>
           <div class="outcasttext-block-2">
-            <em class="outcastitalic-text">Last Updated: August 17, 2020</em><br />
+            <em class="outcastitalic-text">Last Updated: August 25, 2021</em><br />
           </div>
           <p class="outcastparagraph-2">
-            These Terms of Use (“Terms”) govern your use of the TutorPal website
-            (“Site”) at www.tutorpal.org, any mobile device application or any
-            other means provided or authorized by TutorPal Inc. (“TutorPal”).
+            Welcome, and thank you for your interest in TutorPal("TutorPal", "we", "our", or "us"), 
+            which operates the website located at www.tutorpal.org(the "Site"). These Terms of Use 
+            (“Terms”) govern your use of the TutorPal website, any mobile device application or any
+            other means provided or authorized by TutorPal (“TutorPal”).
             Please read these Terms before using or continuing to use the Site.
             Do not agree to the Terms unless you both fully understand and
             accept each provision. By using or continuing to use the Site, you
             represent and warrant that you understand, agree to, and accept all
             terms and conditions contained in these Terms.<br /><br />1. General
-            terms <br /><br />TutorPal provides this Site to Users seeking
+            terms <br /><br />TutorPal provides this site to Users seeking
             tutoring services (“Students”) and to Users seeking to provide
             tutoring services (“Tutors”), and to any other entity on whose
             behalf Users accept these Terms. The term “you” or “You” or “User”
@@ -162,7 +163,7 @@
             (d) neither you, nor anyone in your home, is currently out on bail
             or on your own recognizance pending trial, relating to any felony or
             misdemeanor charges of any kind, including without limitation
-            sexual, child abuse or domestic violence offenses.<br />
+            sexual,child abuse or domestic violence offenses.<br />
           </p>
           <p class="outcastparagraph-3">
             TutorPal may revise the Eligibility Conditions from time to time and
