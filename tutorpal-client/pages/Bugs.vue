@@ -14,7 +14,7 @@
           to="/"
           class="outcastlink-block w-inline-block"
           ><img
-            src="../static/student/images/logo.jpg"
+            src="../static/student/images/logo.jpg"c
             width="250"
             alt=""
             class="outcastimage"
@@ -22,7 +22,7 @@
         <div style="height: auto; font-family: Poppins; padding-bottom: 0x; border-color: skyblue; border-width: 2.5px;" class="outcastdiv-block">
           <div>
             <h1 style="font-size: 30px;"><strong>Bug Reports</strong></h1>
-            Please let us know what bugs you are facing so we can fix them immediately. We use this information to immediately fix issues we have not yet come across. If you have any feedback, please do so <router-link to="/feedback">here</router-link>
+            Please let us know what bugs you are facing so we can fix them immediately. We use this information to fix issues we have not yet come across. If you have any feedback, please do so <router-link to="/feedback">here</router-link>
             <form id="form-wrapper">
               <div style="margin-top: 20px;" class="outcastmb-3">
                 <label for="bugs" class="form-label">Bugs</label>
