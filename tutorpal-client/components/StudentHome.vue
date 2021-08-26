@@ -247,7 +247,7 @@
                       class="button-4 w-button"
                       >Join Meeting</a
                     ><br>
-                    <strong style="margin-top: 10px" class="bold-text-2" >We suggest using Google Chrome as that is most compatible with our calling system</strong>
+                    <strong style="margin-top: 10px; font-size:14px; margin-top:10px" class="bold-text-2" >We suggest using Google Chrome as that is most compatible with our calling system</strong>
                   </div>
                 </div>
               </div>
