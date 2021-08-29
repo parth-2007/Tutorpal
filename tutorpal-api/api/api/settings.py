@@ -126,12 +126,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'api.wsgi.application'
 ASGI_APPLICATION = "api.routing.application"
 
-if os.environ.get('REDIS_HOST', None):
+if os.environ.get('AWS_REDIS_HOST', None) and os.environ.get('RUN_ENV', 'local')=='aws':
     CHANNEL_LAYERS = {
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
             'CONFIG': {
-                "hosts": [(os.environ['REDIS_HOST'], int(os.environ['REDIS_PORT']))],
+                "hosts": [(os.environ['AWS_REDIS_HOST'], 6379)],
+            },
+        },
+    }
+elif os.environ.get('REDIS_HOST', None):
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [(os.environ['REDIS_HOST'], 6379)],
             },
         },
     }
