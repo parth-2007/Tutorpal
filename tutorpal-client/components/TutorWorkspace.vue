@@ -40,7 +40,7 @@
             "
             class="tutordiv-block-23"
           >
-            <div v-if="session.student_joined === true" class="tutordiv-block-25">
+            <div v-if="session.student_joined === true && this.buttonShow===true" class="tutordiv-block-25">
               <strong
                 >You have {{ dateToString(timerDisplay) }} left in this class,
                 are you sure you want to end it?</strong
@@ -48,29 +48,25 @@
               <br />Clicking "confirm" will confirm to us that this class has
               been finished. You will be paid shortly after. Thank you for
               tutoring with TutorPal!
+              <button @click="endclass()" style="background-color: green; margin-left: 10px; margin-top: 10px; font-size: 14px;" class="tutorbutton-10-copy-copy w-button">Confirm</button>
             </div>
             <div
-              v-else
+              v-else-if="session.student_joined === false"
               style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
               Your student has not joined this class, therefore, we are not
-              allowing you to end this class. If there are any issues, please
+              allowing you to end it. If there are any issues, please
               contact us at support@tutorpal.org. We are very sorry for the
-              inconvienence and hope you will continue to tutor on this
-              platform.
+              inconvienence.
             </div>
-            <button
-              v-if="session.student_joined === true"
-              @click="endclass()"
-              style="
-                background-color: green;
-                margin-left: 10px;
-                margin-top: 10px;
-                font-size: 14px;
-              "
-              class="tutorbutton-10-copy-copy w-button"
+            <div
+              v-else-if="this.buttonShow === false"
+              style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
-              Confirm</button
+              You are only allowed to end this class during the last ten 
+              minutes of the meeting. We suggest continuing with the meeting 
+              until the last ten minutes. Thank you.
+            </div>
             ><button
               @click="updateModalValue()"
               style="
@@ -156,39 +152,47 @@
             </div>
           </div>
         </div>
-        <div class="tutorcolumns-2-copy w-row">
-          <div class="tutorcolumn w-col w-col-6">
-            <button
-              v-if="buttonShow === true"
+        <div style="float: right; font-family: Poppins; background-color:white; height:100%; width:23vw; margin-top:25px; margin-bottom:25px; margin-right:8px; border-radius:8px; padding:10px">
+          <div>
+            <p style="font-size:16px;">Here are some tools you can use to help:</p>
+            <a target="_blank" href="https://www.google.com/docs/about/">Google Docs, Sheets, Forms, Slides</a>
+            <br>
+            <a target="_blank" href="https://jamboard.google.com/">Google Jamboard</a>
+            <br>
+            <a target="_blank" href="https://colab.research.google.com/notebooks/intro.ipynb">Google Colab</a>
+            <br>
+            <a target="_blank" href="https://docs.google.com/drawings/">Google Drawings</a>
+            <br>
+            <a target="_blank" href="https://kahoot.com/">Kahoot</a>
+            <br>
+            <a target="_blank" href="https://www.hackerrank.com/">Hackerrank</a>
+            <p style="margin-top:10px">Tips: 1) Leaving the call will NOT end this class as it is not directly connected to our platform. Remember to end the class by clicking the red button below. 2) Please do not need to share the meeting link with anybody, including the student. 3) The video calling system is most compatible with Google Chrome</p>
+            <h1
+              style="
+                font-family: Poppins;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-size: 20px;
+                color: black;
+              "
+            >
+              <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
+            </h1>
+             <button
               @click="updateModalValue()"
               class="tutorbutton-10-copy-copy w-button"
               style="
                 margin-top: 10px;
                 margin-bottom: 10px;
-                margin-left: 20px;
                 background-color: #bb0a1e;
               "
             >
               End this Class
             </button>
           </div>
-          <div style="float: right; margin-right: 20px">
-            <h1
-              style="
-                font-family: Poppins;
-                margin-left: 20px;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                font-size: 24px;
-                color: black;
-              "
-            >
-              <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
-            </h1>
-          </div>
         </div>
         <iframe
-          style="width: 100vw; height: 78.5vh"
+          style="width: 75vw; height: 100vh"
           allow="camera;microphone"
           :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
         ></iframe>
@@ -247,9 +251,9 @@ export default {
             }
           }, 1000)
         } else if (value === 600) {
-          alert(
-            'There are ten minutes remaining in this class. We suggest wrapping things up!'
-          )
+            alert(
+              'You can now end this class. There are still ten minutes remaining in your meeting.'
+            )
         } else if (value === 0) {
           alert("This meeting's time is up, please end the meeting shortly.")
         }
@@ -284,8 +288,10 @@ export default {
     }
     const now = hours + ':' + minutes + ':' + seconds
     const hms = str(sub([this.session.time_end, now]))
+    console.log(this.session.time_end, now, hms)
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
+    console.log(a, timerSeconds)
     this.timerCount = timerSeconds
     await this.fetchUser()
     await this.fetchSessions('pastSessions')

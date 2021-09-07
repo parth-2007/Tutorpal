@@ -14,7 +14,7 @@
             <div class="outcastdiv-block-41">
               <h1 class="outcastheading-3">Thanks for creating an account with us!</h1>
               <p class="outcastparagraph-8">
-                We have sent a verification link to the email you have registered with us, it will be in your inbox shortly. Please click the link to activate your account, skipping this step would hinder you from logging in. Thank you!
+                We have sent a verification link to the email you have registered with us. It will be in your inbox shortly. Please click the link to activate your account. If you skip this step, it will hinder you from logging into the website. Thank you for understanding!
               </p>
             </div>
           </div>
