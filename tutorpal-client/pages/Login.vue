@@ -6,13 +6,18 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          media="none"
+          onload="if(media!='all')media='all'"
+        />
       </head>
       <div v-if="user.isStudent">
-        <Loader/>
+        <Loader />
       </div>
       <div v-else-if="user.isTutor">
-        <Loader/>
+        <Loader />
       </div>
       <body v-else class="homebody">
         <div class="homediv-block-3">
@@ -35,7 +40,10 @@
               >login</router-link
             >
           </div>
-          <router-link style="z-index: 2" to="/register" class="homebutton w-button"
+          <router-link
+            style="z-index: 2"
+            to="/register"
+            class="homebutton w-button"
             >register</router-link
           >
         </div>
@@ -123,9 +131,21 @@ export default {
     return {
       title: 'Login',
       link: [
-        { rel:"stylesheet", type:"text/css", href: "/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
       ],
     }
   },
@@ -137,7 +157,8 @@ export default {
     ...mapGetters(['getUser']),
     ...mapActions(['fetchUser']),
     validateData() {
-      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
       } else {
@@ -149,7 +170,7 @@ export default {
         this.errors.password = ''
       }
     },
-    
+
     async submitHandler(e) {
       e.preventDefault()
       this.validateData()
@@ -158,23 +179,23 @@ export default {
         formData.append('email', this.email)
         formData.append('password', this.password)
         const csrfToken = await getCSRF()
-        const data = await fetch('https://api.tutorpal.org/auth/login/', {
+        const data = await fetch('/api/auth/login/', {
           credentials: 'include',
           method: 'POST',
           headers: {
-            'X-CSRFToken': csrfToken.success,            
+            'X-CSRFToken': csrfToken.success,
           },
           body: formData,
         })
-        .then((res) => {
-          if (res.status >= 400 && res.status < 600) {
+          .then((res) => {
+            if (res.status >= 400 && res.status < 600) {
+              this.errors.global = 'Something went wrong :('
+            }
+            return res.json()
+          })
+          .catch(() => {
             this.errors.global = 'Something went wrong :('
-          }
-          return res.json()
-        })
-        .catch(() => {
-          this.errors.global = 'Something went wrong :('
-        })
+          })
         if (data && data.error) {
           this.errors.global = data.error
         }

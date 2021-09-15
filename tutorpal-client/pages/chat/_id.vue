@@ -25,6 +25,7 @@ export default {
   },
   computed: mapGetters({ user: 'getUser' }),
   async created() {
+    console.log('hi')
     await this.fetchUser()
     const response = await loggedInFetch(
       'api/rooms/' + this.$route.params.id + '/',

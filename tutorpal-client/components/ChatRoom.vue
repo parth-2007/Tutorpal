@@ -7,7 +7,12 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          media="print"
+          onload="this.media='all'"
+        />
       </head>
       <body style="min-height: 100vh" class="body">
         <router-link
@@ -132,9 +137,21 @@ export default {
     return {
       title: `Chat with ${this.otherUser.firstName}`,
       link: [
-        { rel:"stylesheet", type:"text/css", href: "/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
       ],
     }
   },
@@ -191,7 +208,7 @@ export default {
     connect() {
       const chatMsgs = this.chatMsgs
       const endpoint =
-        'ws://localhost:5000/api/ws/chat/' + this.$route.params.id + '/'
+        'ws://localhost:9000/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
         const chatDataMsg = JSON.parse(e.data)
