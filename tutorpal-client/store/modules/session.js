@@ -30,14 +30,14 @@ const actions = {
   async fetchSessions({ commit, state }, sessionName) {
     if (state[sessionName].unfetched) {
       const sessions = await loggedInFetch(
-        `/api/sessions/${camelToSnakeCase(sessionName)}/`
+        `https://api.tutorpal.org/sessions/${camelToSnakeCase(sessionName)}/`
       )
       commit('setSessions', [keysToCamel(sessions.results), sessionName])
     }
   },
   async refreshSessions({ commit }, sessionName) {
     const sessions = await loggedInFetch(
-      `/api/sessions/${camelToSnakeCase(sessionName)}/`
+      `https://api.tutorpal.org/sessions/${camelToSnakeCase(sessionName)}/`
     )
     commit('setSessions', [keysToCamel(sessions.results), sessionName])
   },
