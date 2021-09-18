@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'chat',
     'session',
     'corsheaders',
-    'channels',
+    # 'channels',
     'rest_framework',
     'dry_rest_permissions',
     'storages'
