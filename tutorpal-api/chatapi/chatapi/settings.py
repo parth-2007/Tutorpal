@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org', 'api.tutorpal.org', 'www.tutorpal.org']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org', 'api.tutorpal.org', 'www.tutorpal.org', 'chat.tutorpal.org']
 
 
 # Application definition
@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'chatapi.wsgi.application'
-ASGI_APPLICATION = 'chatapi.asgi.application'
+ASGI_APPLICATION = 'chatapi.asgi.handler'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

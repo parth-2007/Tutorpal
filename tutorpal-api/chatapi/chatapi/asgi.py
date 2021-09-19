@@ -25,8 +25,8 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.urls import re_path, path
 from chat.consumers import ChatConsumer
 from django.conf.urls import url
-# from asgiref.compatibility import guarantee_single_callable
-# from mangum import Mangum
+from asgiref.compatibility import guarantee_single_callable
+from mangum import Mangum
 
 application = ProtocolTypeRouter({
     # (http->django views is added by default)
@@ -50,4 +50,5 @@ application = ProtocolTypeRouter({
     )
 })
 
-# wrapped_application = guarantee_single_callable(application)
+wrapped_application = guarantee_single_callable(application)
+handler = Mangum(wrapped_application, lifespan="off")

@@ -161,7 +161,7 @@ export default {
 
   async created() {
     this.response = await loggedInFetch(
-      'api/rooms/' + this.$route.params.id + '/messages/'
+      'https://api.tutorpal.org/rooms/' + this.$route.params.id + '/messages/'
     )
     if (this.response.error) {
       if (
@@ -208,7 +208,7 @@ export default {
     connect() {
       const chatMsgs = this.chatMsgs
       const endpoint =
-        'ws://localhost:9000/ws/chat/' + this.$route.params.id + '/'
+        'wss://chat.tutorpal.org/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
         const chatDataMsg = JSON.parse(e.data)
