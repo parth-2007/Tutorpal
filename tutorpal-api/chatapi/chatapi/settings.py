@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'chatapi.wsgi.application'
-ASGI_APPLICATION = 'chatapi.asgi.handler'
+ASGI_APPLICATION = 'chatapi.asgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
