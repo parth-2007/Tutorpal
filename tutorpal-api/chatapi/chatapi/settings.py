@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org', 'api.tutorpal.org', 'www.tutorpal.org', 'chat.tutorpal.org']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org', 'api.tutorpal.org', 'www.tutorpal.org', 'chat.tutorpal.org', '13.57.225.15']
 
 
 # Application definition
