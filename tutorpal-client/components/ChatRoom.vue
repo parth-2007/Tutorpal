@@ -208,7 +208,7 @@ export default {
     connect() {
       const chatMsgs = this.chatMsgs
       const endpoint =
-        'wss://chat.tutorpal.org:8000/ws/chat/' + this.$route.params.id + '/'
+        'wss://13.57.225.15/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
         const chatDataMsg = JSON.parse(e.data)
