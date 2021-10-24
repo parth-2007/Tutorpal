@@ -1,5 +1,5 @@
 export default {
-  components: true,
+  // components: true,
   target: 'static',
   webfontloader: {
     google: {
@@ -55,23 +55,35 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    proxy: {
-      '^/api': {
-        target: 'https://api.tutorpal.org',
-        changeOrigin: true,
-        pathRewrite: { '^/api': '/' },
-      },
-    },
+    // proxy: {
+    //   '/api': {
+    //     target: 'https://api.tutorpal.org',
+    //     changeOrigin: true,
+    //     pathRewrite: { '^/api': '/' },
+    //   },
+    // },
   },
 
   devServer: {
-    proxy: {
-      '^/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        logLevel: 'debug',
-        pathRewrite: { '^/api': '/' },
-      },
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:5000/api',
+    //     changeOrigin: true,
+    //     logLevel: 'debug',
+    //     pathRewrite: { '^/api': '/' },
+    //   },
+    // },
+  },
+
+  proxy: {
+    '/api': {
+      target:
+        process.env.NODE_ENV === 'PROD'
+          ? 'http://localhost:5000/api'
+          : 'https://api.tutorpal.org',
+      changeOrigin: true,
+      logLevel: 'debug',
+      pathRewrite: { '^/api': '/' },
     },
   },
 }

@@ -119,18 +119,35 @@ export default {
     }
   },
   async fetch() {
-    const url ='https://api.tutorpal.org/tutors/search/?q=' + this.$route.query.q + '/'
-    this.tutordata = await fetch(url, {
-      credentials: 'include',
-    }).then((res) => res.json())
+    const tutorData = await fetch(
+      `/api/tutors/search/?q=${this.$route.query.q}/`,
+      {
+        credentials: 'include',
+      }
+    )
+      .then((res) => res.json())
+      .catch(() => ({ error: 'client error' }))
+    this.tutordata = tutorData
   },
   head() {
     return {
       title: 'Find a Tutor',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/normalize.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/student-main.webflow.css' },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
       ],
     }
   },

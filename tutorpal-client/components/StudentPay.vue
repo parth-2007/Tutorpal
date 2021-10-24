@@ -168,8 +168,7 @@ export default {
   },
   async fetch() {
     const id = parseInt(this.$route.params.id)
-    const url = 'https://api.tutorpal.org/sessions/' + id + '/'
-    this.session = await fetch(url, {
+    this.session = await fetch('/api/sessions/' + id + '/', {
       credentials: 'include',
     }).then((res) => {
       if (res.status === 500) {
@@ -195,10 +194,22 @@ export default {
     return {
       title: 'Pay',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   computed: {
@@ -250,9 +261,8 @@ export default {
             })
           },
           onApprove: async (data) => {
-            let url = 'https://api.tutorpal.org/capture_order/' + this.$route.params.id + '/'
             const csrfToken = await getCSRF()
-            await fetch(url, {
+            await fetch('/api/capture_order/' + this.$route.params.id + '/', {
               credentials: 'include',
               method: 'POST',
               headers: {
@@ -263,8 +273,7 @@ export default {
                 order_id: data.orderID,
               }),
             })
-            url = 'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
-            await fetch(url, {
+            await fetch('/api/sessions/' + this.$route.params.id + '/', {
               credentials: 'include',
               method: 'PATCH',
               headers: {

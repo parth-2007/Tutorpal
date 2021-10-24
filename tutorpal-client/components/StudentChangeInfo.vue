@@ -6,7 +6,12 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          media="none"
+          onload="if(media!='all')media='all'"
+        />
       </head>
       <body>
         <div :style="updatemodal" class="div-block-22">
@@ -31,19 +36,19 @@
         <div class="div-block-55">
           <div class="section">
             <router-link to="/" class="link-block-3 w-inline-block"
-          ><img
-            src="../static/student/images/logo.jpg"
-            loading="lazy"
-            width="200"
-            srcset="
-              ../static/student/images/logo.jpg  500w,
-              ../static/student/images/logo.jpg  800w,
-              ../static/student/images/logo.jpg 1080w,
-              ../static/student/images/logo.jpg 1432w
-            "
-            sizes="200px"
-            alt=""
-        /></router-link>
+              ><img
+                src="../static/student/images/logo.jpg"
+                loading="lazy"
+                width="200"
+                srcset="
+                  ../static/student/images/logo.jpg  500w,
+                  ../static/student/images/logo.jpg  800w,
+                  ../static/student/images/logo.jpg 1080w,
+                  ../static/student/images/logo.jpg 1432w
+                "
+                sizes="200px"
+                alt=""
+            /></router-link>
             <div class="div-block-4">
               <form action="/search" class="stuff w-form">
                 <img
@@ -142,8 +147,9 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                  <span class="tutorbadge">{{user.unread}}</span> 
-                  </router-link
+                    <span class="tutorbadge">{{
+                      user.unread
+                    }}</span> </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -160,7 +166,10 @@
         <div class="div-block-67">
           <div class="columns-5 w-row">
             <div
-              class="column-16 w-col w-col-4 w-col-small-small-stack w-col-tiny-tiny-stack"
+              class="
+                column-16
+                w-col w-col-4 w-col-small-small-stack w-col-tiny-tiny-stack
+              "
             >
               <img
                 :src="user.profilePic"
@@ -174,7 +183,10 @@
               />
             </div>
             <div
-              class="column-17 w-col w-col-8 w-col-small-small-stack w-col-tiny-tiny-stack"
+              class="
+                column-17
+                w-col w-col-8 w-col-small-small-stack w-col-tiny-tiny-stack
+              "
             >
               <div class="div-block-69">
                 <h1 class="heading-3">
@@ -252,40 +264,44 @@
             >
               <div style="margin-left: 0px" class="columns-2-copy w-row">
                 <div class="w-col w-col-6">
-                <div>
-                  <select
-                    ref="select"
-                    v-model="stars"
-                    style="margin-top: 0px"
-                    class="form-select"
-                    id="stars"
-                    aria-label="Default select example"
-                    required
-                  >
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option selected value="5">5 Stars</option>
-                  </select>
-                  <textarea
-                    ref="description"
-                    v-model="description"
-                    style="height: 150px; margin-top: 20px; margin-bottom: 20px"
-                    class="form-control"
-                    id="description"
-                    placeholder="Enter Description"
-                    rows="3"
-                    required
-                  ></textarea>
-                  <button
-                    @click="createReview(completed.tutor.id)"
-                    class="btn btn-primary"
-                    name="review"
-                  >
-                    Post Review
-                  </button>
-                </div>
+                  <div>
+                    <select
+                      ref="select"
+                      v-model="stars"
+                      style="margin-top: 0px"
+                      class="form-select"
+                      id="stars"
+                      aria-label="Default select example"
+                      required
+                    >
+                      <option value="1">1 Star</option>
+                      <option value="2">2 Stars</option>
+                      <option value="3">3 Stars</option>
+                      <option value="4">4 Stars</option>
+                      <option selected value="5">5 Stars</option>
+                    </select>
+                    <textarea
+                      ref="description"
+                      v-model="description"
+                      style="
+                        height: 150px;
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                      "
+                      class="form-control"
+                      id="description"
+                      placeholder="Enter Description"
+                      rows="3"
+                      required
+                    ></textarea>
+                    <button
+                      @click="createReview(completed.tutor.id)"
+                      class="btn btn-primary"
+                      name="review"
+                    >
+                      Post Review
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -315,10 +331,22 @@ export default {
       show: false,
       title: 'Account Information',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   computed: {
@@ -332,12 +360,15 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ student: 'getStudent', user: 'getUser', pastSessions: 'getPastSessions'}),
+    ...mapGetters({
+      student: 'getStudent',
+      user: 'getUser',
+      pastSessions: 'getPastSessions',
+    }),
   },
   async created() {
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
-    console.log(this.pastSessions)
   },
   methods: {
     updateModalValue() {
@@ -348,7 +379,7 @@ export default {
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
-      await fetch('https://api.tutorpal.org/reviews/', {
+      await fetch('/api/reviews/', {
         credentials: 'include',
         method: 'POST',
         headers: {
@@ -379,7 +410,7 @@ export default {
       })
     },
     ...mapActions(['fetchUser', 'fetchStudent', 'fetchSessions']),
-    ...mapGetters(['getPastSessions'])
+    ...mapGetters(['getPastSessions']),
   },
 }
 </script>

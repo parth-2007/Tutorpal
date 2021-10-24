@@ -321,11 +321,11 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000){
-        this.errors.profilePic = "File size is too high! Please upload a file less than 100 Kilobytes"
-      }
-      else{
-        this.errors.profilePic = ""
+      if (e.target.files[0].size > 100000) {
+        this.errors.profilePic =
+          'File size is too high! Please upload a file less than 100 Kilobytes'
+      } else {
+        this.errors.profilePic = ''
       }
     },
     checkErrors() {
@@ -398,7 +398,7 @@ export default {
             'user',
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
-          const data = await fetch('https://api.tutorpal.org/auth/update-tutor/', {
+          const data = await fetch('/api/auth/update-tutor/', {
             credentials: 'include',
             method: 'PATCH',
             headers: {

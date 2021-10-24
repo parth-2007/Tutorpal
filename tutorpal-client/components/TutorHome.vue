@@ -16,10 +16,10 @@
                 loading="lazy"
                 width="260"
                 srcset="
-                  ../static/tutor/images/logo.jpg   500w,
-                  ../static/tutor/images/logo.jpg   800w,
+                  ../static/tutor/images/logo.jpg  500w,
+                  ../static/tutor/images/logo.jpg  800w,
                   ../static/tutor/images/logo.jpg 1080w,
-                  ../static/tutor/images/logo.jpg         1432w
+                  ../static/tutor/images/logo.jpg 1432w
                 "
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 34vw, (max-width: 991px) 25vw, (max-width: 1439px) 21vw, (max-width: 1919px) 15vw, 12vw"
                 alt=""
@@ -95,8 +95,12 @@
                     >Requests</router-link
                   ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
                     >Messages
-                    <span class="tutorbadge">{{ user.unread }}</span> </router-link
-                  ><router-link to="/payments" class="tutornav-link-4 w-nav-link"
+                    <span class="tutorbadge">{{
+                      user.unread
+                    }}</span> </router-link
+                  ><router-link
+                    to="/payments"
+                    class="tutornav-link-4 w-nav-link"
                     >Payments</router-link
                   >
                 </nav>
@@ -168,7 +172,8 @@
                       }}
                     </p>
                     <p class="tutorparagraph-2">
-                      <strong class="tutorbold-text">Class Information<br /></strong
+                      <strong class="tutorbold-text"
+                        >Class Information<br /></strong
                       >First Session: {{ session.date }}<br />Duration:
                       {{ convertTime(session.timeStart) }} -
                       {{ convertTime(session.timeEnd) }}<br />Trial:
@@ -176,7 +181,8 @@
                     </p>
                     <p class="tutorparagraph-2">
                       <strong class="tutorbold-text">Student Information</strong
-                      ><br />Description: <strong class="tutorbold-text"> </strong
+                      ><br />Description:
+                      <strong class="tutorbold-text"> </strong
                       >{{ session.description }}
                     </p>
                     <div class="tutortext-block-27">
@@ -217,7 +223,10 @@
           <div class="tutorcolumn-15 w-col w-col-4">
             <div style="margin-bottom: 20px" class="tutordiv-block-53">
               <h1 class="tutorheading-2">Starting:</h1>
-              <div v-if="started.unfetched===undefined" class="tutorupcoming_loop">
+              <div
+                v-if="started.unfetched === undefined"
+                class="tutorupcoming_loop"
+              >
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in started"
@@ -255,7 +264,10 @@
               class="tutordiv-block-53"
             >
               <h1 class="tutorheading-2">Upcoming Classes:</h1>
-              <div v-if="upcoming.unfetched===undefined" class="tutorupcoming_loop">
+              <div
+                v-if="upcoming.unfetched === undefined"
+                class="tutorupcoming_loop"
+              >
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in upcoming"
@@ -317,20 +329,30 @@ export default {
       next: '',
     }
   },
-  async created() {
-    await this.fetchSessions('startedSessions')
-    this.requests1 = await fetch('https://api.tutorpal.org/sessions/pending_on_tutor/', {
-      credentials: 'include',
-    }).then((res) => res.json())
-    this.next = this.requests1.next
+  async fetch() {
+    await this.fetchUser()
+    await this.fetchSessions('upcoming')
+    await this.fetchSessions('pendingOnTutor')
   },
   head() {
     return {
       title: 'Home',
       link: [
-        { rel:"stylesheet", type:"text/css", href: "/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
       ],
     }
   },
@@ -347,10 +369,12 @@ export default {
       }
     },
   },
-  async fetch() {
-    await this.fetchUser()
-    await this.fetchSessions('upcoming')
-    await this.fetchSessions('pendingOnTutor')
+  async created() {
+    await this.fetchSessions('startedSessions')
+    this.requests1 = await fetch('api/sessions/pending_on_tutor/', {
+      credentials: 'include',
+    }).then((res) => res.json())
+    this.next = this.requests1.next
   },
   methods: {
     ...mapActions([
@@ -374,9 +398,8 @@ export default {
       this.next = data.next
     },
     async accept(id, session) {
-      const url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
-      await fetch(url, {
+      await fetch('/api/sessions/' + id + '/', {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -390,9 +413,8 @@ export default {
       this.removeSession([session, 'pendingOnTutor'])
     },
     async deny(id, session) {
-      const url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
-      await fetch(url, {
+      await fetch('/api/sessions/' + id + '/', {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -414,15 +436,14 @@ export default {
       const end = y[0] * 60 + y[1]
       const now = today.getHours() * 60 + today.getMinutes()
 
-      const dd = String(today.getDate()).padStart(2, '0');
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const yyyy = today.getFullYear();
-      const date = yyyy + '-' + mm + '-' + dd;
+      const dd = String(today.getDate()).padStart(2, '0')
+      const mm = String(today.getMonth() + 1).padStart(2, '0')
+      const yyyy = today.getFullYear()
+      const date = yyyy + '-' + mm + '-' + dd
 
       if (date === session.date && start < now && now < end) {
-        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
-        await fetch(url, {
+        await fetch('/api/sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {
@@ -448,9 +469,8 @@ export default {
     async canceledHandler(id, session) {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
-        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
-        await fetch(url, {
+        await fetch('/api/sessions/' + id + '/', {
           credentials: 'include',
           method: 'PATCH',
           headers: {

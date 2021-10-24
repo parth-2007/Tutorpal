@@ -13,7 +13,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import loggedInFetch from '../../utils/loggedInFetch'
+// import loggedInFetch from '../../utils/loggedInFetch'
 import { keysToCamel } from '../../utils/changeObjectNaming'
 
 export default {
@@ -25,14 +25,23 @@ export default {
   },
   computed: mapGetters({ user: 'getUser' }),
   async created() {
-    console.log('hi')
+    // console.log('hi')
     await this.fetchUser()
-    const response = await loggedInFetch(
-      'api/rooms/' + this.$route.params.id + '/',
-      {
-        credentials: 'include',
-      }
-    )
+    const response = await fetch('/api/rooms/' + this.$route.params.id + '/', {
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 403 || res.status === 404) {
+          return { unauthenticated: true }
+        } else if (res.status >= 400 && res.status < 600) {
+          return { error: 'server error', status: res.status }
+        }
+        return res.json()
+      })
+      .catch((e) => {
+        // console.warn(e)
+        return { error: 'client error' }
+      })
     if (response.error) {
       if (
         response.error === 'client error' ||
@@ -50,10 +59,12 @@ export default {
     if (this.getUser().isTutor) {
       const student = keysToCamel(response.student)
       this.otherUser = student.user
+      // console.log('otherUser', this.otherUser)
       // console.log('in the _id.vue: ', this.otherUser)
     } else if (this.getUser().isStudent) {
       const tutor = keysToCamel(response.tutor)
       this.otherUser = tutor.user
+      // console.log('otherUser', this.otherUser)
     }
   },
   methods: {

@@ -11,7 +11,11 @@ const getters = {
 const actions = {
   async fetchTrending({ commit, state }) {
     if (state.trending.unfetched) {
-      const trending = await fetch('https://api.tutorpal.org/tutors/trending/')
+      const trending = await fetch(
+        process.env.NODE_ENV === 'PROD'
+          ? 'https://api.tutorpal.org/tutors/trending/'
+          : 'http://localhost:5000/api/tutors/trending'
+      )
         .then((res) => {
           if (res.status >= 400 && res.status < 600) {
             return { error: 'server error' }
@@ -25,7 +29,11 @@ const actions = {
     }
   },
   async refreshTrending({ commit }) {
-    const trending = await fetch('https://api.tutorpal.org/tutors/trending/')
+    const trending = await fetch(
+      process.env.NODE_ENV === 'PROD'
+        ? 'https://api.tutorpal.org/tutors/trending/'
+        : 'http://localhost:5000/api/tutors/trending'
+    )
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {
           return { error: 'server error' }

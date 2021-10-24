@@ -4,9 +4,9 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <head>
-      <meta charset="utf-8" />
-    </head>
+      <head>
+        <meta charset="utf-8" />
+      </head>
       <div v-if="session.student_paid === true && session.started === false">
         <p style="font-size: 18px; font-family: Poppins; margin: 15px">
           This class has not been started yet, your job as a tutor is to start
@@ -15,10 +15,8 @@
       </div>
       <div
         v-else-if="session.student_paid === false || session.finished === true"
-      >
-      </div>
-      <div v-else-if="session.tutor_pk !== user.tutorPk">
-      </div>
+      ></div>
+      <div v-else-if="session.tutor_pk !== user.tutorPk"></div>
       <body
         v-else
         id="body"
@@ -40,7 +38,10 @@
             "
             class="tutordiv-block-23"
           >
-            <div v-if="session.student_joined === true && this.buttonShow===true" class="tutordiv-block-25">
+            <div
+              v-if="session.student_joined === true && this.buttonShow === true"
+              class="tutordiv-block-25"
+            >
               <strong
                 >You have {{ dateToString(timerDisplay) }} left in this class,
                 are you sure you want to end it?</strong
@@ -48,24 +49,34 @@
               <br />Clicking "confirm" will confirm to us that this class has
               been finished. You will be paid shortly after. Thank you for
               tutoring with TutorPal!
-              <button @click="endclass()" style="background-color: green; margin-left: 10px; margin-top: 10px; font-size: 14px;" class="tutorbutton-10-copy-copy w-button">Confirm</button>
+              <button
+                @click="endclass()"
+                style="
+                  background-color: green;
+                  margin-left: 10px;
+                  margin-top: 10px;
+                  font-size: 14px;
+                "
+                class="tutorbutton-10-copy-copy w-button"
+              >
+                Confirm
+              </button>
             </div>
             <div
               v-else-if="session.student_joined === false"
               style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
               Your student has not joined this class, therefore, we are not
-              allowing you to end it. If there are any issues, please
-              contact us at support@tutorpal.org. We are very sorry for the
-              inconvienence.
+              allowing you to end it. If there are any issues, please contact us
+              at support@tutorpal.org. We are very sorry for the inconvienence.
             </div>
             <div
               v-else-if="this.buttonShow === false"
               style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
-              You are only allowed to end this class during the last ten 
-              minutes of the meeting. We suggest continuing with the meeting 
-              until the last ten minutes. Thank you.
+              You are only allowed to end this class during the last ten minutes
+              of the meeting. We suggest continuing with the meeting until the
+              last ten minutes. Thank you.
             </div>
             ><button
               @click="updateModalValue()"
@@ -152,21 +163,52 @@
             </div>
           </div>
         </div>
-        <div style="float: right; font-family: Poppins; background-color:white; height:100%; width:23vw; margin-top:25px; margin-bottom:25px; margin-right:8px; border-radius:8px; padding:10px">
+        <div
+          style="
+            float: right;
+            font-family: Poppins;
+            background-color: white;
+            height: 100%;
+            width: 23vw;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            margin-right: 8px;
+            border-radius: 8px;
+            padding: 10px;
+          "
+        >
           <div>
-            <p style="font-size:16px;">Here are some tools you can use to help:</p>
-            <a target="_blank" href="https://www.google.com/docs/about/">Google Docs, Sheets, Forms, Slides</a>
-            <br>
-            <a target="_blank" href="https://jamboard.google.com/">Google Jamboard</a>
-            <br>
-            <a target="_blank" href="https://colab.research.google.com/notebooks/intro.ipynb">Google Colab</a>
-            <br>
-            <a target="_blank" href="https://docs.google.com/drawings/">Google Drawings</a>
-            <br>
+            <p style="font-size: 16px">
+              Here are some tools you can use to help:
+            </p>
+            <a target="_blank" href="https://www.google.com/docs/about/"
+              >Google Docs, Sheets, Forms, Slides</a
+            >
+            <br />
+            <a target="_blank" href="https://jamboard.google.com/"
+              >Google Jamboard</a
+            >
+            <br />
+            <a
+              target="_blank"
+              href="https://colab.research.google.com/notebooks/intro.ipynb"
+              >Google Colab</a
+            >
+            <br />
+            <a target="_blank" href="https://docs.google.com/drawings/"
+              >Google Drawings</a
+            >
+            <br />
             <a target="_blank" href="https://kahoot.com/">Kahoot</a>
-            <br>
+            <br />
             <a target="_blank" href="https://www.hackerrank.com/">Hackerrank</a>
-            <p style="margin-top:10px">Tips: 1) Leaving the call will NOT end this class as it is not directly connected to our platform. Remember to end the class by clicking the red button below. 2) Please do not need to share the meeting link with anybody, including the student. 3) The video calling system is most compatible with Google Chrome</p>
+            <p style="margin-top: 10px">
+              Tips: 1) Leaving the call will NOT end this class as it is not
+              directly connected to our platform. Remember to end the class by
+              clicking the red button below. 2) Please do not need to share the
+              meeting link with anybody, including the student. 3) The video
+              calling system is most compatible with Google Chrome
+            </p>
             <h1
               style="
                 font-family: Poppins;
@@ -178,7 +220,7 @@
             >
               <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
             </h1>
-             <button
+            <button
               @click="updateModalValue()"
               class="tutorbutton-10-copy-copy w-button"
               style="
@@ -221,10 +263,22 @@ export default {
     return {
       title: 'Tutor Workspace',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   computed: {
@@ -238,7 +292,11 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser', pastSessions: 'getPastSessions', startedSessions: 'getStartedSessions' }),
+    ...mapGetters({
+      user: 'getUser',
+      pastSessions: 'getPastSessions',
+      startedSessions: 'getStartedSessions',
+    }),
   },
   watch: {
     timerCount: {
@@ -251,9 +309,9 @@ export default {
             }
           }, 1000)
         } else if (value === 600) {
-            alert(
-              'You can now end this class. There are still ten minutes remaining in your meeting.'
-            )
+          alert(
+            'You can now end this class. There are still ten minutes remaining in your meeting.'
+          )
         } else if (value === 0) {
           alert("This meeting's time is up, please end the meeting shortly.")
         }
@@ -265,9 +323,7 @@ export default {
     },
   },
   async created() {
-    const url =
-      'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
-    this.session = await fetch(url, {
+    this.session = await fetch('/api/sessions/' + this.$route.params.id + '/', {
       credentials: 'include',
     }).then((res) => {
       if (res.status === 500) {
@@ -304,7 +360,7 @@ export default {
     },
     async updateModalValue() {
       this.session = await fetch(
-        'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/',
+        '/api/sessions/' + this.$route.params.id + '/',
         {
           credentials: 'include',
         }
@@ -317,8 +373,7 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass() {
-      const url ='https://api.tutorpal.org/finish_session/' + this.$route.params.id + '/'
-      await fetch(url, {
+      await fetch('/api/finish_session/' + this.$route.params.id + '/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -331,8 +386,13 @@ export default {
         this.$router.push('/')
       })
     },
-    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession', 'addSession']),
-    ...mapGetters(['getPastSessions', 'getStartedSessions'])
+    ...mapActions([
+      'fetchUser',
+      'fetchSessions',
+      'removeSession',
+      'addSession',
+    ]),
+    ...mapGetters(['getPastSessions', 'getStartedSessions']),
   },
 }
 </script>
