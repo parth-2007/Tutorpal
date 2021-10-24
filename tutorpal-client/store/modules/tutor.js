@@ -15,7 +15,7 @@ const actions = {
       const tutor = await fetch(
         process.env.NODE_ENV === 'PROD'
           ? 'https://api.tutorpal.org/tutors/me/'
-          : 'http://localhost:5000/tutors/me/',
+          : 'http://localhost:5000/api/tutors/me/',
         {
           credentials: 'include',
         }
