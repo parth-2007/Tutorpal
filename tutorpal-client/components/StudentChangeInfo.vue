@@ -379,7 +379,7 @@ export default {
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
-      await fetch('/api/reviews/', {
+      await fetch(process.env.API_URL + '/reviews/', {
         credentials: 'include',
         method: 'POST',
         headers: {

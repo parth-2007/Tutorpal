@@ -377,14 +377,17 @@ export default {
             birth_date: this.birthDate,
           })
         )
-        const data = await fetch('/api/auth/register-student/', {
-          credentials: 'include',
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': (await getCSRF()).success,
-          },
-          body: formData,
-        })
+        const data = await fetch(
+          process.env.API_URL + '/auth/register-student/',
+          {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': (await getCSRF()).success,
+            },
+            body: formData,
+          }
+        )
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('

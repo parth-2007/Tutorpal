@@ -12,14 +12,9 @@ const getters = {
 const actions = {
   async fetchContacts({ commit, state }) {
     if (state.contacts.unfetched) {
-      const contacts = await fetch(
-        process.env.NODE_ENV === 'PROD'
-          ? 'https://api.tutorpal.org/rooms/'
-          : 'http://localhost:5000/api/rooms/',
-        {
-          credentials: 'include',
-        }
-      )
+      const contacts = await fetch(process.env.API_URL + '/rooms/', {
+        credentials: 'include',
+      })
         .then((res) => {
           if (res.status === 403 || res.status === 404) {
             return { unauthenticated: true }
@@ -36,14 +31,9 @@ const actions = {
     }
   },
   async refreshContacts({ commit }) {
-    const contacts = await fetch(
-      process.env.NODE_ENV === 'PROD'
-        ? 'https://api.tutorpal.org/rooms/'
-        : 'http://localhost:5000/api/rooms/',
-      {
-        credentials: 'include',
-      }
-    )
+    const contacts = await fetch(process.env.API_URL + '/rooms/', {
+      credentials: 'include',
+    })
       .then((res) => {
         if (res.status === 403 || res.status === 404) {
           return { unauthenticated: true }

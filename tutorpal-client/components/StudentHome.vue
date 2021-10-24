@@ -390,7 +390,7 @@ export default {
     },
     async joinSession(id) {
       const csrfToken = await getCSRF()
-      await fetch('/api/sessions/' + id + '/', {
+      await fetch(process.env.API_URL + '/sessions/' + id + '/', {
         credentials: 'include',
         method: 'PATCH',
         headers: {
@@ -408,7 +408,7 @@ export default {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
         const csrfToken = await getCSRF()
-        await fetch('/api/sessions/' + id + '/', {
+        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {

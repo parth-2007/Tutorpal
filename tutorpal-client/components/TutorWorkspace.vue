@@ -39,7 +39,7 @@
             class="tutordiv-block-23"
           >
             <div
-              v-if="session.student_joined === true && this.buttonShow === true"
+              v-if="session.student_joined === true && buttonShow === true"
               class="tutordiv-block-25"
             >
               <strong
@@ -71,7 +71,7 @@
               at support@tutorpal.org. We are very sorry for the inconvienence.
             </div>
             <div
-              v-else-if="this.buttonShow === false"
+              v-else-if="buttonShow === false"
               style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
               You are only allowed to end this class during the last ten minutes
@@ -323,9 +323,12 @@ export default {
     },
   },
   async created() {
-    this.session = await fetch('/api/sessions/' + this.$route.params.id + '/', {
-      credentials: 'include',
-    }).then((res) => {
+    this.session = await fetch(
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => {
       if (res.status === 500) {
         this.$router.push('/')
       }
@@ -360,7 +363,7 @@ export default {
     },
     async updateModalValue() {
       this.session = await fetch(
-        '/api/sessions/' + this.$route.params.id + '/',
+        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
         {
           credentials: 'include',
         }
@@ -373,14 +376,17 @@ export default {
       this.clicked1 = !this.clicked1
     },
     async endclass() {
-      await fetch('/api/finish_session/' + this.$route.params.id + '/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'X-CSRFToken': (await getCSRF()).success,
-          'Content-Type': 'application/json',
-        },
-      }).then(() => {
+      await fetch(
+        process.env.API_URL + '/finish_session/' + this.$route.params.id + '/',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'X-CSRFToken': (await getCSRF()).success,
+            'Content-Type': 'application/json',
+          },
+        }
+      ).then(() => {
         this.removeSession([this.session, 'startedSessions'])
         this.addSession([this.session, 'pastSessions'])
         this.$router.push('/')

@@ -177,25 +177,31 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   async created() {
-    this.session = await fetch('/api/sessions/' + this.$route.params.id + '/', {
-      credentials: 'include',
-    }).then((res) => {
+    this.session = await fetch(
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => {
       if (res.status === 500) {
         this.$router.push('/')
       }
       return res.json()
     })
-    await fetch('/api/sessions/' + this.$route.params.id + '/', {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: {
-        'X-CSRFToken': (await getCSRF()).success,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        student_joined: true,
-      }),
-    })
+    await fetch(
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+      {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'X-CSRFToken': (await getCSRF()).success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          student_joined: true,
+        }),
+      }
+    )
     await this.fetchUser()
   },
   methods: {

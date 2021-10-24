@@ -57,7 +57,8 @@ export default {
         this.error = 'Password and Confirm password should match.'
       } else {
         await fetch(
-          `/api/auth/password-reset/${this.$route.params.uid}/${this.$route.params.token}/`,
+          process.env.API_URL +
+            `/api/auth/password-reset/${this.$route.params.uid}/${this.$route.params.token}/`,
           {
             credentials: 'include',
             method: 'POST',

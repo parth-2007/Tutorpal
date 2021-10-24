@@ -27,9 +27,12 @@ export default {
   async created() {
     // console.log('hi')
     await this.fetchUser()
-    const response = await fetch(`/api/rooms/${this.$route.params.id}/`, {
-      credentials: 'include',
-    })
+    const response = await fetch(
+      process.env.API_URL + `/rooms/${this.$route.params.id}/`,
+      {
+        credentials: 'include',
+      }
+    )
       .then((res) => {
         if (res.status === 403 || res.status === 404) {
           return { unauthenticated: true }

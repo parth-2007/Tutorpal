@@ -286,7 +286,7 @@ export default {
     async canceledHandler(id, session) {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
-        await fetch('/api/sessions/' + id + '/', {
+        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {

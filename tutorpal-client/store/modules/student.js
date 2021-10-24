@@ -12,14 +12,9 @@ const getters = {
 const actions = {
   async fetchStudent({ commit, state }) {
     if (state.student.unfetched) {
-      const student = await fetch(
-        process.env.NODE_ENV === 'PROD'
-          ? 'https://api.tutorpal.org/students/me/'
-          : 'http://localhost:5000/api/students/me/',
-        {
-          credentials: 'include',
-        }
-      )
+      const student = await fetch(process.env.API_URL + '/students/me/', {
+        credentials: 'include',
+      })
         .then((res) => {
           if (res.status === 403 || res.status === 404) {
             return { unauthenticated: true }
@@ -36,14 +31,9 @@ const actions = {
     }
   },
   async refreshStudent({ commit }) {
-    const student = await fetch(
-      process.env.NODE_ENV === 'PROD'
-        ? 'https://api.tutorpal.org/students/me/'
-        : 'http://localhost:5000/api/students/me/',
-      {
-        credentials: 'include',
-      }
-    )
+    const student = await fetch(process.env.API_URL + '/students/me/', {
+      credentials: 'include',
+    })
       .then((res) => {
         if (res.status === 403 || res.status === 404) {
           return { unauthenticated: true }

@@ -168,7 +168,7 @@ export default {
   },
   async fetch() {
     const id = parseInt(this.$route.params.id)
-    this.session = await fetch('/api/sessions/' + id + '/', {
+    this.session = await fetch(process.env.API_URL + '/sessions/' + id + '/', {
       credentials: 'include',
     }).then((res) => {
       if (res.status === 500) {
@@ -262,28 +262,37 @@ export default {
           },
           onApprove: async (data) => {
             const csrfToken = await getCSRF()
-            await fetch('/api/capture_order/' + this.$route.params.id + '/', {
-              credentials: 'include',
-              method: 'POST',
-              headers: {
-                'X-CSRFToken': csrfToken.success,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                order_id: data.orderID,
-              }),
-            })
-            await fetch('/api/sessions/' + this.$route.params.id + '/', {
-              credentials: 'include',
-              method: 'PATCH',
-              headers: {
-                'X-CSRFToken': csrfToken.success,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                student_paid: true,
-              }),
-            })
+            await fetch(
+              process.env.API_URL +
+                '/capture_order/' +
+                this.$route.params.id +
+                '/',
+              {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                  'X-CSRFToken': csrfToken.success,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  order_id: data.orderID,
+                }),
+              }
+            )
+            await fetch(
+              process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+              {
+                credentials: 'include',
+                method: 'PATCH',
+                headers: {
+                  'X-CSRFToken': csrfToken.success,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  student_paid: true,
+                }),
+              }
+            )
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')

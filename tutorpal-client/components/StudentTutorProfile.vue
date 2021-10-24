@@ -359,9 +359,12 @@ export default {
     }
   },
   async fetch() {
-    this.data = await fetch('/api/tutors/' + this.$route.params.id + '/', {
-      credentials: 'include',
-    }).then((res) => res.json())
+    this.data = await fetch(
+      process.env.API_URL + '/tutors/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json())
     await this.fetchUser()
   },
   head() {
@@ -400,7 +403,8 @@ export default {
     ...mapGetters({ user: 'getUser', pendingOnTutor: 'getPendingOnTutor' }),
   },
   async created() {
-    const url = 'api/tutors/' + this.$route.params.id + '/reviews/'
+    const url =
+      process.env.API_URL + '/tutors/' + this.$route.params.id + '/reviews/'
     this.reviews = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
@@ -432,7 +436,7 @@ export default {
         student: parseInt(this.user.studentPk),
       }
       const csrfToken = await getCSRF()
-      await fetch('/api/rooms/', {
+      await fetch(process.env.API_URL + '/rooms/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -487,7 +491,7 @@ export default {
       }
       const csrfToken = await getCSRF()
       this.addSession([sessionData, 'pendingOnTutor'])
-      await fetch('/api/sessions/', {
+      await fetch(process.env.API_URL + '/sessions/', {
         method: 'POST',
         credentials: 'include',
         headers: {

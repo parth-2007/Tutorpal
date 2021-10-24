@@ -30,13 +30,7 @@ const actions = {
   async fetchSessions({ commit, state }, sessionName) {
     if (state[sessionName].unfetched) {
       const sessions = await fetch(
-        process.env.NODE_ENV === 'PROD'
-          ? `https://api.tutorpal.org/sessions/${camelToSnakeCase(
-              sessionName
-            )}/`
-          : `http://localhost:5000/api/sessions/${camelToSnakeCase(
-              sessionName
-            )}/`,
+        process.env.API_URL + `/sessions/${camelToSnakeCase(sessionName)}/`,
         {
           credentials: 'include',
         }
@@ -58,11 +52,7 @@ const actions = {
   },
   async refreshSessions({ commit }, sessionName) {
     const sessions = await fetch(
-      process.env.NODE_ENV === 'PROD'
-        ? `https://api.tutorpal.org/sessions/${camelToSnakeCase(sessionName)}/`
-        : `http://localhost:5000/api/sessions/${camelToSnakeCase(
-            sessionName
-          )}/`,
+      process.env.API_URL + `/sessions/${camelToSnakeCase(sessionName)}/`,
       {
         credentials: 'include',
       }
