@@ -161,7 +161,7 @@ export default {
 
   async created() {
     this.response = await fetch(
-      process.env.API_URL + 'rooms/' + this.$route.params.id + '/messages/',
+      process.env.API_URL + '/rooms/' + this.$route.params.id + '/messages/',
       {
         credentials: 'include',
       }
