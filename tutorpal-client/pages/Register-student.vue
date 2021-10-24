@@ -378,7 +378,7 @@ export default {
           })
         )
         const data = await fetch(
-          process.env.API_URL + 'auth/register-student/',
+          process.env.API_URL + '/auth/register-student/',
           {
             credentials: 'include',
             method: 'POST',

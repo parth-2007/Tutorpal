@@ -19,7 +19,7 @@ const getCSRF = async () => {
   if (csrfToken !== null && csrfToken !== undefined) {
     return { success: csrfToken }
   } else {
-    const resp = await fetch(process.env.API_URL + 'auth/ensure-csrf/', {
+    const resp = await fetch(process.env.API_URL + '/auth/ensure-csrf/', {
       credentials: 'include',
     })
       .then((res) => {

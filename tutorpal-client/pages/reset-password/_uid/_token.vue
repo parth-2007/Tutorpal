@@ -58,7 +58,7 @@ export default {
       } else {
         await fetch(
           process.env.API_URL +
-            'auth/password-reset/' +
+            '/auth/password-reset/' +
             this.$route.params.uid +
             '/' +
             this.$route.params.token +

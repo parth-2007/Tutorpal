@@ -142,7 +142,7 @@ export default {
   },
   async created() {
     const tutorData = await fetch(
-      process.env.API_URL + 'tutors/search/?q=' + this.$route.query.q + '/',
+      process.env.API_URL + '/tutors/search/?q=' + this.$route.query.q + '/',
       {
         credentials: 'include',
       }

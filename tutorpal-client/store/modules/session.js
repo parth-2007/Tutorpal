@@ -30,7 +30,10 @@ const actions = {
   async fetchSessions({ commit, state }, sessionName) {
     if (state[sessionName].unfetched) {
       const sessions = await fetch(
-        process.env.API_URL + 'sessions/' + camelToSnakeCase(sessionName) + '/',
+        process.env.API_URL +
+          '/sessions/' +
+          camelToSnakeCase(sessionName) +
+          '/',
         {
           credentials: 'include',
         }
@@ -52,7 +55,7 @@ const actions = {
   },
   async refreshSessions({ commit }, sessionName) {
     const sessions = await fetch(
-      process.env.API_URL + 'sessions/' + camelToSnakeCase(sessionName) + '/',
+      process.env.API_URL + '/sessions/' + camelToSnakeCase(sessionName) + '/',
       {
         credentials: 'include',
       }

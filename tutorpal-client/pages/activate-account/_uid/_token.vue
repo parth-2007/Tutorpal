@@ -12,7 +12,7 @@ export default {
   async created() {
     await fetch(
       process.env.API_URL +
-        'auth/activate-account/' +
+        '/auth/activate-account/' +
         this.$route.params.uid +
         '/' +
         this.$route.params.token +

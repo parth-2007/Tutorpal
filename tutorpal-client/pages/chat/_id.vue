@@ -28,7 +28,7 @@ export default {
     // console.log('hi')
     await this.fetchUser()
     const response = await fetch(
-      process.env.API_URL + 'rooms/' + this.$route.params.id + '/',
+      process.env.API_URL + '/rooms/' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }

@@ -179,7 +179,7 @@ export default {
         formData.append('email', this.email)
         formData.append('password', this.password)
         const csrfToken = await getCSRF()
-        const data = await fetch(process.env.API_URL + 'auth/login/', {
+        const data = await fetch(process.env.API_URL + '/auth/login/', {
           credentials: 'include',
           method: 'POST',
           headers: {

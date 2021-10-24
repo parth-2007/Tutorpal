@@ -11,7 +11,7 @@ const getters = {
 const actions = {
   async fetchTrending({ commit, state }) {
     if (state.trending.unfetched) {
-      const trending = await fetch(process.env.API_URL + 'tutors/trending')
+      const trending = await fetch(process.env.API_URL + '/tutors/trending')
         .then((res) => {
           if (res.status >= 400 && res.status < 600) {
             return { error: 'server error' }
@@ -25,7 +25,7 @@ const actions = {
     }
   },
   async refreshTrending({ commit }) {
-    const trending = await fetch(process.env.API_URL + 'tutors/trending')
+    const trending = await fetch(process.env.API_URL + '/tutors/trending')
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {
           return { error: 'server error' }

@@ -368,7 +368,7 @@ export default {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
         const csrfToken = await getCSRF()
-        await fetch(process.env.API_URL + 'sessions/' + id + '/', {
+        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {

@@ -98,7 +98,7 @@ export default {
   methods: {
     async feedbackhandler(e) {
       e.preventDefault()
-      await fetch(process.env.API_URL + 'feedback/', {
+      await fetch(process.env.API_URL + '/feedback/', {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -117,7 +117,7 @@ export default {
   methods: {
     async bugformhandler() {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + 'bugs/', {
+      await fetch(process.env.API_URL + '/bugs/', {
         method: 'POST',
         credentials: 'include',
         headers: {

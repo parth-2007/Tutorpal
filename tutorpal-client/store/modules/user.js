@@ -12,7 +12,7 @@ const getters = {
 const actions = {
   async fetchUser({ commit, state }) {
     if (state.user.unfetched) {
-      const user = await fetch(process.env.API_URL + 'users/me/', {
+      const user = await fetch(process.env.API_URL + '/users/me/', {
         credentials: 'include',
       })
         .then((res) => {
@@ -30,7 +30,7 @@ const actions = {
     }
   },
   async refreshUser({ commit }) {
-    const user = await fetch(process.env.API_URL + 'users/me/', {
+    const user = await fetch(process.env.API_URL + '/users/me/', {
       credentials: 'include',
     })
       .then((res) => {
@@ -48,7 +48,7 @@ const actions = {
     commit('setUser', keysToCamel(user))
   },
   async logoutUser({ commit }) {
-    await fetch(process.env.API_URL + 'auth/logout/', {
+    await fetch(process.env.API_URL + '/auth/logout/', {
       credentials: 'include',
     })
       .then((res) => {

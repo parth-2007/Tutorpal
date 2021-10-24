@@ -178,7 +178,7 @@ export default {
   },
   async created() {
     this.session = await fetch(
-      process.env.API_URL + 'sessions/' + this.$route.params.id + '/',
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }
@@ -189,7 +189,7 @@ export default {
       return res.json()
     })
     await fetch(
-      process.env.API_URL + 'sessions/' + this.$route.params.id + '/',
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
         method: 'PATCH',
         credentials: 'include',
