@@ -191,7 +191,7 @@
             </button>
           </div>
         </div>
-        <div id="jitsi-container">
+        <div id="jitsi-container"></div>
       </body>
     </html>
   </client-only>
