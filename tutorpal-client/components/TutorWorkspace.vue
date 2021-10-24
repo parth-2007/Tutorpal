@@ -67,7 +67,7 @@
               minutes of the meeting. We suggest continuing with the meeting 
               until the last ten minutes. Thank you.
             </div>
-            <button
+            ><button
               @click="updateModalValue()"
               style="
                 background-color: #bb0a1e;
@@ -191,7 +191,11 @@
             </button>
           </div>
         </div>
-        <div id="jitsi-container"></div>
+        <iframe
+          style="width: 75vw; height: 100vh"
+          allow="camera;microphone"
+          :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
+        ></iframe>
       </body>
     </html>
   </client-only>
@@ -201,7 +205,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { sub, str } from 'timelite/time'
 import getCSRF from '../utils/getCSRF'
 import dateToString from '../utils/dateToString'
-
 export default {
   data() {
     return {
@@ -222,26 +225,6 @@ export default {
         { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
-  },
-  mounted() {
-    const script = document.createElement('script')
-    script.src = 'https://meet.jit.si/external_api.js'
-    script.addEventListener('load', this.setLoaded)
-    document.body.appendChild(script)
-    var container = document.querySelector('#jitsi-container');
-    var api = null;
-    var roomurl = this.session.call_url;
-    var domain = "meet.jit.si";
-    var options = {
-        "roomName": roomurl,
-        "parentNode": container,
-        "width": window.innerWidth -20,
-        "height": window.innerHeight -20 ,
-        userInfo: {
-          displayName: this.user.firstName + " " + this.user.lastName
-        }
-    };
-    api = new JitsiMeetExternalAPI(domain, options);
   },
   computed: {
     logout() {
@@ -271,7 +254,7 @@ export default {
               'You can now end this class. There are still ten minutes remaining in your meeting.'
             )
         } else if (value === 0) {
-          alert("This meeting's time is up, please end the meeting shortly.")
+            alert("This meeting's time is up, please end the meeting shortly.")
         }
         const t = new Date(1970, 0, 1)
         t.setSeconds(value)
@@ -292,6 +275,7 @@ export default {
       return res.json()
     })
     const time = new Date()
+    const classTime = new Date(this.session.date)
     let hours = time.getHours()
     let minutes = time.getMinutes()
     let seconds = time.getSeconds()
@@ -304,11 +288,13 @@ export default {
     }
     const now = hours + ':' + minutes + ':' + seconds
     const hms = str(sub([this.session.time_end, now]))
-    console.log(this.session.time_end, now, hms)
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    console.log(a, timerSeconds)
-    this.timerCount = timerSeconds
+    if (time > classTime){
+      this.timerCount = 0
+    } else {
+      this.timerCount = timerSeconds
+    }
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
@@ -372,4 +358,3 @@ export default {
 }
 </style>
  
-
