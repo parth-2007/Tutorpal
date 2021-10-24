@@ -679,17 +679,14 @@ export default {
         }
         formData.append('tutor', JSON.stringify(tutor))
 
-        const data = await fetch(
-          process.env.API_URL + '/auth/register-tutor/',
-          {
-            credentials: 'include',
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': getCSRF(),
-            },
-            body: formData,
-          }
-        )
+        const data = await fetch(process.env.API_URL + 'auth/register-tutor/', {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCSRF(),
+          },
+          body: formData,
+        })
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('

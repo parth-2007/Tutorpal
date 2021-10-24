@@ -121,7 +121,9 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                    <span v-if="user.unread > 0" class="badge">{{ user.unread }}</span> </router-link
+                    <span v-if="user.unread > 0" class="badge">{{
+                      user.unread
+                    }}</span> </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -390,7 +392,7 @@ export default {
     },
     async joinSession(id) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+      await fetch(process.env.API_URL + 'sessions/' + id + '/', {
         credentials: 'include',
         method: 'PATCH',
         headers: {
@@ -408,7 +410,7 @@ export default {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
         const csrfToken = await getCSRF()
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+        await fetch(process.env.API_URL + 'sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {

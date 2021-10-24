@@ -153,13 +153,13 @@ export default {
   },
   async fetch() {
     this.data = await fetch(
-      process.env.API_URL + '/tutors/' + this.$route.params.id + '/',
+      process.env.API_URL + 'tutors/' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }
     ).then((res) => res.json())
     this.reviews = await fetch(
-      process.env.API_URL + '/tutors/' + this.$route.params.id + '/reviews/',
+      process.env.API_URL + 'tutors/' + this.$route.params.id + '/reviews/',
       {
         credentials: 'include',
       }

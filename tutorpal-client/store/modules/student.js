@@ -12,7 +12,7 @@ const getters = {
 const actions = {
   async fetchStudent({ commit, state }) {
     if (state.student.unfetched) {
-      const student = await fetch(process.env.API_URL + '/students/me/', {
+      const student = await fetch(process.env.API_URL + 'students/me/', {
         credentials: 'include',
       })
         .then((res) => {
@@ -31,7 +31,7 @@ const actions = {
     }
   },
   async refreshStudent({ commit }) {
-    const student = await fetch(process.env.API_URL + '/students/me/', {
+    const student = await fetch(process.env.API_URL + 'students/me/', {
       credentials: 'include',
     })
       .then((res) => {

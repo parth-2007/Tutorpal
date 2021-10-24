@@ -207,7 +207,7 @@ export default {
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
           const data = await fetch(
-            process.env.API_URL + '/auth/update-student/',
+            process.env.API_URL + 'auth/update-student/',
             {
               credentials: 'include',
               method: 'PATCH',

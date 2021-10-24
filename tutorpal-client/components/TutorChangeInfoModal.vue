@@ -398,17 +398,14 @@ export default {
             'user',
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
-          const data = await fetch(
-            process.env.API_URL + '/auth/update-tutor/',
-            {
-              credentials: 'include',
-              method: 'PATCH',
-              headers: {
-                'X-CSRFToken': csrfToken.success,
-              },
-              body: formData,
-            }
-          )
+          const data = await fetch(process.env.API_URL + 'auth/update-tutor/', {
+            credentials: 'include',
+            method: 'PATCH',
+            headers: {
+              'X-CSRFToken': csrfToken.success,
+            },
+            body: formData,
+          })
             .then((res) => {
               if (res.status >= 400 && res.status < 600) {
                 this.errors.global = 'Something went wrong :('

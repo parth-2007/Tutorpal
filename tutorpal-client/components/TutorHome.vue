@@ -372,7 +372,7 @@ export default {
   async created() {
     await this.fetchSessions('startedSessions')
     this.requests1 = await fetch(
-      process.env.API_URL + '/sessions/pending_on_tutor/',
+      process.env.API_URL + 'sessions/pending_on_tutor/',
       {
         credentials: 'include',
       }
@@ -402,7 +402,7 @@ export default {
     },
     async accept(id, session) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+      await fetch(process.env.API_URL + 'sessions/' + id + '/', {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -417,7 +417,7 @@ export default {
     },
     async deny(id, session) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+      await fetch(process.env.API_URL + 'sessions/' + id + '/', {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -446,7 +446,7 @@ export default {
 
       if (date === session.date && start < now && now < end) {
         const csrfToken = await getCSRF()
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+        await fetch(process.env.API_URL + 'sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {
@@ -473,7 +473,7 @@ export default {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
         const csrfToken = await getCSRF()
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+        await fetch(process.env.API_URL + 'sessions/' + id + '/', {
           credentials: 'include',
           method: 'PATCH',
           headers: {

@@ -12,7 +12,7 @@ const getters = {
 const actions = {
   async fetchContacts({ commit, state }) {
     if (state.contacts.unfetched) {
-      const contacts = await fetch(process.env.API_URL + '/rooms/', {
+      const contacts = await fetch(process.env.API_URL + 'rooms/', {
         credentials: 'include',
       })
         .then((res) => {
@@ -31,7 +31,7 @@ const actions = {
     }
   },
   async refreshContacts({ commit }) {
-    const contacts = await fetch(process.env.API_URL + '/rooms/', {
+    const contacts = await fetch(process.env.API_URL + 'rooms/', {
       credentials: 'include',
     })
       .then((res) => {

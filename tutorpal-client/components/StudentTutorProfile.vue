@@ -221,7 +221,9 @@
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages<span v-if="user.unread > 0" class="badge">{{ user.unread }}</span></router-link
+                      >Messages<span v-if="user.unread > 0" class="badge">{{
+                        user.unread
+                      }}</span></router-link
                     ><router-link to="/requests" class="nav-link-4 w-nav-link"
                       >Requests</router-link
                     ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -358,7 +360,7 @@ export default {
   },
   async fetch() {
     this.data = await fetch(
-      process.env.API_URL + '/tutors/' + this.$route.params.id + '/',
+      process.env.API_URL + 'tutors/' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }
@@ -402,7 +404,7 @@ export default {
   },
   async created() {
     const url =
-      process.env.API_URL + '/tutors/' + this.$route.params.id + '/reviews/'
+      process.env.API_URL + 'tutors/' + this.$route.params.id + '/reviews/'
     this.reviews = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
@@ -434,7 +436,7 @@ export default {
         student: parseInt(this.user.studentPk),
       }
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + '/rooms/', {
+      await fetch(process.env.API_URL + 'rooms/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -489,7 +491,7 @@ export default {
       }
       const csrfToken = await getCSRF()
       this.addSession([sessionData, 'pendingOnTutor'])
-      await fetch(process.env.API_URL + '/sessions/', {
+      await fetch(process.env.API_URL + 'sessions/', {
         method: 'POST',
         credentials: 'include',
         headers: {

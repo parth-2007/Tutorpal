@@ -323,7 +323,7 @@ export default {
   },
   async created() {
     this.session = await fetch(
-      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+      process.env.API_URL + 'sessions/' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }
@@ -365,7 +365,7 @@ export default {
     },
     async updateModalValue() {
       this.session = await fetch(
-        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+        process.env.API_URL + 'sessions/' + this.$route.params.id + '/',
         {
           credentials: 'include',
         }
@@ -379,7 +379,7 @@ export default {
     },
     async endclass() {
       await fetch(
-        process.env.API_URL + '/finish_session/' + this.$route.params.id + '/',
+        process.env.API_URL + 'finish_session/' + this.$route.params.id + '/',
         {
           method: 'POST',
           credentials: 'include',

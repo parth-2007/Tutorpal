@@ -121,7 +121,9 @@
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                       >Messages
-                      <span v-if="user.unread > 0" class="badge">{{ user.unread }}</span> </router-link
+                      <span v-if="user.unread > 0" class="badge">{{
+                        user.unread
+                      }}</span> </router-link
                     ><router-link
                       to="/requests"
                       class="nav-link-4 w-nav-link w--current"
@@ -168,7 +170,7 @@ export default {
   },
   async fetch() {
     const id = parseInt(this.$route.params.id)
-    this.session = await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+    this.session = await fetch(process.env.API_URL + 'sessions/' + id + '/', {
       credentials: 'include',
     }).then((res) => {
       if (res.status === 500) {
@@ -264,7 +266,7 @@ export default {
             const csrfToken = await getCSRF()
             await fetch(
               process.env.API_URL +
-                '/capture_order/' +
+                'capture_order/' +
                 this.$route.params.id +
                 '/',
               {
@@ -280,7 +282,7 @@ export default {
               }
             )
             await fetch(
-              process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+              process.env.API_URL + 'sessions/' + this.$route.params.id + '/',
               {
                 credentials: 'include',
                 method: 'PATCH',

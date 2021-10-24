@@ -161,7 +161,7 @@ export default {
 
   async created() {
     this.response = await fetch(
-      process.env.API_URL + '/rooms/' + this.$route.params.id + '/messages/',
+      process.env.API_URL + 'rooms/' + this.$route.params.id + '/messages/',
       {
         credentials: 'include',
       }
@@ -221,8 +221,11 @@ export default {
     },
     connect() {
       const chatMsgs = this.chatMsgs
-      const endpoint =
-        'wss://chat.tutorpal.org/ws/chat/' + this.$route.params.id + '/'
+      const host =
+        process.env.API_URL === 'https://api.tutorpal.org'
+          ? 'wss://chat.tutorpal.org'
+          : 'ws://localhost:8080'
+      const endpoint = host + '/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
         const chatDataMsg = JSON.parse(e.data)

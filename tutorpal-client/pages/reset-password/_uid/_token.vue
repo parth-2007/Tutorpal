@@ -58,7 +58,11 @@ export default {
       } else {
         await fetch(
           process.env.API_URL +
-            `/api/auth/password-reset/${this.$route.params.uid}/${this.$route.params.token}/`,
+            'auth/password-reset/' +
+            this.$route.params.uid +
+            '/' +
+            this.$route.params.token +
+            '/',
           {
             credentials: 'include',
             method: 'POST',
