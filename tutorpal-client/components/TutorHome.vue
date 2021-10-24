@@ -95,7 +95,7 @@
                     >Requests</router-link
                   ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
                     >Messages
-                    <span class="tutorbadge">{{
+                    <span v-if="user.unread > 0" class="tutorbadge">{{
                       user.unread
                     }}</span> </router-link
                   ><router-link

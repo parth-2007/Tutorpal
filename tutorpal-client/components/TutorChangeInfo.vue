@@ -117,7 +117,7 @@ T<template>
                     to="/inbox"
                     class="tutornav-link-4 w-nav-link"
                     >Messages
-                    <span class="tutorbadge">{{user.unread}}</span>
+                    <span v-if="user.unread > 0" class="tutorbadge">{{ user.unread }}</span>
                     </router-link
                   ><router-link to="/payments" class="tutornav-link-4 w-nav-link"
                     >Payments</router-link
@@ -167,12 +167,9 @@ T<template>
                 {{ tutor.education }}<br /><strong
                   >Working/Subject Experience:</strong
                 >
-                {{ tutor.profExp }}<br /><strong>Teaching Experience: </strong>9
+                {{ tutor.profExp }} years<br /><strong>Teaching Experience: </strong>{{ tutor.teachExp }}
                 years<br /><strong>Average Review:</strong>
-                {{ tutor.averageReviews }}<br /><strong
-                  >Number of classes taught:</strong
-                >
-                {{ tutor.numClasses }}<br /><strong>Occupation:</strong>
+                {{ tutor.averageReviews }}<br />
                 {{ tutor.occupation }}<br /><strong>Price: </strong>${{
                   tutor.rates
                 }}

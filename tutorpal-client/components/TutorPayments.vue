@@ -78,34 +78,34 @@
               </div>
             </div>
           </div>
-          <div class="tutordiv-block-6">
-            <div
-              data-collapse="none"
-              data-animation="default"
-              data-duration="400"
-              role="banner"
-              class="tutornavbar-2 w-nav"
-            >
-              <div class="tutorcontainer-2 w-container">
-                <nav role="navigation" class="tutornav-menu-3 w-nav-menu">
-                  <router-link
-                    to="/"
-                    aria-current="page"
-                    class="tutornav-link-4 w-nav-link"
-                    >Requests</router-link
-                  ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
-                    >Messages<span class="tutorbadge">{{
-                      user.unread
-                    }}</span></router-link
-                  ><router-link
-                    to="/payments"
-                    class="tutornav-link-4 w-nav-link w--current"
-                    >Payments</router-link
-                  >
-                </nav>
-                <div class="tutormenu-button-2 w-nav-button">
-                  <div class="tutoricon-2 w-icon-nav-menu"></div>
-                </div>
+        </div>
+        <div class="tutordiv-block-6">
+          <div
+            data-collapse="none"
+            data-animation="default"
+            data-duration="400"
+            role="banner"
+            class="tutornavbar-2 w-nav"
+          >
+            <div class="tutorcontainer-2 w-container">
+              <nav role="navigation" class="tutornav-menu-3 w-nav-menu">
+                <router-link
+                  to="/"
+                  aria-current="page"
+                  class="tutornav-link-4 w-nav-link"
+                  >Requests</router-link
+                ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
+                  >Messages<span v-if="user.unread > 0" class="tutorbadge">{{
+                    user.unread
+                  }}</span></router-link
+                ><router-link
+                  to="/payments"
+                  class="tutornav-link-4 w-nav-link w--current"
+                  >Payments</router-link
+                >
+              </nav>
+              <div class="tutormenu-button-2 w-nav-button">
+                <div class="tutoricon-2 w-icon-nav-menu"></div>
               </div>
             </div>
           </div>

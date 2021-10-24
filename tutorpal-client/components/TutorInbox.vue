@@ -80,7 +80,7 @@
         <div v-if="contacts.unfetched === undefined">
           <div v-for="contact in contacts" :key="contact.id" class="tutorloop">
             <div style="padding-bottom: 5px; padding-top: 5px; " class="tutoritem-2">
-              <span class="tutorbadge">{{contact.unread}}</span>
+              <span class="tutorbadge">{{ contact.unread }}</span>
               <div class="tutordiv-block-78">
                 <div class="tutordiv-block-77"><img style="border-radius: 100px" :src="contact.student !== undefined ? contact.student.user.profilePic: ''" loading="lazy" height="60"  width="60" alt="" class="tutorimage-15">
                   <h1 class="tutorheading-12">{{contact.student !== undefined ? contact.student.user.firstName: '' }} {{contact.student !== undefined ? contact.student.user.lastName: ''}}</h1>

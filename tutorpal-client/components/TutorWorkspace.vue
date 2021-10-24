@@ -247,7 +247,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { sub, str } from 'timelite/time'
 import getCSRF from '../utils/getCSRF'
 import dateToString from '../utils/dateToString'
-
 export default {
   data() {
     return {
@@ -335,6 +334,7 @@ export default {
       return res.json()
     })
     const time = new Date()
+    const classTime = new Date(this.session.date)
     let hours = time.getHours()
     let minutes = time.getMinutes()
     let seconds = time.getSeconds()
@@ -347,11 +347,13 @@ export default {
     }
     const now = hours + ':' + minutes + ':' + seconds
     const hms = str(sub([this.session.time_end, now]))
-    // console.log(this.session.time_end, now, hms)
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    // console.log(a, timerSeconds)
-    this.timerCount = timerSeconds
+    if (time > classTime) {
+      this.timerCount = 0
+    } else {
+      this.timerCount = timerSeconds
+    }
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
@@ -422,4 +424,3 @@ export default {
 }
 </style>
  
-
