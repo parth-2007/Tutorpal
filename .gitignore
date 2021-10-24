@@ -11,3 +11,4 @@ env_backup.txt
 zappa_settings.json
 zappa_settings_backup.json
 api_gateway_policy.json
+chat-api.zip

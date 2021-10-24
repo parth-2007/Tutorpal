@@ -20,7 +20,7 @@ const getCSRF = async () => {
     return { success: csrfToken }
   } else {
     const resp = await fetch('https://api.tutorpal.org/auth/ensure-csrf/', {
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((res) => {
         if (res.status >= 400 && res.status < 600) {

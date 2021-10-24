@@ -21,7 +21,7 @@ const actions = {
     commit('setUser', keysToCamel(user))
   },
   async logoutUser({ commit }) {
-    await fetch('https://api.tutorpal.org/auth/logout/', {
+    await fetch('/api/auth/logout/', {
       credentials: 'include',
     })
       .then((res) => {

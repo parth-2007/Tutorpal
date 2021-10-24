@@ -100,15 +100,18 @@ class ChatConsumer(AsyncConsumer):
         print('removing from redis')
         self.redis_client.srem(
             self.chat_room, 'tutor' if self.me_user_obj.has_tutor else 'student')
-        await self.disconnect(event["code"])
-        try:
-            for group in self.groups:
-                await self.channel_layer.group_discard(group, self.channel_name)
-        except AttributeError:
-            raise exceptions.InvalidChannelLayerError(
-                "BACKEND is unconfigured or doesn't support groups"
-            )
-        # await self.disconnect_user()
+        await self.channel_layer.group_discard(
+            self.chat_room,
+            self.channel_name
+        )
+        # try:
+        #     for group in self.groups:
+        #         await self.channel_layer.group_discard(group, self.channel_name)
+        # except AttributeError:
+        #     raise exceptions.InvalidChannelLayerError(
+        #         "BACKEND is unconfigured or doesn't support groups"
+        #     )
+        # await self.disconnect(event["code"])
         raise exceptions.StopConsumer()
 
     @database_sync_to_async

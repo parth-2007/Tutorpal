@@ -10,10 +10,7 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
-from asgiref.compatibility import guarantee_single_callable
-# from channels.routing import get_default_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
 
-application = guarantee_single_callable(get_asgi_application())
-# application = get_default_application()
+application = get_asgi_application()

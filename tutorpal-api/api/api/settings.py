@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'chat',
     'session',
     'corsheaders',
-    'channels',
+    # 'channels',
     'rest_framework',
     'dry_rest_permissions',
     'storages'
@@ -124,17 +124,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'api.wsgi.application'
-ASGI_APPLICATION = "api.routing.application"
-
-if os.environ.get('REDIS_HOST', None):
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [(os.environ['REDIS_HOST'], int(os.environ['REDIS_PORT']))],
-            },
-        },
-    }
+ASGI_APPLICATION = "api.asgi.application"
 
 
 # Database
@@ -218,11 +208,6 @@ if os.environ.get("AWS_SES_ACCESS_KEY_ID", None) and os.environ.get('RUN_ENV', '
     AWS_SES_REGION_NAME = 'us-west-1'
     AWS_SES_REGION_ENDPOINT = 'email.us-west-1.amazonaws.com'
     EMAIL_FROM = "dev@tutorpal.org"
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # EMAIL_HOST = 'email-smtp.us-west-1.amazonaws.com'
-    # EMAIL_PORT = os.environ.get("EMAIL_PORT")
-    # EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
-    # EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_FROM = None
