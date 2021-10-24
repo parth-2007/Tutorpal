@@ -102,6 +102,7 @@
             margin-right: 10%;
             margin-left: 10%;
             font-family: Poppins;
+            margin-bottom: 15px;
             margin-top: 20px;
           "
           class="form-control"
