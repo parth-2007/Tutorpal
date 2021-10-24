@@ -344,10 +344,10 @@ export default {
     }
     const now = hours + ':' + minutes + ':' + seconds
     const hms = str(sub([this.session.time_end, now]))
-    console.log(this.session.time_end, now, hms)
+    // console.log(this.session.time_end, now, hms)
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    console.log(a, timerSeconds)
+    // console.log(a, timerSeconds)
     this.timerCount = timerSeconds
     await this.fetchUser()
     await this.fetchSessions('pastSessions')

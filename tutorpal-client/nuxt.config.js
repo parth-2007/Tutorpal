@@ -44,6 +44,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'nuxt-webfontloader',
+    '@nuxtjs/proxy',
   ],
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

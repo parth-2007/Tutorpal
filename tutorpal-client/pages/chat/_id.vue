@@ -27,7 +27,7 @@ export default {
   async created() {
     // console.log('hi')
     await this.fetchUser()
-    const response = await fetch('/api/rooms/' + this.$route.params.id + '/', {
+    const response = await fetch(`/api/rooms/${this.$route.params.id}/`, {
       credentials: 'include',
     })
       .then((res) => {
