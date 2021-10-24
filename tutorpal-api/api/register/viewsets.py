@@ -229,7 +229,7 @@ class ReviewViewSet(viewsets.GenericViewSet,
             tutor = Tutor.objects.get(pk=request.data.get('tutor'))  # 2 query
             review = Review.objects.create(
                 tutor=tutor, student=student, stars=stars, description=description)  # 3 query
-            tutor.average_reviews = (
-                float(tutor.average_reviews) + float(stars)) / (float(tutor.num_reviews) + 1)
+            tutor.average_reviews = ((float(tutor.average_reviews) * float(tutor.num_reviews)) + float(stars)) / (float(tutor.num_reviews) + 1)
+            tutor.num_reviews = tutor.num_reviews + 1
             tutor.save()  # 4 query
             return Response(status=status.HTTP_201_CREATED, data=self.serializer_class(review).data)
