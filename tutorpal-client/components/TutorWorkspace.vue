@@ -67,7 +67,7 @@
               minutes of the meeting. We suggest continuing with the meeting 
               until the last ten minutes. Thank you.
             </div>
-            ><button
+            <button
               @click="updateModalValue()"
               style="
                 background-color: #bb0a1e;
@@ -191,11 +191,7 @@
             </button>
           </div>
         </div>
-        <iframe
-          style="width: 75vw; height: 100vh"
-          allow="camera;microphone"
-          :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
-        ></iframe>
+        <div id="jitsi-container">
       </body>
     </html>
   </client-only>
@@ -226,6 +222,26 @@ export default {
         { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
       ]
     }
+  },
+  mounted() {
+    const script = document.createElement('script')
+    script.src = 'https://meet.jit.si/external_api.js'
+    script.addEventListener('load', this.setLoaded)
+    document.body.appendChild(script)
+    var container = document.querySelector('#jitsi-container');
+    var api = null;
+    var roomurl = this.session.call_url;
+    var domain = "meet.jit.si";
+    var options = {
+        "roomName": roomurl,
+        "parentNode": container,
+        "width": window.innerWidth -20,
+        "height": window.innerHeight -20 ,
+        userInfo: {
+          displayName: this.user.firstName + " " + this.user.lastName
+        }
+    };
+    api = new JitsiMeetExternalAPI(domain, options);
   },
   computed: {
     logout() {
