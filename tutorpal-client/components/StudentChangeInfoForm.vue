@@ -205,6 +205,7 @@ export default {
             'user',
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
+          console.log(formData)
           const data = await fetch('https://api.tutorpal.org/auth/update-student/', {
             credentials: 'include',
             method: 'PATCH',
