@@ -542,8 +542,16 @@ export default {
     return {
       title: 'Tutor Registration',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/normalize.css' },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
       ],
     }
   },
@@ -552,11 +560,11 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000){
-        this.errors.profilePic = "File size is too high! Please upload a file less than 100 Kilobytes"
-      }
-      else{
-        this.errors.profilePic = ""
+      if (e.target.files[0].size > 100000) {
+        this.errors.profilePic =
+          'File size is too high! Please upload a file less than 100 Kilobytes'
+      } else {
+        this.errors.profilePic = ''
       }
     },
     checkErrors() {
@@ -588,6 +596,11 @@ export default {
       const age = Math.floor(((Date.now() - birthday) / (31557600000)))
       if(age < 15){
         this.errors.birthDate = "You must be at least 15 years old to register as a tutor"
+      const birthday = new Date(this.birthDate)
+      const age = Math.floor((Date.now() - birthday) / 31557600000)
+      if (age < 15) {
+        this.errors.birthDate =
+          'You must be at least 15 years old to register as a tutor'
       }
       const requiredFields = [
         'email',
@@ -612,7 +625,8 @@ export default {
         }
       })
 
-      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.email)) {
         this.errors.email = 'Invalid email'
       } else {
@@ -679,14 +693,17 @@ export default {
         }
         formData.append('tutor', JSON.stringify(tutor))
 
-        const data = await fetch('https://api.tutorpal.org/auth/register-tutor/', {
-          credentials: 'include',
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': getCSRF(),
-          },
-          body: formData,
-        })
+        const data = await fetch(
+          process.env.API_URL + '/auth/register-tutor/',
+          {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCSRF(),
+            },
+            body: formData,
+          }
+        )
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('

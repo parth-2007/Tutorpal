@@ -121,7 +121,9 @@
                     >Explore</router-link
                   ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                     >Messages
-                    <span v-if="user.unread > 0" class="badge">{{ user.unread }}</span> </router-link
+                    <span v-if="user.unread > 0" class="badge">{{
+                      user.unread
+                    }}</span> </router-link
                   ><router-link to="/requests" class="nav-link-4 w-nav-link"
                     >Requests</router-link
                   ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -246,8 +248,17 @@
                       @click="joinSession(session.id)"
                       class="button-4 w-button"
                       >Join Meeting</a
-                    ><br>
-                    <strong style="margin-top: 10px; font-size:14px; margin-top:10px" class="bold-text-2" >We suggest using Google Chrome as that is most compatible with our calling system</strong>
+                    ><br />
+                    <strong
+                      style="
+                        margin-top: 10px;
+                        font-size: 14px;
+                        margin-top: 10px;
+                      "
+                      class="bold-text-2"
+                      >We suggest using Google Chrome as that is most compatible
+                      with our calling system</strong
+                    >
                   </div>
                 </div>
               </div>
@@ -257,7 +268,10 @@
               class="div-block-53"
             >
               <h1 class="heading-2">Upcoming Classes:</h1>
-              <div v-if="upcoming.unfetched === undefined" class="upcoming_loop">
+              <div
+                v-if="upcoming.unfetched === undefined"
+                class="upcoming_loop"
+              >
                 <div
                   style="margin-bottom: 50px"
                   v-for="session in upcoming"
@@ -329,10 +343,22 @@ export default {
     return {
       title: 'Home',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   computed: {
@@ -365,9 +391,8 @@ export default {
       this.clicked = !this.clicked
     },
     async joinSession(id) {
-      let url = 'https://api.tutorpal.org/sessions/' + id + '/'
       const csrfToken = await getCSRF()
-      await fetch(url, {
+      await fetch(process.env.API_URL + '/sessions/' + id + '/', {
         credentials: 'include',
         method: 'PATCH',
         headers: {
@@ -378,15 +403,14 @@ export default {
           student_joined: true,
         }),
       })
-      url = '/sessions/' + id + '/'
+      const url = '/sessions/' + id + '/'
       this.$router.push(url)
     },
     async canceledHandler(id, session) {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
-        const url = 'https://api.tutorpal.org/sessions/' + id + '/'
         const csrfToken = await getCSRF()
-        await fetch(url, {
+        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {

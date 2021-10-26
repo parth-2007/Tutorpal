@@ -1,4 +1,5 @@
 const loggedInFetch = async (url) => {
+  console.warn('loggedInFetch doesnt work lol')
   const data = await fetch(url, {
     credentials: 'include',
   })
@@ -10,10 +11,9 @@ const loggedInFetch = async (url) => {
       }
       return res.json()
     })
-    .catch(() => {
+    .catch((e) => {
       return { error: 'client error' }
     })
-
   return data
 }
 

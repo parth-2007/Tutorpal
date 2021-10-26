@@ -6,12 +6,15 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" media="print" onload="this.media='all'">
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          media="print"
+          onload="this.media='all'"
+        />
       </head>
-      <div v-if="user.isStudent">
-      </div>
-      <div v-else-if="user.isTutor">
-      </div>
+      <div v-if="user.isStudent"></div>
+      <div v-else-if="user.isTutor"></div>
       <body v-else style="min-height: 100vh" class="registerbody">
         <div style="height: 150vh" class="registersection">
           <div
@@ -23,7 +26,9 @@
             </div>
             <div class="registerdiv-block-2">
               <div class="registertext-block">Already have an account?</div>
-              <router-link to="/login" class="registerlink">Sign In</router-link>
+              <router-link to="/login" class="registerlink"
+                >Sign In</router-link
+              >
             </div>
             <div style="margin-top: 20px" class="registerdiv-block-3">
               <div>
@@ -255,9 +260,21 @@ export default {
     return {
       title: 'Student Registration',
       link: [
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/webflow.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/normalize.css' },
-        { rel: 'stylesheet', type: 'text/css', href: '/student/css/student-main.webflow.css' },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
       ],
     }
   },
@@ -273,11 +290,11 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000){
-        this.errors.profilePic = "File size is too high! Please upload a file less than 100 Kilobytes"
-      }
-      else{
-        this.errors.profilePic = ""
+      if (e.target.files[0].size > 100000) {
+        this.errors.profilePic =
+          'File size is too high! Please upload a file less than 100 Kilobytes'
+      } else {
+        this.errors.profilePic = ''
       }
     },
     checkErrors() {
@@ -360,14 +377,17 @@ export default {
             birth_date: this.birthDate,
           })
         )
-        const data = await fetch('https://api.tutorpal.org/auth/register-student/', {
-          credentials: 'include',
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': (await getCSRF()).success,
-          },
-          body: formData,
-        })
+        const data = await fetch(
+          process.env.API_URL + '/auth/register-student/',
+          {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': (await getCSRF()).success,
+            },
+            body: formData,
+          }
+        )
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('

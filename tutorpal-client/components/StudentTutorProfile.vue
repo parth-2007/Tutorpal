@@ -6,7 +6,12 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          media="print"
+          onload="this.media='all'"
+        />
       </head>
       <body>
         <div id="main">
@@ -216,7 +221,9 @@
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages<span v-if="user.unread > 0" class="badge">{{ user.unread }}</span></router-link
+                      >Messages<span v-if="user.unread > 0" class="badge">{{
+                        user.unread
+                      }}</span></router-link
                     ><router-link to="/requests" class="nav-link-4 w-nav-link"
                       >Requests</router-link
                     ><router-link to="/payments" class="nav-link-4 w-nav-link"
@@ -230,7 +237,7 @@
               </div>
             </div>
           </div>
-          <div  v-if="data!==[]" class="div-block-70">
+          <div v-if="data !== []" class="div-block-70">
             <div class="div-block-71">
               <img
                 :src="data.user !== undefined ? data.user.profile_pic : ''"
@@ -277,7 +284,7 @@
               >{{ data.bio }}<br /><strong>Course Description: </strong
               >{{ data.what_you_teach }}<br /><strong>Availability: </strong
               >{{ data.availability }} <br /><a
-                v-if="data.linkedIn!==''"
+                v-if="data.linkedIn !== ''"
                 style="font-family: Poppins"
                 :href="data.linkedIn"
                 target="_blank"
@@ -297,8 +304,12 @@
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div v-if="reviews!==[]">
-              <div v-for="review in reviews.results" :key="review.id" id="posts">
+            <div v-if="reviews !== []">
+              <div
+                v-for="review in reviews.results"
+                :key="review.id"
+                id="posts"
+              >
                 <div class="review_bundle">
                   <div class="review_item">
                     <img
@@ -348,20 +359,34 @@ export default {
     }
   },
   async fetch() {
-    this.url = 'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/'
-    this.data = await fetch(this.url, {
-      credentials: 'include',
-    }).then((res) => res.json())
+    this.data = await fetch(
+      process.env.API_URL + '/tutors/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json())
     await this.fetchUser()
   },
   head() {
     return {
       title: 'Tutor Profile',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   computed: {
@@ -379,7 +404,7 @@ export default {
   },
   async created() {
     const url =
-      'https://api.tutorpal.org/tutors/' + this.$route.params.id + '/reviews/'
+      process.env.API_URL + '/tutors/' + this.$route.params.id + '/reviews/'
     this.reviews = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
@@ -411,7 +436,7 @@ export default {
         student: parseInt(this.user.studentPk),
       }
       const csrfToken = await getCSRF()
-      await fetch('https://api.tutorpal.org/rooms/', {
+      await fetch(process.env.API_URL + '/rooms/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -466,7 +491,7 @@ export default {
       }
       const csrfToken = await getCSRF()
       this.addSession([sessionData, 'pendingOnTutor'])
-      await fetch('https://api.tutorpal.org/sessions/', {
+      await fetch(process.env.API_URL + '/sessions/', {
         method: 'POST',
         credentials: 'include',
         headers: {

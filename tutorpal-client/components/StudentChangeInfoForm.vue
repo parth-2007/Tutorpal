@@ -12,7 +12,7 @@
             aria-label="First name"
             required
           />
-          {{errors.firstName}}
+          {{ errors.firstName }}
         </div>
         <div style="padding-left: 0px" class="col">
           <label for="lastname" class="form-label">Last Name</label>
@@ -24,7 +24,7 @@
             aria-label="Last name"
             required
           />
-          {{errors.lastName}}
+          {{ errors.lastName }}
         </div>
       </div>
       <div style="margin-top: 15px" class="mb-3">
@@ -36,7 +36,7 @@
           id="emailaddress"
           required
         />
-        {{errors.email}}
+        {{ errors.email }}
       </div>
       <div style="margin-top: 15px; float: left" class="row">
         <div style="position: relative; text-align: center" class="col">
@@ -82,7 +82,7 @@
           placeholder="Enter Parent Email"
           required
         />
-        {{errors.parentEmail}}
+        {{ errors.parentEmail }}
       </div>
       <div class="form-group row">
         <label for="birthdate" class="col-2 col-form-label">Birthdate</label>
@@ -94,7 +94,7 @@
             id="birthdate"
             required
           />
-          {{errors.birthDate}}
+          {{ errors.birthDate }}
         </div>
       </div>
     </form>
@@ -124,7 +124,7 @@ export default {
         parentEmail: '',
         birthDate: '',
       },
-      src:""
+      src: '',
     }
   },
   async created() {
@@ -141,11 +141,11 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000){
-        this.errors.profilePic = "File size is too high! Please upload a file less than 100 Kilobytes"
-      }
-      else{
-        this.errors.profilePic = ""
+      if (e.target.files[0].size > 100000) {
+        this.errors.profilePic =
+          'File size is too high! Please upload a file less than 100 Kilobytes'
+      } else {
+        this.errors.profilePic = ''
       }
     },
     checkErrors() {
@@ -158,7 +158,8 @@ export default {
       return isError
     },
     validateData() {
-      const emailValidation = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+      const emailValidation =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.user.email)) {
         this.errors.email = 'Invalid user email'
       } else {
@@ -216,11 +217,26 @@ export default {
           }).then((res) => {
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('
+          const data = await fetch(
+            process.env.API_URL + '/auth/update-student/',
+            {
+              credentials: 'include',
+              method: 'PATCH',
+              headers: {
+                'X-CSRFToken': csrfToken.success,
+              },
+              body: formData,
             }
-            return res.json()
-          }).catch(() => {
-            this.errors.global = 'Something went wrong :('
-          })
+          )
+            .then((res) => {
+              if (res.status >= 400 && res.status < 600) {
+                this.errors.global = 'Something went wrong :('
+              }
+              return res.json()
+            })
+            .catch(() => {
+              this.errors.global = 'Something went wrong :('
+            })
           if (data && data.error) {
             this.errors.global = data.error
           } else {

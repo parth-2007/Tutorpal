@@ -6,7 +6,10 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+        />
       </head>
       <body>
         <router-link
@@ -14,20 +17,45 @@
           to="/"
           class="outcastlink-block w-inline-block"
           ><img
-            src="../static/student/images/logo.jpg"c
+            src="../static/student/images/logo.jpg"
+            c
             width="250"
             alt=""
             class="outcastimage"
         /></router-link>
-        <div style="height: auto; font-family: Poppins; padding-bottom: 0x; border-color: skyblue; border-width: 2.5px;" class="outcastdiv-block">
+        <div
+          style="
+            height: auto;
+            font-family: Poppins;
+            padding-bottom: 0x;
+            border-color: skyblue;
+            border-width: 2.5px;
+          "
+          class="outcastdiv-block"
+        >
           <div>
-            <h1 style="font-size: 30px;"><strong>Bug Reports</strong></h1>
-            Please let us know what bugs you are facing so we can fix them immediately. We use this information to fix issues we have not yet come across. If you have any feedback, please do so <router-link to="/feedback">here</router-link>
+            <h1 style="font-size: 30px"><strong>Bug Reports</strong></h1>
+            Please let us know what bugs you are facing so we can fix them
+            immediately. We use this information to fix issues we have not yet
+            come across. If you have any feedback, please do so
+            <router-link to="/feedback">here</router-link>
             <form id="form-wrapper">
-              <div style="margin-top: 20px;" class="outcastmb-3">
+              <div style="margin-top: 20px" class="outcastmb-3">
                 <label for="bugs" class="form-label">Bugs</label>
-                <textarea v-model="description" style="height:250px;" class="form-control" id="bugs" rows="3"></textarea>
-                <select v-model="level" style="margin-top: 15px;" class="form-select" id="buglevel" aria-label="Default select example">
+                <textarea
+                  v-model="description"
+                  style="height: 250px"
+                  class="form-control"
+                  id="bugs"
+                  rows="3"
+                ></textarea>
+                <select
+                  v-model="level"
+                  style="margin-top: 15px"
+                  class="form-select"
+                  id="buglevel"
+                  aria-label="Default select example"
+                >
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -41,7 +69,13 @@
                 </select>
               </div>
             </form>
-            <button @click="bugformhandler()" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+            <button
+              @click="bugformhandler()"
+              class="btn btn-primary"
+              style="margin-top: 10px"
+            >
+              Submit
+            </button>
           </div>
         </div>
       </body>
@@ -52,26 +86,38 @@
 import getCSRF from '../utils/getCSRF'
 
 export default {
-  data(){
-    return{
-      level: "",
-      description: ""
+  data() {
+    return {
+      level: '',
+      description: '',
     }
   },
   head() {
     return {
       title: 'Bugs',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   methods: {
-    async bugformhandler(){
+    async bugformhandler() {
       const csrfToken = await getCSRF()
-      await fetch('/api/bugs/', {
+      await fetch(process.env.API_URL + '/bugs/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -79,12 +125,11 @@ export default {
           'X-CSRFToken': csrfToken.success,
         },
         body: JSON.stringify({
-          "bug": this.description,
-          "level": parseInt(this.level)
+          bug: this.description,
+          level: parseInt(this.level),
         }),
       })
-    }
-  }
+    },
+  },
 }
- 
 </script>

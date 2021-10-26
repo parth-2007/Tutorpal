@@ -11,7 +11,12 @@ export default {
   },
   async created() {
     await fetch(
-      `https://api.tutorpal.org/auth/activate-account/${this.$route.params.uid}/${this.$route.params.token}/`,
+      process.env.API_URL +
+        '/auth/activate-account/' +
+        this.$route.params.uid +
+        '/' +
+        this.$route.params.token +
+        '/',
       {
         credentials: 'include',
       }

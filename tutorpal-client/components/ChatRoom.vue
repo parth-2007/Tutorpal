@@ -115,7 +115,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import loggedInFetch from '../utils/loggedInFetch'
 import convertTime2 from '../utils/convertTime2'
 
 export default {
@@ -161,9 +160,23 @@ export default {
   },
 
   async created() {
-    this.response = await loggedInFetch(
-      'https://api.tutorpal.org/rooms/' + this.$route.params.id + '/messages/'
+    this.response = await fetch(
+      process.env.API_URL + '/rooms/' + this.$route.params.id + '/messages/',
+      {
+        credentials: 'include',
+      }
     )
+      .then((res) => {
+        if (res.status === 403 || res.status === 404) {
+          return { unauthenticated: true }
+        } else if (res.status >= 400 && res.status < 600) {
+          return { error: 'server error', status: res.status }
+        }
+        return res.json()
+      })
+      .catch(() => {
+        return { error: 'client error' }
+      })
     if (this.response.error) {
       if (
         this.response.error === 'client error' ||
@@ -208,8 +221,11 @@ export default {
     },
     connect() {
       const chatMsgs = this.chatMsgs
-      const endpoint =
-        'wss://chat.tutorpal.org/ws/chat/' + this.$route.params.id + '/'
+      const host =
+        process.env.API_URL === 'https://api.tutorpal.org'
+          ? 'wss://chat.tutorpal.org'
+          : 'ws://localhost:8080'
+      const endpoint = host + '/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
         const chatDataMsg = JSON.parse(e.data)

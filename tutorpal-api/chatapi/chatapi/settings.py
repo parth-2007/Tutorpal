@@ -87,24 +87,14 @@ REST_FRAMEWORK = {
 }
 
 # To connect to redis db
-if os.environ.get('AWS_REDIS_HOST', None) and os.environ.get('RUN_ENV', 'local')=='aws':
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [(os.environ['AWS_REDIS_HOST'], 6379)],
-            },
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
         },
-    }
-elif os.environ.get('REDIS_HOST', None):
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [(os.environ['REDIS_HOST'], 6379)],
-            },
-        },
-    }
+    },
+}
 
 
 # Database

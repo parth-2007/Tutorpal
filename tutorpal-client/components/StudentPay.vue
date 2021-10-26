@@ -121,7 +121,9 @@
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
                       >Messages
-                      <span v-if="user.unread > 0" class="badge">{{ user.unread }}</span> </router-link
+                      <span v-if="user.unread > 0" class="badge">{{
+                        user.unread
+                      }}</span> </router-link
                     ><router-link
                       to="/requests"
                       class="nav-link-4 w-nav-link w--current"
@@ -168,8 +170,7 @@ export default {
   },
   async fetch() {
     const id = parseInt(this.$route.params.id)
-    const url = 'https://api.tutorpal.org/sessions/' + id + '/'
-    this.session = await fetch(url, {
+    this.session = await fetch(process.env.API_URL + '/sessions/' + id + '/', {
       credentials: 'include',
     }).then((res) => {
       if (res.status === 500) {
@@ -195,10 +196,22 @@ export default {
     return {
       title: 'Pay',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href: "/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   computed: {
@@ -250,31 +263,38 @@ export default {
             })
           },
           onApprove: async (data) => {
-            let url = 'https://api.tutorpal.org/capture_order/' + this.$route.params.id + '/'
             const csrfToken = await getCSRF()
-            await fetch(url, {
-              credentials: 'include',
-              method: 'POST',
-              headers: {
-                'X-CSRFToken': csrfToken.success,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                order_id: data.orderID,
-              }),
-            })
-            url = 'https://api.tutorpal.org/sessions/' + this.$route.params.id + '/'
-            await fetch(url, {
-              credentials: 'include',
-              method: 'PATCH',
-              headers: {
-                'X-CSRFToken': csrfToken.success,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                student_paid: true,
-              }),
-            })
+            await fetch(
+              process.env.API_URL +
+                '/capture_order/' +
+                this.$route.params.id +
+                '/',
+              {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                  'X-CSRFToken': csrfToken.success,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  order_id: data.orderID,
+                }),
+              }
+            )
+            await fetch(
+              process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+              {
+                credentials: 'include',
+                method: 'PATCH',
+                headers: {
+                  'X-CSRFToken': csrfToken.success,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  student_paid: true,
+                }),
+              }
+            )
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')

@@ -1,4 +1,4 @@
-import loggedInFetch from '../../utils/loggedInFetch'
+// import loggedInFetch from '../../utils/loggedInFetch'
 import { keysToCamel } from '../../utils/changeObjectNaming'
 
 const state = () => ({
@@ -12,14 +12,40 @@ const getters = {
 const actions = {
   async fetchStudent({ commit, state }) {
     if (state.student.unfetched) {
-      const student = await loggedInFetch(
-        'https://api.tutorpal.org/students/me/'
-      )
+      const student = await fetch(process.env.API_URL + '/students/me/', {
+        credentials: 'include',
+      })
+        .then((res) => {
+          if (res.status === 403 || res.status === 404) {
+            return { unauthenticated: true }
+          } else if (res.status >= 400 && res.status < 600) {
+            return { error: 'server error', status: res.status }
+          }
+          return res.json()
+        })
+        .catch(() => {
+          // console.warn(e)
+          return { error: 'client error' }
+        })
       commit('setStudent', keysToCamel(student))
     }
   },
   async refreshStudent({ commit }) {
-    const student = await loggedInFetch('https://api.tutorpal.org/students/me/')
+    const student = await fetch(process.env.API_URL + '/students/me/', {
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 403 || res.status === 404) {
+          return { unauthenticated: true }
+        } else if (res.status >= 400 && res.status < 600) {
+          return { error: 'server error', status: res.status }
+        }
+        return res.json()
+      })
+      .catch(() => {
+        // console.warn(e)
+        return { error: 'client error' }
+      })
     commit('setStudent', keysToCamel(student))
   },
   logoutStudent({ commit }) {

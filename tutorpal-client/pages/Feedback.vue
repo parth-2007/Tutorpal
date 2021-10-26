@@ -6,7 +6,12 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          media="none"
+          onload="if(media!='all')media='all'"
+        />
       </head>
       <body>
         <router-link
@@ -19,15 +24,39 @@
             alt=""
             class="outcastimage"
         /></router-link>
-        <div style="height: auto; font-family: Poppins; padding-bottom: 20px; border-width: 2px; border-color: skyblue;" class="outcastdiv-block">
+        <div
+          style="
+            height: auto;
+            font-family: Poppins;
+            padding-bottom: 20px;
+            border-width: 2px;
+            border-color: skyblue;
+          "
+          class="outcastdiv-block"
+        >
           <div>
-            Please provide any user feedback you may have so we can continue to improve the platform. We will work on these suggestions immediately. If you would like to report a bug, please do so <router-link to="/bugs">here</router-link> 
+            Please provide any user feedback you may have so we can continue to
+            improve the platform. We will work on these suggestions immediately.
+            If you would like to report a bug, please do so
+            <router-link to="/bugs">here</router-link>
             <form>
-              <div style="margin-top: 20px;" class="outcastmb-3">
+              <div style="margin-top: 20px" class="outcastmb-3">
                 <label for="feedback" class="form-label">Feedback</label>
-                <textarea v-model="text" style="height:250px;" class="form-control" id="feedback" rows="3"></textarea>
+                <textarea
+                  v-model="text"
+                  style="height: 250px"
+                  class="form-control"
+                  id="feedback"
+                  rows="3"
+                ></textarea>
               </div>
-              <button @submit="feedbackhandler()" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+              <button
+                @submit="feedbackhandler()"
+                class="btn btn-primary"
+                style="margin-top: 10px"
+              >
+                Submit
+              </button>
             </form>
           </div>
         </div>
@@ -39,34 +68,46 @@
 import getCSRF from '../utils/getCSRF'
 
 export default {
-  data(){
-    return{
-      text: ""
+  data() {
+    return {
+      text: '',
     }
   },
   head() {
     return {
       title: 'Feedback',
       link: [
-        { rel:"stylesheet", type:"text/css", href:"/student/css/webflow.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/normalize.css" },
-        { rel:"stylesheet", type:"text/css", href:"/student/css/student-main.webflow.css" },
-      ]
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/normalize.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/student-main.webflow.css',
+        },
+      ],
     }
   },
   methods: {
-    async feedbackhandler(e){
+    async feedbackhandler(e) {
       e.preventDefault()
-      await fetch('/api/feedback/', {
+      await fetch(process.env.API_URL + '/feedback/', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': (await getCSRF()).success,
         },
-        body: JSON.stringify({"text": this.text}),
+        body: JSON.stringify({ text: this.text }),
       })
-    }
-  }
+    },
+  },
 }
 </script>
