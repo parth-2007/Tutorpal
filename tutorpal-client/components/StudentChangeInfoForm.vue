@@ -217,6 +217,7 @@ export default {
           }).then((res) => {
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('
+            }
           const data = await fetch(
             process.env.API_URL + '/auth/update-student/',
             {
