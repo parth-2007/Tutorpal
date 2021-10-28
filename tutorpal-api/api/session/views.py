@@ -294,6 +294,8 @@ def finish_session(request, id):
             return Response(status=status.HTTP_403_FORBIDDEN, data={'Error': 'Ending session too early'})
         if not session.tutor_paid and not session.free:  # the session was paid
             tutor = session.tutor
+            tutor.num_classes = tutor.num_classes + 1
+            tutor.save()
             # paypal fees and round
             payout_price = math.floor(
                 ((float(session.price) * 0.9651) - 0.49) * 100) / 100
