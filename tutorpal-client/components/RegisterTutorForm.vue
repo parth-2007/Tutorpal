@@ -578,10 +578,24 @@ export default {
     },
     validateData() {
       if (!this.toc) {
-        this.errors.global = 'Please read and agree to toc'
+        this.errors.global = 'Please read and agree to oue Terms of Conditions'
       } else {
         this.errors.global = ''
       }
+      if (this.linkedIn !== ""){
+        const httpCheck = this.linkedIn.substr(0, 8);
+        if (httpCheck === 'https://'){
+          console.log("Passed https:// check")
+        }
+        else{
+          console.log("Didn't pass, altering linkedIn field...")
+          this.linkedIn = httpCheck.concat(this.linkedIn)
+        }
+      }
+      const birthday = new Date(this.birthDate);
+      const age = Math.floor(((Date.now() - birthday) / (31557600000)))
+      if(age < 15){
+        this.errors.birthDate = "You must be at least 15 years old to register as a tutor"
       const birthday = new Date(this.birthDate)
       const age = Math.floor((Date.now() - birthday) / 31557600000)
       if (age < 15) {
