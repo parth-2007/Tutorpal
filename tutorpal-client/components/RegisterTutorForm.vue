@@ -582,73 +582,72 @@ export default {
       } else {
         this.errors.global = ''
       }
-      if (this.linkedIn !== ""){
-        const httpCheck = this.linkedIn.substr(0, 8);
-        if (httpCheck === 'https://'){
-          console.log("Passed https:// check")
-        }
-        else{
-          console.log("Didn't pass, altering linkedIn field...")
+      if (this.linkedIn !== '') {
+        const httpCheck = this.linkedIn.substr(0, 8)
+        if (httpCheck !== 'https://') {
           this.linkedIn = httpCheck.concat(this.linkedIn)
         }
       }
-      const birthday = new Date(this.birthDate);
-      const age = Math.floor(((Date.now() - birthday) / (31557600000)))
-      if(age < 15){
-        this.errors.birthDate = "You must be at least 15 years old to register as a tutor"
       const birthday = new Date(this.birthDate)
       const age = Math.floor((Date.now() - birthday) / 31557600000)
       if (age < 15) {
         this.errors.birthDate =
           'You must be at least 15 years old to register as a tutor'
-      }
-      const requiredFields = [
-        'email',
-        'firstName',
-        'lastName',
-        'gender',
-        'occupation',
-        'subjects',
-        'whatYouTeach',
-        'qualifications',
-        'bio',
-        'rates',
-        'teachExp',
-        'profExp',
-        'password',
-      ]
-      requiredFields.forEach((field) => {
-        if (this[field].length < 1) {
-          this.errors[field] = 'This field is required'
-        } else {
-          this.errors[field] = ''
+        const birthday = new Date(this.birthDate)
+        const age = Math.floor((Date.now() - birthday) / 31557600000)
+        if (age < 15) {
+          this.errors.birthDate =
+            'You must be at least 15 years old to register as a tutor'
         }
-      })
+        const requiredFields = [
+          'email',
+          'firstName',
+          'lastName',
+          'gender',
+          'occupation',
+          'subjects',
+          'whatYouTeach',
+          'qualifications',
+          'bio',
+          'rates',
+          'teachExp',
+          'profExp',
+          'password',
+        ]
+        requiredFields.forEach((field) => {
+          if (this[field].length < 1) {
+            this.errors[field] = 'This field is required'
+          } else {
+            this.errors[field] = ''
+          }
+        })
 
-      const emailValidation =
-        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
-      if (!emailValidation.test(this.email)) {
-        this.errors.email = 'Invalid email'
-      } else {
-        this.errors.email = ''
-      }
-      if (
-        this.paypalEmail.length > 0 &&
-        !emailValidation.test(this.paypalEmail)
-      ) {
-        this.errors.paypalEmail = 'Invalid email'
-      } else {
-        this.errors.paypalEmail = ''
-        this.paypalEmail = this.email
-      }
+        const emailValidation =
+          /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+        if (!emailValidation.test(this.email)) {
+          this.errors.email = 'Invalid email'
+        } else {
+          this.errors.email = ''
+        }
+        if (
+          this.paypalEmail.length > 0 &&
+          !emailValidation.test(this.paypalEmail)
+        ) {
+          this.errors.paypalEmail = 'Invalid email'
+        } else {
+          this.errors.paypalEmail = ''
+          this.paypalEmail = this.email
+        }
 
-      if (this.password !== this.confirmPassword) {
-        this.errors.password = 'Password and Confirm Password must be the same'
-        this.errors.confimPassword =
-          'Password and Confirm Password must be the same'
-      } else {
-        this.errors.password = ''
-        this.errors.confirmPassword = ''
+        if (this.password !== this.confirmPassword) {
+          this.errors.password =
+            'Password and Confirm Password must be the same'
+          this.errors.confimPassword =
+            'Password and Confirm Password must be the same'
+        } else {
+          this.errors.password = ''
+          this.errors.confirmPassword = ''
+        }
       }
     },
     async handleSubmit() {
