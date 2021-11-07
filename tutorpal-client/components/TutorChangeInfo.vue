@@ -174,10 +174,11 @@ T<template>
                   tutor.rates
                 }}
                 per hour <br /><strong>Bio: </strong>{{ tutor.bio
-                }}<br /><strong>Course Description: {{tutor.id}} </strong
+                }}<br /><strong>Availability: </strong>{{ tutor.availability
+                }}<br /><strong style="padding-bottom: 10px;">Course Description: </strong
                 >{{ tutor.whatYouTeach }}<br />
                 <a
-                  style="font-family: Poppins"
+                  style="font-family: Poppins;"
                   :href="'https://www.tutorpal.org/tutors/'+tutor.id"
                   target="_blank"
                 ><strong>View my profile</strong>
@@ -185,6 +186,7 @@ T<template>
                 </a>
                 <a
                   @click="updateModalValue"
+                  style="margin-top: 10px;"
                   class="tutorbutton-10-copy-copy w-button"
                   >Update Information</a
                 >
