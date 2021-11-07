@@ -197,7 +197,7 @@
                         Degree: {{ tutor.education }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Education: {{ tutor.major }} at {{ tutor.school }}, GPA
+                        Education: <text v-if="tutor.education !== 'High School' || tutor.major !== '' ">{{ tutor.major }} at</text> {{ tutor.school }}, GPA
                         of {{ tutor.gpa }}
                       </div>
                       <div class="text-block-21-copy-2">

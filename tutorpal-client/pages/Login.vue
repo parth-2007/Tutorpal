@@ -152,6 +152,7 @@ export default {
   computed: mapGetters({ user: 'getUser' }),
   async created() {
     await this.fetchUser()
+    console.log(process.env.API_URL)
   },
   methods: {
     ...mapGetters(['getUser']),

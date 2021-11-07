@@ -230,7 +230,7 @@
         <div class="w-col w-col-6">
           <div class="row">
             <div class="col">
-              <label for="major" class="form-label">Major</label>
+              <label for="major" class="form-label">Major (leave blank if none)</label>
               <input
                 v-model="major"
                 type="text"

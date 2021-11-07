@@ -269,7 +269,7 @@
               >{{ data.birth_date }}<br /><strong
                 >Qualification Description: </strong
               >{{ data.qualifications }}<br />
-              <strong>Education: </strong>{{ data.major }} at {{ data.school }},
+              <strong>Education: </strong><text v-if="data.education !== 'High School' || data.major !== '' ">{{ data.major }} at</text> {{ data.school }},
               GPA of {{ data.gpa }}<br /><strong
                 >Professional Experience: </strong
               >{{ data.prof_exp }} years<br /><strong

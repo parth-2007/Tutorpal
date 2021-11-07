@@ -174,8 +174,15 @@ T<template>
                   tutor.rates
                 }}
                 per hour <br /><strong>Bio: </strong>{{ tutor.bio
-                }}<br /><strong>Course Description: </strong
+                }}<br /><strong>Course Description: {{tutor.id}} </strong
                 >{{ tutor.whatYouTeach }}<br />
+                <a
+                  style="font-family: Poppins"
+                  :href="'https://www.tutorpal.org/tutors/'+tutor.id"
+                  target="_blank"
+                ><strong>View my profile</strong>
+                <br>
+                </a>
                 <a
                   @click="updateModalValue"
                   class="tutorbutton-10-copy-copy w-button"

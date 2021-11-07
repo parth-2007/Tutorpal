@@ -1,4 +1,3 @@
-
 <template>
   <client-only>
     <html
@@ -106,36 +105,37 @@
                   </div>
                 </div>
               </div>
-              <div class="div-block-6">
-                <div
-                  data-collapse="none"
-                  data-animation="default"
-                  data-duration="400"
-                  role="banner"
-                  class="navbar-2 w-nav"
-                >
-                  <div class="container-2 w-container">
-                    <nav role="navigation" class="nav-menu-3 w-nav-menu">
-                      <router-link
-                        to="/"
-                        aria-current="page"
-                        class="nav-link-4 w-nav-link"
-                        >Explore</router-link
-                      ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                        >Messages<span v-if="user.unread > 0" class="badge">{{
-                          user.unread
-                        }}</span></router-link
-                      ><router-link
-                        to="/requests"
-                        class="nav-link-4 w-nav-link w--current"
-                        >Requests</router-link
-                      ><router-link to="/payments" class="nav-link-4 w-nav-link"
-                        >Payments</router-link
-                      >
-                    </nav>
-                    <div class="menu-button-2 w-nav-button">
-                      <div class="icon-2 w-icon-nav-menu"></div>
-                    </div>
+            </div>
+            <div class="div-block-6">
+              <div
+                data-collapse="none"
+                data-animation="default"
+                data-duration="400"
+                role="banner"
+                class="navbar-2 w-nav"
+              >
+                <div class="container-2 w-container">
+                  <nav role="navigation" class="nav-menu-3 w-nav-menu">
+                    <router-link
+                      to="/"
+                      aria-current="page"
+                      class="nav-link-4 w-nav-link"
+                      >Explore</router-link
+                    ><router-link to="/inbox" class="nav-link-4 w-nav-link"
+                    >Messages
+                    <span v-if="user.unread > 0" class="badge">{{
+                      user.unread
+                    }}</span> </router-link
+                    ><router-link
+                      to="/requests"
+                      class="nav-link-4 w-nav-link w--current"
+                      >Requests</router-link
+                    ><router-link to="/payments" class="nav-link-4 w-nav-link"
+                      >Payments</router-link
+                    >
+                  </nav>
+                  <div class="menu-button-2 w-nav-button">
+                    <div class="icon-2 w-icon-nav-menu"></div>
                   </div>
                 </div>
               </div>
@@ -236,7 +236,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data() {
     return {
@@ -286,7 +285,7 @@ export default {
     async canceledHandler(id, session) {
       const x = confirm('Please confirm that you wish to cancel this session.')
       if (x === true) {
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
+        await fetch('/api/sessions/' + id + '/', {
           method: 'PATCH',
           credentials: 'include',
           headers: {
