@@ -30,10 +30,12 @@
             class="homeimage-13"
           >
           </div>
-          <p class="homeparagraph-8">Our members in the team are Parth Saxena, Sarosh Thalappil, and Pratham Saxena. 
-          Sarosh is one of the developers of the TutorPal platform, currently a 10th grader attending Scripps Ranch High School (SRHS) with programming knowledge in Python. 
-          Accompanying Sarosh in the development of the TutorPal platform is Parth, a 8th grader at Thurgood Marshall Middle School with a background in Python, JavaScript, CSS, and HTML. 
-          Pratham is the website content manager, designer, and the testing lead for the TutorPal platform. He is currently a senior at SRHS and has a programming background in Java, C, JavaScript, CSS, and HTML.
+          <p class="homeparagraph-8">Our members in the team are Parth Saxena, Sarosh Thalappil, and Pratham Saxena.</p>
+          <ul>
+            <li> Sarosh Thalappil is a co-founder and one of the developers of the TutorPal platform, currently a 10th grader attending Scripps Ranch High School with programming knowledge in Python, HTML, and more languages. </li> 
+            <li> Parth Saxena, a 8th grader at Thurgood Marshall Middle School with a background in Python, JavaScript, CSS, HTML, and more, is accompanying Sarosh in the development of the TutorPal platform. </li> 
+            <li> Pratham Saxena is the website content manager, designer, the testing lead, and marketing lead for the TutorPal platform. He is currently a senior at SRHS and has a programming background in Java, C#, JavaScript, CSS, and HTML.</li>
+          </ul>
           TutorPal’s main purpose is to link students and tutors from any area to receive assistance. To prevent struggle in the search for tutors, TutorPal instantly provides the best tutors.<br></p>
       </body>
     </html>
