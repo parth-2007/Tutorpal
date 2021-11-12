@@ -224,7 +224,7 @@
   </client-only>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   data() {
@@ -267,13 +267,33 @@ export default {
     ...mapGetters({ user: 'getUser', contacts: 'getContacts' }),
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchContacts', 'markContactAsRead']),
+    ...mapActions([
+      'fetchUser',
+      'fetchContacts',
+      'markContactAsRead',
+      'setUser',
+    ]),
     ...mapGetters(['getUser', 'getContacts']),
+    ...mapMutations(['setContacts', 'setUser']),
     logoutclick() {
       this.clicked = !this.clicked
     },
     markAsRead(id) {
-      this.markContactAsRead(id)
+      const contacts = this.getContacts()
+      this.setUser({
+        ...this.getUser(),
+        unread:
+          this.getUser().unread -
+          contacts.find((contact) => contact.id === id).unread,
+      })
+      const contact = {
+        ...contacts.find((contact) => contact.id === id),
+        unread: 0,
+      }
+      const contactIndex = contacts.findIndex((x) => x.id === id)
+      contacts[contactIndex] = contact
+      console.log(contacts)
+      this.setContacts(contacts)
     },
   },
 }
