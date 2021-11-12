@@ -159,7 +159,7 @@
                 Our service is affordable and does not request payment in
                 monthly installments, simply based on the classes taken. We do
                 not take any commission, so you can expect an hour class to
-                range from $25 - 80 depending on experience/subjects.<br />
+                range from $25 to 80 depending on experience/subjects.<br />
               </p>
             </div>
           </div>
@@ -217,7 +217,7 @@
             <div class="homediv-block-16">
               <h1 class="homeheading-5">Simple</h1>
               <p class="homeparagraph-4">
-                tutorPal is straightforward, simple, and convenient. This
+                TutorPal is straightforward, simple, and convenient. This
                 implies the scarce amount of ineffective and aesthetic
                 functions. Our goal is to prioritize customers’ time into
                 learning and educating more while maintaining a friendly user
