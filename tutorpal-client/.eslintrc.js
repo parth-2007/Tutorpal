@@ -12,5 +12,6 @@ module.exports = {
   // add your custom rules here
   rules: {
     'vue/attributes-order': 'off',
+    'vue/script-setup-uses-vars': 'on',
   },
 }
