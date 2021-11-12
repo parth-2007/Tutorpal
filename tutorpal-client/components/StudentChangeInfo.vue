@@ -203,6 +203,11 @@
                 <a @click="updateModalValue()" class="b10 w-button"
                   >Update Information</a
                 >
+                <router-link
+                  style="font-family: Poppins; padding-left: 10px;"
+                  to="/timezone"
+                ><strong>Set my timezone</strong>
+                </router-link>
               </div>
             </div>
           </div>

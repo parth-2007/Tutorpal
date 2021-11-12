@@ -160,7 +160,7 @@ T<template>
                   </strong>
                 </div>
               </div>
-              <p style="padding-top: 20px" class="tutorparagraph-7">
+              <p style="padding-top: 20px overflow: hidden" class="tutorparagraph-7">
                 <strong>Birth Date: </strong>{{ tutor.birthDate }}<br /><strong
                   >Qualification Description: </strong
                 >{{ tutor.qualifications }}<br /><strong>Education:</strong>
@@ -190,6 +190,11 @@ T<template>
                   class="tutorbutton-10-copy-copy w-button"
                   >Update Information</a
                 >
+                <router-link
+                  style="font-family: Poppins; padding-left: 10px;"
+                  to="/timezone"
+                ><strong>Set my timezone</strong>
+                </router-link>
               </p>
             </div>
           </div>
