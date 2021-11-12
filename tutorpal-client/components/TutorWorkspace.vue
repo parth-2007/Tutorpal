@@ -68,7 +68,7 @@
             >
               Your student has not joined this class, therefore, we are not
               allowing you to end it. If there are any issues, please contact us
-              at support@tutorpal.org. We are very sorry for the inconvienence.
+              at info@tutorpal.org. We are very sorry for the inconvienence.
             </div>
             <div
               v-else-if="buttonShow === false"
@@ -78,7 +78,7 @@
               of the meeting. We suggest continuing with the meeting until the
               last ten minutes. Thank you.
             </div>
-            ><button
+            <button
               @click="updateModalValue()"
               style="
                 background-color: #bb0a1e;
@@ -257,6 +257,9 @@ export default {
       timerDisplay: '',
       buttonShow: false,
     }
+  },
+  mounted(){
+    this.buttonShow = true
   },
   head() {
     return {

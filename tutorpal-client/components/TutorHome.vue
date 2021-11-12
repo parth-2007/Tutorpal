@@ -121,7 +121,7 @@
                   width="30"
                   alt=""
                 /><a
-                  href="mailto:the2tor4u@gmail.com?subject=Website%20Email"
+                  href="mailto:info@tutorpal.org"
                   class="tutorlink-2"
                   >Need help? Send us an email</a
                 >
