@@ -12,5 +12,6 @@
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Args": [
         "--ignore=E501"
-    ]
+    ],
+    // "python.terminal.activateEnvironment": false
 }

@@ -18,9 +18,8 @@
     "nuxt": "^2.15.3",
     "nuxt-webfontloader": "^1.1.0",
     "timelite": "^1.0.0",
-    "vue": "^2.6.12",
-    "webfontloader": "^1.6.28",
-    "yarn": "^1.22.17"
+    "vue": "^2.6.14",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",
