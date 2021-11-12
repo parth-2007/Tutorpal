@@ -8,6 +8,7 @@ from channels import exceptions
 from django.utils import timezone
 import pytz
 import redis
+from django.conf import settings
 # from channels.asgi import get_channel_layer
 # from django.db import transaction
 # from asgiref.sync import sync_to_async
@@ -56,11 +57,10 @@ class ChatConsumer(AsyncConsumer):
             me_user_obj = self.me_user_obj
             room_obj = self.room_obj
             if self.check_user_in_room(me_user_obj, room_obj):
-                if tzname != "None" and tzname is not None:
-                    tzone = pytz.timezone(tzname)
-                    local_time = timezone.now().astimezone(tzone)
-                else:
-                    local_time = timezone.now()
+                if tzname == "None" or tzname is None:
+                    tzname = settings.TIME_ZONE
+                tzone = pytz.timezone(tzname)
+                local_time = timezone.now().astimezone(tzone)
                 message_obj = await self.create_chat_message(message)
                 myResponse = {
                     'message': message,
