@@ -51,6 +51,18 @@ const actions = {
   updateContacts({ commit, state }, contact) {
     commit('setContacts', [contact, ...state.contacts])
   },
+  markContactAsRead({ commit, state }, id) {
+    const contacts = [...state.contacts]
+    const contact = {
+      ...contacts.find((contact) => contact.id === id),
+      unread: 0,
+    }
+    const contactIndex = contacts.findIndex((x) => x.id === id)
+    console.log('contact: ', contact)
+    console.log('contacts: ', contacts)
+    contacts[contactIndex] = contact
+    commit('setContacts', contacts)
+  },
 }
 
 const mutations = {
