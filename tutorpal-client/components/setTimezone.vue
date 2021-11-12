@@ -94,7 +94,7 @@ export default {
   methods: {   
     setCookie(){
       console.log(this.timezoneValue)
-      document.cookie = `tz_name='${this.timezoneValue}'; expires=Thu, 18 Dec 2041 12:00:00 UTC; domain=.tutorpal.org; secure";`
+      document.cookie = `tz_name=${this.timezoneValue}; expires=Thu, 18 Dec 2041 12:00:00 UTC; domain=.tutorpal.org; secure=true;`
     }
   },
 }
