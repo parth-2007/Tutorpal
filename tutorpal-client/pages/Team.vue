@@ -32,11 +32,11 @@
           </div>
           <p class="homeparagraph-8">Our members in the team are Parth Saxena, Sarosh Thalappil, and Pratham Saxena.</p>
             <h1 class="Sarosh_name"> Sarosh Thalappil </h1>
-            <p class="homeparagraph-Sa"> Sarosh Thalappil is a co-founder and one of the developers of the TutorPal platform, currently a 10th grader attending Scripps Ranch High School with programming knowledge in Python, HTML, and more languages.  </p>
+            <p class="homeparagraph-Sa"> Sarosh Thalappil is a co-founder and one of the developers of the TutorPal platform, currently a 10th grader attending Scripps Ranch High School with programming knowledge in Python, HTML, and more.  </p>
             <h1 class="Parth_name"> Parth Saxena </h1>
-             <p class="homeparagraph-Pa"> Parth Saxena, a 8th grader at Thurgood Marshall Middle School with a background in Python, JavaScript, CSS, HTML, and more, is accompanying Sarosh in the development of the TutorPal platform. </p>
+             <p class="homeparagraph-Pa"> Co-founder Parth Saxena, a 8th grader at Thurgood Marshall Middle School with a background in Python, JavaScript, CSS, HTML, and more, is accompanying Sarosh in the development of the TutorPal platform. </p>
             <h1 class="Pratham_name"> Pratham Saxena </h1>
-             <p style="padding-bottom: 40px" class="homeparagraph-Pra">Pratham Saxena is the website content manager, designer, the testing lead, and marketing lead for the TutorPal platform. He is currently a senior at SRHS and has a programming background in Java, C#, JavaScript, CSS, and HTML.</p>
+             <p style="padding-bottom: 60px" class="homeparagraph-Pra">Pratham Saxena is a co-founder, the website content manager, designer, the testing lead, and marketing lead for the TutorPal platform. He is currently a senior at SRHS and has a programming background in Java, C#, JavaScript, CSS, and HTML. Pratham is very interested in STEM, mainly in engineering and computer science. He has prior knowledge in mechanical engineering, CAD design, computer science, and is currently learning the basics of electrical engineering and marketing. Currently, Pratham volunteers as a high school coach for Thurgood Marshall Science Olympiad and is participating in the robotics competition RoboSub, RobotX, FIRST Robotics Challenge, and more with complete devotion. In his spare time, Pratham likes to swim and to spend time with his family and friends!</p>
       </body>
     </html>
   </client-only>
