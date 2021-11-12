@@ -29,7 +29,7 @@ urlpatterns = [
 
 # urlpatterns = [path(r'api/', include(urlpatterns))]
 
-if os.environ.get('RUN_ENV', 'local') != 'aws':
+if os.environ.get('RUN_ENV', 'local') == 'local':
     urlpatterns = [path(r'api/', include(urlpatterns))]
 
 # if settings.DEBUG and os.environ.get('RUN_ENV', 'local') != 'aws':
