@@ -304,6 +304,40 @@
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
+            <div>
+                  <select
+                    ref="select"
+                    v-model="stars"
+                    style="margin-top: 0px"
+                    class="form-select"
+                    id="stars"
+                    aria-label="Default select example"
+                    required
+                  >
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option selected value="5">5 Stars</option>
+                  </select>
+                  <textarea
+                    ref="description"
+                    v-model="reviewDescription"
+                    style="height: 150px; margin-top: 20px; margin-bottom: 20px"
+                    class="form-control"
+                    id="description"
+                    placeholder="Enter Description"
+                    rows="3"
+                    required
+                  ></textarea>
+                  <button
+                    @click="createReview(data.id)"
+                    class="btn btn-primary"
+                    name="review"
+                  >
+                    Post Review
+                  </button>
+                </div>
             <div v-if="reviews !== []">
               <div
                 v-for="review in reviews.results"
@@ -356,6 +390,8 @@ export default {
       subjects: '',
       reviews: [],
       predictedprice: '',
+      stars: 5,
+      reviewDescription: '',
     }
   },
   async fetch() {
@@ -427,6 +463,38 @@ export default {
       this.predictedprice =
         'Predicted Class Amount: $' +
         Math.floor((this.data.rates / 60) * parseInt(this.duration) * 100) / 100
+    },
+    async createReview(tutorId) {
+      const csrfToken = await getCSRF()
+      await fetch(process.env.API_URL +'/reviews/', {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          student: this.user.studentPk,
+          stars: parseInt(this.stars),
+          description: this.description,
+          tutor: tutorId,
+        }),
+      }).then((res) => {
+        let error = null
+        if (res.status === 403) {
+          error = 'You have already posted a review for this tutor.'
+        } else if (res.status === 500) {
+          error = 'Please check your inputs and make sure they are not empty.'
+        } else if (res.status === 404) {
+          error =
+            'We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
+        }
+        if (error) {
+          alert(error)
+        }
+        this.reviewDescription = ''
+        this.stars = undefined
+      })
     },
     async createroom() {
       const room = {
