@@ -90,7 +90,10 @@ if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
         'https://www.tutorpal.org',
     ]
 elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-    CORS_ALLOWED_ORIGINS = ['https://beta.tutorpal.org']
+    CORS_ALLOWED_ORIGINS = [
+        'https://beta.tutorpal.org',
+        'https://www.beta.tutorpal.org',
+    ]
 else:
     CORS_ALLOWED_ORIGINS = [
         'http://localhost:8000',
@@ -108,7 +111,10 @@ if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
         'https://tutorpal.org'
     ]
 if os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-    CSRF_TRUSTED_ORIGINS = ['https://beta.tutorpal.org']
+    CSRF_TRUSTED_ORIGINS = [
+        'https://beta.tutorpal.org',
+        'https://www.beta.tutorpal.org',
+    ]
 else:
     CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
