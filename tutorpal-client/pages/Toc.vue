@@ -83,8 +83,10 @@
             restrict your access to parts of or all of the Service without
             notice or liability. <br />‍<br />4. Services<br />‍<br />The Site
             offers an online marketplace for those seeking tutoring services to
-            connect with those seeking to provide tutoring services. As
-            independent businesses engaged by Students, Tutors decide, are
+            connect with those seeking to provide tutoring services. Tutors at 
+            other sites who register at TutorPal are responsible if other tutoring
+            platforms prevent them from using TutorPal. We are not held responsible 
+            in such scenarios. As independent businesses engaged by Students, Tutors decide, are
             responsible for and generally control the methods, materials,
             scheduling, frequency, duration and all other aspects of the
             tutoring they provide. Students are responsible for selecting the
