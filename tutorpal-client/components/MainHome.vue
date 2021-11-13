@@ -259,7 +259,7 @@
             <router-link to="/team" class="homelink-3">Team</router-link>
           </div>
           <div class="homecolumn-10 w-col w-col-3">
-            <router-link to="/toc" class="homelink-3">Terms of service</router-link>
+            <router-link to="/toc" class="homelink-3">Terms of Service</router-link>
           </div>
           <div class="homecolumn-11 w-col w-col-3">
             <router-link to="/feedback" class="homelink-3">User Feedback</router-link>
