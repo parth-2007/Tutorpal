@@ -371,7 +371,7 @@
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
           <div style="margin-left: 60px" class="text-block-5">
-            Pricing Per Hour (in terms of USD)
+            Pricing Per Hour (in terms of USD) <br>(to claim volunteer hours you MUST set this value to 0)
           </div>
         </div>
         <div class="w-col w-col-6">
