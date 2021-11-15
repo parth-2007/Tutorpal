@@ -163,81 +163,35 @@
             </div>
           </div>
         </div>
-        <div
+        <h1
           style="
-            float: right;
             font-family: Poppins;
-            background-color: white;
-            height: 100%;
-            width: 23vw;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            margin-right: 8px;
-            border-radius: 8px;
-            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            font-size: 20px;
+            color: black;
           "
         >
-          <div>
-            <p style="font-size: 16px">
-              Here are some tools you can use to help:
-            </p>
-            <a target="_blank" href="https://www.google.com/docs/about/"
-              >Google Docs, Sheets, Forms, Slides</a
-            >
-            <br />
-            <a target="_blank" href="https://jamboard.google.com/"
-              >Google Jamboard</a
-            >
-            <br />
-            <a
-              target="_blank"
-              href="https://colab.research.google.com/notebooks/intro.ipynb"
-              >Google Colab</a
-            >
-            <br />
-            <a target="_blank" href="https://docs.google.com/drawings/"
-              >Google Drawings</a
-            >
-            <br />
-            <a target="_blank" href="https://kahoot.com/">Kahoot</a>
-            <br />
-            <a target="_blank" href="https://www.hackerrank.com/">Hackerrank</a>
-            <p style="margin-top: 10px">
-              Tips: 1) Leaving the call will NOT end this class as it is not
-              directly connected to our platform. Remember to end the class by
-              clicking the red button below. 2) Please do not need to share the
-              meeting link with anybody, including the student. 3) The video
-              calling system is most compatible with Google Chrome
-            </p>
-            <h1
-              style="
-                font-family: Poppins;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                font-size: 20px;
-                color: black;
-              "
-            >
-              <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
-            </h1>
-            <button
-              @click="updateModalValue()"
-              class="tutorbutton-10-copy-copy w-button"
-              style="
-                margin-top: 10px;
-                margin-bottom: 10px;
-                background-color: #bb0a1e;
-              "
-            >
-              End this Class
-            </button>
-          </div>
-        </div>
+          <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
+          <button
+            @click="updateModalValue()"
+            class="tutorbutton-10-copy-copy w-button"
+            style="
+              background-color: #bb0a1e;
+              margin-left: 30px;
+              font-size: 16px;
+            "
+          >
+            End this Class
+          </button>
+        </h1>
         <iframe
-          style="width: 75vw; height: 100vh"
+          style="width: 40vw; height: 100vh; margin-left: 10px; float:left"
           allow="camera;microphone"
           :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
         ></iframe>
+        <div style="width: 58vw; height: 100vh; float: right" id="wt-container"></div>
       </body>
     </html>
   </client-only>
@@ -260,6 +214,10 @@ export default {
   },
   mounted(){
     this.buttonShow = true
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    script.addEventListener('load', this.setLoaded)
+    document.body.appendChild(script)
   },
   head() {
     return {
@@ -365,6 +323,13 @@ export default {
     dateToString,
     logoutclick() {
       this.clicked = !this.clicked
+    },
+    setLoaded() {
+      const wt = new api.WhiteboardTeam('#wt-container', { 
+          clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+          boardCode: this.session.call_url,
+      });
+      console.log(wt)
     },
     async updateModalValue() {
       this.session = await fetch(
