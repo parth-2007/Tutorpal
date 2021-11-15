@@ -203,9 +203,6 @@
                       I agree with the
                       <router-link to="/toc">Terms of Service</router-link>
                     </label>
-                    <p style="color: hsla(0, 100%, 64%, 1)">
-                      {{ errors.toc }}
-                    </p>
                   </div>
                   <p style="color: hsla(0, 100%, 64%, 1)">
                     {{ errors.global }}

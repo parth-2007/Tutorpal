@@ -386,6 +386,13 @@ export default {
           !objectsEqual(this.user, this.getUser()))
       ) {
         const csrfToken = await getCSRF()
+        if (this.tutor.linkedIn !== '') {
+          let httpCheck = this.tutor.linkedIn.substr(0, 8)
+          if (httpCheck !== 'https://') {
+            httpCheck = 'https://'
+            this.tutor.linkedIn = httpCheck.concat(this.tutor.linkedIn)
+          }
+        }
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
           const formData = new FormData()
           if (this.profilePic) {

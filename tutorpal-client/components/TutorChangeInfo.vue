@@ -170,7 +170,7 @@ T<template>
                 {{ tutor.profExp }} years<br /><strong>Teaching Experience: </strong>{{ tutor.teachExp }}
                 years<br /><strong>Average Review:</strong>
                 {{ tutor.averageReviews }}<br />
-                <strong>Occupation:</strong>{{ tutor.occupation }}<br />
+                <strong>Occupation: </strong>{{ tutor.occupation }}<br />
                 <strong>Price: </strong>${{tutor.rates}} per hour <br />
                 <strong>Bio: </strong>{{ tutor.bio}}<br />
                 <strong>Availability: </strong>{{ tutor.availability}}<br />
