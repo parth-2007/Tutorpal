@@ -8,6 +8,7 @@
         <meta charset="utf-8" />
       </head>
       <body>
+        <div style="width: 98vw; height: 550px;" id="wt-container"></div>
       </body>
     </html>
   </client-only>
