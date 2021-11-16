@@ -131,7 +131,7 @@
           allow="camera;microphone"
           :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
         ></iframe>
-        <div style="width: 58vw; height: 100vh; float: right;" id="wt-container"></div>
+        <container><div style="width: 58vw; height: 100vh; float: right" id="wt-container"></div></container>
       </body>
     </html>
   </client-only>
@@ -216,12 +216,15 @@ export default {
       this.clicked = !this.clicked
     },
     setLoaded() {
-      const wt = new api.WhiteboardTeam('#wt-container', {
+      const wt = new api.WhiteboardTeam('#wt-container', { 
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
+          participant: {
+              name : this.user.firstName + " " + this.user.lastName,
+              role: 'editor'
+          }
       });
       wt.resetZoom()
-      console.log(wt)
     },
     ...mapActions(['fetchUser']),
   },
