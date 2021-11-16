@@ -329,7 +329,7 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
       });
-      console.log(wt)
+      wt.resetZoom()
     },
     async updateModalValue() {
       this.session = await fetch(
