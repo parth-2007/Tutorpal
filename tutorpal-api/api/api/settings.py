@@ -31,9 +31,9 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
-    ALLOWED_HOSTS = ['api.tutorpal.org']
+    ALLOWED_HOSTS = ['api.tutorpal.org', 'localhost']
 elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-    ALLOWED_HOSTS = ['devapi.tutorpal.org']
+    ALLOWED_HOSTS = ['devapi.tutorpal.org', 'localhost']
 else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -154,7 +154,7 @@ ASGI_APPLICATION = "api.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 # Add a prod db here later
-if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -163,6 +163,17 @@ if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') =
             'PASSWORD': os.environ['RDS_PASSWORD'],
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
+        }
+    }
+elif os.environ.get('DEV_DB_NAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['DEV_DB_NAME'],
+            'USER': os.environ['DEV_DB_USER'],
+            'PASSWORD': os.environ['DEV_DB_PASSWORD'],
+            'HOST': os.environ['DEV_DB_HOST'],
+            'PORT': int(os.environ['DEV_DB_PORT']),
         }
     }
 elif os.environ.get('DATABASE_NAME', None):
