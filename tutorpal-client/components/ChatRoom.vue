@@ -221,10 +221,17 @@ export default {
     },
     connect() {
       const chatMsgs = this.chatMsgs
-      const host =
-        process.env.API_URL === 'https://api.tutorpal.org'
-          ? 'wss://chat.tutorpal.org'
-          : 'ws://localhost:8080'
+      // Check the api url, depending on the api url the chat connection changes accodingly
+      if (process.env.API_URL === 'https://api.tutorpal.org') {
+        // prod
+        const host = 'wss://chat.tutorpal.org'
+      } else if (process.env.API_URL === 'https://devapi.tutorpal.org') {
+        // beta
+        const host = 'wss://chat.tutorpal.org:8080'
+      } else {
+        // local
+        const host = 'ws://localhost:8080'
+      }
       const endpoint = host + '/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
       this.socket.onmessage = function (e) {
