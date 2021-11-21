@@ -81,7 +81,7 @@
                     </h1>
                     <p class="paragraph">
                       12 hours after you have conducted your class, a Paypal
-                      payment will be sent to your email.
+                      payment will be sent to your email OR receive volunteer hours.
                     </p>
                   </div>
                 </div>

@@ -8,9 +8,7 @@
         <meta charset="utf-8" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
-      <div style="margin-bottom: 0px;" class="alert alert-success" role="alert">
-        <p style="font-family: Poppins; font-size: 15px; padding-left:20px; margin-bottom: 0px;"> Students older than 15 years of age and without a valid Social Security Number (SSN) can become tutors and earn volunteering hours. Students with a valid SSN can earn money on a fixed hourly rate. </p> 
-      </div>
+      
       <div style="margin-top: 0px;" class="homesection-2">
         <div class="homediv-block-5">
           <div class="homediv-block-3-copy">
@@ -143,7 +141,7 @@
         </div>
       </div>
       <div class="homediv-block-14">
-        <h1 class="homeheading-4">What makes us so special?</h1>
+        <h1 style= "padding-bottom: 40px" class="homeheading-4">What makes us so special?</h1>
         <div class="homew-layout-grid grid">
           <div class="homediv-block-15">
             <img
@@ -184,7 +182,8 @@
               <p class="homeparagraph-2">
                 The tutoring website offers a wide range of tutors in subjects,
                 along with diversity. You can expect scholars ranging from high
-                school toppers to college professors.<br />
+                school toppers to college professors. Tutors can earn money on 
+                a fixed hourly rate or receive volunteering hours.<br />
               </p>
             </div>
           </div>
@@ -260,7 +259,7 @@
             <router-link to="/team" class="homelink-3">Team</router-link>
           </div>
           <div class="homecolumn-10 w-col w-col-3">
-            <router-link to="/toc" class="homelink-3">Terms of service</router-link>
+            <router-link to="/toc" class="homelink-3">Terms of Service</router-link>
           </div>
           <div class="homecolumn-11 w-col w-col-3">
             <router-link to="/feedback" class="homelink-3">User Feedback</router-link>

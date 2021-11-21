@@ -7,6 +7,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
+      <STYLE>A {text-decoration: none;} </STYLE>
       <body id="body" style="min-height: 100vh" class="tutorbody-2">
         <div id="main">
           <div class="tutorsection">
@@ -140,7 +141,6 @@
                 style="padding-bottom: 5px; padding-top: 5px"
                 class="tutoritem-2"
               >
-                <span class="tutorbadge">{{ contact.unread }}</span>
                 <div class="tutordiv-block-78">
                   <div class="tutordiv-block-77">
                     <img
@@ -178,7 +178,26 @@
                       loading="lazy"
                       width="40"
                       alt=""
-                  /></router-link>
+                    />
+                    <span style="
+                        position: relative;
+                        top: -10px;
+                        left: -18px;
+                        border-radius: 100px;
+                        width: 25px;
+                        height: 25px;
+                        display: inline-flex;
+                        background: red;
+                        color: white;
+                        font-size: 14px;
+                        text-decoration: none;
+                        font-family: Poppins;
+                        align-items: center;
+                        justify-content: center;
+                    "> 
+                    {{contact.unread}}
+                    </span>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -238,16 +257,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.tutorbadge {
-  margin-top: 5px;
-  float: right;
-  padding: 2px 8px;
-  border-radius: 1000px;
-  background-color: red;
-  color: white;
-  font-family: Poppins;
-  font-size: 14px;
-  margin-right: 15px;
-}
-</style>

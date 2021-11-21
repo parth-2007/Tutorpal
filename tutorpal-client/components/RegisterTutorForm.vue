@@ -109,6 +109,7 @@
                 type="email"
                 class="form-control"
                 id="paypalemail"
+                required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">
                 {{ errors.paypalEmail }}
@@ -371,7 +372,7 @@
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
           <div style="margin-left: 60px" class="text-block-5">
-            Pricing Per Hour (in terms of USD)
+            Pricing Per Hour (in terms of USD) <br>(to claim volunteer hours you MUST set this value to 0)
           </div>
         </div>
         <div class="w-col w-col-6">
@@ -467,7 +468,7 @@
         </div>
       </div>
     </form>
-    <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.global }}</p>
+    <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins; font-size: 16px; margin-left: 60px;">{{ errors.global }}</p>
     <button
       @click="handleSubmit"
       style="margin-top: 40px; margin-bottom: 20px; margin-left: 60px"
@@ -479,7 +480,6 @@
 </template>
 <script>
 import getCSRF from '../utils/getCSRF'
-// import FormInput from '../components/FormInput'
 
 export default {
   data() {
@@ -578,13 +578,14 @@ export default {
     },
     validateData() {
       if (!this.toc) {
-        this.errors.global = 'Please read and agree to oue Terms of Conditions'
+        this.errors.global = 'Please read and agree to our Terms of Conditions'
       } else {
         this.errors.global = ''
       }
       if (this.linkedIn !== '') {
-        const httpCheck = this.linkedIn.substr(0, 8)
+        let httpCheck = this.linkedIn.substr(0, 8)
         if (httpCheck !== 'https://') {
+          httpCheck = 'https://'
           this.linkedIn = httpCheck.concat(this.linkedIn)
         }
       }
