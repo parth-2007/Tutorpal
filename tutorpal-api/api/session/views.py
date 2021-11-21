@@ -213,8 +213,10 @@ class SessionViewSet(viewsets.ModelViewSet):
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
                         duration=duration, call_url=result_str, price=price, free=free)  # 2 query
         email = tutor.user.email
-        if os.environ.get('RUN_ENV', 'local') == 'aws':
-            domain = 'https://tutorpal.org/'
+        if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+            domain = 'https://www.tutorpal.org/'
+        elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+            domain = 'https://beta.tutorpal.org/'
         else:
             domain = get_current_site(self.request).domain
         subject = 'You have a class request'
