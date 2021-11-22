@@ -295,7 +295,6 @@ export default {
       return res.json()
     })
     const time = new Date()
-    const classTime = new Date(this.session.date)
     let hours = time.getHours()
     let minutes = time.getMinutes()
     let seconds = time.getSeconds()
@@ -310,11 +309,7 @@ export default {
     const hms = str(sub([this.session.time_end, now]))
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    if (time > classTime) {
-      this.timerCount = 0
-    } else {
-      this.timerCount = timerSeconds
-    }
+    this.timerCount = timerSeconds
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
