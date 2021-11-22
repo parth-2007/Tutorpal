@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('session.urls')),
     path('', include('chat.urls')),
     path('', include('main.urls')),
+    path('admin/', admin.site.urls),
 ]
 
 # urlpatterns = [path(r'api/', include(urlpatterns))]

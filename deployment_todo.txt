@@ -2,3 +2,4 @@
 - Add autoscaling to prod db
 - Keep lambda funcs warm
 - Remove IP restrictions for prod api and chat api
+- Remove email sandbox for SES
