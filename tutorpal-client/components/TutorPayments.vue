@@ -281,7 +281,9 @@ export default {
           body: JSON.stringify({
             canceled: true,
           }),
-        })
+        }).then((res) => {
+            console.log(res)
+          })
         this.removeSession([session, 'pendingOnStudentPayment'])
       }
     },
