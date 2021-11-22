@@ -226,7 +226,7 @@ export default {
         process.env.API_URL === 'https://api.tutorpal.org'
           ? 'wss://chat.tutorpal.org'
           : process.env.API_URL === 'https://devapi.tutorpal.org'
-          ? 'wss://chat.tutorpal.org:8080'
+          ? 'wss://chat.tutorpal.org/dev'
           : 'ws://localhost:8080'
       const endpoint = host + '/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
