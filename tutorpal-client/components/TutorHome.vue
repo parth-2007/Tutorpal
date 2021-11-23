@@ -120,8 +120,11 @@
                   ><router-link
                     to="/payments"
                     class="tutornav-link-4 w-nav-link"
-                    >Payments</router-link
-                  >
+                    >Payments</router-link>
+                  <router-link
+                    to="/volunteering"
+                    class="tutornav-link-4 w-nav-link"
+                    >Volunteering</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
