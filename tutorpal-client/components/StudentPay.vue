@@ -227,7 +227,7 @@ export default {
   mounted() {
     const script = document.createElement('script')
     const clientId =
-      'Ae0zJYc6uq0r19vdNLW2TedQ86i7_FTrS7s_3pwgU5ePOXriAibXuXssw_Nbc5jOg7JOUvU4e7q_LkaT'
+      'AUzYwiCFrFC-E70TT-KhY5GDZuAUel5HTGw8NvEtpc1jGUQTtmGdgxyQjdCapPH-GccMwDghpVcXcinf'
     script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
     script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
