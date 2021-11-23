@@ -221,9 +221,12 @@ export default {
     },
     connect() {
       const chatMsgs = this.chatMsgs
+      // Check the api url, depending on the api url the chat connection changes accodingly
       const host =
         process.env.API_URL === 'https://api.tutorpal.org'
           ? 'wss://chat.tutorpal.org'
+          : process.env.API_URL === 'https://devapi.tutorpal.org'
+          ? 'wss://chat.tutorpal.org:8080'
           : 'ws://localhost:8080'
       const endpoint = host + '/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)
