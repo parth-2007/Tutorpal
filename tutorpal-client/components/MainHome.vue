@@ -39,7 +39,6 @@
               name="q"
               placeholder="Search by subject"
               id="search"
-              required=""
             /><input
               type="submit"
               value="Search"

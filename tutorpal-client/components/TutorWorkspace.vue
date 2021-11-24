@@ -295,6 +295,10 @@ export default {
       return res.json()
     })
     const time = new Date()
+    let yourDate = new Date()
+    yourDate = new Date(yourDate.getTime() - (yourDate.getTimezoneOffset()*60*1000))
+    const todayDate = yourDate.toISOString().split('T')[0]
+
     let hours = time.getHours()
     let minutes = time.getMinutes()
     let seconds = time.getSeconds()
@@ -309,7 +313,9 @@ export default {
     const hms = str(sub([this.session.time_end, now]))
     const a = hms.split(':')
     const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    this.timerCount = timerSeconds
+    if (todayDate === this.session.date){
+      this.timerCount = timerSeconds
+    }
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
