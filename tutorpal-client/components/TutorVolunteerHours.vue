@@ -4,12 +4,12 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-      <head>
-        <meta charset="utf-8" />
-      </head>
-      <STYLE>A {text-decoration: none;} </STYLE>
-      <body id="body" style="min-height: 100vh" class="tutorbody-2">
-        <div id="main">
+    <head>
+      <meta charset="utf-8" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
+    </head>
+    <body>
+      <div id="main">
           <div class="tutorsection">
             <router-link to="/" class="tutorlink-block w-inline-block"
               ><img
@@ -91,21 +91,21 @@
                 <nav role="navigation" class="tutornav-menu-3 w-nav-menu">
                   <router-link
                     to="/"
-                    aria-current="page"
                     class="tutornav-link-4 w-nav-link"
-                    >Requests</router-link
-                  ><router-link
-                    to="/inbox"
-                    class="tutornav-link-4 w-nav-link w--current"
-                    >Messages</router-link
+                    >Requests
+                  </router-link
+                  ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
+                    >Messages
+                    <span v-if="user.unread > 0" class="tutorbadge">{{
+                      user.unread
+                    }}</span> </router-link
                   ><router-link
                     to="/payments"
                     class="tutornav-link-4 w-nav-link"
-                    >Payments</router-link
-                  >
+                    >Payments</router-link>
                   <router-link
                     to="/volunteering"
-                    class="tutornav-link-4 w-nav-link"
+                    class="tutornav-link-4 w-nav-link w--current"
                     >Volunteering</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
@@ -114,117 +114,44 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="tutordiv-block-44">
-          <div class="tutordiv-block-79">
-            <img
-              src="../static/tutor/images/question.png"
-              loading="lazy"
-              width="30"
-              alt=""
-            /><a
-              href="mailto:the2tor4u@gmail.com?subject=Website%20Email"
-              class="tutorlink-2"
-              >Need help? Send us an email</a
-            >
-          </div>
-          <div class="tutordiv-block-48">
-            <div class="tutortext-block-23">Messages</div>
-            <p class="tutorparagraph">
-              View all of your contacts here on the messages page, click the
-              buttons to reach the chatroom
-            </p>
-          </div>
-          <div v-if="contacts.unfetched === undefined">
-            <div
-              v-for="contact in contacts"
-              :key="contact.id"
-              class="tutorloop"
-            >
-              <div
-                style="padding-bottom: 5px; padding-top: 5px"
-                class="tutoritem-2"
-              >
-                <div class="tutordiv-block-78">
-                  <div class="tutordiv-block-77">
-                    <img
-                      style="border-radius: 100px"
-                      :src="
-                        contact.student !== undefined
-                          ? contact.student.user.profilePic
-                          : ''
-                      "
-                      loading="lazy"
-                      height="60"
-                      width="60"
-                      alt=""
-                      class="tutorimage-15"
-                    />
-                    <h1 class="tutorheading-12">
-                      {{
-                        contact.student !== undefined
-                          ? contact.student.user.firstName
-                          : ''
-                      }}
-                      {{
-                        contact.student !== undefined
-                          ? contact.student.user.lastName
-                          : ''
-                      }}
-                    </h1>
-                  </div>
-                  <router-link
-                    style="margin-right: -10px"
-                    :to="'/chat/' + contact.id"
-                    class="tutorlink-block-3 w-inline-block"
-                    ><img
-                      src="../static/tutor/images/chat.png"
-                      loading="lazy"
-                      width="40"
-                      alt=""
-                    />
-                    <span style="
-                        position: relative;
-                        top: -10px;
-                        left: -18px;
-                        border-radius: 100px;
-                        width: 25px;
-                        height: 25px;
-                        display: inline-flex;
-                        background: red;
-                        color: white;
-                        font-size: 14px;
-                        text-decoration: none;
-                        font-family: Poppins;
-                        align-items: center;
-                        justify-content: center;
-                    "> 
-                    {{contact.unread}}
-                    </span>
-                  </router-link>
+           <div style="font-family: Poppins;" class="container">
+              <h1 style="margin-top: 20px;">Certificate Generator</h1>
+              <p>Claim your credit for volunteering hours here</p>
+              <button class="btn btn-outline-primary" @click="download()" >Download</button>
+              <div>
+                <div ref="certificate">
+                  <img ref="image" style="z-index: 0;" height="500" src="../static/tutor/images/certficate.jpg">
+                  <h1 style="z-index: 5; margin-top: -280px; width: 760px; text-align: center; font-family: Playfair Display; font-size: 44px;"><strong>{{this.user.firstName}} {{this.user.lastName}}</strong></h1>
+                  <p style="z-index: 5; font-size: 16px; margin-top: 130px; margin-left: 162px; font-family: Playfair Display;"><strong>{{month}}</strong></p>
+                  <p style="z-index: 5; font-size: 16px; margin-left: 182px; margin-top: -40px; font-family: Playfair Display;"><strong>{{day}}</strong></p>
+                  <p style="z-index: 5; font-size: 16px; margin-left: 202px; margin-top: -40px; font-family: Playfair Display;"><strong>{{year}}</strong></p>
+                  <p style="z-index: 5; font-size: 26px; margin-left: 208px; margin-top: -110px; font-family: Playfair Display;"><strong>{{hours}}</strong></p>
                 </div>
               </div>
-            </div>
           </div>
         </div>
-      </body>
+    </body>
     </html>
   </client-only>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Jspdf from 'jspdf'
+import html2canvas from 'html2canvas'
 
 export default {
-  data() {
-    return { clicked: false }
-  },
-  async fetch() {
-    await this.fetchContacts()
-    await this.fetchUser()
+  data(){
+    return{
+      clicked: false,
+      day: '',
+      month: '',
+      year: '',
+      hours: '',
+    }
   },
   head() {
     return {
-      title: 'Inbox',
+      title: 'Tutor Volunteer Hours',
       link: [
         {
           rel: 'stylesheet',
@@ -244,20 +171,61 @@ export default {
       ],
     }
   },
+
+  async created() {
+    await this.fetchTutor()
+    await this.fetchUser()
+    let date = new Date()
+    date = new Date(date.getTime() - (date.getTimezoneOffset()*60*1000))
+    this.hours = this.tutor.freeTutoringGiven.substr(0,2)
+    this.day = date.getDate();
+    this.month = date.getMonth()+1;
+    this.year = date.getFullYear();
+  },
   computed: {
-    ...mapGetters({ user: 'getUser', contacts: 'getContacts' }),
     logout() {
       return {
         display: this.clicked ? 'flex' : 'none',
       }
     },
+    ...mapGetters({ tutor: 'getTutor' }),
+    ...mapGetters({ user: 'getUser' }),
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchContacts']),
-    ...mapGetters(['getUser', 'getContacts']),
-    logoutclick() {
+    logoutclick(){
       this.clicked = !this.clicked
     },
-  },
+    download(){
+      const pdf = new Jspdf('l', 'mm', [297, 210]);
+      html2canvas(this.$refs.certificate, {
+        height: 700
+      }).then(function(canvas) {
+        const img = canvas.toDataURL();
+        pdf.addImage(img,'JPEG',0,0);
+        pdf.save("certificate.pdf");
+      });
+    },
+    ...mapActions(['fetchTutor', 'fetchUser']),
+  }
 }
 </script>
+<style>
+.tutordiv-block-80 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 10px 5%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+}
+</style>
+ 

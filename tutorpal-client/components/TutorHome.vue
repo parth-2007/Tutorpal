@@ -92,7 +92,26 @@
                     to="/"
                     aria-current="page"
                     class="tutornav-link-4 w-nav-link w--current"
-                    >Requests</router-link
+                    >Requests
+                    <span style="
+                        position: relative;
+                        top: -10px;
+                        left: -18px;
+                        border-radius: 100px;
+                        width: 25px;
+                        height: 25px;
+                        display: inline-flex;
+                        background: red;
+                        color: white;
+                        font-size: 14px;
+                        text-decoration: none;
+                        font-family: Poppins;
+                        align-items: center;
+                        justify-content: center;
+                    "> 
+                    {{countPendingRequests}}
+                    </span>
+                  </router-link
                   ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
                     >Messages
                     <span v-if="user.unread > 0" class="tutorbadge">{{
@@ -101,8 +120,11 @@
                   ><router-link
                     to="/payments"
                     class="tutornav-link-4 w-nav-link"
-                    >Payments</router-link
-                  >
+                    >Payments</router-link>
+                  <router-link
+                    to="/volunteering"
+                    class="tutornav-link-4 w-nav-link"
+                    >Volunteering</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -327,12 +349,14 @@ export default {
       clicked: false,
       requests1: [],
       next: '',
+      countPendingRequests: 0,
     }
   },
   async fetch() {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
     await this.fetchSessions('pendingOnTutor')
+    this.countPendingRequests = this.requests.length;
   },
   head() {
     return {

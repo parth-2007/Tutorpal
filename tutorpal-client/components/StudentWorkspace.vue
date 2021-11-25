@@ -127,10 +127,11 @@
           </div>
         </div>
         <iframe
-          style="width: 100vw; height: 87vh"
+          style="width: 40vw; height: 100vh; margin-left: 10px; float:left"
           allow="camera;microphone"
           :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
         ></iframe>
+        <container><div style="width: 58vw; height: 100vh; float: right" id="wt-container"></div></container>
       </body>
     </html>
   </client-only>
@@ -167,6 +168,12 @@ export default {
         },
       ],
     }
+  },
+  mounted(){
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    script.addEventListener('load', this.setLoaded)
+    document.body.appendChild(script)
   },
   computed: {
     logout() {
@@ -208,6 +215,17 @@ export default {
     logoutclick() {
       this.clicked = !this.clicked
     },
+    // setLoaded() {
+    //   const wt = new api.WhiteboardTeam('#wt-container', { 
+    //       clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+    //       boardCode: this.session.call_url,
+    //       participant: {
+    //           name : this.user.firstName + " " + this.user.lastName,
+    //           role: 'editor'
+    //       }
+    //   });
+    //   wt.resetZoom()
+    // },
     ...mapActions(['fetchUser']),
   },
 }

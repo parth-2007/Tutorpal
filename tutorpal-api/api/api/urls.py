@@ -25,11 +25,12 @@ urlpatterns = [
     path('', include('session.urls')),
     path('', include('chat.urls')),
     path('', include('main.urls')),
+    path('admin/', admin.site.urls),
 ]
 
 # urlpatterns = [path(r'api/', include(urlpatterns))]
 
-if os.environ.get('RUN_ENV', 'local') != 'aws':
+if os.environ.get('RUN_ENV', 'local') == 'local':
     urlpatterns = [path(r'api/', include(urlpatterns))]
 
 # if settings.DEBUG and os.environ.get('RUN_ENV', 'local') != 'aws':

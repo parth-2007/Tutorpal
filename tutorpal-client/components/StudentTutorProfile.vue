@@ -304,7 +304,7 @@
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div>
+            <div style="margin-bottom: 20px;">
                   <select
                     ref="select"
                     v-model="stars"
@@ -337,7 +337,7 @@
                   >
                     Post Review
                   </button>
-                </div>
+            </div>
             <div v-if="reviews !== []">
               <div
                 v-for="review in reviews.results"

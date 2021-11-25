@@ -103,6 +103,11 @@
                   class="tutornav-link-4 w-nav-link w--current"
                   >Payments</router-link
                 >
+                <router-link
+                  to="/volunteering"
+                  class="tutornav-link-4 w-nav-link"
+                  >Volunteering
+                </router-link>
               </nav>
               <div class="tutormenu-button-2 w-nav-button">
                 <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -281,7 +286,9 @@ export default {
           body: JSON.stringify({
             canceled: true,
           }),
-        })
+        }).then((res) => {
+            console.log(res)
+          })
         this.removeSession([session, 'pendingOnStudentPayment'])
       }
     },

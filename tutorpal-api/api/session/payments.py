@@ -1,4 +1,4 @@
-from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment
+from paypalpayoutssdk.core import PayPalHttpClient, SandboxEnvironment, LiveEnvironment
 from paypalpayoutssdk.payouts import PayoutsPostRequest
 from paypalcheckoutsdk.payments import CapturesRefundRequest
 from paypalcheckoutsdk.orders import OrdersCaptureRequest
@@ -14,8 +14,11 @@ def send_payout(email, price, session_id):
     client_secret = os.environ.get('PAYPAL_CLIENT_SECRET')
 
     # Creating an environment
-    environment = SandboxEnvironment(
-        client_id=client_id, client_secret=client_secret)
+    if os.environ.get("RUN_ENV", 'local') == 'aws_prod':
+        environment = LiveEnvironment(client_id=client_id, client_secret=client_secret)
+    else:
+        environment = SandboxEnvironment(
+            client_id=client_id, client_secret=client_secret)
     client = PayPalHttpClient(environment)
 
     body = {
@@ -63,9 +66,13 @@ class PayPalClient:
 
         """Set up and return PayPal Python SDK environment with PayPal access credentials.
            This sample uses SandboxEnvironment. In production, use LiveEnvironment."""
-
-        self.environment = SandboxEnvironment(
-            client_id=self.client_id, client_secret=self.client_secret)
+        if os.environ.get("RUN_ENV", 'local') == 'aws_prod':
+            self.environment = LiveEnvironment(client_id=client_id, client_secret=client_secret)
+        else:
+            self.environment = SandboxEnvironment(
+                client_id=client_id, client_secret=client_secret)
+        # self.environment = SandboxEnvironment(
+        #     client_id=self.client_id, client_secret=self.client_secret)
 
         """ Returns PayPal HTTP client instance with environment that has access
             credentials context. Use this instance to invoke PayPal APIs, provided the
