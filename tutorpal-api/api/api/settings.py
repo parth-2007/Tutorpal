@@ -30,7 +30,12 @@ SECRET_KEY = os.environ.get(
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tutorpal.org', 'api.tutorpal.org', 'www.tutorpal.org']
+if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+    ALLOWED_HOSTS = ['api.tutorpal.org', 'localhost']
+elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+    ALLOWED_HOSTS = ['devapi.tutorpal.org', 'localhost']
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -78,11 +83,16 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-if os.environ.get('RUN_ENV', 'local') == 'aws':
+if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     CORS_ALLOWED_ORIGINS = [
         'https://tutorpal.org',
         'https://api.tutorpal.org',
         'https://www.tutorpal.org',
+    ]
+elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+    CORS_ALLOWED_ORIGINS = [
+        'https://beta.tutorpal.org',
+        'https://www.beta.tutorpal.org',
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
@@ -90,12 +100,26 @@ else:
         'http://127.0.0.1:8000',
         'http://localhost:5500',
         'http://127.0.0.1:5500',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
     ]
 
-CSRF_TRUSTED_ORIGINS = ['https://www.tutorpal.org', 'https://api.tutorpal.org', 'https://tutorpal.org'] if os.environ.get('RUN_ENV', 'local') == 'aws' else ['http://localhost:3000']
+if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+    CSRF_TRUSTED_ORIGINS = [
+        'https://www.tutorpal.org', 
+        'https://api.tutorpal.org', 
+        'https://tutorpal.org'
+    ]
+if os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+    CSRF_TRUSTED_ORIGINS = [
+        'https://beta.tutorpal.org',
+        'https://www.beta.tutorpal.org',
+    ]
+else:
+    CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
 
-if os.environ.get('RUN_ENV', 'local') == 'aws':
+if os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev':
     CSRF_COOKIE_DOMAIN = ".tutorpal.org"
     SESSION_COOKIE_DOMAIN = ".tutorpal.org"
     CSRF_COOKIE_SAMESITE = 'None'
@@ -129,8 +153,8 @@ ASGI_APPLICATION = "api.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+# Add a prod db here later
+if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -139,6 +163,17 @@ if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') =
             'PASSWORD': os.environ['RDS_PASSWORD'],
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
+        }
+    }
+elif os.environ.get('DEV_DB_NAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['DEV_DB_NAME'],
+            'USER': os.environ['DEV_DB_USER'],
+            'PASSWORD': os.environ['DEV_DB_PASSWORD'],
+            'HOST': os.environ['DEV_DB_HOST'],
+            'PORT': int(os.environ['DEV_DB_PORT']),
         }
     }
 elif os.environ.get('DATABASE_NAME', None):
@@ -201,7 +236,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-if os.environ.get("AWS_SES_ACCESS_KEY_ID", None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+if os.environ.get("AWS_SES_ACCESS_KEY_ID", None) and (os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev'):
     EMAIL_BACKEND = 'django_ses.SESBackend'
     AWS_SES_ACCESS_KEY_ID = os.environ['AWS_SES_ACCESS_KEY_ID']
     AWS_SES_SECRET_ACCESS_KEY = os.environ['AWS_SES_SECRET_ACCESS_KEY']
@@ -230,7 +265,8 @@ REST_FRAMEWORK = {
     ] if DEBUG else ['rest_framework.renderers.JSONRenderer']
 }
 
-if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and os.environ.get('RUN_ENV', 'local') == 'aws':
+# Fix the s3 bucket later
+if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and (os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev'):
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_S3_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_S3_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_S3_STORAGE_BUCKET_NAME")

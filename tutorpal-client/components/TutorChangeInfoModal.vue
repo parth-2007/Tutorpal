@@ -321,6 +321,7 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
+      console.log(e.target.files, this.profilePic, this.src)
       if (e.target.files[0].size > 100000) {
         this.errors.profilePic =
           'File size is too high! Please upload a file less than 100 Kilobytes'
@@ -385,6 +386,13 @@ export default {
           !objectsEqual(this.user, this.getUser()))
       ) {
         const csrfToken = await getCSRF()
+        if (this.tutor.linkedIn !== '') {
+          let httpCheck = this.tutor.linkedIn.substr(0, 8)
+          if (httpCheck !== 'https://') {
+            httpCheck = 'https://'
+            this.tutor.linkedIn = httpCheck.concat(this.tutor.linkedIn)
+          }
+        }
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
           const formData = new FormData()
           if (this.profilePic) {

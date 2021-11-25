@@ -213,8 +213,10 @@ class SessionViewSet(viewsets.ModelViewSet):
                         tutor=tutor, tutor_pk=int(data.get('tutor')),
                         duration=duration, call_url=result_str, price=price, free=free)  # 2 query
         email = tutor.user.email
-        if os.environ.get('RUN_ENV', 'local') == 'aws':
-            domain = 'https://tutorpal.org/'
+        if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+            domain = 'https://www.tutorpal.org/'
+        elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+            domain = 'https://beta.tutorpal.org/'
         else:
             domain = get_current_site(self.request).domain
         subject = 'You have a class request'
@@ -316,8 +318,12 @@ def finish_session(request, id):
                 session.save()
                 return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0'}, status=status.HTTP_200_OK)
         else:  # session was free
+            tutor = session.tutor
+            tutor.num_classes = tutor.num_classes + 1
+            tutor.free_tutoring_given = tutor.free_tutoring_given + session.duration
+            tutor.save()
             session.finished = True
             session.save()
-            return Response(data={'Success': 'Ended Session'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(data={'Success': 'Ended Session'}, status=status.HTTP_200_OK)
     else:
         return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)
