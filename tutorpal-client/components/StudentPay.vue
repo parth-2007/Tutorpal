@@ -288,8 +288,8 @@ export default {
             this.addSession([this.session, 'upcoming'])
             return actions.order.capture().then(function(orderData) {
               console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              this.$router.push('/payments')
             });
-            this.$router.push('/payments')
           },
           onError: () => {
             alert(
