@@ -292,9 +292,7 @@ export default {
             });
           },
           onError: () => {
-            alert(
-              'Sorry, we had an error with processing the payment. Please try again'
-            )
+            this.$router.push('/payments')
           },
         })
         .render(this.$refs.paypal)
