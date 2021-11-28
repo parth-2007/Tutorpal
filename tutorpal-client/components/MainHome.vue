@@ -34,11 +34,13 @@
               alt=""
               class="homeimage-2"
             /><input
-              type="search"
-              class="homesearch-3 w-input"
-              name="q"
-              placeholder="Search by subject"
-              id="search"
+                type="search"
+                class="homesearch-3 w-input"
+                name="q"
+                placeholder="Search by subject"
+                id="search"
+                v-model="q"
+                @keyup.enter="submitSearch()"
             /><input
               type="submit"
               value="Search"
@@ -270,6 +272,11 @@
 </template>
 <script>
 export default {
+  data(){
+    return {
+      q: ''
+    }
+  },
   head() {
     return {
       title: 'Home - TutorPal',
@@ -280,5 +287,10 @@ export default {
       ]
     }
   },
+  methods: {
+    submitSearch() {
+            this.$router.push({path: this.localePath('search'), query: {q: this.q}});
+        }
+  }
 }
 </script>
