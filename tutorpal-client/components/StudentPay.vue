@@ -1,4 +1,3 @@
-
 <template>
   <client-only>
     <html
@@ -160,7 +159,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data() {
     return {
@@ -226,7 +224,6 @@ export default {
   },
   mounted() {
     const script = document.createElement('script')
-
     script.src = 'https://www.paypal.com/sdk/js?client-id=Ae0zJYc6uq0r19vdNLW2TedQ86i7_FTrS7s_3pwgU5ePOXriAibXuXssw_Nbc5jOg7JOUvU4e7q_LkaT&enable-funding=venmo&currency=USD'
     script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
@@ -251,7 +248,7 @@ export default {
           createOrder: (data, actions) => {
             console.log(this.session.price)
             return actions.order.create({
-              purchase_units: [{"amount":{"currency_code":"USD","value":this.session.price}}]
+              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.session.price)}}]
             });
           },
           onApprove: async (data, actions) => {
