@@ -245,10 +245,9 @@ export default {
             label: 'pay',
             height: 40,
           },
-          createOrder: (data, actions) => {
-            console.log(this.session.price)
+          createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.session.price)}}]
             });
           },
           onApprove: async (data, actions) => {
