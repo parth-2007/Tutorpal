@@ -226,9 +226,8 @@ export default {
   },
   mounted() {
     const script = document.createElement('script')
-    const clientId =
-      'AeuByWOKTQNkAdahS0U5OLyaCxzeOMFKSmWhe6EIP1neTuwLQVxFst0XCiZmTSkyFnCYobpXOuXLrAp5'
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+
+    script.src = 'https://www.paypal.com/sdk/js?client-id=Ae0zJYc6uq0r19vdNLW2TedQ86i7_FTrS7s_3pwgU5ePOXriAibXuXssw_Nbc5jOg7JOUvU4e7q_LkaT&enable-funding=venmo&currency=USD'
     script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
   },
@@ -250,19 +249,12 @@ export default {
             height: 40,
           },
           createOrder: (data, actions) => {
+            console.log(this.session.price)
             return actions.order.create({
-              purchase_units: [
-                {
-                  description: 'Pay for your TutorPal Session',
-                  amount: {
-                    currency_code: 'USD',
-                    value: this.session.price,
-                  },
-                },
-              ],
-            })
+              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.session.price)}}]
+            });
           },
-          onApprove: async (data) => {
+          onApprove: async (data, actions) => {
             const csrfToken = await getCSRF()
             await fetch(
               process.env.API_URL +
@@ -298,6 +290,9 @@ export default {
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
             this.$router.push('/payments')
+            return actions.order.capture().then(function(orderData) {
+              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+            });
           },
           onError: () => {
             alert(
