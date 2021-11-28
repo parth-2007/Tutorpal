@@ -247,7 +247,7 @@ export default {
           },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.session.price)}}]
+              purchase_units: [{"amount":{"currency_code":"USD","value":this.session.price}}]
             });
           },
           onApprove: async (data, actions) => {
