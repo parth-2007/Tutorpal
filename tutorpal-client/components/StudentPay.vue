@@ -125,9 +125,9 @@
                       }}</span> </router-link
                     ><router-link
                       to="/requests"
-                      class="nav-link-4 w-nav-link"
+                      class="nav-link-4 w-nav-link w--current"
                       >Requests</router-link
-                    ><router-link to="/payments" class="nav-link-4 w-nav-link w--current"
+                    ><router-link to="/payments" class="nav-link-4 w-nav-link"
                       >Payments</router-link
                     >
                   </nav>
@@ -245,9 +245,10 @@ export default {
             label: 'pay',
             height: 40,
           },
-          createOrder: function(data, actions) {
+          createOrder: (data, actions) => {
+            console.log(this.session.price)
             return actions.order.create({
-              purchase_units: [{"amount":{"currency_code":"USD","value":this.session.price}}]
+              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.session.price)}}]
             });
           },
           onApprove: async (data, actions) => {
@@ -285,10 +286,10 @@ export default {
             )
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
-            // this.$router.push('/payments')
             return actions.order.capture().then(function(orderData) {
               console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
             });
+            this.$router.push('/payments')
           },
           onError: () => {
             alert(
