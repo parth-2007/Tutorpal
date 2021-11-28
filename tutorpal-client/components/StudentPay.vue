@@ -125,9 +125,9 @@
                       }}</span> </router-link
                     ><router-link
                       to="/requests"
-                      class="nav-link-4 w-nav-link w--current"
+                      class="nav-link-4 w-nav-link"
                       >Requests</router-link
-                    ><router-link to="/payments" class="nav-link-4 w-nav-link"
+                    ><router-link to="/payments" class="nav-link-4 w-nav-link w--current"
                       >Payments</router-link
                     >
                   </nav>
@@ -248,7 +248,7 @@ export default {
           createOrder: (data, actions) => {
             console.log(this.session.price)
             return actions.order.create({
-              purchase_units: [{"amount":{"currency_code":"USD","value":parseInt(this.session.price)}}]
+              purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
             });
           },
           onApprove: async (data, actions) => {
