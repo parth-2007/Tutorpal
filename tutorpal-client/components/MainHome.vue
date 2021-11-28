@@ -289,8 +289,8 @@ export default {
   },
   methods: {
     submitSearch() {
-            this.$router.push({path: this.localePath('search'), query: {q: this.q}});
-        }
+        this.$router.push({path: './search', query: {q: this.q}});
+    }
   }
 }
 </script>

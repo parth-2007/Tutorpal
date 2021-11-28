@@ -325,13 +325,13 @@ export default {
     logoutclick() {
       this.clicked = !this.clicked
     },
-    setLoaded() {
-      console.log(this.session.call_url)
-      const wt = new api.WhiteboardTeam('#wt-container', {
-            clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-            boardCode: toString(this.session.call_url),
-        });
-    },
+    // setLoaded() {
+    //   console.log(this.session.call_url)
+    //   const wt = new api.WhiteboardTeam('#wt-container', {
+    //         clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+    //         boardCode: toString(this.session.call_url),
+    //     });
+    // },
     async updateModalValue() {
       this.session = await fetch(
         process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
