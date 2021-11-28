@@ -286,7 +286,7 @@ export default {
             )
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
-            this.$router.push('/payments')
+            // this.$router.push('/payments')
             return actions.order.capture().then(function(orderData) {
               console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
             });
