@@ -20,7 +20,7 @@
           <h1 class="homeheading">
             Find tutors around the globe,<br />in an instant
           </h1>
-          <form action="/search" class="homestuff w-form">
+          <form class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
