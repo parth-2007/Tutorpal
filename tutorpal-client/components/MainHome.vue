@@ -20,7 +20,7 @@
           <h1 class="homeheading">
             Find tutors around the globe,<br />in an instant
           </h1>
-          <form action="/search" class="homestuff w-form">
+          <div action="/search" class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
@@ -44,7 +44,7 @@
               value="Search"
               class="homebutton-8 _100 _5px-left w-button"
             />
-          </form>
+          </div>
         </div>
       </div>
       <div
