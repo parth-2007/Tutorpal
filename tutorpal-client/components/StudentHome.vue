@@ -25,32 +25,31 @@
                 alt=""
             /></router-link>
             <div class="div-block-4">
-              <form action="/search" class="stuff w-form">
-                <img
-                  src="../static/student/images/search-1.png"
-                  loading="lazy"
-                  width="25"
-                  height="25"
-                  srcset="
-                    ../static/student/images/search-1-p-500.png 500w,
-                    ../static/student/images/search-1.png       512w
-                  "
-                  sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
-                  alt=""
-                  class="image-2"
-                /><input
-                  type="search"
-                  class="search-3 w-input"
-                  name="q"
-                  placeholder="Search by subject"
-                  id="search"
-                  required=""
-                /><input
-                  type="submit"
-                  value="Search"
-                  class="button-8 _100 _5px-left w-button"
-                />
-              </form>
+                <div style="margin-left: 0px; padding-left: 0px" class="stuff w-form">
+                  <img
+                    src="../static/student/images/search-1.png"
+                    loading="lazy"
+                    width="25"
+                    height="25"
+                    srcset="
+                      ../static/student/images/search-1.png 500w,
+                      ../static/student/images/search-1.png       512w
+                    "
+                    sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
+                    alt=""
+                    class="image-2"
+                  /><input
+                      class="search-3 w-input"
+                      placeholder="Search by subject"
+                      id="search"
+                      v-model="q"
+                      @keyup.enter="submitSearch()"
+                  /><input
+                    type="submit"
+                    value="Search"
+                    class="button-8 _100 _5px-left w-button"
+                  />
+              </div>
               <div class="div-block-43">
                 <div class="name_profile_pic">
                   <img
@@ -333,6 +332,7 @@ export default {
   data() {
     return {
       clicked: false,
+      q: ''
     }
   },
   async fetch() {
@@ -389,6 +389,9 @@ export default {
     convertTime,
     logoutclick() {
       this.clicked = !this.clicked
+    },
+    submitSearch() {
+      this.$router.push("/search/"+this.q);
     },
     async joinSession(id) {
       const csrfToken = await getCSRF()

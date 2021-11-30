@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
       <div v-if="session.student_paid === true && session.started === false">
         <p style="font-size: 18px; font-family: Poppins; margin: 15px">
@@ -171,6 +172,7 @@
             margin-left: 10px;
             font-size: 20px;
             color: black;
+            float: right;
           "
         >
           <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
@@ -186,12 +188,18 @@
             End this Class
           </button>
         </h1>
-        <iframe
-          style="width: 40vw; height: 100vh; margin-left: 10px; float:left"
-          allow="camera;microphone"
-          :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
-        ></iframe>
-        <container><div style="width: 58vw; height: 100vh; float: right" id="wt-container"></div></container>
+        <div style="background-color: white;">
+          <button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button>
+        </div>
+        <div style="margin-top: 0px;">
+          <iframe
+            style="width: 100vw; height: 100vh; float:left;"
+            allow="camera;microphone"
+            :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
+            ref="meeting"
+          ></iframe>
+          <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
+        </div>
       </body>
     </html>
   </client-only>
@@ -216,7 +224,6 @@ export default {
     this.buttonShow = true
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
-    script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
   },
   head() {
@@ -319,19 +326,34 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
+    this.setLoaded()
   },
   methods: {
     dateToString,
     logoutclick() {
       this.clicked = !this.clicked
     },
-    // setLoaded() {
-    //   console.log(this.session.call_url)
-    //   const wt = new api.WhiteboardTeam('#wt-container', {
-    //         clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-    //         boardCode: toString(this.session.call_url),
-    //     });
-    // },
+    whiteboardHandler(){
+      const whiteboard = this.$refs.container
+      if(whiteboard.style.visibility==="hidden"){
+        whiteboard.style.visibility = "visible"
+        this.$refs.meeting.style.width= "41vw"
+      }
+      else if(whiteboard.style.visibility==="visible"){
+        whiteboard.style.visibility = "hidden"
+        this.$refs.meeting.style.width= "100vw"
+      }
+    },
+    /* eslint-disable */
+    setLoaded() {
+      const code = this.session.call_url
+      console.log(code)
+      const wt = new api.WhiteboardTeam(this.$refs.container, {
+            clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+            boardCode: code,
+        });
+    },
+    /* eslint-enable */
     async updateModalValue() {
       this.session = await fetch(
         process.env.API_URL + '/sessions/' + this.$route.params.id + '/',

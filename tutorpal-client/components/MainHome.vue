@@ -20,7 +20,7 @@
           <h1 class="homeheading">
             Find tutors around the globe,<br />in an instant
           </h1>
-          <form action="/search" class="homestuff w-form">
+          <div class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
@@ -34,19 +34,13 @@
               alt=""
               class="homeimage-2"
             /><input
-                type="search"
                 class="homesearch-3 w-input"
-                name="q"
                 placeholder="Search by subject"
                 id="search"
                 v-model="q"
                 @keyup.enter="submitSearch()"
-            /><input
-              type="submit"
-              value="Search"
-              class="homebutton-8 _100 _5px-left w-button"
             />
-          </form>
+          </div>
         </div>
       </div>
       <div
@@ -289,7 +283,7 @@ export default {
   },
   methods: {
     submitSearch() {
-        this.$router.push({path: './search', query: {q: this.q}});
+      this.$router.push("/search/"+this.q);
     }
   }
 }
