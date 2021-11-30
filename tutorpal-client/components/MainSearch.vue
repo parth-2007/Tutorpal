@@ -22,38 +22,28 @@
             sizes="200px"
             alt=""
         /></router-link>
-        <div class="search">
-          <form
-            style="margin-left: 0px; margin-bottom: 40px"
-            action="/search"
-            class="stuff w-form"
-          >
+        <div class="search" style="margin-left: 0px; padding-left: 0px">
+          <div style="margin-left: 0px; padding-left: 0px" class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
               width="25"
               height="25"
               srcset="
-                ../static/student/images/search-1-p-500.png 500w,
+                ../static/student/images/search-1.png 500w,
                 ../static/student/images/search-1.png       512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
               alt=""
-              class="image-2"
+              class="homeimage-2"
             /><input
-              type="search"
-              class="search-3 w-input"
-              maxlength="256"
-              name="q"
-              placeholder="Search by subject"
-              id="search"
-              required=""
-            /><input
-              type="submit"
-              value="Search"
-              class="button-8 _100 _5px-left w-button"
+                class="homesearch-3 w-input"
+                placeholder="Search by subject"
+                id="search"
+                v-model="q"
+                @keyup.enter="submitSearch()"
             />
-          </form>
+          </div>
           <div
             v-for="tutor in tutordata.results"
             :key="tutor.id"
@@ -116,6 +106,7 @@ export default {
   data() {
     return {
       tutordata: [],
+      q: '',
     }
   },
   head() {
@@ -142,14 +133,19 @@ export default {
   },
   async created() {
     const tutorData = await fetch(
-      process.env.API_URL + '/tutors/search/?q=' + this.$route.query.q + '/',
+      process.env.API_URL + '/tutors/search/?q=' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }
     )
-      .then((res) => res.json())
-      .catch(() => ({ error: 'client error' }))
-    this.tutordata = tutorData
-  },
+    .then((res) => res.json())
+    .catch(() => ({ error: 'client error' }))
+      this.tutordata = tutorData
+    },
+  methods: {
+    submitSearch() {
+      this.$router.push("/search/"+this.q);
+    }
+  }
 }
 </script>

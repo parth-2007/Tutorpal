@@ -93,24 +93,6 @@
                     aria-current="page"
                     class="tutornav-link-4 w-nav-link w--current"
                     >Requests
-                    <span style="
-                        position: relative;
-                        top: -10px;
-                        left: -18px;
-                        border-radius: 100px;
-                        width: 25px;
-                        height: 25px;
-                        display: inline-flex;
-                        background: red;
-                        color: white;
-                        font-size: 14px;
-                        text-decoration: none;
-                        font-family: Poppins;
-                        align-items: center;
-                        justify-content: center;
-                    "> 
-                    {{countPendingRequests}}
-                    </span>
                   </router-link
                   ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
                     >Messages

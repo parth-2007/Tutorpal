@@ -20,7 +20,7 @@
           <h1 class="homeheading">
             Find tutors around the globe,<br />in an instant
           </h1>
-          <div action="/search" class="homestuff w-form">
+          <div class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
@@ -34,15 +34,11 @@
               alt=""
               class="homeimage-2"
             /><input
-              type="search"
-              class="homesearch-3 w-input"
-              name="q"
-              placeholder="Search by subject"
-              id="search"
-            /><input
-              type="submit"
-              value="Search"
-              class="homebutton-8 _100 _5px-left w-button"
+                class="homesearch-3 w-input"
+                placeholder="Search by subject"
+                id="search"
+                v-model="q"
+                @keyup.enter="submitSearch()"
             />
           </div>
         </div>
@@ -268,6 +264,11 @@
 </template>
 <script>
 export default {
+  data(){
+    return {
+      q: ''
+    }
+  },
   head() {
     return {
       title: 'Home - TutorPal',
@@ -278,5 +279,10 @@ export default {
       ]
     }
   },
+  methods: {
+    submitSearch() {
+      this.$router.push("/search/"+this.q);
+    }
+  }
 }
 </script>

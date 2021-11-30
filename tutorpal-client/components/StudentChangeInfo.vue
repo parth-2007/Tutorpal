@@ -50,33 +50,27 @@
                 alt=""
             /></router-link>
             <div class="div-block-4">
-              <form action="/search" class="stuff w-form">
+              <div class="homestuff w-form">
                 <img
                   src="../static/student/images/search-1.png"
                   loading="lazy"
                   width="25"
                   height="25"
                   srcset="
-                    ../static/student/images/search-1-p-500.png 500w,
+                    ../static/student/images/search-1.png 500w,
                     ../static/student/images/search-1.png       512w
                   "
-                  sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
+                  sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                   alt=""
-                  class="image-2"
+                  class="homeimage-2"
                 /><input
-                  type="search"
-                  class="search-3 w-input"
-                  maxlength="256"
-                  name="q"
-                  placeholder="Search by subject"
-                  id="search"
-                  required=""
-                /><input
-                  type="submit"
-                  value="Search"
-                  class="button-8 _100 _5px-left w-button"
+                    class="homesearch-3 w-input"
+                    placeholder="Search by subject"
+                    id="search"
+                    v-model="q"
+                    @keyup.enter="submitSearch()"
                 />
-              </form>
+              </div>
               <div class="div-block-43">
                 <div class="name_profile_pic">
                   <img
@@ -229,6 +223,7 @@ export default {
       clicked1: false,
       stars: 5,
       description: '',
+      q: ''
     }
   },
   head() {
@@ -281,6 +276,9 @@ export default {
     },
     logoutClick() {
       this.clicked1 = !this.clicked1
+    },
+    submitSearch() {
+      this.$router.push("/search/"+this.q);
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
