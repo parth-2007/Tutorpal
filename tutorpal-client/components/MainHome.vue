@@ -20,11 +20,7 @@
           <h1 class="homeheading">
             Find tutors around the globe,<br />in an instant
           </h1>
-<<<<<<< HEAD
           <div class="homestuff w-form">
-=======
-          <form class="homestuff w-form">
->>>>>>> 42b47346d6af66375cea8162b82811486e289294
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
