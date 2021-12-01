@@ -48,14 +48,13 @@
                 sizes="150px"
                 alt=""
               />
-              <h1 class="homeheading-7">Become a tutor</h1>
-              <p class="homeparagraph-7">
-                Join our community at TutorPal by becoming a tutor to spread
-                your passion and knowledge with many other students while making
-                a profit at the same time. We do not take any commission, so
-                what you list as your price is how much you get paid. If your
-                tutor agency or program has been shut down due to COVID-19, make
-                it online and global in a couple of minutes.
+              <h1 class="homeheading-7">Become a Tutor</h1>
+              <p style="font-size:14px" class="homeparagraph-7">
+                Join the community at TutorPal by registering as a tutor! You can provide
+                your knowledge and skills to students struggling and make
+                profit at the same time. We do take 5% commission from your hourly rates primarily to maintain the platform's infrastructure. 
+                If your tutor agency or service has been shut down due to COVID-19, make
+                it online in a couple of minutes.
               </p></router-link
             >
           </div>
@@ -73,11 +72,12 @@
                 alt=""
               />
               <h1 class="homeheading-7">Become a student</h1>
-              <p class="homeparagraph-7">
-                Have loads of homework coming in? Need to prepare for a competition? We
-                provide a variety of services here at TutorPal. It does not cost
-                to register an account as a student. Gain access to these
-                services in the click of a button.
+              <p style="font-size:14px" class="homeparagraph-7">
+                Struggling on your homework? Struggling to understand a concept?
+                 Need to prepare for a competition? Need assistance in preparing for an upcoming test?
+                 Don't worry! TutorPal provides a variety of services on this online platform. 
+                 Register an account as a student in TutorPal and gain access to these
+                services in an instant! 
               </p></router-link
             >
           </div>

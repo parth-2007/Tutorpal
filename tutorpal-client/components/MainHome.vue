@@ -152,11 +152,10 @@
             />
             <div class="homediv-block-16">
               <h1 class="homeheading-5">Affordability</h1>
-              <p class="homeparagraph-3">
-                Our service is affordable and does not request payment in
-                monthly installments, simply based on the classes taken. We do
-                not take any commission, so you can expect an hour class to
-                range from $25 to 80 depending on experience/subjects.<br />
+              <p style="font-size: 13px " class="homeparagraph-3">
+                TutorPal is an affordable service that does not request payment in
+                monthly installments. Students simply pay their tutors based on the tutor's hourly rate. You can expect a class for an hour to
+                range from $15 to typically $60 or more, depending on the tutor's level of experience in the subject. We do take 5% commission from payments to tutors.<br />
               </p>
             </div>
           </div>
@@ -174,11 +173,12 @@
             />
             <div class="homediv-block-16">
               <h1 class="homeheading-5">Qualified Tutors</h1>
-              <p class="homeparagraph-2">
-                The tutoring website offers a wide range of tutors in subjects,
-                along with diversity. You can expect scholars ranging from high
-                school toppers to college professors. Tutors can earn money on 
-                a fixed hourly rate or receive volunteering hours.<br />
+              <p style="font-size: 13px " class="homeparagraph-2">
+                The tutoring website offers tutors that can provide their services in a wide range of subjects. 
+                 You can expect scholars ranging from high
+                school students to college professors. Even currently unemployed people can tutor, 
+                based on their background in certain subjects and level of skills. Tutors can earn money on 
+                a fixed hourly rate of their choice or receive volunteering hours(This option is available to all).<br />
               </p>
             </div>
           </div>
@@ -196,9 +196,9 @@
             />
             <div class="homediv-block-16">
               <h1 class="homeheading-5">Variety of subjects</h1>
-              <p class="homeparagraph-5">
+              <p style="font-size: 13px " class="homeparagraph-5">
                 The service consists of a varietal of classes, from kindergarten
-                mathematics to AP Calculus AB/BC, taught by tutors from all
+                mathematics to college level science courses and more, taught by tutors from all
                 backgrounds and diversity. It also includes non-academic
                 subjects, such as culinary skills, arts and crafts, languages,
                 and more.<br />
@@ -214,12 +214,10 @@
             />
             <div class="homediv-block-16">
               <h1 class="homeheading-5">Simple</h1>
-              <p class="homeparagraph-4">
-                TutorPal is straightforward, simple, and convenient. This
-                implies the scarce amount of ineffective and aesthetic
-                functions. Our goal is to prioritize customers’ time into
-                learning and educating more while maintaining a friendly user
-                interface.<br />
+              <p style="font-size: 13px " class="homeparagraph-4">
+                TutorPal's aesthetic features and functions are designed to be straightforward, simple, and convenient.
+                 Our main goal is to prioritize customers’ time into
+                learning and educating more with a friendly user interface.<br />
               </p>
             </div>
           </div>
