@@ -227,5 +227,17 @@ export default {
   background-color: #fff;
   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
 }
+
+.tutorbadge {
+  position: absolute;
+  top: 11px;
+  right: 3px;
+  padding: 4px 7px;
+  border-radius: 1000px;
+  background-color: red;
+  color: white;
+  font-family: Poppins;
+  font-size: 14px;
+}
 </style>
  
