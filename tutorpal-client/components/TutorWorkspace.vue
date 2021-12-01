@@ -50,13 +50,14 @@
               <br />Clicking "confirm" will confirm to us that this class has
               been finished. You will be paid shortly after. Thank you for
               tutoring with TutorPal!
+              <br>
               <button
                 @click="endclass()"
                 style="
                   background-color: green;
-                  margin-left: 10px;
-                  margin-top: 10px;
                   font-size: 14px;
+                  margin-top: 10px;
+                  float: left
                 "
                 class="tutorbutton-10-copy-copy w-button"
               >
