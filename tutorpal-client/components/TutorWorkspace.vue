@@ -221,12 +221,6 @@ export default {
       buttonShow: false,
     }
   },
-  mounted(){
-    this.buttonShow = true
-    const script = document.createElement('script')
-    script.src = "https://www.whiteboard.team/dist/api.js"
-    document.body.appendChild(script)
-  },
   head() {
     return {
       title: 'Tutor Workspace',
@@ -290,7 +284,10 @@ export default {
       immediate: true,
     },
   },
-  async created() {
+  async mounted() {
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    document.body.appendChild(script)
     this.session = await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -327,6 +324,7 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
+    this.buttonShow = true
     this.setLoaded()
   },
   methods: {
@@ -350,9 +348,9 @@ export default {
       const code = this.session.call_url
       console.log(code)
       const wt = new api.WhiteboardTeam(this.$refs.container, {
-            clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-            boardCode: code,
-        });
+          clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+          boardCode: code,
+      });
     },
     /* eslint-enable */
     async updateModalValue() {

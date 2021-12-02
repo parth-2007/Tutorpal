@@ -443,6 +443,7 @@ export default {
     this.reviews = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
+    console.log(this.reviews.results[0])
     await this.fetchSessions('pendingOnTutor')
   },
   methods: {
@@ -478,7 +479,7 @@ export default {
         body: JSON.stringify({
           student: this.user.studentPk,
           stars: parseInt(this.stars),
-          description: this.description,
+          description: this.reviewDescription,
           tutor: tutorId,
         }),
       }).then((res) => {
