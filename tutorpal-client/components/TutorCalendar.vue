@@ -117,7 +117,7 @@
             </div>
           </div>
         </div>
-        <div style="margin-top: 20px; display: none; margin-left: 60px; background-color: white; padding-top: 20px; padding-bottom: 20px; border-radius: 8px; box-shadow: 0px 0px 3px #CBD4C2;" id="container" ref="container">
+        <div id="container" ref="container">
           <div id="header">
             <div id="monthDisplay">{{monthDisplay}}</div>
           </div>
@@ -147,7 +147,8 @@ export default {
   data(){
     return {
       monthDisplay:'',
-      calendarData: []
+      calendarData: [],
+      clicked: false,
     }
   },
   head() {
