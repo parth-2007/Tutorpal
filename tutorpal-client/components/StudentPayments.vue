@@ -129,7 +129,8 @@
                       to="/payments"
                       class="nav-link-4 w-nav-link w--current"
                       >Payments</router-link
-                    >
+                    ><router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    >Calendar</router-link>
                   </nav>
                   <div class="menu-button-2 w-nav-button">
                     <div class="icon-2 w-icon-nav-menu"></div>

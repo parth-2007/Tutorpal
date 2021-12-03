@@ -167,11 +167,6 @@ export default {
       ],
     }
   },
-  mounted(){
-    const script = document.createElement('script')
-    script.src = "https://www.whiteboard.team/dist/api.js"
-    document.body.appendChild(script)
-  },
   computed: {
     logout() {
       return {
@@ -180,7 +175,10 @@ export default {
     },
     ...mapGetters({ user: 'getUser' }),
   },
-  async created() {
+  async mounted() {
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    document.body.appendChild(script)
     this.session = await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {

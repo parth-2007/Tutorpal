@@ -107,6 +107,8 @@
                     to="/volunteering"
                     class="tutornav-link-4 w-nav-link"
                     >Volunteering</router-link>
+                  <router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    >Calendar</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -384,6 +386,7 @@ export default {
       }
     ).then((res) => res.json())
     this.next = this.requests1.next
+    
   },
   methods: {
     ...mapActions([
@@ -497,6 +500,7 @@ export default {
 }
 </script>
 <style scoped>
+
 .tutorbadge {
   position: absolute;
   top: 11px;

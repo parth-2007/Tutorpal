@@ -1,8 +1,8 @@
 <template>
   <client-only>
     <html
-      data-wf-page="5f600218af481481a99ffa6a"
-      data-wf-site="5f600218af4814e3759ffa69"
+      data-wf-page="5f405fbdac064904ad639864"
+      data-wf-site="5f3c2694b3e98672caad2a0f"
     >
       <head>
         <meta charset="utf-8" />
@@ -54,7 +54,7 @@
                 <div class="div-block-43">
                   <div class="name_profile_pic">
                     <img
-                      :src="user !== undefined ? user.profilePic : ''"
+                      :src="user.profilePic"
                       id="image"
                       width="60"
                       height="60"
@@ -120,17 +120,16 @@
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                    >Messages
-                    <span v-if="user.unread > 0" class="badge">{{
-                      user.unread
-                    }}</span> </router-link
-                    ><router-link
-                      to="/requests"
-                      class="nav-link-4 w-nav-link w--current"
+                      >Messages<span v-if="user.unread > 0" class="tutorbadge">{{
+                        user.unread
+                      }}</span></router-link
+                    ><router-link to="/requests" class="nav-link-4 w-nav-link"
                       >Requests</router-link
-                    ><router-link to="/payments" class="nav-link-4 w-nav-link"
+                    ><router-link
+                      to="/payments"
+                      class="nav-link-4 w-nav-link"
                       >Payments</router-link
-                    ><router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    ><router-link to="/calendar" class="nav-link-4 w-nav-link w--current"
                     >Calendar</router-link>
                   </nav>
                   <div class="menu-button-2 w-nav-button">
@@ -140,92 +139,23 @@
               </div>
             </div>
           </div>
-          <div class="div-block-66">
-            <div class="div-block-45">
-              <img
-                src="../static/student/images/question.png"
-                loading="lazy"
-                width="30"
-                alt=""
-              /><a
-                href="mailto:info@tutorpal.org?subject=Website%20Email"
-                class="link-2"
-                >Need help? Send us an email</a
-              >
-            </div>
-            <h1 class="heading">Student Requests</h1>
-            <div class="div-block-65">
-              <div class="text-block-23">Requests</div>
-              <p class="paragraph">
-                These are the requests you have sent to potential tutors who
-                have not accepted yet. Once the tutor has accepted, please check
-                the
-                <router-link to="/payments" class="link-3"
-                  >payments</router-link
-                >
-                page to pay for the class.
-              </p>
-            </div>
-            <div v-if="requests.unfetched === undefined">
-              <div
-                v-for="session in requests"
-                :key="session.id"
-                id="requests"
-                class="loop"
-              >
-                <div class="i">
-                  <img
-                    @click="canceledHandler(session.id, session)"
-                    style="margin-top: 10px; cursor: pointer"
-                    src="../static/student/images/close-1.png"
-                    align="right"
-                    width="15"
-                    alt=""
-                  />
-                  <div class="div-block-51-copy">
-                    <img
-                      :src="
-                        session.tutor !== undefined
-                          ? session.tutor.user.profilePic
-                          : ''
-                      "
-                      loading="lazy"
-                      width="75"
-                      height="75"
-                      sizes="100px"
-                      alt=""
-                      class="image-15"
-                    />
-                    <p class="paragraph-2">
-                      <strong class="bold-text">Schedule <br /></strong>First
-                      Session: {{ session.date }}<br />Tutor:
-                      {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.firstName
-                          : ''
-                      }}
-                      {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.lastName
-                          : ''
-                      }}<br />Duration: {{ convertTime(session.timeStart) }} -
-                      {{ convertTime(session.timeEnd) }} <br />Amount: ${{
-                        session.price
-                      }}<br />Trial: {{ session.free }}
-                    </p>
-                  </div>
-                  <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong
-                    ><br />Description: <strong class="bold-text"> </strong
-                    >{{ session.description }}
-                  </p>
-                  <div class="text-block-27">
-                    This tutor has not accepted your request yet.
-                  </div>
-                </div>
-              </div>
-            </div>
+        </div>
+        <div style="margin-top: 20px; display: none; margin-left: 60px; background-color: white; padding-top: 20px; padding-bottom: 20px; border-radius: 8px; box-shadow: 0px 0px 3px #CBD4C2;" id="container" ref="container">
+          <div id="header">
+            <div id="monthDisplay">{{monthDisplay}}</div>
           </div>
+
+          <div id="weekdays">
+            <div>Sunday</div>
+            <div>Monday</div>
+            <div>Tuesday</div>
+            <div>Wednesday</div>
+            <div>Thursday</div>
+            <div>Friday</div>
+            <div>Saturday</div>
+          </div>
+            <div id="calendar" ref="calendar">    
+        </div>
         </div>
       </body>
     </html>
@@ -234,20 +164,19 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import convertTime from '../utils/convertTime'
-import getCSRF from '../utils/getCSRF'
+// import getCSRF from '../utils/getCSRF'
+
 export default {
-  data() {
+  data(){
     return {
-      clicked: false,
+      monthDisplay:'',
+      calendarData: [],
       q: ''
     }
   },
-  async fetch() {
-    await this.fetchSessions('pendingOnTutor')
-    await this.fetchUser()
-  },
   head() {
     return {
+      title: 'My Calendar',
       link: [
         {
           rel: 'stylesheet',
@@ -264,8 +193,24 @@ export default {
           type: 'text/css',
           href: '/student/css/student-main.webflow.css',
         },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/calendar.css',
+        },
       ],
     }
+  },
+  async mounted(){
+    await this.fetchStudent()
+    await this.fetchUser()
+    const url =
+      process.env.API_URL + '/sessions/my_sessions'
+    const data = await fetch(url, {
+      credentials: 'include',
+    }).then((res) => res.json())
+    this.calendarData = data.results;
+    this.calendar()
   },
   computed: {
     logout() {
@@ -273,11 +218,12 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser', requests: 'getPendingOnTutor' }),
+    ...mapGetters({ student: 'getStudent' }),
+    ...mapGetters({ user: 'getUser' }),
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession']),
-    ...mapGetters(['getUser', 'getPendingOnTutor']),
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser', 'fetchStudent']),
     convertTime,
     logoutclick() {
       this.clicked = !this.clicked
@@ -285,28 +231,80 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    async canceledHandler(id, session) {
-      const x = confirm('Please confirm that you wish to cancel this session.')
-      if (x === true) {
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
-          method: 'PATCH',
-          credentials: 'include',
-          headers: {
-            'X-CSRFToken': (await getCSRF()).success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            canceled: true,
-          }),
-        })
-        this.removeSession([session, 'pendingOnTutor'])
+    calendar(){
+      const events = []
+      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const calendar = this.$refs.calendar
+      const dt = new Date();
+
+      const day = dt.getDate();
+      const month = dt.getMonth();
+      const year = dt.getFullYear();
+
+      const firstDayOfMonth = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      this.monthDisplay = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+      const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+      });
+
+      calendar.innerHTML = '';
+
+      const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
+      this.calendarData.forEach(function(x){
+        if(x.accepted === true){
+          const splitDate = x.date.split('-');
+          if(splitDate.count === 0){
+              return null;
+          }
+
+          const year = splitDate[0];
+          const month = splitDate[1];
+          const day = splitDate[2]; 
+          const date = Number(month) + "/" + Number(day) + "/" + year
+          const title = "Class with " + x.tutor.user.first_name + ": " + convertTime(x.time_start) + " - " + convertTime(x.time_end)
+          /* eslint-disable */
+          events.push({
+            date: date,
+            title: title,
+          });
+          /* eslint-enable */
+        }
+        
+      })
+      for(let i = 1; i <= paddingDays + daysInMonth; i++) {
+        const daySquare = document.createElement('div');
+        daySquare.classList.add('day');
+        const dayString = `${month + 1}/${i - paddingDays}/${year}`;
+        if (i > paddingDays) {
+          daySquare.innerText = i - paddingDays;
+          const eventForDay = events.find(e => e.date === dayString);
+          if (i - paddingDays === day) {
+            daySquare.id = 'currentDay';
+          }
+
+          if (eventForDay) {
+            const eventDiv = document.createElement('div');
+            eventDiv.classList.add('event');
+            eventDiv.innerText = eventForDay.title;
+            daySquare.appendChild(eventDiv);
+          }
+
+        } else {
+          daySquare.classList.add('padding');
+        }
+        calendar.appendChild(daySquare); 
+        this.$refs.container.style.display = "block";
       }
-    },
+    }
   },
 }
 </script>
 <style scoped>
-.badge {
+.tutorbadge {
   position: absolute;
   top: 11px;
   right: 3px;

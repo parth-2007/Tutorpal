@@ -321,6 +321,9 @@ export default {
     if (todayDate === this.session.date){
       this.timerCount = timerSeconds
     }
+    else {
+      this.timerCount = 0;
+    }
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
@@ -346,7 +349,6 @@ export default {
     /* eslint-disable */
     setLoaded() {
       const code = this.session.call_url
-      console.log(code)
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: code,
