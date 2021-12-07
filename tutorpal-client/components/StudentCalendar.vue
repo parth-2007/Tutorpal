@@ -140,22 +140,24 @@
             </div>
           </div>
         </div>
-        <div id="container" ref="container">
-          <div id="header">
-            <div id="monthDisplay">{{monthDisplay}}</div>
-          </div>
+        <div style="display: flex; justify-content: center; padding: 20px;">
+          <div id="container" ref="container">
+            <div id="header">
+              <div id="monthDisplay">{{monthDisplay}}</div>
+            </div>
 
-          <div id="weekdays">
-            <div>Sunday</div>
-            <div>Monday</div>
-            <div>Tuesday</div>
-            <div>Wednesday</div>
-            <div>Thursday</div>
-            <div>Friday</div>
-            <div>Saturday</div>
+            <div id="weekdays">
+              <div>Sunday</div>
+              <div>Monday</div>
+              <div>Tuesday</div>
+              <div>Wednesday</div>
+              <div>Thursday</div>
+              <div>Friday</div>
+              <div>Saturday</div>
+            </div>
+              <div id="calendar" ref="calendar">    
           </div>
-            <div id="calendar" ref="calendar">    
-        </div>
+          </div>
         </div>
       </body>
     </html>
@@ -270,8 +272,8 @@ export default {
           /* eslint-disable */
           events.push({
             date: date,
-            title: title,
-          });
+            title: title
+          })
           /* eslint-enable */
         }
         
@@ -282,18 +284,21 @@ export default {
         const dayString = `${month + 1}/${i - paddingDays}/${year}`;
         if (i > paddingDays) {
           daySquare.innerText = i - paddingDays;
-          const eventForDay = events.find(e => e.date === dayString);
+          const eventForDay = events.filter(e => e.date === dayString);
           if (i - paddingDays === day) {
             daySquare.id = 'currentDay';
           }
 
-          if (eventForDay) {
+          if (eventForDay.length!==0) {
             const eventDiv = document.createElement('div');
+            eventForDay.forEach(function(x){
+              console.log(x)
+              eventDiv.innerHTML +=`<div style="margin-top: 10px;">${x.title}</div>`
+            })
             eventDiv.classList.add('event');
-            eventDiv.innerText = eventForDay.title;
             daySquare.appendChild(eventDiv);
+            console.log(eventDiv)
           }
-
         } else {
           daySquare.classList.add('padding');
         }

@@ -21,13 +21,11 @@
     background-color:#92a1d1;
   }
   #container {
-    width: 770px;
+    width: 830px;
     margin-top: 20px; 
     display: none; 
-    margin-left: 60px; 
     background-color: white; 
-    padding-top: 20px; 
-    padding-bottom: 20px; 
+    padding: 20px; 
     border-radius: 8px; 
     box-shadow: 0px 0px 3px #CBD4C2;
     font-family: Poppins;
@@ -38,7 +36,7 @@
     color: #247BA0;
   }
   #weekdays div {
-    width: 120px;
+    width: 115px;
     padding: 10px;
   }
   #calendar {
@@ -50,7 +48,7 @@
   .day {
     width: 100px;
     padding: 10px;
-    height: 125px;
+    min-height: 125px;
     cursor: pointer;
     box-sizing: border-box;
     background-color: white;
@@ -73,7 +71,7 @@
     background-color: #58bae4;
     color: white;
     border-radius: 5px;
-    max-height: 100px;
+    height: 100%;
   }
   .padding {
     cursor: default !important;

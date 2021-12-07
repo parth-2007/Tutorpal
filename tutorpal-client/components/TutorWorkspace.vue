@@ -266,16 +266,18 @@ export default {
         if (value > 0) {
           setTimeout(() => {
             this.timerCount--
-            if (this.timerCount === 600 || this.timerCount < 600) {
-              this.buttonShow = true
+            if (value === 300 || value < 300) {
+              this.buttonShow = true;
             }
           }, 1000)
-        } else if (value === 600) {
-          alert(
-            'You can now end this class. There are still ten minutes remaining in your meeting.'
-          )
+        } else if (value === 300) {
+            alert(
+              'You can now end this class. There are still ten minutes remaining in your meeting.'
+            )
+            this.buttonShow = true;
         } else if (value === 0) {
-          alert("This meeting's time is up, please end the meeting shortly.")
+            alert("This meeting's time is up, please end the meeting shortly.")
+            this.buttonShow = true;
         }
         const t = new Date(1970, 0, 1)
         t.setSeconds(value)
@@ -327,7 +329,6 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
-    this.buttonShow = true
     this.setLoaded()
   },
   methods: {
