@@ -1,4 +1,3 @@
-
 <template>
   <client-only>
     <html
@@ -116,7 +115,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import convertTime2 from '../utils/convertTime2'
-
 export default {
   props: {
     otherUser: {
@@ -158,7 +156,6 @@ export default {
   computed: {
     ...mapGetters({ user: 'getUser' }),
   },
-
   async created() {
     this.response = await fetch(
       process.env.API_URL + '/rooms/' + this.$route.params.id + '/messages/',
@@ -226,7 +223,7 @@ export default {
         process.env.API_URL === 'https://api.tutorpal.org'
           ? 'wss://chat.tutorpal.org'
           : process.env.API_URL === 'https://devapi.tutorpal.org'
-          ? 'wss://devchat.tutorpal.org'
+          ? 'wss://chat.tutorpal.org:8080'
           : 'ws://localhost:8080'
       const endpoint = host + '/ws/chat/' + this.$route.params.id + '/'
       this.socket = new WebSocket(endpoint)

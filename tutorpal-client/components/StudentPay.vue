@@ -1,4 +1,3 @@
-
 <template>
   <client-only>
     <html
@@ -27,33 +26,31 @@
                   alt=""
               /></router-link>
               <div class="div-block-4">
-                <form action="/search" class="stuff w-form">
+                <div style="margin-left: 0px; padding-left: 0px" class="stuff w-form">
                   <img
                     src="../static/student/images/search-1.png"
                     loading="lazy"
                     width="25"
                     height="25"
                     srcset="
-                      ../static/student/images/search-1-p-500.png 500w,
+                      ../static/student/images/search-1.png 500w,
                       ../static/student/images/search-1.png       512w
                     "
-                    sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
+                    sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                     alt=""
                     class="image-2"
                   /><input
-                    type="search"
-                    class="search-3 w-input"
-                    maxlength="256"
-                    name="q"
-                    placeholder="Search by subject"
-                    id="search"
-                    required=""
+                      class="search-3 w-input"
+                      placeholder="Search by subject"
+                      id="search"
+                      v-model="q"
+                      @keyup.enter="submitSearch()"
                   /><input
                     type="submit"
                     value="Search"
                     class="button-8 _100 _5px-left w-button"
                   />
-                </form>
+              </div>
                 <div class="div-block-43">
                   <div class="name_profile_pic">
                     <img
@@ -160,12 +157,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data() {
     return {
       session: [],
       index: '',
+      q: ''
     }
   },
   async fetch() {
@@ -226,9 +223,7 @@ export default {
   },
   mounted() {
     const script = document.createElement('script')
-    const clientId =
-      'AWW16XfjrRH_ES95pba-gKzG2Zf51wsnFT00MqTASBMYetPIoGvo9zjAH2_K5yZ9rW3ssiwGXqsHl1iJ'
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+    script.src = 'https://www.paypal.com/sdk/js?client-id=Ae0zJYc6uq0r19vdNLW2TedQ86i7_FTrS7s_3pwgU5ePOXriAibXuXssw_Nbc5jOg7JOUvU4e7q_LkaT&enable-funding=venmo&currency=USD'
     script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
   },
@@ -240,6 +235,9 @@ export default {
       'addSession',
       'removeSession',
     ]),
+    submitSearch() {
+      this.$router.push("/search/"+this.q);
+    },
     setLoaded() {
       window.paypal
         .Buttons({
@@ -250,19 +248,12 @@ export default {
             height: 40,
           },
           createOrder: (data, actions) => {
+            console.log(this.session.price)
             return actions.order.create({
-              purchase_units: [
-                {
-                  description: 'Pay for your TutorPal Session',
-                  amount: {
-                    currency_code: 'USD',
-                    value: this.session.price,
-                  },
-                },
-              ],
-            })
+              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.session.price)}}]
+            });
           },
-          onApprove: async (data) => {
+          onApprove: async (data, actions) => {
             const csrfToken = await getCSRF()
             await fetch(
               process.env.API_URL +
@@ -297,12 +288,13 @@ export default {
             )
             this.removeSession([this.session, 'pendingOnStudentPayment'])
             this.addSession([this.session, 'upcoming'])
-            this.$router.push('/payments')
+            return actions.order.capture().then(function(orderData) {
+              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              this.$router.push('/payments')
+            });
           },
           onError: () => {
-            alert(
-              'Sorry, we had an error with processing the payment. Please try again'
-            )
+            this.$router.push('/payments')
           },
         })
         .render(this.$refs.paypal)

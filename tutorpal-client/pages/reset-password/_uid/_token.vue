@@ -1,36 +1,41 @@
+
 <template>
   <client-only>
-    <head>
-      <meta charset="utf-8" />
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-        media="print"
-        onload="this.media='all'"
-      />
-    </head>
-    <form
-      style="font-family: Poppins; margin-top: 25px; margin-left: 25px"
-      @submit="handleSubmit"
-    >
-      <p style="font-size: 16px; color: #bb0a1e" v-if="error">{{ error }}</p>
-      <div style="width: 1000px" class="input-group mb-3">
-        <input
-          placeholder="Enter password here"
-          class="form-control"
-          type="password"
-          v-model="password"
+    <div>
+      <head>
+        <meta charset="utf-8" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          media="print"
+          onload="this.media='all'"
         />
-        <input
-          placeholder="Confirm password here"
-          style="margin-right: 5px; margin-left: 5px"
-          class="form-control"
-          type="password"
-          v-model="confirmPassword"
-        />
-        <button class="btn btn-primary" @click="handleSubmit">Submit</button>
-      </div>
-    </form>
+      </head>
+      <body>
+        <form
+          style="font-family: Poppins; margin-top: 25px; margin-left: 25px"
+          @submit="handleSubmit"
+        >
+          <p style="font-size: 16px; color: #bb0a1e" v-if="error">{{ error }}</p>
+          <div style="width: 1000px" class="input-group mb-3">
+            <input
+              placeholder="Enter password here"
+              class="form-control"
+              type="password"
+              v-model="password"
+            />
+            <input
+              placeholder="Confirm password here"
+              style="margin-right: 5px; margin-left: 5px"
+              class="form-control"
+              type="password"
+              v-model="confirmPassword"
+            />
+            <button class="btn btn-primary" @click="handleSubmit">Submit</button>
+          </div>
+        </form>
+      </body>
+    </div>
   </client-only>
 </template>
 <script>

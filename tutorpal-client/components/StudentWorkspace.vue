@@ -6,12 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          media="none"
-          onload="if(media!='all')media='all'"
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
       <div
         v-if="session.student_paid === true && session.started === false"
@@ -44,33 +39,31 @@
                   alt=""
               /></router-link>
               <div class="div-block-4">
-                <form action="/search" class="stuff w-form">
+                <div style="margin-left: 0px; padding-left: 0px" class="stuff w-form">
                   <img
                     src="../static/student/images/search-1.png"
                     loading="lazy"
                     width="25"
                     height="25"
                     srcset="
-                      ../static/student/images/search-1-p-500.png 500w,
+                      ../static/student/images/search-1.png 500w,
                       ../static/student/images/search-1.png       512w
                     "
-                    sizes="(max-width: 767px) 20px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
+                    sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                     alt=""
                     class="image-2"
                   /><input
-                    type="search"
-                    class="search-3 w-input"
-                    maxlength="256"
-                    name="q"
-                    placeholder="Search by subject"
-                    id="search"
-                    required=""
+                      class="search-3 w-input"
+                      placeholder="Search by subject"
+                      id="search"
+                      v-model="q"
+                      @keyup.enter="submitSearch()"
                   /><input
                     type="submit"
                     value="Search"
                     class="button-8 _100 _5px-left w-button"
                   />
-                </form>
+              </div>
                 <div class="div-block-43">
                   <div class="name_profile_pic">
                     <img
@@ -126,12 +119,16 @@
             </div>
           </div>
         </div>
-        <iframe
-          style="width: 40vw; height: 100vh; margin-left: 10px; float:left"
-          allow="camera;microphone"
-          :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
-        ></iframe>
-        <container><div style="width: 58vw; height: 100vh; float: right" id="wt-container"></div></container>
+        <div style="background-color: white;"><button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button></div>
+        <div style="margin-top: 0px;">
+          <iframe
+            style="width: 100vw; height: 100vh; float:left;"
+            allow="camera;microphone"
+            :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
+            ref="meeting"
+          ></iframe>
+          <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
+        </div>
       </body>
     </html>
   </client-only>
@@ -145,6 +142,7 @@ export default {
     return {
       clicked: false,
       session: [],
+      q: '',
     }
   },
   head() {
@@ -172,7 +170,6 @@ export default {
   mounted(){
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
-    script.addEventListener('load', this.setLoaded)
     document.body.appendChild(script)
   },
   computed: {
@@ -209,23 +206,36 @@ export default {
         }),
       }
     )
+    this.setLoaded()
     await this.fetchUser()
   },
   methods: {
     logoutclick() {
       this.clicked = !this.clicked
     },
-    // setLoaded() {
-    //   const wt = new api.WhiteboardTeam('#wt-container', { 
-    //       clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-    //       boardCode: this.session.call_url,
-    //       participant: {
-    //           name : this.user.firstName + " " + this.user.lastName,
-    //           role: 'editor'
-    //       }
-    //   });
-    //   wt.resetZoom()
-    // },
+    submitSearch() {
+      this.$router.push("/search/"+this.q);
+    },
+    whiteboardHandler(){
+      const whiteboard = this.$refs.container
+      if(whiteboard.style.visibility==="hidden"){
+        whiteboard.style.visibility = "visible"
+        this.$refs.meeting.style.width= "41vw"
+      }
+      else if(whiteboard.style.visibility==="visible"){
+        whiteboard.style.visibility = "hidden"
+        this.$refs.meeting.style.width= "100vw"
+      }
+    },
+    /* eslint-disable */
+    setLoaded() {
+      const code = this.session.call_url
+      const wt = new api.WhiteboardTeam(this.$refs.container, {
+          clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+          boardCode: code,
+      });
+    },
+    /* eslint-enable */
     ...mapActions(['fetchUser']),
   },
 }
