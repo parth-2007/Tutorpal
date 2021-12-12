@@ -18,7 +18,7 @@
             <router-link to="/register" class="homebutton w-button">register</router-link>
           </div>
           <h1 class="homeheading">
-            Find tutors around the globe,<br />in an instant
+            Find tutors around the globe,<br />in an instant.
           </h1>
           <div class="homestuff w-form">
             <img
