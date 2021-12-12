@@ -76,9 +76,9 @@
               v-else-if="buttonShow === false"
               style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
-              You are only allowed to end this class during the last ten minutes
+              You are only allowed to end this class during the last five minutes
               of the meeting. We suggest continuing with the meeting until the
-              last ten minutes. Thank you.
+              last five minutes. Thank you.
             </div>
             <button
               @click="updateModalValue()"
@@ -272,7 +272,7 @@ export default {
           }, 1000)
         } else if (value === 300) {
             alert(
-              'You can now end this class. There are still ten minutes remaining in your meeting.'
+              'You can now end this class. There are still five minutes remaining in your meeting.'
             )
             this.buttonShow = true;
         } else if (value === 0) {
