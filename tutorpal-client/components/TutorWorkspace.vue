@@ -329,7 +329,6 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
-    await new Promise(resolve => setTimeout(resolve, 3000));
     this.setLoaded()
   },
   methods: {
@@ -349,8 +348,8 @@ export default {
       }
     },
     /* eslint-disable */
-    setLoaded() {
-      
+    async setLoaded() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
