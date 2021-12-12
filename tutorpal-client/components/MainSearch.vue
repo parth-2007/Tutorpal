@@ -23,7 +23,7 @@
             alt=""
         /></router-link>
         <div class="search" style="margin-left: 0px; padding-left: 0px;">
-          <div style="margin-left: 0px; padding-left: 0px; padding-bottom: 20px;" class="homestuff w-form">
+          <div style="margin-left: 0px; padding-left: 0px;" class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
@@ -48,6 +48,7 @@
             v-for="tutor in tutordata.results"
             :key="tutor.id"
             id="posts"
+            style="margin-top: 20px;"
           >
             <router-link
               :to="'/tutors/' + tutor.id"
