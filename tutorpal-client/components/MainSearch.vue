@@ -22,7 +22,7 @@
             sizes="200px"
             alt=""
         /></router-link>
-        <div class="search" style="margin-left: 0px; padding-left: 0px; margin-bottom: 20px;">
+        <div class="search" style="margin-left: 0px; padding-left: 0px; padding-bottom: 20px;">
           <div style="margin-left: 0px; padding-left: 0px" class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"

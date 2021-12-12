@@ -204,8 +204,9 @@ export default {
         }),
       }
     )
-    this.setLoaded()
     await this.fetchUser()
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    this.setLoaded()
   },
   methods: {
     logoutclick() {
