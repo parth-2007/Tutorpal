@@ -123,7 +123,7 @@ class TutorViewSet(viewsets.GenericViewSet,
         tutor_query = Tutor.objects.annotate(ranking=ranking).annotate(
             search=SearchVector('user__first_name', 'user__last_name', 'occupation',
                                 'rates', 'qualifications', 'subjects', 'what_you_teach', 'education')
-        ).filter(search=query).select_related('user')
+        ).filter(search__contains=query).select_related('user')
         page = self.paginate_queryset(tutor_query)
         if page is not None:
             serializer_class = self.get_serializer(page, many=True)
