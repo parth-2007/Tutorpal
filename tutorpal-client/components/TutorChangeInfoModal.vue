@@ -258,7 +258,7 @@
       />
     </form>
     <button
-      @click="handleSubmit"
+      @click="handleSubmit()"
       style="margin-top: 15px; font-family: Poppins; margin-left: 0px"
       class="btn btn-primary"
     >
