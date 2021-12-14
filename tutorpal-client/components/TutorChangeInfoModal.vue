@@ -173,9 +173,10 @@
             <p>
               <input
                 type="file"
-                accept="image/"
+                accept="image/+"
                 name="image"
                 id="file"
+                onchange="loadFile(event)"
                 @change="handleFile"
                 style="display: none"
               />
