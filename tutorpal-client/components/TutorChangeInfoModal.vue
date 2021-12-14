@@ -313,6 +313,7 @@ export default {
     this.tutor = { ...this.getTutor() }
     this.user = { ...this.getUser() }
     this.src = this.user.profilePic
+    console.log(process.env.API_URL)
   },
   methods: {
     ...mapActions(['fetchTutor', 'fetchUser', 'updateTutor', 'updateUser']),
