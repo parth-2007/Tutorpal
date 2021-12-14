@@ -462,7 +462,7 @@
               I have read and agree with TutorPal's
               <router-link to="/toc">Terms of Service</router-link> and will not
               hold them liable for personal losses. I also acknowldge that
-              TutorPal takes a 10% fee of the payments I receive.
+              TutorPal takes a 5% fee of the payments I receive.
             </label>
           </div>
         </div>
