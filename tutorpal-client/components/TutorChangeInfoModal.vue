@@ -379,10 +379,10 @@ export default {
       } else {
         this.errors.paypalEmail = ''
       }
-      console.log("cacamos")
     },
     async handleSubmit() {
       this.validateData()
+      console.log(objectsEqual(this.tutor, this.getTutor()) + "cacamos")
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
