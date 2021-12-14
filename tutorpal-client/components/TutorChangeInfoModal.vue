@@ -394,6 +394,7 @@ export default {
             this.tutor.linkedIn = httpCheck.concat(this.tutor.linkedIn)
           }
         }
+        console.log(csrfToken)
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
           const formData = new FormData()
           if (this.profilePic) {
@@ -407,6 +408,7 @@ export default {
             'user',
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
+          console.log(formData, process.env.API_URL)
           const data = await fetch(
             process.env.API_URL + '/auth/update-tutor/',
             {
@@ -422,6 +424,7 @@ export default {
               if (res.status >= 400 && res.status < 600) {
                 this.errors.global = 'Something went wrong :('
               }
+              console.log(res, data)
               return res.json()
             })
             .catch(() => {
