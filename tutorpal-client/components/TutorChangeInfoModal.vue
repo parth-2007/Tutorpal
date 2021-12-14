@@ -379,6 +379,7 @@ export default {
       } else {
         this.errors.paypalEmail = ''
       }
+      console.log("cacamos")
     },
     async handleSubmit() {
       this.validateData()
@@ -395,7 +396,6 @@ export default {
             this.tutor.linkedIn = httpCheck.concat(this.tutor.linkedIn)
           }
         }
-        console.log(csrfToken)
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
           const formData = new FormData()
           if (this.profilePic) {
