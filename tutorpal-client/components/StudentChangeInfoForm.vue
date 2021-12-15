@@ -172,7 +172,25 @@ export default {
         this.errors.email = ''
         counter+=1
       }
-
+      const birthday = new Date(this.student.birthDate)
+      const age = Math.floor((Date.now() - birthday) / 31557600000)
+      /* eslint-disable */
+      if(age<0){
+        this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
+      }
+      else if(age>70){
+        this.errors.birthDate = "Sorry but our platform doesn't accept students above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
+      }
+      else if(age<6){
+        this.errors.birthDate = "You must be at least 6 years old to register as a student."
+      }
+      else {
+        counter+=1
+        console.log("works")
+        this.errors.birthDate = ""
+        this.errors.global = ""
+      }
+      /* eslint-enable */
       if (!emailValidation.test(this.student.parentEmail)) {
         this.errors.parentEmail = 'Invalid parent email'
       } else {
@@ -193,11 +211,11 @@ export default {
         this.errors.lastName = ''
         counter+=1
       }
-      if (counter!==4){
+      if (counter!==5){
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
         this.success = ""
       }
-      else if(counter===4){
+      else if(counter===5){
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }

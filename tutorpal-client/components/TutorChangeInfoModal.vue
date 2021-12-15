@@ -423,11 +423,28 @@ export default {
         this.errors.paypalEmail = ''
         counter+=1
       }
-      if (counter!==18){
+      const birthday = new Date(this.tutor.birthDate)
+      const age = Math.floor((Date.now() - birthday) / 31557600000)
+      /* eslint-disable */
+      if(age<0){
+        this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
+      }
+      else if(age>70){
+        this.errors.birthDate = "Sorry but our platform doesn't accept tutors above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
+      }
+      else if(age<15){
+        this.errors.birthDate = "You must be at least 15 years old to register as a tutor."
+      }
+      else {
+        counter+=1
+        this.errors.birthDate = ""
+      }
+
+      if (counter!==19){
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
         this.success = ""
       }
-      else if(counter===18){
+      else if(counter===19){
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }
