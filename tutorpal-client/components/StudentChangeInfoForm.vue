@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="font-family: Poppins;">
     <form style="font-family: Poppins; padding-bottom: 20px">
       <div class="row">
         <div class="col">
@@ -12,7 +12,7 @@
             aria-label="First name"
             required
           />
-          {{ errors.firstName }}
+          <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.firstName }}</p>
         </div>
         <div style="padding-left: 0px" class="col">
           <label for="lastname" class="form-label">Last Name</label>
@@ -24,7 +24,7 @@
             aria-label="Last name"
             required
           />
-          {{ errors.lastName }}
+          <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.lastName }}</p>
         </div>
       </div>
       <div style="margin-top: 15px" class="mb-3">
@@ -36,7 +36,7 @@
           id="emailaddress"
           required
         />
-        {{ errors.email }}
+        <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.email }}</p>
       </div>
       <div style="margin-top: 15px; float: left" class="row">
         <div style="position: relative; text-align: center" class="col">
@@ -72,6 +72,7 @@
           >
         </div>
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.profilePic }}</p>
       <div style="margin-top: 25px" class="mb-3">
         <input
           v-model="student.parentEmail"
@@ -81,7 +82,7 @@
           placeholder="Enter Parent Email"
           required
         />
-        {{ errors.parentEmail }}
+        <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.parentEmail }}</p>
       </div>
       <div class="form-group row">
         <label for="birthdate" class="col-2 col-form-label">Birthdate</label>
@@ -93,13 +94,15 @@
             id="birthdate"
             required
           />
-          {{ errors.birthDate }}
+          <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.birthDate }}</p>
         </div>
       </div>
     </form>
     <button @click="handleSubmit()" class="btn btn-primary">
       Update Information
     </button>
+    <p style="margin-top: 10px; color: hsla(0, 100%, 64%, 1)">{{errors.global}}</p>
+    <p style="margin-top: 10px; color: #008000;">{{success}}</p>
   </div>
 </template>
 
@@ -122,7 +125,9 @@ export default {
         profilePic: '',
         parentEmail: '',
         birthDate: '',
+        global: ''
       },
+      success: "",
       src: '',
     }
   },
@@ -143,6 +148,7 @@ export default {
       if (e.target.files[0].size > 100000) {
         this.errors.profilePic =
           'File size is too high! Please upload a file less than 100 Kilobytes'
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
       } else {
         this.errors.profilePic = ''
       }
@@ -157,30 +163,43 @@ export default {
       return isError
     },
     validateData() {
+      let counter = 0
       const emailValidation =
         /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.user.email)) {
         this.errors.email = 'Invalid user email'
       } else {
         this.errors.email = ''
+        counter+=1
       }
 
       if (!emailValidation.test(this.student.parentEmail)) {
         this.errors.parentEmail = 'Invalid parent email'
       } else {
         this.errors.parentEmail = ''
+        counter+=1
       }
 
       if (this.user.firstName.length < 1) {
         this.errors.firstName = 'Invalid first name'
       } else {
         this.errors.firstName = ''
+        counter+=1
       }
 
       if (this.user.lastName.length < 1) {
         this.errors.lastName = 'Invalid last name'
       } else {
         this.errors.lastName = ''
+        counter+=1
+      }
+      if (counter!==4){
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+        this.success = ""
+      }
+      else if(counter===4){
+        this.success = "You have successfully updated your account info!"
+        this.errors.global = ''
       }
     },
     async handleSubmit() {
@@ -205,19 +224,6 @@ export default {
             'user',
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
-          // console.log(formData)
-          // const data = await fetch(process.env.API_URL + '/auth/update-student/', {
-          //   credentials: 'include',
-          //   method: 'PATCH',
-          //   headers: {
-          //     'X-CSRFToken': csrfToken.success,
-          //   },
-          //   body: formData,
-          // }).then((res) => {
-          //   if (res.status >= 400 && res.status < 600) {
-          //     this.errors.global = 'Something went wrong :('
-          //   }
-          // }
           const data = await fetch(
             process.env.API_URL + '/auth/update-student/',
             {
@@ -231,7 +237,15 @@ export default {
           )
             .then((res) => {
               if (res.status >= 400 && res.status < 600) {
-                this.errors.global = 'Something went wrong :('
+                this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+                this.success=""
+                if(res.status === 400){
+                  this.errors.email = "Invalid email, already in use by another user."
+                }
+              }
+              else if(res.status === 200){
+                this.success = "You have successfully updated your account info!"
+                this.errors.global = ''
               }
               return res.json()
             })
@@ -247,13 +261,10 @@ export default {
             if (!objectsEqual(this.user, this.getUser())) {
               this.updateUser({ ...this.user })
             }
-            this.$emit('modalSubmit')
           }
         } else {
           this.errors.global = 'Something went wrong :('
         }
-      } else {
-        this.$emit('modalSubmit')
       }
     },
   },
