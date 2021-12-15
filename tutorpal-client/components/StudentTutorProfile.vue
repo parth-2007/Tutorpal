@@ -244,6 +244,7 @@
                 width="74"
                 height="74"
                 sizes="74px"
+                style="border-radius: 100px;"
                 alt=""
               />
               <div class="div-block-72">

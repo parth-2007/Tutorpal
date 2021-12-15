@@ -54,6 +54,7 @@
                 loading="lazy"
                 width="74"
                 height="74"
+                style="border-radius: 100px;"
                 sizes="74px"
                 alt=""
               />

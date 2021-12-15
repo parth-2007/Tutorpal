@@ -382,7 +382,9 @@ export default {
     },
     async handleSubmit() {
       this.validateData()
-      console.log(objectsEqual(this.tutor, this.getTutor()) + "cacamos")
+      console.log(!objectsEqual(this.tutor, this.getTutor()))
+      console.log(!objectsEqual(this.user, this.getUser()))
+      console.log(!this.checkErrors())
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
