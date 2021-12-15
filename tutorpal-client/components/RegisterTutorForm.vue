@@ -208,7 +208,7 @@
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
           <div style="margin-left: 60px" class="text-block-5">
-            Class Description (please be as detailed as possible)
+            Class Curriculum (please be as detailed as possible)
           </div>
         </div>
         <div class="w-col w-col-6">
@@ -480,7 +480,6 @@
 </template>
 <script>
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data() {
     return {
@@ -589,6 +588,11 @@ export default {
           this.linkedIn = httpCheck.concat(this.linkedIn)
         }
       }
+      const birthday = new Date(this.birthDate)
+      const age = Math.floor((Date.now() - birthday) / 31557600000)
+      if (age < 15) {
+        this.errors.birthDate =
+          'You must be at least 15 years old to register as a tutor'
         const birthday = new Date(this.birthDate)
         const age = Math.floor((Date.now() - birthday) / 31557600000)
         if (age < 15) {
@@ -617,7 +621,6 @@ export default {
             this.errors[field] = ''
           }
         })
-
         const emailValidation =
           /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
         if (!emailValidation.test(this.email)) {
@@ -634,7 +637,6 @@ export default {
           this.errors.paypalEmail = ''
           this.paypalEmail = this.email
         }
-
         if (this.password !== this.confirmPassword) {
           this.errors.password =
             'Password and Confirm Password must be the same'
@@ -687,7 +689,6 @@ export default {
           tutor.linkedIn = this.linkedIn
         }
         formData.append('tutor', JSON.stringify(tutor))
-
         const data = await fetch(
           process.env.API_URL + '/auth/register-tutor/',
           {
@@ -708,15 +709,14 @@ export default {
           .catch(() => {
             this.errors.global = 'Something went wrong :('
           })
-
         if (data && data.error) {
           this.errors.global = data.error
         }
-
         if (data && data.success === 'Successfully created tutor') {
           this.$router.push('/checkemail')
         }
       }
     },
+  },
 }
 </script>
