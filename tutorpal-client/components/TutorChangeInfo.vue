@@ -168,15 +168,18 @@ T<template>
               </div>
               <p style="padding-top: 20px overflow: hidden" class="tutorparagraph-7">
                 <strong>Birth Date: </strong>{{ tutor.birthDate }}<br /><strong
-                  >Qualification Description: </strong
-                >{{ tutor.qualifications }}<br /><strong>Education:</strong>
+                    >Qualification Description: </strong>{{tutor.qualifications}}
+                <br><strong>Email: </strong>{{ user.email }}<br />
+                <strong>Paypal Email: </strong>{{ tutor.paypalEmail }}<br />
+                <strong>Education:</strong>
                 {{ tutor.education }}<br /><strong
-                  >Working/Subject Experience:</strong
-                >
+                    >Working/Subject Experience:</strong
+                    >
                 {{ tutor.profExp }} years<br /><strong>Teaching Experience: </strong>{{ tutor.teachExp }}
                 years<br /><strong>Average Review:</strong>
                 {{ tutor.averageReviews }}<br />
                 <strong>Occupation: </strong>{{ tutor.occupation }}<br />
+                <strong>Gender: </strong>{{ tutor.gender }}<br />
                 <strong>Price: </strong>${{tutor.rates}} per hour <br />
                 <strong>Bio: </strong>{{ tutor.bio}}<br />
                 <strong>Availability: </strong>{{ tutor.availability}}<br />
@@ -185,19 +188,19 @@ T<template>
                   style="font-family: Poppins;"
                   :href="'https://www.tutorpal.org/tutors/'+tutor.id"
                   target="_blank"
-                ><strong>View my profile</strong>
+                  ><strong>View my profile</strong>
                 <br>
                 </a>
                 <a
-                  @click="updateModalValue"
-                  style="margin-top: 10px;"
-                  class="tutorbutton-10-copy-copy w-button"
-                  >Update Information
+                    @click="updateModalValue"
+                    style="margin-top: 10px;"
+                    class="tutorbutton-10-copy-copy w-button"
+                    >Update Information
                 </a>
                 <router-link
-                  style="font-family: Poppins; padding-left: 10px;"
-                  to="/timezone"
-                ><strong>Set my timezone</strong>
+                    style="font-family: Poppins; padding-left: 10px;"
+                    to="/timezone"
+                    ><strong>Set my timezone</strong>
                 </router-link>
               </p>
             </div>

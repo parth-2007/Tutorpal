@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form>
+    <form @submit="handleSubmit">
       <div style="margin-top: 15px" class="mb-3">
         <label for="emailaddress" class="form-label">Email Address</label>
         <input
@@ -40,11 +40,12 @@
           class="form-select"
           id="gender"
           aria-label="Default select example"
+          required
         >
-          <option value="1">Prefer Not To Say</option>
-          <option value="2">Male</option>
-          <option value="3">Female</option>
-          <option value="4">Other</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+          <option value="Prefer Not To Say">Prefer Not To Say</option>
         </select>
       </div>
       <div class="mb-3">
@@ -90,6 +91,7 @@
         class="form-control"
         id="description"
         rows="3"
+        required
       ></textarea>
       <div style="margin-top: 15px" class="row">
         <div class="col">
@@ -110,7 +112,9 @@
             id="gpa"
             min="0"
             max="5"
+            step="any"
             class="form-control"
+            required
           />
         </div>
         <div style="padding-left: 0px" class="col">
@@ -121,6 +125,7 @@
             class="form-select"
             id="education"
             aria-label="Default select example"
+            required
           >
             <option selected>Select</option>
             <option value="High School">High School</option>
@@ -147,6 +152,7 @@
         placeholder="Qualifications"
         id="educationdescription"
         rows="3"
+        required
       ></textarea>
       <div style="margin-top: 15px; margin-bottom: 5px" class="text-block-5">
         <b>Linkedin Profile Link(Optional)</b>
@@ -166,6 +172,7 @@
             id="bio"
             placeholder="Eg. My hobbies are..."
             rows="3"
+            required
           ></textarea>
         </div>
         <div style="padding-left: 0px" class="col">
@@ -176,7 +183,6 @@
                 accept="image/+"
                 name="image"
                 id="file"
-                onchange="loadFile(event)"
                 @change="handleFile"
                 style="display: none"
               />
@@ -256,14 +262,14 @@
         id="availability"
         placeholder="Mondays, 4:00 PM - 6:00 PM"
       />
+      <button
+        style="margin-top: 15px; font-family: Poppins; margin-left: 0px"
+        class="btn btn-primary"
+        type="submit"
+      >
+        Update Profile
+      </button>
     </form>
-    <button
-      @click="handleSubmit()"
-      style="margin-top: 15px; font-family: Poppins; margin-left: 0px"
-      class="btn btn-primary"
-    >
-      Update Profile
-    </button>
   </div>
 </template>
 
@@ -313,7 +319,6 @@ export default {
     this.tutor = { ...this.getTutor() }
     this.user = { ...this.getUser() }
     this.src = this.user.profilePic
-    console.log(process.env.API_URL)
   },
   methods: {
     ...mapActions(['fetchTutor', 'fetchUser', 'updateTutor', 'updateUser']),
@@ -323,12 +328,11 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      console.log(e.target.files, this.profilePic, this.src)
       if (e.target.files[0].size > 100000) {
-        this.errors.profilePic =
+        this.errors.user.profilePic =
           'File size is too high! Please upload a file less than 100 Kilobytes'
       } else {
-        this.errors.profilePic = ''
+        this.errors.user.profilePic = ''
       }
     },
     checkErrors() {
@@ -341,28 +345,6 @@ export default {
       return isError
     },
     validateData() {
-      const requiredFields = [
-        'user.email',
-        'user.firstName',
-        'user.lastName',
-        'tutor.gender',
-        'tutor.occupation',
-        'tutor.subjects',
-        'tutor.whatYouTeach',
-        'tutor.qualifications',
-        'tutor.bio',
-        'tutor.rates',
-        'tutor.teachExp',
-        'tutor.profExp',
-      ]
-      requiredFields.forEach((field) => {
-        if (this[field.split('.')[0]][field.split('.')[1]].length < 1) {
-          this.errors[field] = 'This field is required'
-        } else {
-          this.errors[field] = ''
-        }
-      })
-
       const emailValidation =
         /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.user.email)) {
@@ -370,7 +352,8 @@ export default {
       } else {
         this.errors.email = ''
       }
-
+      this.tutor.gpa = parseFloat(this.tutor.gpa).toFixed(2)
+      console.log(this.tutor.gpa)
       if (
         this.tutor.paypalEmail.length > 0 &&
         !emailValidation.test(this.tutor.paypalEmail)
@@ -382,8 +365,6 @@ export default {
     },
     async handleSubmit() {
       this.validateData()
-      console.log(!this.checkErrors())
-      console.log(this.errors)
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
@@ -410,7 +391,6 @@ export default {
             'user',
             JSON.stringify(keysToSnake(unpackUser({ ...this.user })))
           )
-          console.log(formData, process.env.API_URL)
           const data = await fetch(
             process.env.API_URL + '/auth/update-tutor/',
             {
@@ -426,7 +406,6 @@ export default {
               if (res.status >= 400 && res.status < 600) {
                 this.errors.global = 'Something went wrong :('
               }
-              console.log(res, data)
               return res.json()
             })
             .catch(() => {

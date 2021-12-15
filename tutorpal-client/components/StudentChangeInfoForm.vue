@@ -47,7 +47,6 @@
               accept="image/*"
               name="image"
               id="file"
-              onchange="loadFile(event)"
               style="display: none"
             />
           </p>

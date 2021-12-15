@@ -589,11 +589,6 @@ export default {
           this.linkedIn = httpCheck.concat(this.linkedIn)
         }
       }
-      const birthday = new Date(this.birthDate)
-      const age = Math.floor((Date.now() - birthday) / 31557600000)
-      if (age < 15) {
-        this.errors.birthDate =
-          'You must be at least 15 years old to register as a tutor'
         const birthday = new Date(this.birthDate)
         const age = Math.floor((Date.now() - birthday) / 31557600000)
         if (age < 15) {
@@ -723,6 +718,5 @@ export default {
         }
       }
     },
-  },
 }
 </script>
