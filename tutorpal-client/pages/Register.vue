@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       </head>
       <div v-if="user.isStudent">
       </div>
@@ -82,6 +83,7 @@
             >
           </div>
         </div>
+        <a style="position: fixed; bottom: 0px; right: 10px; font-family: Poppins; font-size: 16px; color: red; text-decoration: none; display: flex; align-items: center; justify-content: center;" href="https://www.youtube.com/channel/UCTbysqe_AM_eY9N3eVpiY6A" target="_blank"><i class="fa fa-youtube-play" style="font-size:36px;"></i><a style="margin-left: 10px; text-decoration: none;">Tutorials</a></a>
       </body>
     </html>
   </client-only>

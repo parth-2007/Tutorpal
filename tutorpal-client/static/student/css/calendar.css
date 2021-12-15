@@ -48,7 +48,8 @@
   .day {
     width: 100px;
     padding: 10px;
-    min-height: 125px;
+    height: 125px;
+    overflow-y: auto;
     cursor: pointer;
     box-sizing: border-box;
     background-color: white;
@@ -71,7 +72,6 @@
     background-color: #58bae4;
     color: white;
     border-radius: 5px;
-    height: 100%;
   }
   .padding {
     cursor: default !important;
