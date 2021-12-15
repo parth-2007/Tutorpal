@@ -215,9 +215,9 @@
                     </p>
                   </div>
                   <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong
-                    ><br />Description: <strong class="bold-text"> </strong
-                    >{{ session.description }}
+                    <strong class="bold-text">Student Information</strong>
+                    <br />Topic: {{ session.subjects }}
+                    <br />Description: {{ session.description }}
                   </p>
                   <div class="text-block-27">
                     This tutor has not accepted your request yet.

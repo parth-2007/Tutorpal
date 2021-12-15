@@ -239,7 +239,7 @@
                       }}<br />Subject:
                       {{
                         session.tutor !== undefined
-                          ? session.tutor.subjects
+                          ? session.subjects
                           : ''
                       }}<br />Class Description:
                       {{ session.description }}‍<br />
@@ -303,7 +303,7 @@
                       }}<br />Subject:
                       {{
                         session.tutor !== undefined
-                          ? session.tutor.subjects
+                          ? session.subjects
                           : ''
                       }}<br />‍Class Description:
                       {{ session.description }}‍<br /><strong

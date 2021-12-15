@@ -186,10 +186,9 @@
                       {{ session.free }}<br />Amount: ${{ session.price }}
                     </p>
                     <p class="tutorparagraph-2">
-                      <strong class="tutorbold-text">Student Information</strong
-                      ><br />Description:
-                      <strong class="tutorbold-text"> </strong
-                      >{{ session.description }}
+                      <strong class="tutorbold-text">Student Information</strong>
+                      <br />Topic: {{ session.subjects }}
+                      <br />Description: {{ session.description }}
                     </p>
                     <div class="tutortext-block-27">
                       Remember, you only have 24 hours from since this request
@@ -253,7 +252,7 @@
                         session.student !== undefined
                           ? session.student.user.lastName
                           : ''
-                      }}<br />Subject: {{ session.subjects }}<br />Class
+                      }}<br />Topic: {{ session.subjects }}<br />Class
                       Description: {{ session.description }}‍<br />
                     </p>
                     <router-link
@@ -302,7 +301,7 @@
                         session.student !== undefined
                           ? session.student.user.lastName
                           : ''
-                      }}<br />Subject: {{ session.subjects }}<br />‍Class
+                      }}<br />Topic: {{ session.subjects }}<br />‍Class
                       Description: {{ session.description }}‍
                     </p>
                     <button
