@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit="handleSubmit">
+    <form>
       <div style="margin-top: 15px" class="mb-3">
         <label for="emailaddress" class="form-label">Email Address</label>
         <input
@@ -11,6 +11,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.email }}</p>
       <div style="margin-top: 15px" class="mb-3">
         <label for="paypalemailaddress" class="form-label"
           >PayPal Email Address</label
@@ -23,6 +24,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.paypalEmail }}</p>
       <div class="mb-3">
         <label for="birthdate" class="form-label">Birthdate</label>
         <input
@@ -33,6 +35,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.birthDate }}</p>
       <div class="mb-3">
         <label for="birthdate" class="form-label">Gender</label>
         <select
@@ -40,7 +43,6 @@
           class="form-select"
           id="gender"
           aria-label="Default select example"
-          required
         >
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -48,6 +50,7 @@
           <option value="Prefer Not To Say">Prefer Not To Say</option>
         </select>
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gender }}</p>
       <div class="mb-3">
         <label for="firstname" class="form-label">First Name</label>
         <input
@@ -57,6 +60,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.firstName }}</p>
       <div class="mb-3">
         <label for="lastname" class="form-label">Last Name</label>
         <input
@@ -66,6 +70,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.lastName }}</p>
       <div class="mb-3">
         <label for="occupation" class="form-label">Occupation</label>
         <input
@@ -75,6 +80,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.occupation }}</p>
       <div class="mb-3">
         <label for="subject" class="form-label">Subjects</label>
         <input
@@ -84,6 +90,7 @@
           required
         />
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.subjects }}</p>
       <div class="text-block-5"><b>Class Description</b></div>
       <textarea
         v-model="tutor.whatYouTeach"
@@ -91,8 +98,8 @@
         class="form-control"
         id="description"
         rows="3"
-        required
       ></textarea>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.whatYouTeach }}</p>
       <div style="margin-top: 15px" class="row">
         <div class="col">
           <label for="major" class="form-label">Major</label>
@@ -104,7 +111,8 @@
             required
           />
         </div>
-        <div style="padding-left: 0px" class="col">
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.major }}</p>
+        <div style="padding-left: 0px; margin-left: 15px;" class="col">
           <label for="gpa" class="form-label">GPA</label>
           <input
             v-model="tutor.gpa"
@@ -112,12 +120,11 @@
             id="gpa"
             min="0"
             max="5"
-            step="any"
             class="form-control"
-            required
           />
         </div>
-        <div style="padding-left: 0px" class="col">
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gpa }}</p>
+        <div style="padding-left: 0px; margin-left: 15px;" class="col">
           <label for="education" class="form-label">Education</label>
           <select
             v-model="tutor.education"
@@ -125,16 +132,15 @@
             class="form-select"
             id="education"
             aria-label="Default select example"
-            required
           >
-            <option selected>Select</option>
             <option value="High School">High School</option>
             <option value="Bachelors Degree">Bachelors Degree</option>
             <option value="Masters Degree">Masters Degree</option>
             <option value="Ph.D.">Ph.D.</option>
           </select>
         </div>
-        <div style="padding-left: 0px" class="col">
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
+        <div style="padding-left: 0px; margin-left: 15px;" class="col">
           <label for="school" class="form-label">School/College</label>
           <input
             v-model="tutor.school"
@@ -144,16 +150,18 @@
             required
           />
         </div>
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.school }}</p>
       </div>
+      <strong>Qualifications</strong>
       <textarea
         v-model="tutor.qualifications"
-        style="height: 250px; margin-top: 25px"
+        style="height: 250px; margin-top: 10px"
         class="form-control"
         placeholder="Qualifications"
         id="educationdescription"
         rows="3"
-        required
       ></textarea>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.qualifications }}</p>
       <div style="margin-top: 15px; margin-bottom: 5px" class="text-block-5">
         <b>Linkedin Profile Link(Optional)</b>
       </div>
@@ -163,18 +171,20 @@
         id="linkedin"
         placeholder="https://www.linkedin.com/in/johndoe"
       />
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
+      <strong style="padding-top: 25px;">Tell us a bit about yourself</strong>
       <div class="row">
         <div class="col">
           <textarea
             v-model="tutor.bio"
-            style="height: 250px; margin-top: 25px"
+            style="height: 250px; margin-top: 10px"
             class="form-control"
             id="bio"
             placeholder="Eg. My hobbies are..."
             rows="3"
-            required
           ></textarea>
         </div>
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.bio }}</p>
         <div style="padding-left: 0px" class="col">
           <div style="position: relative; text-align: center" class="col">
             <p>
@@ -209,6 +219,7 @@
             >
           </div>
         </div>
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profilePic }}</p>
       </div>
       <label
         style="margin-top: 15px"
@@ -225,6 +236,7 @@
         class="form-control"
         id="rates"
       />
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.rates }}</p>
       <div style="margin-top: 15px" class="row">
         <div class="col">
           <label for="teachexp" class="form-label"
@@ -239,7 +251,8 @@
             class="form-control"
           />
         </div>
-        <div style="padding-left: 0px" class="col">
+        <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.teachExp }}</p>
+        <div style="padding-left: 0px; margin-left: 15px;" class="col">
           <label for="profexp" class="form-label"
             >Years of Professional Experience</label
           >
@@ -253,6 +266,7 @@
           />
         </div>
       </div>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profExp }}</p>
       <label style="margin-top: 15px" for="availability" class="form-label"
         >Availability</label
       >
@@ -262,14 +276,17 @@
         id="availability"
         placeholder="Mondays, 4:00 PM - 6:00 PM"
       />
-      <button
-        style="margin-top: 15px; font-family: Poppins; margin-left: 0px"
-        class="btn btn-primary"
-        type="submit"
-      >
-        Update Profile
-      </button>
+      <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
     </form>
+    <button
+      @click="handleSubmit()"
+      style="margin-top: 15px; font-family: Poppins; margin-left: 0px"
+      class="btn btn-primary"
+    >
+      Update Profile
+    </button>
+    <p style="margin-top: 10px; color: hsla(0, 100%, 64%, 1)">{{errors.global}}</p>
+    <p style="margin-top: 10px; color: #008000;">{{success}}</p>
   </div>
 </template>
 
@@ -279,7 +296,6 @@ import getCSRF from '../utils/getCSRF'
 import objectsEqual from '../utils/objectsEqual'
 import { unpackTutor, unpackUser } from '../utils/unPackObjects'
 import { keysToSnake } from '../utils/changeObjectNaming'
-
 export default {
   data() {
     return {
@@ -287,6 +303,7 @@ export default {
       user: {},
       profilePic: null,
       src: '',
+      success: '',
       errors: {
         email: '',
         firstName: '',
@@ -323,16 +340,17 @@ export default {
   methods: {
     ...mapActions(['fetchTutor', 'fetchUser', 'updateTutor', 'updateUser']),
     ...mapGetters(['getUser', 'getTutor']),
-
     handleFile(e) {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
+      console.log(e.target.files, this.profilePic, this.src)
       if (e.target.files[0].size > 100000) {
-        this.errors.user.profilePic =
+        this.errors.profilePic =
           'File size is too high! Please upload a file less than 100 Kilobytes'
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
       } else {
-        this.errors.user.profilePic = ''
+        this.errors.profilePic = ''
       }
     },
     checkErrors() {
@@ -345,15 +363,57 @@ export default {
       return isError
     },
     validateData() {
+      const requiredFields = [
+        'user.email',
+        'user.firstName',
+        'user.lastName',
+        'tutor.gender',
+        'tutor.occupation',
+        'tutor.subjects',
+        'tutor.whatYouTeach',
+        'tutor.qualifications',
+        'tutor.bio',
+        'tutor.rates',
+        'tutor.teachExp',
+        'tutor.profExp',
+        'tutor.major',
+        'tutor.gpa',
+        'tutor.school',
+        'tutor.education'
+      ]
+      let counter = 0
+      requiredFields.forEach((field) => {
+        if (this[field.split('.')[0]][field.split('.')[1]].length < 1) {
+          this.errors[field] = 'This field is required'
+        } else {
+          this.errors[field] = ''
+          counter+=1
+        }
+      })
+      this.errors.email = this.errors['user.email']
+      this.errors.firstName = this.errors['user.firstName']
+      this.errors.lastName = this.errors['user.lastName']
+      this.errors.gender = this.errors['tutor.gender']
+      this.errors.occupation = this.errors['tutor.occupation']
+      this.errors.subjects = this.errors['tutor.subjects']
+      this.errors.whatYouTeach = this.errors['tutor.whatYouTeach']
+      this.errors.qualifications = this.errors['tutor.qualifications']
+      this.errors.bio = this.errors['tutor.bio']
+      this.errors.rates = this.errors['tutor.rates']
+      this.errors.teachExp = this.errors['tutor.teachExp']
+      this.errors.profExp = this.errors['tutor.profExp']
+      this.errors.major = this.errors['tutor.major']
+      this.errors.gpa = this.errors['tutor.gpa']
+      this.errors.school = this.errors['tutor.school']
+      this.errors.education = this.errors['tutor.education']
       const emailValidation =
         /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
       if (!emailValidation.test(this.user.email)) {
         this.errors.email = 'Invalid email'
       } else {
         this.errors.email = ''
+        counter+=1
       }
-      this.tutor.gpa = parseFloat(this.tutor.gpa).toFixed(2)
-      console.log(this.tutor.gpa)
       if (
         this.tutor.paypalEmail.length > 0 &&
         !emailValidation.test(this.tutor.paypalEmail)
@@ -361,6 +421,15 @@ export default {
         this.errors.paypalEmail = 'Invalid email'
       } else {
         this.errors.paypalEmail = ''
+        counter+=1
+      }
+      if (counter!==18){
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+        this.success = ""
+      }
+      else if(counter===18){
+        this.success = "You have successfully updated your account info!"
+        this.errors.global = ''
       }
     },
     async handleSubmit() {
@@ -404,12 +473,18 @@ export default {
           )
             .then((res) => {
               if (res.status >= 400 && res.status < 600) {
-                this.errors.global = 'Something went wrong :('
+                this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+                this.success = ""
+              }
+              else if(res.status ===200){
+                this.success = "You have successfully updated your account info!"
+                this.errors.global = ''
               }
               return res.json()
             })
             .catch(() => {
-              this.errors.global = 'Something went wrong :('
+              this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+              this.success = ""
             })
           if (data && data.error) {
             this.errors.global = data.error
@@ -420,13 +495,10 @@ export default {
             if (!objectsEqual(this.user, this.getUser())) {
               this.updateUser({ ...this.user })
             }
-            this.$emit('modalSubmit')
           }
         } else {
           this.errors.global = 'Something went wrong :('
         }
-      } else {
-        this.$emit('modalSubmit')
       }
     },
   },

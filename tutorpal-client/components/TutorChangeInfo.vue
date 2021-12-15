@@ -1,4 +1,4 @@
-T<template>
+<template>
   <client-only>
     <html
       data-wf-page="5f405fbdac064904ad639864"
@@ -191,19 +191,21 @@ T<template>
                   ><strong>View my profile</strong>
                 <br>
                 </a>
+              </p>
+              <div style="margin-left: 50%;">
                 <a
-                    @click="updateModalValue"
-                    style="margin-top: 10px;"
-                    class="tutorbutton-10-copy-copy w-button"
-                    >Update Information
+                  @click="updateModalValue"
+                  style="margin-top: 10px;"
+                  class="tutorbutton-10-copy-copy w-button"
+                  >Update Information
                 </a>
                 <router-link
-                    style="font-family: Poppins; padding-left: 10px;"
-                    to="/timezone"
-                    ><strong>Set my timezone</strong>
+                  style="font-family: Poppins; padding-left: 10px;"
+                  to="/timezone"
+                  ><strong>Set my timezone</strong>
                 </router-link>
-              </p>
-            </div>
+              </div>
+          </div>
           </div>
         </div>
       </body>
