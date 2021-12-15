@@ -48,7 +48,7 @@
   .day {
     width: 100px;
     padding: 10px;
-    height: 125px;
+    height: 145px;
     overflow-y: auto;
     cursor: pointer;
     box-sizing: border-box;
