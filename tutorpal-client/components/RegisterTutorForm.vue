@@ -152,7 +152,7 @@
             id="gender"
             aria-label="Default select example"
           >
-            <option value="Male">Male</option>
+            <option value="Male" selected="selected">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
             <option value="Prefer Not To Say">Prefer Not To Say</option>
@@ -269,6 +269,7 @@
               </select>
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
             </div>
+            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
             <div style="padding-left: 0px" class="col">
               <label for="school" class="form-label">School/College</label>
               <input
@@ -428,7 +429,7 @@
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
           <div style="margin-left: 60px" class="text-block-5">
-            Availability(optional)
+            Availability
           </div>
         </div>
         <div class="w-col w-col-6">
@@ -457,18 +458,19 @@
               id="toc"
               required
             />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
             <label class="form-check-label" for="toc">
               I have read and agree with TutorPal's
               <router-link to="/toc">Terms of Service</router-link> and will not
               hold them liable for personal losses. I also acknowldge that
               TutorPal takes a 5% fee of the payments I receive.
             </label>
+            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
           </div>
         </div>
       </div>
     </form>
     <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins; font-size: 16px; margin-left: 60px;">{{ errors.global }}</p>
+    <p style="margin-top: 10px; font-family: Poppins; font-size: 16px; margin-left: 60px; color: #008000;">{{success}}</p>
     <button
       @click="handleSubmit"
       style="margin-top: 40px; margin-bottom: 20px; margin-left: 60px"
@@ -534,6 +536,7 @@ export default {
         availability: '',
         global: '',
       },
+      success: "",
       src: 'https://image.flaticon.com/icons/png/512/149/149071.png',
     }
   },
@@ -576,10 +579,12 @@ export default {
       return isError
     },
     validateData() {
+      let counter = 0
       if (!this.toc) {
-        this.errors.global = 'Please read and agree to our Terms of Conditions'
+        this.errors.toc = 'Please read and agree to our Terms of Conditions'
       } else {
-        this.errors.global = ''
+        this.errors.toc = ''
+        counter+=1
       }
       if (this.linkedIn !== '') {
         let httpCheck = this.linkedIn.substr(0, 8)
@@ -588,16 +593,23 @@ export default {
           this.linkedIn = httpCheck.concat(this.linkedIn)
         }
       }
-      const birthday = new Date(this.birthDate)
-      const age = Math.floor((Date.now() - birthday) / 31557600000)
-      if (age < 15) {
-        this.errors.birthDate =
-          'You must be at least 15 years old to register as a tutor'
         const birthday = new Date(this.birthDate)
         const age = Math.floor((Date.now() - birthday) / 31557600000)
-        if (age < 15) {
-          this.errors.birthDate =
-            'You must be at least 15 years old to register as a tutor'
+        if(age<0){
+          this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
+        }
+        else if(age>70){
+          this.errors.birthDate = "Sorry but our platform doesn't accept tutors above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
+        }
+        else if(age<15){
+          this.errors.birthDate = "You must be at least 15 years old to register as a tutor."
+        }
+        else if(isNaN(age)){
+          this.errors.birthDate = "We're not detecting a birthdate here..."
+        }
+        else {
+          counter+=1
+          this.errors.birthDate = ""
         }
         const requiredFields = [
           'email',
@@ -608,17 +620,23 @@ export default {
           'subjects',
           'whatYouTeach',
           'qualifications',
+          'major',
+          'gpa',
+          'education',
+          'school',
           'bio',
           'rates',
           'teachExp',
           'profExp',
           'password',
+          'availability'
         ]
         requiredFields.forEach((field) => {
           if (this[field].length < 1) {
             this.errors[field] = 'This field is required'
           } else {
             this.errors[field] = ''
+            counter+=1
           }
         })
         const emailValidation =
@@ -626,7 +644,8 @@ export default {
         if (!emailValidation.test(this.email)) {
           this.errors.email = 'Invalid email'
         } else {
-          this.errors.email = ''
+          this.errors.email = '';
+          counter+=1
         }
         if (
           this.paypalEmail.length > 0 &&
@@ -635,7 +654,8 @@ export default {
           this.errors.paypalEmail = 'Invalid email'
         } else {
           this.errors.paypalEmail = ''
-          this.paypalEmail = this.email
+          this.paypalEmail = this.email;
+          counter+=1
         }
         if (this.password !== this.confirmPassword) {
           this.errors.password =
@@ -645,8 +665,16 @@ export default {
         } else {
           this.errors.password = ''
           this.errors.confirmPassword = ''
+          counter+=1
         }
-      }
+        if (counter!==23){
+          this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+          this.success = ""
+        }
+        else if(counter===23){
+          this.success = "You have successfully created a tutor account!"
+          this.errors.global = ''
+        }
     },
     async handleSubmit() {
       this.validateData()
@@ -662,7 +690,6 @@ export default {
         }
         if (this.profilePic) {
           // eslint-disable-next-line
-          console.log(this.profilePic[0])
           formData.append('profile_pic', this.profilePic[0])
         }
         formData.append('user', JSON.stringify(user))
@@ -702,17 +729,18 @@ export default {
         )
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
-              this.errors.global = 'Something went wrong :('
+              this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
             }
             return res.json()
           })
           .catch(() => {
-            this.errors.global = 'Something went wrong :('
+            this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
           })
         if (data && data.error) {
           this.errors.global = data.error
         }
         if (data && data.success === 'Successfully created tutor') {
+          this.success = "You have successfully created a tutor account!"
           this.$router.push('/checkemail')
         }
       }

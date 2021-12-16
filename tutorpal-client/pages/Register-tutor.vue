@@ -16,7 +16,7 @@
       <body v-else>
         <div class="div-block">
           <router-link
-            style="margin-top: 0px; margin-bottom: -30px"
+            style="margin-top: 0px; margin-bottom: -30px; margin-left: 0px;"
             to="/"
             class="link-block w-inline-block"
             ><img
