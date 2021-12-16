@@ -91,7 +91,7 @@
         />
       </div>
       <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.subjects }}</p>
-      <div class="text-block-5"><b>Class Description</b></div>
+      <div class="text-block-5"><b>Class Description (Curriculum)</b></div>
       <textarea
         v-model="tutor.whatYouTeach"
         style="height: 250px"
@@ -344,7 +344,6 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      console.log(e.target.files, this.profilePic, this.src)
       if (e.target.files[0].size > 100000) {
         this.errors.profilePic =
           'File size is too high! Please upload a file less than 100 Kilobytes'
@@ -376,7 +375,7 @@ export default {
         'tutor.rates',
         'tutor.teachExp',
         'tutor.profExp',
-        'tutor.major',
+        'tutor.availability',
         'tutor.gpa',
         'tutor.school',
         'tutor.education'
@@ -402,7 +401,7 @@ export default {
       this.errors.rates = this.errors['tutor.rates']
       this.errors.teachExp = this.errors['tutor.teachExp']
       this.errors.profExp = this.errors['tutor.profExp']
-      this.errors.major = this.errors['tutor.major']
+      this.errors.availability = this.errors['tutor.availability']
       this.errors.gpa = this.errors['tutor.gpa']
       this.errors.school = this.errors['tutor.school']
       this.errors.education = this.errors['tutor.education']
@@ -425,6 +424,7 @@ export default {
       }
       const birthday = new Date(this.tutor.birthDate)
       const age = Math.floor((Date.now() - birthday) / 31557600000)
+      console.log(this.tutor.gpa, this.tutor.rates)
       /* eslint-disable */
       if(age<0){
         this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
@@ -440,11 +440,25 @@ export default {
         this.errors.birthDate = ""
       }
 
-      if (counter!==19){
+      if(this.tutor.gpa>6 || this.tutor.gpa<0){
+        this.errors.gpa = "Our site is only allowing for GPAS on the 4.0, 5.0, and 6.0 scale. Anything higher than that or lower than 0 is not accepted."
+      }
+      else{
+        counter+=1
+      }
+      
+      if(parseInt(this.tutor.rates)>1000 || parseInt(this.tutor.rates)<0){
+        this.errors.rates="We are not accepting negative fees or fees higher than $1000 per hour"
+      }
+      else{
+        counter+=1
+      }
+
+      if (counter!==21){
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
         this.success = ""
       }
-      else if(counter===19){
+      else if(counter===21){
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }

@@ -437,6 +437,7 @@
             v-model="availability"
             class="form-control"
             id="availability"
+            maxlength="350"
             placeholder="Mondays, 4:00 PM - 6:00 PM"
           />
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
@@ -620,7 +621,6 @@ export default {
           'subjects',
           'whatYouTeach',
           'qualifications',
-          'major',
           'gpa',
           'education',
           'school',
@@ -639,6 +639,20 @@ export default {
             counter+=1
           }
         })
+        if(this.gpa>6 || this.gpa<0){
+          this.errors.gpa = "Our site is only allowing for GPAS on the 4.0, 5.0, and 6.0 scale. Anything higher than that or lower than 0 is not accepted."
+        }
+        else{
+          counter+=1
+        }
+        
+        if(parseInt(this.rates)>1000 || parseInt(this.rates)<0){
+          this.errors.rates="We are not accepting negative fees or fees higher than $1000 per hour"
+        }
+        else{
+          counter+=1
+        }
+
         const emailValidation =
           /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
         if (!emailValidation.test(this.email)) {
@@ -667,11 +681,11 @@ export default {
           this.errors.confirmPassword = ''
           counter+=1
         }
-        if (counter!==23){
+        if (counter!==24){
           this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
           this.success = ""
         }
-        else if(counter===23){
+        else if(counter===24){
           this.success = "You have successfully created a tutor account!"
           this.errors.global = ''
         }
