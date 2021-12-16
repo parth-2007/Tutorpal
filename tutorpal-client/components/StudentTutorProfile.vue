@@ -43,6 +43,10 @@
               <div class="div-block-25">
                 <form id="form-wrapper" style="font-family: Poppins">
                   <div class="form-group row">
+                    <p style="color: #008000; font-size: 16px; margin-top: 10px;">
+                    {{ success }}
+                  </p>
+                  <p style="margin-top: 10px; color: hsla(0, 100%, 64%, 1)">{{errors.global}}</p>
                     <p style="color: #008000; font-size: 16px">
                       {{ predictedprice }}
                     </p>
@@ -58,6 +62,7 @@
                         required
                       />
                     </div>
+                    <p style="color: hsla(0, 100%, 64%, 1)">{{errors.date_startTime}}</p>
                     <label for="date-time" class="col-2 col-form-label"
                       >Duration in Minutes</label
                     >
@@ -71,12 +76,14 @@
                         required
                       />
                     </div>
+                    <p style="color: hsla(0, 100%, 64%, 1)">{{errors.duration}}</p>
                     <label for="date-time" class="col-2 col-form-label"
                       >Subject(specify the topic)</label
                     >
                     <div class="col-10">
                       <input v-model="subjects" class="form-control" required />
                     </div>
+                    <p style="color: hsla(0, 100%, 64%, 1)">{{errors.subjects}}</p>
                   </div>
                   <textarea
                     v-model="description"
@@ -87,6 +94,7 @@
                     rows="3"
                     required
                   ></textarea>
+                  <p style="color: hsla(0, 100%, 64%, 1)">{{errors.description}}</p>
                   <div
                     style="margin-top: 15px; margin-bottom: 15px"
                     class="form-check"
@@ -103,13 +111,15 @@
                     </label>
                   </div>
                 </form>
-                <button
-                  @click="addSessionHandler"
-                  class="btn btn-primary"
-                  name="session"
-                >
-                  Send request
-                </button>
+                <div style="font-family: Poppins">
+                  <button
+                    @click="addSessionHandler"
+                    class="btn btn-primary"
+                    name="session"
+                  >
+                    Send request
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -304,7 +314,7 @@
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div style="margin-bottom: 20px;">
+            <div style="margin-bottom: 20px; font-family: Poppins;">
                   <select
                     ref="select"
                     v-model="stars"
@@ -391,8 +401,16 @@ export default {
       reviews: [],
       predictedprice: '',
       stars: 5,
+      success: "",
       reviewDescription: '',
-      q: ''
+      q: '',
+      errors: {
+        global: '',
+        description: '',
+        subjects: '',
+        duration: '',
+        date_startTime: ''
+      }
     }
   },
   async fetch() {
@@ -445,7 +463,6 @@ export default {
     this.reviews = await fetch(url, {
       credentials: 'include',
     }).then((res) => res.json())
-    console.log(this.reviews.results[0])
     await this.fetchSessions('pendingOnTutor')
   },
   methods: {
@@ -520,9 +537,33 @@ export default {
       })
     },
     async addSessionHandler() {
+      const requiredFields = [
+        'description',
+        'subjects',
+        'duration',
+        'date_startTime',
+      ]
+       /* eslint-disable */
+      let counter = 0
+      requiredFields.forEach((field) => {
+        if (this[field].length < 1) {
+          this.errors[field] = 'This field is required'
+        } else {
+          this.errors[field] = ''
+          counter+=1
+        }
+      })
+       /* eslint-enable */
       const sessionDate = (this.date_startTime || '').substring(0, 10)
       const startTime = (this.date_startTime || '').substring(11, 18)
       const hours = parseInt(this.duration) / 60
+      if (this.duration>240){
+        this.errors.duration = "We are restricting sessions longer than 4 hours"
+      }
+      else{
+        counter+=1
+      }
+      if (counter === 5){
       let rhours = Math.floor(hours)
       const minutes = (hours - rhours) * 60
       let rminutes = Math.round(minutes)
@@ -533,8 +574,7 @@ export default {
         rhours = '0' + rhours
       }
       const sessionDuration = rhours + ':' + rminutes + ':00'
-      const sessionPrice =
-        Math.floor((this.data.rates / 60) * parseInt(this.duration) * 100) / 100
+      const sessionPrice = Math.floor((this.data.rates / 60) * parseInt(this.duration) * 100) / 100
       let endTime = add([startTime, sessionDuration])
       endTime = str(endTime)
       endTime = endTime.substring(0, 5)
@@ -574,23 +614,30 @@ export default {
         body: JSON.stringify(sessionData),
       }).then((res) => {
         if (res.status === 400) {
-          this.predictedprice =
+          this.errors.global =
             'Oops! Something went wrong, please check your inputs again.'
+          this.success = ''
         } else if (res.status === 500) {
-          this.predictedprice =
-            'There seems to be an internal error, we are working on the issue.'
-        } else if (res.status === 201) {
-          this.predictedprice =
-            'Thank you for successfully creating a session. Good luck!'
+          this.errors.global = 'There seems to be an internal error, we are working on the issue.'
+          this.success=''
+        } else if (res.status === 201 || res.status === 200) {
+          this.success = 'Thank you for successfully creating a session. Good luck!'
+          this.errors.global = ''
           this.subjects = ''
           this.free = false
           this.description = ''
           this.duration = ''
           this.date_startTime = ''
+          this.predictedprice=""
         }
       })
-    },
+    }
+    else{
+      this.errors.global ='Oops! Something went wrong, please check your inputs again.'
+      this.success =""
+    }
   },
+},
 }
 </script>
 <style scoped>
