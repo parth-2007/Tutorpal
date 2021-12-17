@@ -141,7 +141,10 @@
                   alt=""
               /></router-link>
               <div class="div-block-4">
-                <div style="margin-left: 0px; padding-left: 0px" class="stuff w-form">
+                <div
+                  style="margin-left: 0px; padding-left: 0px"
+                  class="stuff w-form"
+                >
                   <img
                     src="../static/student/images/search-1.png"
                     loading="lazy"
@@ -149,23 +152,23 @@
                     height="25"
                     srcset="
                       ../static/student/images/search-1.png 500w,
-                      ../static/student/images/search-1.png       512w
+                      ../static/student/images/search-1.png 512w
                     "
                     sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                     alt=""
                     class="image-2"
                   /><input
-                      class="search-3 w-input"
-                      placeholder="Search by subject"
-                      id="search"
-                      v-model="q"
-                      @keyup.enter="submitSearch()"
+                    class="search-3 w-input"
+                    placeholder="Search by subject"
+                    id="search"
+                    v-model="q"
+                    @keyup.enter="submitSearch()"
                   /><input
                     type="submit"
                     value="Search"
                     class="button-8 _100 _5px-left w-button"
                   />
-              </div>
+                </div>
                 <div class="div-block-43">
                   <div class="name_profile_pic">
                     <img
@@ -278,8 +281,12 @@
               <strong>Degree: </strong>{{ data.education }}<br /><strong
                 >Qualification Description: </strong
               >{{ data.qualifications }}<br />
-              <strong>Education: </strong><text v-if="data.education !== 'High School' || data.major !== '' ">{{ data.major }} at</text> {{ data.school }},
-              GPA of {{ data.gpa }}<br /><strong
+              <strong>Education: </strong
+              ><text
+                v-if="data.education !== 'High School' || data.major !== ''"
+                >{{ data.major }} at</text
+              >
+              {{ data.school }}, GPA of {{ data.gpa }}<br /><strong
                 >Professional Experience: </strong
               >{{ data.prof_exp }} years<br /><strong
                 >Teaching Experience: </strong
@@ -478,7 +485,7 @@ export default {
       this.predictedprice = 'Predicted Class Amount: $0.00'
     },
     submitSearch() {
-      this.$router.push("/search/"+this.q);
+      this.$router.push('/search/' + this.q)
     },
     predictprice() {
       this.predictedprice =
@@ -487,7 +494,7 @@ export default {
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL +'/reviews/', {
+      await fetch(process.env.API_URL + '/reviews/', {
         credentials: 'include',
         method: 'POST',
         headers: {

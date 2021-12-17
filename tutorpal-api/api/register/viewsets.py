@@ -117,7 +117,7 @@ class TutorViewSet(viewsets.GenericViewSet,
 
     @action(detail=False)
     def search(self, request):
-        query = request.GET.get('q')
+        query = request.GET.get('q').lower()
         ranking = ExpressionWrapper(4 * F('average_reviews') + 2 * F(
             'num_reviews') + F('num_classes'), output_field=FloatField())
         tutor_query = Tutor.objects.annotate(ranking=ranking).annotate(

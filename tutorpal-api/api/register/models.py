@@ -159,21 +159,21 @@ class Student(models.Model):
 class Tutor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     paypal_email = models.EmailField(blank=True)
-    qualifications = models.TextField(max_length=1000)
+    qualifications = models.TextField(max_length=1000, blank=True, null=True)
     what_you_teach = models.TextField(
-        max_length=1000, help_text="Give us a class description.")
+        max_length=1000, help_text="Give us a class description.", blank=True, null=True)
     subjects = models.CharField(max_length=100)
     birth_date = models.DateField(help_text="YYYY-MM-DD")
     bio = models.TextField(
-        max_length=1000, help_text="Tell potential students about yourself")
+        max_length=1000, help_text="Tell potential students about yourself", blank=True, null=True)
     rates = models.DecimalField(
         help_text="How much will you charge per hour?", max_digits=10, decimal_places=2)
     occupation = models.CharField(max_length=100)
     linkedIn = models.URLField(
         max_length=200, help_text="You may optionally put your LinkedIn profile URL.  Make sure to put it in the format of https://www.linkedin.com/in/[rest of url]", blank=True)
     verified = models.BooleanField(default=False)
-    prof_exp = models.IntegerField()
-    teach_exp = models.IntegerField()
+    prof_exp = models.IntegerField(blank=True, null=True)
+    teach_exp = models.IntegerField(blank=True, null=True)
     education = models.CharField(choices=(("High School", "High School"), ("Bachelors Degree",
                                                                            "Bachelors Degree"), ("Masters Degree", "Masters Degree"), ("Ph.D.", "Ph.D.")), max_length=16)
     school = models.CharField(blank=True, max_length=100)
@@ -183,7 +183,7 @@ class Tutor(models.Model):
         "Other", "Other"), ("Prefer Not To Say", "Prefer Not To Say")), max_length=17)
     tutor_type = models.CharField(max_length=50, blank=True)
     availability = models.CharField(
-        max_length=500, help_text="Please explain your availability times.", blank=True)
+        max_length=500, help_text="Please explain your availability times.", blank=True, null=True)
     num_classes = models.IntegerField(default=0)
     average_reviews = models.FloatField(default=0.0)
     num_reviews = models.IntegerField(default=0)
