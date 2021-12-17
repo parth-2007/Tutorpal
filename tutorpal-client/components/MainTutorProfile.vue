@@ -89,7 +89,7 @@
                 >Teaching Experience: </strong
               >{{ data.teach_exp }} years<br />
               <strong>Average Review:</strong>
-              {{ data.average_reviews }} Stars<br /><strong>Occupation: </strong
+              {{ data.average_reviews }} Stars, {{reviewNum}} Review(s)<br /><strong>Occupation: </strong
               >{{ data.occupation }}<br /><strong>Gender: </strong
               >{{ data.gender }}<br />
               <strong>Price: </strong>${{ data.rates }} hourly <br /><strong
@@ -106,7 +106,7 @@
             </p>
           </div>
           <div class="div-block-56">
-            <h1 class="heading-11">Reviews</h1>
+            <h1 class="heading-11">Reviews ({{this.reviewNum}})</h1>
             <div v-if="reviews !== []">
               <div
                 v-for="review in reviews.results"
@@ -148,6 +148,7 @@ export default {
       data: [],
       reviews: [],
       q: '',
+      reviewNum: "",
     }
   },
   async fetch() {
@@ -163,6 +164,7 @@ export default {
         credentials: 'include',
       }
     ).then((res) => res.json())
+    this.reviewNum=this.reviews.results.length;
   },
   head() {
     return {
