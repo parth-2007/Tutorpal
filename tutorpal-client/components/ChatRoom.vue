@@ -14,12 +14,12 @@
         />
       </head>
       <body style="min-height: 100vh" class="body">
-        <router-link
-          to="/inbox"
+        <a
+          href="/inbox"
           aria-current="page"
           style="font-family: Poppins; margin-left: 5%; padding-top: 20px"
           class="link-block w-inline-block w--current"
-          >Go back to contacts</router-link
+          >Go back to contacts</a
         >
         <div style="border-radius: 8px" class="div-block-80">
           <div style="" class="div-block-71">

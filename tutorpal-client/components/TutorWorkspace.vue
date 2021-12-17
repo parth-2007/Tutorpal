@@ -50,13 +50,14 @@
               <br />Clicking "confirm" will confirm to us that this class has
               been finished. You will be paid shortly after. Thank you for
               tutoring with TutorPal!
+              <br>
               <button
                 @click="endclass()"
                 style="
                   background-color: green;
-                  margin-left: 10px;
-                  margin-top: 10px;
                   font-size: 14px;
+                  margin-top: 10px;
+                  float: left
                 "
                 class="tutorbutton-10-copy-copy w-button"
               >
@@ -75,9 +76,9 @@
               v-else-if="buttonShow === false"
               style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
             >
-              You are only allowed to end this class during the last ten minutes
+              You are only allowed to end this class during the last five minutes
               of the meeting. We suggest continuing with the meeting until the
-              last ten minutes. Thank you.
+              last five minutes. Thank you.
             </div>
             <button
               @click="updateModalValue()"
@@ -220,12 +221,6 @@ export default {
       buttonShow: false,
     }
   },
-  mounted(){
-    this.buttonShow = true
-    const script = document.createElement('script')
-    script.src = "https://www.whiteboard.team/dist/api.js"
-    document.body.appendChild(script)
-  },
   head() {
     return {
       title: 'Tutor Workspace',
@@ -271,16 +266,18 @@ export default {
         if (value > 0) {
           setTimeout(() => {
             this.timerCount--
-            if (this.timerCount === 600 || this.timerCount < 600) {
-              this.buttonShow = true
+            if (value === 300 || value < 300) {
+              this.buttonShow = true;
             }
           }, 1000)
-        } else if (value === 600) {
-          alert(
-            'You can now end this class. There are still ten minutes remaining in your meeting.'
-          )
+        } else if (value === 300) {
+            alert(
+              'You can now end this class. There are still five minutes remaining in your meeting.'
+            )
+            this.buttonShow = true;
         } else if (value === 0) {
-          alert("This meeting's time is up, please end the meeting shortly.")
+            alert("This meeting's time is up, please end the meeting shortly.")
+            this.buttonShow = true;
         }
         const t = new Date(1970, 0, 1)
         t.setSeconds(value)
@@ -289,7 +286,10 @@ export default {
       immediate: true,
     },
   },
-  async created() {
+  async mounted() {
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    document.body.appendChild(script)
     this.session = await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -323,6 +323,9 @@ export default {
     if (todayDate === this.session.date){
       this.timerCount = timerSeconds
     }
+    else {
+      this.timerCount = 0;
+    }
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
@@ -345,13 +348,13 @@ export default {
       }
     },
     /* eslint-disable */
-    setLoaded() {
+    async setLoaded() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       const code = this.session.call_url
-      console.log(code)
       const wt = new api.WhiteboardTeam(this.$refs.container, {
-            clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-            boardCode: code,
-        });
+          clientId: '322f4ec635688d506ad1bae2f1b21cb9',
+          boardCode: code,
+      });
     },
     /* eslint-enable */
     async updateModalValue() {

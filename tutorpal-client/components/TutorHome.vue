@@ -107,6 +107,8 @@
                     to="/volunteering"
                     class="tutornav-link-4 w-nav-link"
                     >Volunteering</router-link>
+                  <router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    >Calendar</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -184,10 +186,9 @@
                       {{ session.free }}<br />Amount: ${{ session.price }}
                     </p>
                     <p class="tutorparagraph-2">
-                      <strong class="tutorbold-text">Student Information</strong
-                      ><br />Description:
-                      <strong class="tutorbold-text"> </strong
-                      >{{ session.description }}
+                      <strong class="tutorbold-text">Student Information</strong>
+                      <br />Topic: {{ session.subjects }}
+                      <br />Description: {{ session.description }}
                     </p>
                     <div class="tutortext-block-27">
                       Remember, you only have 24 hours from since this request
@@ -251,7 +252,7 @@
                         session.student !== undefined
                           ? session.student.user.lastName
                           : ''
-                      }}<br />Subject: {{ session.subjects }}<br />Class
+                      }}<br />Topic: {{ session.subjects }}<br />Class
                       Description: {{ session.description }}‍<br />
                     </p>
                     <router-link
@@ -300,7 +301,7 @@
                         session.student !== undefined
                           ? session.student.user.lastName
                           : ''
-                      }}<br />Subject: {{ session.subjects }}<br />‍Class
+                      }}<br />Topic: {{ session.subjects }}<br />‍Class
                       Description: {{ session.description }}‍
                     </p>
                     <button
@@ -384,6 +385,7 @@ export default {
       }
     ).then((res) => res.json())
     this.next = this.requests1.next
+    
   },
   methods: {
     ...mapActions([
@@ -497,6 +499,7 @@ export default {
 }
 </script>
 <style scoped>
+
 .tutorbadge {
   position: absolute;
   top: 11px;

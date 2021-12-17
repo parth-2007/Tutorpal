@@ -22,8 +22,8 @@
             sizes="200px"
             alt=""
         /></router-link>
-        <div class="search" style="margin-left: 0px; padding-left: 0px">
-          <div style="margin-left: 0px; padding-left: 0px" class="homestuff w-form">
+        <div class="search" style="margin-left: 0px; padding-left: 0px;">
+          <div style="margin-left: 0px; padding-left: 0px;" class="homestuff w-form">
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
@@ -44,57 +44,58 @@
                 @keyup.enter="submitSearch()"
             />
           </div>
-          <div
-            v-for="tutor in tutordata.results"
-            :key="tutor.id"
-            style="margin-bottom: 20px"
-            id="posts"
-          >
-            <router-link
-              :to="'/tutors/' + tutor.id"
-              class="link-block-2 w-inline-block"
+          <div style="margin-top: 20px;">
+            <div
+              v-for="tutor in tutordata.results"
+              :key="tutor.id"
+              id="posts"
             >
-              <div style="line-height: 14px" class="div-block-54">
-                <img
-                  :src="tutor.user !== undefined ? tutor.user.profile_pic : ''"
-                  loading="lazy"
-                  width="38"
-                  height="38"
-                  sizes="38px"
-                  alt=""
-                  class="image-5"
-                />
-                <div class="text-block-21">
-                  <strong class="bold-text-3"
-                    >{{
-                      tutor.user !== undefined ? tutor.user.first_name : ''
-                    }}
-                    {{
-                      tutor.user !== undefined ? tutor.user.last_name : ''
-                    }}</strong
-                  >
+              <router-link
+                :to="'/tutors/' + tutor.id"
+                class="link-block-2 w-inline-block"
+              >
+                <div style="line-height: 14px" class="div-block-54">
+                  <img
+                    :src="tutor.user !== undefined ? tutor.user.profile_pic : ''"
+                    loading="lazy"
+                    width="38"
+                    height="38"
+                    sizes="38px"
+                    alt=""
+                    class="image-5"
+                  />
+                  <div class="text-block-21">
+                    <strong class="bold-text-3"
+                      >{{
+                        tutor.user !== undefined ? tutor.user.first_name : ''
+                      }}
+                      {{
+                        tutor.user !== undefined ? tutor.user.last_name : ''
+                      }}</strong
+                    >
+                  </div>
+                  <div class="text-block-21-copy">
+                    Subject: {{ tutor.subjects }}
+                  </div>
+                  <div class="text-block-21-copy-2">
+                    Price: ${{ tutor.rates }} hourly
+                  </div>
+                  <div class="text-block-21-copy-2">
+                    Degree: {{ tutor.education }}
+                  </div>
+                  <div class="text-block-21-copy-2">
+                    Education: {{ tutor.major }} at {{ tutor.school }}, GPA of
+                    {{ tutor.gpa }}
+                  </div>
+                  <div class="text-block-21-copy-2">
+                    Reviews: {{ tutor.average_reviews }} Stars
+                  </div>
+                  <div class="text-block-21-copy-2">
+                    Occupation: {{ tutor.occupation }}
+                  </div>
                 </div>
-                <div class="text-block-21-copy">
-                  Subject: {{ tutor.subjects }}
-                </div>
-                <div class="text-block-21-copy-2">
-                  Price: ${{ tutor.rates }} hourly
-                </div>
-                <div class="text-block-21-copy-2">
-                  Degree: {{ tutor.education }}
-                </div>
-                <div class="text-block-21-copy-2">
-                  Education: {{ tutor.major }} at {{ tutor.school }}, GPA of
-                  {{ tutor.gpa }}
-                </div>
-                <div class="text-block-21-copy-2">
-                  Reviews: {{ tutor.average_reviews }} Stars
-                </div>
-                <div class="text-block-21-copy-2">
-                  Occupation: {{ tutor.occupation }}
-                </div>
-              </div>
-            </router-link>
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -133,7 +134,7 @@ export default {
   },
   async created() {
     const tutorData = await fetch(
-      process.env.API_URL + '/tutors/search/?q=' + this.$route.params.id + '/',
+      process.env.API_URL + '/tutors/search/?q=' + this.$route.params.id,
       {
         credentials: 'include',
       }

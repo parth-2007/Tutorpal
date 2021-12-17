@@ -4,12 +4,11 @@
       data-wf-page="5f405fbdac064904ad639864"
       data-wf-site="5f3c2694b3e98672caad2a0f"
     >
-    <head>
-      <meta charset="utf-8" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
-    </head>
-    <body>
-      <div id="main">
+      <head>
+        <meta charset="utf-8" />
+      </head>
+      <body id="body" style="min-height: 100vh" class="tutorbody">
+        <div id="main">
           <div class="tutorsection">
             <router-link to="/" class="tutorlink-block w-inline-block"
               ><img
@@ -91,6 +90,7 @@
                 <nav role="navigation" class="tutornav-menu-3 w-nav-menu">
                   <router-link
                     to="/"
+                    aria-current="page"
                     class="tutornav-link-4 w-nav-link"
                     >Requests
                   </router-link
@@ -105,9 +105,9 @@
                     >Payments</router-link>
                   <router-link
                     to="/volunteering"
-                    class="tutornav-link-4 w-nav-link w--current"
+                    class="tutornav-link-4 w-nav-link"
                     >Volunteering</router-link>
-                  <router-link to="/calendar" class="nav-link-4 w-nav-link"
+                  <router-link to="/calendar" class="nav-link-4 w-nav-link w--current"
                     >Calendar</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
@@ -116,44 +116,46 @@
               </div>
             </div>
           </div>
-           <div style="font-family: Poppins;" class="container">
-              <h1 style="margin-top: 20px;">Certificate Generator</h1>
-              <p>Claim your credit for volunteering hours here</p>
-              <button class="btn btn-outline-primary" @click="download()" >Download</button>
-              <div>
-                <div ref="certificate">
-                  <img ref="image" style="z-index: 0;" height="500" src="../static/tutor/images/certficate.jpg">
-                  <h1 style="z-index: 5; margin-top: -280px; width: 760px; text-align: center; font-family: Playfair Display; font-size: 44px;"><strong>{{this.user.firstName}} {{this.user.lastName}}</strong></h1>
-                  <p style="z-index: 5; font-size: 16px; margin-top: 130px; margin-left: 162px; font-family: Playfair Display;"><strong>{{month}}</strong></p>
-                  <p style="z-index: 5; font-size: 16px; margin-left: 182px; margin-top: -40px; font-family: Playfair Display;"><strong>{{day}}</strong></p>
-                  <p style="z-index: 5; font-size: 16px; margin-left: 202px; margin-top: -40px; font-family: Playfair Display;"><strong>{{year}}</strong></p>
-                  <p style="z-index: 5; font-size: 26px; margin-left: 208px; margin-top: -110px; font-family: Playfair Display;"><strong>{{hours}}</strong></p>
-                </div>
-              </div>
+        </div>
+        <div style="display: flex; justify-content: center; padding: 20px;">
+          <div id="container" ref="container">
+            <div id="header">
+              <div id="monthDisplay">{{monthDisplay}}</div>
+            </div>
+
+            <div id="weekdays">
+              <div>Sunday</div>
+              <div>Monday</div>
+              <div>Tuesday</div>
+              <div>Wednesday</div>
+              <div>Thursday</div>
+              <div>Friday</div>
+              <div>Saturday</div>
+            </div>
+              <div id="calendar" ref="calendar">    
+          </div>
           </div>
         </div>
-    </body>
+      </body>
     </html>
   </client-only>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Jspdf from 'jspdf'
-import html2canvas from 'html2canvas'
+import convertTime from '../utils/convertTime'
+// import getCSRF from '../utils/getCSRF'
 
 export default {
   data(){
-    return{
+    return {
+      monthDisplay:'',
+      calendarData: [],
       clicked: false,
-      day: '',
-      month: '',
-      year: '',
-      hours: '',
     }
   },
   head() {
     return {
-      title: 'Tutor Volunteer Hours',
+      title: 'My Calendar',
       link: [
         {
           rel: 'stylesheet',
@@ -170,25 +172,24 @@ export default {
           type: 'text/css',
           href: '/student/css/student-main.webflow.css',
         },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/student/css/calendar.css',
+        },
       ],
     }
   },
-
-  async created() {
+  async mounted(){
     await this.fetchTutor()
     await this.fetchUser()
-    let date = new Date()
-    date = new Date(date.getTime() - (date.getTimezoneOffset()*60*1000))
-    this.hours = this.tutor.freeTutoringGiven.substr(0,2)
-    this.day = date.getDate();
-    if(this.day < 10){
-      this.day = "0" + this.day
-    }
-    if(this.month < 10){
-      this.month = "0" + this.month
-    }
-    this.month = date.getMonth()+1;
-    this.year = date.getFullYear();
+    const url =
+      process.env.API_URL + '/sessions/my_sessions'
+    const data = await fetch(url, {
+      credentials: 'include',
+    }).then((res) => res.json())
+    this.calendarData = data.results;
+    this.calendar()
   },
   computed: {
     logout() {
@@ -200,42 +201,88 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   methods: {
-    logoutclick(){
+    ...mapGetters(['getUser']),
+    ...mapActions(['fetchUser', 'fetchTutor']),
+    convertTime,
+    logoutclick() {
       this.clicked = !this.clicked
     },
-    download(){
-      const pdf = new Jspdf('l', 'mm', [297, 210]);
-      html2canvas(this.$refs.certificate, {
-        height: 700
-      }).then(function(canvas) {
-        const img = canvas.toDataURL();
-        pdf.addImage(img,'JPEG',0,0);
-        pdf.save("certificate.pdf");
+    calendar(){
+      const events = []
+      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const calendar = this.$refs.calendar
+      const dt = new Date();
+
+      const day = dt.getDate();
+      const month = dt.getMonth();
+      const year = dt.getFullYear();
+
+      const firstDayOfMonth = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      this.monthDisplay = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+      const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
       });
-    },
-    ...mapActions(['fetchTutor', 'fetchUser']),
-  }
+
+      calendar.innerHTML = '';
+
+      const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
+      this.calendarData.forEach(function(x){
+        if(x.accepted === true){
+          const splitDate = x.date.split('-');
+          if(splitDate.count === 0){
+              return null;
+          }
+
+          const year = splitDate[0];
+          const month = splitDate[1];
+          const day = splitDate[2]; 
+          const date = Number(month) + "/" + Number(day) + "/" + year
+          const title = "Class with " + x.student.user.first_name + ": " + convertTime(x.time_start) + " - " + convertTime(x.time_end)
+          /* eslint-disable */
+          events.push({
+            date: date,
+            title: title
+          })
+          /* eslint-enable */
+        }
+        
+      })
+      for(let i = 1; i <= paddingDays + daysInMonth; i++) {
+        const daySquare = document.createElement('div');
+        daySquare.classList.add('day');
+        const dayString = `${month + 1}/${i - paddingDays}/${year}`;
+        if (i > paddingDays) {
+          daySquare.innerText = i - paddingDays;
+          const eventForDay = events.filter(e => e.date === dayString);
+          if (i - paddingDays === day) {
+            daySquare.id = 'currentDay';
+          }
+
+          if (eventForDay.length!==0) {
+            const eventDiv = document.createElement('div');
+            eventForDay.forEach(function(x){
+              console.log(x)
+              eventDiv.innerHTML +=`<div style="margin-top: 10px;">${x.title}</div>`
+            })
+            eventDiv.classList.add('event');
+            daySquare.appendChild(eventDiv);
+            console.log(eventDiv)
+          }
+        } else {
+          daySquare.classList.add('padding');
+        }
+        calendar.appendChild(daySquare); 
+        this.$refs.container.style.display = "block";
+      }
+    }
+  },
 }
 </script>
-<style>
-.tutordiv-block-80 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  margin: 10px 5%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-}
-
+<style scoped>
 .tutorbadge {
   position: absolute;
   top: 11px;
@@ -248,4 +295,3 @@ export default {
   font-size: 14px;
 }
 </style>
- 

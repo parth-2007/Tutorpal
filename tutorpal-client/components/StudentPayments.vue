@@ -129,7 +129,8 @@
                       to="/payments"
                       class="nav-link-4 w-nav-link w--current"
                       >Payments</router-link
-                    >
+                    ><router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    >Calendar</router-link>
                   </nav>
                   <div class="menu-button-2 w-nav-button">
                     <div class="icon-2 w-icon-nav-menu"></div>
@@ -215,9 +216,9 @@
                     </p>
                   </div>
                   <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong
-                    ><br />Description: <strong class="bold-text"> </strong
-                    >{{ session.description }}
+                    <strong class="bold-text">Student Information</strong>
+                    <br />Topic: {{ session.subjects }}
+                    <br />Description: {{ session.description }}
                   </p>
                   <div class="text-block-27">
                     You have not paid for this session yet. Please do as soon as
@@ -286,9 +287,9 @@
                     </p>
                   </div>
                   <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong
-                    ><br />Description: <strong class="bold-text"> </strong
-                    >{{ session.description }}
+                    <strong class="bold-text">Student Information</strong>
+                    <br />Topic: {{ session.subjects }}
+                    <br />Description: {{ session.description }}
                   </p>
                   <div class="text-block-27-copy">
                     Thank you for paying for your session!

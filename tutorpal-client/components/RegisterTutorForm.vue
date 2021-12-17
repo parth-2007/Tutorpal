@@ -22,6 +22,7 @@
                 class="form-control"
                 id="firstname"
                 aria-label="First name"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.firstName }}</p>
@@ -35,6 +36,7 @@
                 id="lastname"
                 aria-label="Last name"
                 required
+                maxlength="200"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.lastName }}</p>
             </div>
@@ -85,6 +87,7 @@
                 type="email"
                 class="form-control"
                 id="emailaddress"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.email }}</p>
@@ -94,9 +97,9 @@
         <div class="columns-2-copy w-row">
           <div class="column w-col w-col-6">
             <div class="text-block-5">
-              PayPal Email Address (Put the email address you like like to
-              accept payments from. If left blank, this will be set to your
-              default email address)
+              PayPal Email Address (Put the email address you would like to
+              accept payments from. This is a crucial part of being a tutor on our platform unless you are a volunteer tutor. If left blank, this will be set to your
+              default email address.)
             </div>
           </div>
           <div class="w-col w-col-6">
@@ -109,6 +112,7 @@
                 type="email"
                 class="form-control"
                 id="paypalemail"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">
@@ -152,7 +156,7 @@
             id="gender"
             aria-label="Default select example"
           >
-            <option value="Male">Male</option>
+            <option value="Male" selected="selected">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
             <option value="Prefer Not To Say">Prefer Not To Say</option>
@@ -179,6 +183,7 @@
                 class="form-control"
                 id="occupation"
                 required
+                maxlength="200"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">
                 {{ errors.occupation }}
@@ -198,6 +203,7 @@
                 v-model="subjects"
                 class="form-control"
                 id="subjects"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.subjects }}</p>
@@ -208,7 +214,7 @@
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
           <div style="margin-left: 60px" class="text-block-5">
-            Class Description (please be as detailed as possible)
+            Class Curriculum (please be as detailed as possible)
           </div>
         </div>
         <div class="w-col w-col-6">
@@ -218,6 +224,7 @@
             class="form-control"
             id="description"
             rows="3"
+            maxlength="3000"
           ></textarea>
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.whatYouTeach }}</p>
         </div>
@@ -236,6 +243,7 @@
                 v-model="major"
                 type="text"
                 class="form-control"
+                maxlength="200"
                 id="major"
                 required
               />
@@ -248,7 +256,7 @@
                 type="number"
                 id="gpa"
                 min="0"
-                max="5"
+                max="6"
                 class="form-control"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gpa }}</p>
@@ -269,6 +277,7 @@
               </select>
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.education }}</p>
             </div>
+            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
             <div style="padding-left: 0px" class="col">
               <label for="school" class="form-label">School/College</label>
               <input
@@ -276,6 +285,7 @@
                 type="text"
                 class="form-control"
                 id="school"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.school }}</p>
@@ -287,6 +297,7 @@
             class="form-control"
             id="t_education"
             rows="3"
+            maxlength="3000"
           ></textarea>
           <p style="color: hsla(0, 100%, 64%, 1)">
             {{ errors.qualifications }}
@@ -305,6 +316,7 @@
             class="form-control"
             id="linkedin"
             placeholder="linkedin.com/in/johndoe"
+            maxlength="200"
           />
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
         </div>
@@ -325,6 +337,7 @@
                 id="bio"
                 placeholder="eg. my hobbies are..."
                 rows="3"
+                maxlength="2000"
               ></textarea>
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.bio }}</p>
             </div>
@@ -403,7 +416,7 @@
                 type="number"
                 id="teachexp"
                 min="0"
-                max="30"
+                max="50"
                 class="form-control"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.teachExp }}</p>
@@ -417,7 +430,7 @@
                 id="profexp"
                 type="number"
                 min="0"
-                max="30"
+                max="50"
                 class="form-control"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profExp }}</p>
@@ -428,7 +441,7 @@
       <div class="columns-2-copy w-row">
         <div class="column w-col w-col-6">
           <div style="margin-left: 60px" class="text-block-5">
-            Availability(optional)
+            Availability
           </div>
         </div>
         <div class="w-col w-col-6">
@@ -436,6 +449,7 @@
             v-model="availability"
             class="form-control"
             id="availability"
+            maxlength="200"
             placeholder="Mondays, 4:00 PM - 6:00 PM"
           />
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
@@ -457,18 +471,19 @@
               id="toc"
               required
             />
-            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
             <label class="form-check-label" for="toc">
               I have read and agree with TutorPal's
               <router-link to="/toc">Terms of Service</router-link> and will not
               hold them liable for personal losses. I also acknowldge that
-              TutorPal takes a 10% fee of the payments I receive.
+              TutorPal takes a 5% fee of the payments I receive.
             </label>
+            <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.toc }}</p>
           </div>
         </div>
       </div>
     </form>
     <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins; font-size: 16px; margin-left: 60px;">{{ errors.global }}</p>
+    <p style="margin-top: 10px; font-family: Poppins; font-size: 16px; margin-left: 60px; color: #008000;">{{success}}</p>
     <button
       @click="handleSubmit"
       style="margin-top: 40px; margin-bottom: 20px; margin-left: 60px"
@@ -480,7 +495,6 @@
 </template>
 <script>
 import getCSRF from '../utils/getCSRF'
-
 export default {
   data() {
     return {
@@ -535,6 +549,7 @@ export default {
         availability: '',
         global: '',
       },
+      success: "",
       src: 'https://image.flaticon.com/icons/png/512/149/149071.png',
     }
   },
@@ -560,11 +575,13 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000) {
+      if (e.target.files[0].size > 5000000) {
         this.errors.profilePic =
-          'File size is too high! Please upload a file less than 100 Kilobytes'
+          'File size is too high! Please upload a file less than 5 Megabytes'
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
       } else {
         this.errors.profilePic = ''
+        this.errors.global='';
       }
     },
     checkErrors() {
@@ -577,58 +594,83 @@ export default {
       return isError
     },
     validateData() {
-      if (!this.toc) {
-        this.errors.global = 'Please read and agree to our Terms of Conditions'
-      } else {
-        this.errors.global = ''
-      }
-      if (this.linkedIn !== '') {
-        let httpCheck = this.linkedIn.substr(0, 8)
-        if (httpCheck !== 'https://') {
-          httpCheck = 'https://'
-          this.linkedIn = httpCheck.concat(this.linkedIn)
+        let counter = 0
+        if (!this.toc) {
+          this.errors.toc = 'Please read and agree to our Terms of Conditions'
+        } else {
+          this.errors.toc = ''
+          counter+=1
         }
-      }
-      const birthday = new Date(this.birthDate)
-      const age = Math.floor((Date.now() - birthday) / 31557600000)
-      if (age < 15) {
-        this.errors.birthDate =
-          'You must be at least 15 years old to register as a tutor'
+        if (this.linkedIn !== '') {
+          let httpCheck = this.linkedIn.substr(0, 8)
+          if (httpCheck !== 'https://') {
+            httpCheck = 'https://'
+            this.linkedIn = httpCheck.concat(this.linkedIn)
+          }
+        }
+
         const birthday = new Date(this.birthDate)
         const age = Math.floor((Date.now() - birthday) / 31557600000)
-        if (age < 15) {
-          this.errors.birthDate =
-            'You must be at least 15 years old to register as a tutor'
+        if(age<0){
+          this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
         }
+        else if(age>70){
+          this.errors.birthDate = "Sorry but our platform doesn't accept tutors above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
+        }
+        else if(age<15){
+          this.errors.birthDate = "You must be at least 15 years old to register as a tutor."
+        }
+        else if(isNaN(age)){
+          this.errors.birthDate = "We're not detecting a birthdate here..."
+        }
+        else {
+          counter+=1
+          this.errors.birthDate = ""
+        }
+
         const requiredFields = [
           'email',
           'firstName',
           'lastName',
           'gender',
-          'occupation',
           'subjects',
-          'whatYouTeach',
-          'qualifications',
-          'bio',
+          'gpa',
+          'education',
+          'school',
           'rates',
-          'teachExp',
-          'profExp',
           'password',
         ]
+
         requiredFields.forEach((field) => {
           if (this[field].length < 1) {
             this.errors[field] = 'This field is required'
           } else {
             this.errors[field] = ''
+            counter+=1
           }
         })
+
+        if(this.gpa>6 || this.gpa<0){
+          this.errors.gpa = "Our site is only allowing for GPAS on the 4.0, 5.0, and 6.0 scale. Anything higher than that or lower than 0 is not accepted."
+        }
+        else{
+          counter+=1
+        }
+        
+        if(parseInt(this.rates)>1000 || parseInt(this.rates)<0){
+          this.errors.rates="We are not accepting negative fees or fees higher than $1000 per hour"
+        }
+        else{
+          counter+=1
+        }
 
         const emailValidation =
           /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
         if (!emailValidation.test(this.email)) {
           this.errors.email = 'Invalid email'
         } else {
-          this.errors.email = ''
+          this.errors.email = '';
+          counter+=1
         }
         if (
           this.paypalEmail.length > 0 &&
@@ -637,19 +679,34 @@ export default {
           this.errors.paypalEmail = 'Invalid email'
         } else {
           this.errors.paypalEmail = ''
-          this.paypalEmail = this.email
+          this.paypalEmail = this.email;
+          counter+=1
         }
 
         if (this.password !== this.confirmPassword) {
           this.errors.password =
             'Password and Confirm Password must be the same'
-          this.errors.confimPassword =
+          this.errors.confirmPassword =
             'Password and Confirm Password must be the same'
-        } else {
+        }
+        else if(this.password.length===0){
+          this.errors.password="This field is required"
+          this.errors.confirmPassword="This field is required"
+        }
+        else {
           this.errors.password = ''
           this.errors.confirmPassword = ''
+          counter+=1
         }
-      }
+
+        if (counter!==18){
+          this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+          this.success = ""
+        }
+        else if(counter===18){
+          this.success = "You have successfully created a tutor account!"
+          this.errors.global = ''
+        }
     },
     async handleSubmit() {
       this.validateData()
@@ -665,7 +722,6 @@ export default {
         }
         if (this.profilePic) {
           // eslint-disable-next-line
-          console.log(this.profilePic[0])
           formData.append('profile_pic', this.profilePic[0])
         }
         formData.append('user', JSON.stringify(user))
@@ -692,7 +748,6 @@ export default {
           tutor.linkedIn = this.linkedIn
         }
         formData.append('tutor', JSON.stringify(tutor))
-
         const data = await fetch(
           process.env.API_URL + '/auth/register-tutor/',
           {
@@ -706,19 +761,18 @@ export default {
         )
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
-              this.errors.global = 'Something went wrong :('
+              this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
             }
             return res.json()
           })
           .catch(() => {
-            this.errors.global = 'Something went wrong :('
+            this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
           })
-
         if (data && data.error) {
           this.errors.global = data.error
         }
-
         if (data && data.success === 'Successfully created tutor') {
+          this.success = "You have successfully created a tutor account!"
           this.$router.push('/checkemail')
         }
       }

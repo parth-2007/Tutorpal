@@ -167,11 +167,6 @@ export default {
       ],
     }
   },
-  mounted(){
-    const script = document.createElement('script')
-    script.src = "https://www.whiteboard.team/dist/api.js"
-    document.body.appendChild(script)
-  },
   computed: {
     logout() {
       return {
@@ -180,7 +175,10 @@ export default {
     },
     ...mapGetters({ user: 'getUser' }),
   },
-  async created() {
+  async mounted() {
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    document.body.appendChild(script)
     this.session = await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -206,8 +204,8 @@ export default {
         }),
       }
     )
-    this.setLoaded()
     await this.fetchUser()
+    this.setLoaded()
   },
   methods: {
     logoutclick() {
@@ -228,7 +226,8 @@ export default {
       }
     },
     /* eslint-disable */
-    setLoaded() {
+    async setLoaded() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',

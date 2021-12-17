@@ -16,7 +16,7 @@
       <body v-else>
         <div class="div-block">
           <router-link
-            style="margin-top: 0px; margin-bottom: -30px"
+            style="margin-top: 0px; margin-bottom: -30px; margin-left: 0px;"
             to="/"
             class="link-block w-inline-block"
             ><img
@@ -80,7 +80,7 @@
                       <strong class="bold-text-2">Get paid</strong>
                     </h1>
                     <p class="paragraph">
-                      12 hours after you have conducted your class, a Paypal
+                      At most 12 hours after you have conducted your class, a Paypal
                       payment will be sent to your email OR receive volunteer hours.
                     </p>
                   </div>

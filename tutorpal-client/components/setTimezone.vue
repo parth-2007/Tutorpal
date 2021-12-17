@@ -35,7 +35,7 @@
         >
           <div>
             <h1 style="font-size: 30px"><strong>Set Timezone Here</strong></h1>
-            This lets us know how we should format your information according to your timezone. Please pick a field below, we automatically default your timezone to PST.
+            This lets us know how we should format your information according to your timezone. Please pick a field below, we automatically default your timezone to PST. This only effective for CHAT Messages.
             <form id="form-wrapper">
               <select
                   v-model="timezoneValue"

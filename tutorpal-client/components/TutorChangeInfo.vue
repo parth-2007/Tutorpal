@@ -1,4 +1,4 @@
-T<template>
+<template>
   <client-only>
     <html
       data-wf-page="5f405fbdac064904ad639864"
@@ -126,6 +126,8 @@ T<template>
                     to="/volunteering"
                     class="tutornav-link-4 w-nav-link"
                     >Volunteering</router-link>
+                  <router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    >Calendar</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -166,15 +168,18 @@ T<template>
               </div>
               <p style="padding-top: 20px overflow: hidden" class="tutorparagraph-7">
                 <strong>Birth Date: </strong>{{ tutor.birthDate }}<br /><strong
-                  >Qualification Description: </strong
-                >{{ tutor.qualifications }}<br /><strong>Education:</strong>
+                    >Qualification Description: </strong>{{tutor.qualifications}}
+                <br><strong>Email: </strong>{{ user.email }}<br />
+                <strong>Paypal Email: </strong>{{ tutor.paypalEmail }}<br />
+                <strong>Education:</strong>
                 {{ tutor.education }}<br /><strong
-                  >Working/Subject Experience:</strong
-                >
+                    >Working/Subject Experience:</strong
+                    >
                 {{ tutor.profExp }} years<br /><strong>Teaching Experience: </strong>{{ tutor.teachExp }}
                 years<br /><strong>Average Review:</strong>
                 {{ tutor.averageReviews }}<br />
                 <strong>Occupation: </strong>{{ tutor.occupation }}<br />
+                <strong>Gender: </strong>{{ tutor.gender }}<br />
                 <strong>Price: </strong>${{tutor.rates}} per hour <br />
                 <strong>Bio: </strong>{{ tutor.bio}}<br />
                 <strong>Availability: </strong>{{ tutor.availability}}<br />
@@ -183,9 +188,11 @@ T<template>
                   style="font-family: Poppins;"
                   :href="'https://www.tutorpal.org/tutors/'+tutor.id"
                   target="_blank"
-                ><strong>View my profile</strong>
+                  ><strong>View my profile</strong>
                 <br>
                 </a>
+              </p>
+              <div style="margin-left: 50%;">
                 <a
                   @click="updateModalValue"
                   style="margin-top: 10px;"
@@ -195,10 +202,10 @@ T<template>
                 <router-link
                   style="font-family: Poppins; padding-left: 10px;"
                   to="/timezone"
-                ><strong>Set my timezone</strong>
+                  ><strong>Set my timezone</strong>
                 </router-link>
-              </p>
-            </div>
+              </div>
+          </div>
           </div>
         </div>
       </body>
