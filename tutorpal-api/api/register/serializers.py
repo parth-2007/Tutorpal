@@ -155,7 +155,7 @@ class TutorViewingSerializer(serializers.ModelSerializer):
         model = Tutor
         fields = [
             'id', 'user', 'qualifications', 'what_you_teach',
-            'subjects', 'birth_date', 'bio', 'rates', 'occupation', 'linkedIn',
+            'subjects', 'bio', 'rates', 'occupation', 'linkedIn',
             'verified', 'prof_exp', 'teach_exp', 'education', 'school', 'gpa', 'major',
             'gender', 'tutor_type', 'availability', 'average_reviews', 'free_tutoring_given',  # 'reviews'
         ]

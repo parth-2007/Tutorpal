@@ -130,7 +130,10 @@
                   alt=""
               /></router-link>
               <div class="div-block-4">
-                <div style="margin-left: 0px; padding-left: 0px" class="stuff w-form">
+                <div
+                  style="margin-left: 0px; padding-left: 0px"
+                  class="stuff w-form"
+                >
                   <img
                     src="../static/student/images/search-1.png"
                     loading="lazy"
@@ -138,23 +141,23 @@
                     height="25"
                     srcset="
                       ../static/student/images/search-1.png 500w,
-                      ../static/student/images/search-1.png       512w
+                      ../static/student/images/search-1.png 512w
                     "
                     sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                     alt=""
                     class="image-2"
                   /><input
-                      class="search-3 w-input"
-                      placeholder="Search by subject"
-                      id="search"
-                      v-model="q"
-                      @keyup.enter="submitSearch()"
+                    class="search-3 w-input"
+                    placeholder="Search by subject"
+                    id="search"
+                    v-model="q"
+                    @keyup.enter="submitSearch()"
                   /><input
                     type="submit"
                     value="Search"
                     class="button-8 _100 _5px-left w-button"
                   />
-              </div>
+                </div>
                 <div class="div-block-43">
                   <div class="name_profile_pic">
                     <img
@@ -263,12 +266,14 @@
             </div>
             <p style="padding-top: 20px" class="paragraph-8">
               <strong>Degree: </strong>{{ data.education }}<br /><strong
-                >Birthdate: </strong
-              >{{ data.birth_date }}<br /><strong
                 >Qualification Description: </strong
               >{{ data.qualifications }}<br />
-              <strong>Education: </strong><text v-if="data.education !== 'High School' || data.major !== '' ">{{ data.major }} at</text> {{ data.school }},
-              GPA of {{ data.gpa }}<br /><strong
+              <strong>Education: </strong
+              ><text
+                v-if="data.education !== 'High School' || data.major !== ''"
+                >{{ data.major }} at</text
+              >
+              {{ data.school }}, GPA of {{ data.gpa }}<br /><strong
                 >Professional Experience: </strong
               >{{ data.prof_exp }} years<br /><strong
                 >Teaching Experience: </strong
@@ -302,39 +307,39 @@
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews</h1>
-            <div style="margin-bottom: 20px;">
-                  <select
-                    ref="select"
-                    v-model="stars"
-                    style="margin-top: 0px"
-                    class="form-select"
-                    id="stars"
-                    aria-label="Default select example"
-                    required
-                  >
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option selected value="5">5 Stars</option>
-                  </select>
-                  <textarea
-                    ref="description"
-                    v-model="reviewDescription"
-                    style="height: 150px; margin-top: 20px; margin-bottom: 20px"
-                    class="form-control"
-                    id="description"
-                    placeholder="Enter Description"
-                    rows="3"
-                    required
-                  ></textarea>
-                  <button
-                    @click="createReview(data.id)"
-                    class="btn btn-primary"
-                    name="review"
-                  >
-                    Post Review
-                  </button>
+            <div style="margin-bottom: 20px">
+              <select
+                ref="select"
+                v-model="stars"
+                style="margin-top: 0px"
+                class="form-select"
+                id="stars"
+                aria-label="Default select example"
+                required
+              >
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option selected value="5">5 Stars</option>
+              </select>
+              <textarea
+                ref="description"
+                v-model="reviewDescription"
+                style="height: 150px; margin-top: 20px; margin-bottom: 20px"
+                class="form-control"
+                id="description"
+                placeholder="Enter Description"
+                rows="3"
+                required
+              ></textarea>
+              <button
+                @click="createReview(data.id)"
+                class="btn btn-primary"
+                name="review"
+              >
+                Post Review
+              </button>
             </div>
             <div v-if="reviews !== []">
               <div
@@ -390,7 +395,7 @@ export default {
       predictedprice: '',
       stars: 5,
       reviewDescription: '',
-      q: ''
+      q: '',
     }
   },
   async fetch() {
@@ -459,7 +464,7 @@ export default {
       this.predictedprice = 'Predicted Class Amount: $0.00'
     },
     submitSearch() {
-      this.$router.push("/search/"+this.q);
+      this.$router.push('/search/' + this.q)
     },
     predictprice() {
       this.predictedprice =
@@ -468,7 +473,7 @@ export default {
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL +'/reviews/', {
+      await fetch(process.env.API_URL + '/reviews/', {
         credentials: 'include',
         method: 'POST',
         headers: {
