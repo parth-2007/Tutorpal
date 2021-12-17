@@ -292,7 +292,7 @@
                 >Teaching Experience: </strong
               >{{ data.teach_exp }} years<br />
               <strong>Average Review:</strong>
-              {{ data.average_reviews }} Stars<br /><strong>Occupation: </strong
+              {{ data.average_reviews }} Stars, {{reviewNum}} Review(s)<br /><strong>Occupation: </strong
               >{{ data.occupation }}<br /><strong>Gender: </strong
               >{{ data.gender }}<br />
               <strong>Price: </strong>${{ data.rates }} hourly <br /><strong
@@ -319,7 +319,7 @@
             >
           </div>
           <div class="div-block-56">
-            <h1 class="heading-11">Reviews</h1>
+            <h1 class="heading-11">Reviews ({{this.reviewNum}})</h1>
             <div style="margin-bottom: 20px; font-family: Poppins;">
                   <select
                     ref="select"
@@ -344,7 +344,7 @@
                     id="description"
                     placeholder="Enter Description"
                     rows="3"
-                    maxlength="1000"
+                    maxlength="1500"
                   ></textarea>
                   <button
                     @click="createReview(data.id)"
@@ -353,6 +353,9 @@
                   >
                     Post Review
                   </button>
+                  <p style="color: #008000; font-size: 16px; margin-top: 5px; margin-bottom: 5px;">{{ reviewSuccess }}</p>
+                  <p style="color: hsla(0, 100%, 64%, 1)">{{reviewError}}</p>
+
             </div>
             <div v-if="reviews !== []">
               <div
@@ -410,6 +413,9 @@ export default {
       success: "",
       reviewDescription: '',
       q: '',
+      reviewError:"",
+      reviewSuccess:"",
+      reviewNum:"",
       errors: {
         global: '',
         description: '',
@@ -470,6 +476,7 @@ export default {
       credentials: 'include',
     }).then((res) => res.json())
     await this.fetchSessions('pendingOnTutor')
+    this.reviewNum=this.reviews.results.length;
   },
   methods: {
     ...mapGetters(['getUser', 'getPendingOnTutor']),
@@ -494,7 +501,8 @@ export default {
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + '/reviews/', {
+      if(this.reviewDescription!==""){
+        await fetch(process.env.API_URL + '/reviews/', {
         credentials: 'include',
         method: 'POST',
         headers: {
@@ -508,21 +516,27 @@ export default {
           tutor: tutorId,
         }),
       }).then((res) => {
-        let error = null
-        if (res.status === 403) {
-          error = 'You have already posted a review for this tutor.'
-        } else if (res.status === 500) {
-          error = 'Please check your inputs and make sure they are not empty.'
-        } else if (res.status === 404) {
-          error =
-            'We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
+        if (res.status === 200 || res.status === 201){
+          this.reviewSuccess="Your review was posted successfully!"
+          this.reviewError=""
         }
-        if (error) {
-          alert(error)
+        else if (res.status === 403) {
+          this.reviewError = 'You have already posted a review for this tutor.'
+          this.reviewSuccess=""
+        } else if (res.status === 500) {
+          this.reviewError = 'Please check your inputs and make sure they are not empty.'
+        } else if (res.status === 404) {
+          this.reviewError ='We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
+          this.reviewSuccess=""
         }
         this.reviewDescription = ''
-        this.stars = undefined
+        this.stars = 5
       })
+      }
+      else{
+        this.reviewError="Please write a description and provide insight on this tutor for other students on this platform."
+        this.success=""
+      }
     },
     async createroom() {
       const room = {
