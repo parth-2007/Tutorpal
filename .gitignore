@@ -11,6 +11,7 @@ env_backup.txt
 .python-version
 zappa_settings.json
 zappa_settings_backup.json
-api_gateway_policy.json
 chat-api.zip
 s3rule.json
+tutorpal-api/api/prod_api_gateway_policy.json
+tutorpal-api/api/api_gateway_policy.json

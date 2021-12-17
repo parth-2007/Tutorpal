@@ -31,17 +31,17 @@
                     height="25"
                     srcset="
                       ../static/student/images/search-1.png 500w,
-                      ../static/student/images/search-1.png       512w
+                      ../static/student/images/search-1.png 512w
                     "
                     sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
                     alt=""
                     class="image-2"
                   /><input
-                      class="search-3 w-input"
-                      placeholder="Search by subject"
-                      id="search"
-                      v-model="q"
-                      @keyup.enter="submitSearch()"
+                    class="search-3 w-input"
+                    placeholder="Search by subject"
+                    id="search"
+                    v-model="q"
+                    @keyup.enter="submitSearch()"
                   />
                 </div>
               </div>
@@ -78,8 +78,12 @@
               <strong>Degree: </strong>{{ data.education }}<br /><strong
                 >Qualification Description: </strong
               >{{ data.qualifications }}<br />
-              <strong>Education: </strong><text v-if="data.education !== 'High School' || data.major !== '' ">{{ data.major }} at</text> {{ data.school }},
-              GPA of {{ data.gpa }}<br /><strong
+              <strong>Education: </strong
+              ><text
+                v-if="data.education !== 'High School' || data.major !== ''"
+                >{{ data.major }} at</text
+              >
+              {{ data.school }}, GPA of {{ data.gpa }}<br /><strong
                 >Professional Experience: </strong
               >{{ data.prof_exp }} years<br /><strong
                 >Teaching Experience: </strong
@@ -143,7 +147,7 @@ export default {
     return {
       data: [],
       reviews: [],
-      q: ''
+      q: '',
     }
   },
   async fetch() {
@@ -184,9 +188,9 @@ export default {
   },
   methods: {
     submitSearch() {
-      this.$router.push("/search/"+this.q);
-    }
-  }
+      this.$router.push('/search/' + this.q)
+    },
+  },
 }
 </script>
 
