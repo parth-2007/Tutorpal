@@ -338,6 +338,7 @@ export default {
         this.errors.toc = 'Please read and agree to the Terms of Condition'
       } else {
         this.errors.global = ''
+        this.errors.toc=""
         counter+=1
       }
       const birthday = new Date(this.birthDate)
