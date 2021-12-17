@@ -84,7 +84,7 @@
                     Degree: {{ tutor.education }}
                   </div>
                   <div class="text-block-21-copy-2">
-                    Education: {{ tutor.major }} at {{ tutor.school }}, GPA of
+                    Education: {{ tutor.school }}, GPA of
                     {{ tutor.gpa }}
                   </div>
                   <div class="text-block-21-copy-2">

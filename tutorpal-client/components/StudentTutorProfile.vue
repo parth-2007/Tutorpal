@@ -562,6 +562,30 @@ export default {
       else{
         counter+=1
       }
+      let yourDate = new Date()
+      const offset = yourDate.getTimezoneOffset()
+      yourDate = new Date(yourDate.getTime() - (offset*60*1000))
+      yourDate = yourDate.toISOString().split('T')[0].slice(0, 10)
+
+
+      let dateFrom = yourDate;
+      const dateTo = "2023/11/31"
+      let dateCheck = sessionDate
+      dateCheck = [dateCheck.slice(0, 4), "/", dateCheck.slice(5, 7), "/", dateCheck.slice(8, 10)].join('');
+      dateFrom = [dateFrom.slice(0, 4), "/", dateFrom.slice(5, 7), "/", dateFrom.slice(8, 10)].join('');
+
+      const from = Date.parse(dateFrom);
+      const to   = Date.parse(dateTo);
+      const check = Date.parse(dateCheck );
+      if(dateCheck!=="//"){
+        if((check > from && check < to)){     
+          counter+=1
+          this.errors.date_startTime=""
+        }
+        else{
+          this.errors.date_startTime="The date you are selecting has either already passed or is occurring after a few years."
+        }
+      }
       let rhours = Math.floor(hours)
       const minutes = (hours - rhours) * 60
       let rminutes = Math.round(minutes)
@@ -576,7 +600,6 @@ export default {
       let endTime = add([startTime, sessionDuration])
       endTime = str(endTime)
       endTime = endTime.substring(0, 5)
-      console.log(sessionDate)
       const sessionData = {
         student_pk: this.user.studentPk,
         tutor: parseInt(this.$route.params.id),
@@ -601,7 +624,7 @@ export default {
         parent_emailed: false,
         accessable: false,
       }
-      if (counter === 5){
+      if (counter === 6){
         const csrfToken = await getCSRF()
         this.addSession([sessionData, 'pendingOnTutor'])
         await fetch(process.env.API_URL + '/sessions/', {
@@ -662,4 +685,5 @@ export default {
   font-family: Poppins;
   font-size: 12px;
 }
+
 </style>

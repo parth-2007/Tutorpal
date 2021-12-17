@@ -420,6 +420,23 @@ export default {
         this.errors.paypalEmail = ''
         counter+=1
       }
+
+      if(parseInt(this.tutor.profExp) < 0 || parseInt(this.tutor.profExp) > 50){
+        this.errors.profExp="Sorry but we aren't allowing for more than 50 or negative years in professional experience"
+      }
+      else{
+        this.errors.profExp=""
+        counter+=1
+      }
+
+      if(parseInt(this.tutor.teachExp) < 0 || parseInt(this.tutor.teachExp) > 50){
+        this.errors.teachExp="Sorry but we aren't allowing for more than 50 or negative years in teaching experience"
+      }
+      else{
+        this.errors.teachExp=""
+        counter+=1
+      }
+
       const birthday = new Date(this.tutor.birthDate)
       const age = Math.floor((Date.now() - birthday) / 31557600000)
       /* eslint-disable */
@@ -451,11 +468,11 @@ export default {
         counter+=1
       }
 
-      if (counter!==14){
+      if (counter!==16){
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
         this.success = ""
       }
-      else if(counter===14){
+      else if(counter===16){
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }
