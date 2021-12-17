@@ -22,6 +22,7 @@
                 class="form-control"
                 id="firstname"
                 aria-label="First name"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.firstName }}</p>
@@ -35,6 +36,7 @@
                 id="lastname"
                 aria-label="Last name"
                 required
+                maxlength="200"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.lastName }}</p>
             </div>
@@ -85,6 +87,7 @@
                 type="email"
                 class="form-control"
                 id="emailaddress"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.email }}</p>
@@ -109,6 +112,7 @@
                 type="email"
                 class="form-control"
                 id="paypalemail"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">
@@ -179,6 +183,7 @@
                 class="form-control"
                 id="occupation"
                 required
+                maxlength="200"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">
                 {{ errors.occupation }}
@@ -198,6 +203,7 @@
                 v-model="subjects"
                 class="form-control"
                 id="subjects"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.subjects }}</p>
@@ -218,6 +224,7 @@
             class="form-control"
             id="description"
             rows="3"
+            maxlength="3000"
           ></textarea>
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.whatYouTeach }}</p>
         </div>
@@ -236,6 +243,7 @@
                 v-model="major"
                 type="text"
                 class="form-control"
+                maxlength="200"
                 id="major"
                 required
               />
@@ -248,7 +256,7 @@
                 type="number"
                 id="gpa"
                 min="0"
-                max="5"
+                max="6"
                 class="form-control"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.gpa }}</p>
@@ -277,6 +285,7 @@
                 type="text"
                 class="form-control"
                 id="school"
+                maxlength="200"
                 required
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.school }}</p>
@@ -288,6 +297,7 @@
             class="form-control"
             id="t_education"
             rows="3"
+            maxlength="3000"
           ></textarea>
           <p style="color: hsla(0, 100%, 64%, 1)">
             {{ errors.qualifications }}
@@ -306,6 +316,7 @@
             class="form-control"
             id="linkedin"
             placeholder="linkedin.com/in/johndoe"
+            maxlength="200"
           />
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
         </div>
@@ -326,6 +337,7 @@
                 id="bio"
                 placeholder="eg. my hobbies are..."
                 rows="3"
+                maxlength="2000"
               ></textarea>
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.bio }}</p>
             </div>
@@ -404,7 +416,7 @@
                 type="number"
                 id="teachexp"
                 min="0"
-                max="30"
+                max="50"
                 class="form-control"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.teachExp }}</p>
@@ -418,7 +430,7 @@
                 id="profexp"
                 type="number"
                 min="0"
-                max="30"
+                max="50"
                 class="form-control"
               />
               <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.profExp }}</p>
@@ -437,7 +449,7 @@
             v-model="availability"
             class="form-control"
             id="availability"
-            maxlength="350"
+            maxlength="200"
             placeholder="Mondays, 4:00 PM - 6:00 PM"
           />
           <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
@@ -563,11 +575,13 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000) {
+      if (e.target.files[0].size > 5000000) {
         this.errors.profilePic =
-          'File size is too high! Please upload a file less than 100 Kilobytes'
+          'File size is too high! Please upload a file less than 5 Megabytes'
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
       } else {
         this.errors.profilePic = ''
+        this.errors.global='';
       }
     },
     checkErrors() {
@@ -580,20 +594,21 @@ export default {
       return isError
     },
     validateData() {
-      let counter = 0
-      if (!this.toc) {
-        this.errors.toc = 'Please read and agree to our Terms of Conditions'
-      } else {
-        this.errors.toc = ''
-        counter+=1
-      }
-      if (this.linkedIn !== '') {
-        let httpCheck = this.linkedIn.substr(0, 8)
-        if (httpCheck !== 'https://') {
-          httpCheck = 'https://'
-          this.linkedIn = httpCheck.concat(this.linkedIn)
+        let counter = 0
+        if (!this.toc) {
+          this.errors.toc = 'Please read and agree to our Terms of Conditions'
+        } else {
+          this.errors.toc = ''
+          counter+=1
         }
-      }
+        if (this.linkedIn !== '') {
+          let httpCheck = this.linkedIn.substr(0, 8)
+          if (httpCheck !== 'https://') {
+            httpCheck = 'https://'
+            this.linkedIn = httpCheck.concat(this.linkedIn)
+          }
+        }
+
         const birthday = new Date(this.birthDate)
         const age = Math.floor((Date.now() - birthday) / 31557600000)
         if(age<0){
@@ -612,25 +627,20 @@ export default {
           counter+=1
           this.errors.birthDate = ""
         }
+
         const requiredFields = [
           'email',
           'firstName',
           'lastName',
           'gender',
-          'occupation',
           'subjects',
-          'whatYouTeach',
-          'qualifications',
           'gpa',
           'education',
           'school',
-          'bio',
           'rates',
-          'teachExp',
-          'profExp',
           'password',
-          'availability'
         ]
+
         requiredFields.forEach((field) => {
           if (this[field].length < 1) {
             this.errors[field] = 'This field is required'
@@ -639,6 +649,7 @@ export default {
             counter+=1
           }
         })
+
         if(this.gpa>6 || this.gpa<0){
           this.errors.gpa = "Our site is only allowing for GPAS on the 4.0, 5.0, and 6.0 scale. Anything higher than that or lower than 0 is not accepted."
         }
@@ -671,21 +682,28 @@ export default {
           this.paypalEmail = this.email;
           counter+=1
         }
+
         if (this.password !== this.confirmPassword) {
           this.errors.password =
             'Password and Confirm Password must be the same'
-          this.errors.confimPassword =
+          this.errors.confirmPassword =
             'Password and Confirm Password must be the same'
-        } else {
+        }
+        else if(this.password.length===0){
+          this.errors.password="This field is required"
+          this.errors.confirmPassword="This field is required"
+        }
+        else {
           this.errors.password = ''
           this.errors.confirmPassword = ''
           counter+=1
         }
-        if (counter!==24){
+
+        if (counter!==18){
           this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
           this.success = ""
         }
-        else if(counter===24){
+        else if(counter===18){
           this.success = "You have successfully created a tutor account!"
           this.errors.global = ''
         }

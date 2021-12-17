@@ -8,6 +8,7 @@
           type="email"
           class="form-control"
           id="emailaddress"
+          maxlength="200"
           required
         />
       </div>
@@ -57,6 +58,7 @@
           v-model="user.firstName"
           class="form-control"
           id="firstname"
+          maxlength="200"
           required
         />
       </div>
@@ -67,6 +69,7 @@
           v-model="user.lastName"
           class="form-control"
           id="lastname"
+          maxlength="200"
           required
         />
       </div>
@@ -77,6 +80,7 @@
           v-model="tutor.occupation"
           class="form-control"
           id="occupation"
+          maxlength="200"
           required
         />
       </div>
@@ -87,6 +91,7 @@
           v-model="tutor.subjects"
           class="form-control"
           id="subject"
+          maxlength="200"
           required
         />
       </div>
@@ -98,6 +103,7 @@
         class="form-control"
         id="description"
         rows="3"
+        maxlength="3000"
       ></textarea>
       <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.whatYouTeach }}</p>
       <div style="margin-top: 15px" class="row">
@@ -108,6 +114,7 @@
             type="text"
             class="form-control"
             id="major"
+            maxlength="200"
             required
           />
         </div>
@@ -119,7 +126,7 @@
             type="number"
             id="gpa"
             min="0"
-            max="5"
+            max="6"
             class="form-control"
           />
         </div>
@@ -147,6 +154,7 @@
             type="text"
             class="form-control"
             id="school"
+            maxlength="200"
             required
           />
         </div>
@@ -160,6 +168,7 @@
         placeholder="Qualifications"
         id="educationdescription"
         rows="3"
+        maxlength="3000"
       ></textarea>
       <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.qualifications }}</p>
       <div style="margin-top: 15px; margin-bottom: 5px" class="text-block-5">
@@ -169,6 +178,7 @@
         v-model="tutor.linkedIn"
         class="form-control"
         id="linkedin"
+        maxlength="200"
         placeholder="https://www.linkedin.com/in/johndoe"
       />
       <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.linkedIn }}</p>
@@ -182,6 +192,7 @@
             id="bio"
             placeholder="Eg. My hobbies are..."
             rows="3"
+            maxlength="2000"
           ></textarea>
         </div>
         <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.bio }}</p>
@@ -247,7 +258,7 @@
             type="number"
             id="teachexp"
             min="0"
-            max="30"
+            max="50"
             class="form-control"
           />
         </div>
@@ -261,7 +272,7 @@
             id="profexp"
             type="number"
             min="0"
-            max="30"
+            max="50"
             class="form-control"
           />
         </div>
@@ -274,6 +285,7 @@
         v-model="tutor.availability"
         class="form-control"
         id="availability"
+        maxlength="200"
         placeholder="Mondays, 4:00 PM - 6:00 PM"
       />
       <p style="color: hsla(0, 100%, 64%, 1)">{{ errors.availability }}</p>
@@ -325,7 +337,6 @@ export default {
         rates: '',
         teachExp: '',
         profExp: '',
-        availability: '',
         global: '',
       },
     }
@@ -344,12 +355,13 @@ export default {
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000) {
+      if (e.target.files[0].size > 5000000) {
         this.errors.profilePic =
-          'File size is too high! Please upload a file less than 100 Kilobytes'
+          'File size is too high! Please upload a file less than 5 Megabytes'
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
       } else {
         this.errors.profilePic = ''
+        this.errors.global='';
       }
     },
     checkErrors() {
@@ -367,15 +379,8 @@ export default {
         'user.firstName',
         'user.lastName',
         'tutor.gender',
-        'tutor.occupation',
         'tutor.subjects',
-        'tutor.whatYouTeach',
-        'tutor.qualifications',
-        'tutor.bio',
         'tutor.rates',
-        'tutor.teachExp',
-        'tutor.profExp',
-        'tutor.availability',
         'tutor.gpa',
         'tutor.school',
         'tutor.education'
@@ -393,15 +398,8 @@ export default {
       this.errors.firstName = this.errors['user.firstName']
       this.errors.lastName = this.errors['user.lastName']
       this.errors.gender = this.errors['tutor.gender']
-      this.errors.occupation = this.errors['tutor.occupation']
       this.errors.subjects = this.errors['tutor.subjects']
-      this.errors.whatYouTeach = this.errors['tutor.whatYouTeach']
-      this.errors.qualifications = this.errors['tutor.qualifications']
-      this.errors.bio = this.errors['tutor.bio']
       this.errors.rates = this.errors['tutor.rates']
-      this.errors.teachExp = this.errors['tutor.teachExp']
-      this.errors.profExp = this.errors['tutor.profExp']
-      this.errors.availability = this.errors['tutor.availability']
       this.errors.gpa = this.errors['tutor.gpa']
       this.errors.school = this.errors['tutor.school']
       this.errors.education = this.errors['tutor.education']
@@ -424,7 +422,6 @@ export default {
       }
       const birthday = new Date(this.tutor.birthDate)
       const age = Math.floor((Date.now() - birthday) / 31557600000)
-      console.log(this.tutor.gpa, this.tutor.rates)
       /* eslint-disable */
       if(age<0){
         this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
@@ -454,11 +451,11 @@ export default {
         counter+=1
       }
 
-      if (counter!==21){
+      if (counter!==14){
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
         this.success = ""
       }
-      else if(counter===21){
+      else if(counter===14){
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }

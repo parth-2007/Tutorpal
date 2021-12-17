@@ -81,7 +81,7 @@
                       >Subject(specify the topic)</label
                     >
                     <div class="col-10">
-                      <input v-model="subjects" class="form-control" required />
+                      <input v-model="subjects" class="form-control" maxlength="200"/>
                     </div>
                     <p style="color: hsla(0, 100%, 64%, 1)">{{errors.subjects}}</p>
                   </div>
@@ -93,6 +93,7 @@
                     placeholder="Describe what you want to learn, cover, or what you need help with."
                     rows="3"
                     required
+                    maxlength="2000"
                   ></textarea>
                   <p style="color: hsla(0, 100%, 64%, 1)">{{errors.description}}</p>
                   <div
@@ -275,8 +276,6 @@
             </div>
             <p style="padding-top: 20px" class="paragraph-8">
               <strong>Degree: </strong>{{ data.education }}<br /><strong
-                >Birthdate: </strong
-              >{{ data.birth_date }}<br /><strong
                 >Qualification Description: </strong
               >{{ data.qualifications }}<br />
               <strong>Education: </strong><text v-if="data.education !== 'High School' || data.major !== '' ">{{ data.major }} at</text> {{ data.school }},
@@ -338,7 +337,7 @@
                     id="description"
                     placeholder="Enter Description"
                     rows="3"
-                    required
+                    maxlength="1000"
                   ></textarea>
                   <button
                     @click="createReview(data.id)"
@@ -563,7 +562,6 @@ export default {
       else{
         counter+=1
       }
-      if (counter === 5){
       let rhours = Math.floor(hours)
       const minutes = (hours - rhours) * 60
       let rminutes = Math.round(minutes)
@@ -578,6 +576,7 @@ export default {
       let endTime = add([startTime, sessionDuration])
       endTime = str(endTime)
       endTime = endTime.substring(0, 5)
+      console.log(sessionDate)
       const sessionData = {
         student_pk: this.user.studentPk,
         tutor: parseInt(this.$route.params.id),
@@ -602,36 +601,37 @@ export default {
         parent_emailed: false,
         accessable: false,
       }
-      const csrfToken = await getCSRF()
-      this.addSession([sessionData, 'pendingOnTutor'])
-      await fetch(process.env.API_URL + '/sessions/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'X-CSRFToken': csrfToken.success,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(sessionData),
-      }).then((res) => {
-        if (res.status === 400) {
-          this.errors.global =
-            'Oops! Something went wrong, please check your inputs again.'
-          this.success = ''
-        } else if (res.status === 500) {
-          this.errors.global = 'There seems to be an internal error, we are working on the issue.'
-          this.success=''
-        } else if (res.status === 201 || res.status === 200) {
-          this.success = 'Thank you for successfully creating a session. Good luck!'
-          this.errors.global = ''
-          this.subjects = ''
-          this.free = false
-          this.description = ''
-          this.duration = ''
-          this.date_startTime = ''
-          this.predictedprice=""
-        }
-      })
-    }
+      if (counter === 5){
+        const csrfToken = await getCSRF()
+        this.addSession([sessionData, 'pendingOnTutor'])
+        await fetch(process.env.API_URL + '/sessions/', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'X-CSRFToken': csrfToken.success,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(sessionData),
+        }).then((res) => {
+          if (res.status === 400) {
+            this.errors.global =
+              'Oops! Something went wrong, please check your inputs again.'
+            this.success = ''
+          } else if (res.status === 500) {
+            this.errors.global = 'There seems to be an internal error, we are working on the issue.'
+            this.success=''
+          } else if (res.status === 201 || res.status === 200) {
+            this.success = 'Thank you for successfully creating a session. Good luck!'
+            this.errors.global = ''
+            this.subjects = ''
+            this.free = false
+            this.description = ''
+            this.duration = ''
+            this.date_startTime = ''
+            this.predictedprice=""
+          }
+        })
+      }
     else{
       this.errors.global ='Oops! Something went wrong, please check your inputs again.'
       this.success =""

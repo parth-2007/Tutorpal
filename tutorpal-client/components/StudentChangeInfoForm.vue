@@ -10,6 +10,7 @@
             class="form-control"
             id="firstname"
             aria-label="First name"
+            maxlength="200"
             required
           />
           <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.firstName }}</p>
@@ -22,6 +23,7 @@
             class="form-control"
             id="lastname"
             aria-label="Last name"
+            maxlength="200"
             required
           />
           <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.lastName }}</p>
@@ -34,6 +36,7 @@
           type="email"
           class="form-control"
           id="emailaddress"
+          maxlength="200"
           required
         />
         <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.email }}</p>
@@ -80,6 +83,7 @@
           class="form-control"
           id="parentemail"
           placeholder="Enter Parent Email"
+          maxlength="200"
           required
         />
         <p style="color: hsla(0, 100%, 64%, 1)"> {{ errors.parentEmail }}</p>

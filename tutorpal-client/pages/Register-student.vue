@@ -47,6 +47,7 @@
                         type="text"
                         class="form-control"
                         aria-label="First name"
+                        maxlength="200"
                         required
                       />
                       <p style="color: hsla(0, 100%, 64%, 1)">
@@ -62,6 +63,7 @@
                         class="form-control"
                         aria-label="Last name"
                         required
+                        maxlength="200"
                       />
                       <p style="color: hsla(0, 100%, 64%, 1)">
                         {{ errors.lastName }}
@@ -77,6 +79,7 @@
                       type="email"
                       class="form-control"
                       id="emailaddress"
+                      maxlength="200"
                       required
                     />
                     <p style="color: hsla(0, 100%, 64%, 1)">
@@ -91,6 +94,7 @@
                         type="password"
                         class="form-control"
                         id="password"
+                        maxlength="200"
                         required
                       />
                       <p style="color: hsla(0, 100%, 64%, 1)">
@@ -106,6 +110,7 @@
                         type="password"
                         id="confirmpassword"
                         class="form-control"
+                        maxlength="200"
                         required
                       />
                       <p style="color: hsla(0, 100%, 64%, 1)">
@@ -163,6 +168,7 @@
                       type="email"
                       class="form-control"
                       placeholder="Enter Parent Email"
+                      maxlength="200"
                       required
                     />
                   </div>

@@ -76,8 +76,6 @@
             </div>
             <p style="padding-top: 20px" class="paragraph-8">
               <strong>Degree: </strong>{{ data.education }}<br /><strong
-                >Birthdate: </strong
-              >{{ data.birth_date }}<br /><strong
                 >Qualification Description: </strong
               >{{ data.qualifications }}<br />
               <strong>Education: </strong><text v-if="data.education !== 'High School' || data.major !== '' ">{{ data.major }} at</text> {{ data.school }},
