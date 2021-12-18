@@ -349,8 +349,8 @@ export default {
       else if(age>70){
         this.errors.birthDate = "Sorry but our platform doesn't accept students above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
       }
-      else if(age<15){
-        this.errors.birthDate = "You must be at least 15 years old to register as a tutor."
+      else if(age<6){
+        this.errors.birthDate = "You must be at least 6 years old to register as a tutor."
       }
       else if(isNaN(age)){
         this.errors.birthDate = "We're not detecting a birthdate here..."
