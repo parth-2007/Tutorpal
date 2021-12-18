@@ -7462,7 +7462,8 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    height: 46px;
+    min-height: 50px;
+    max-height: 150px;
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
@@ -8742,7 +8743,7 @@
 @media screen and (max-width: 1200px) and (min-width: 1000px) {
     .div-block-54 {
         min-width: 70vw;
-        max-width: 90vw;
+        max-width: 100vw;
     }
 }
 

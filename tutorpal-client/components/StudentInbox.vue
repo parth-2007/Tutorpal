@@ -248,6 +248,7 @@ export default {
   data() {
     return {
       clicked: false,
+      q:"",
     }
   },
   async fetch() {

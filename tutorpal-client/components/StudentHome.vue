@@ -180,15 +180,15 @@
                       <div class="text-block-21">
                         <strong class="bold-text-3"
                           >{{
-                            tutor.user !== undefined ? tutor.user.firstName : ''
+                            tutor.user !== undefined ? restrictChar(17, tutor.user.firstName) : ''
                           }}
                           {{
-                            tutor.user !== undefined ? tutor.user.lastName : ''
+                            tutor.user !== undefined ? restrictChar(17, tutor.user.lastName) : ''
                           }}</strong
                         >
                       </div>
                       <div class="text-block-21-copy">
-                        Subject: {{ tutor.subjects }}
+                        Subject: {{ restrictChar(20, tutor.subjects) }}
                       </div>
                       <div class="text-block-21-copy-2">
                         Price: ${{ tutor.rates }} hourly
@@ -197,14 +197,13 @@
                         Degree: {{ tutor.education }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Education: <text v-if="tutor.education !== 'High School' || tutor.major !== '' ">{{ tutor.major }} at</text> {{ tutor.school }}, GPA
-                        of {{ tutor.gpa }}
+                        Education: {{ restrictChar(20, `${tutor.school}, GPA of ${tutor.gpa}`) }}
                       </div>
                       <div class="text-block-21-copy-2">
                         Reviews: {{ tutor.averageReviews }} Stars
                       </div>
                       <div class="text-block-21-copy-2">
-                        Occupation: {{ tutor.occupation }}
+                        Occupation: {{ restrictChar(15, tutor.occupation) }}
                       </div>
                     </div>
                   </router-link>
@@ -394,6 +393,17 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
+    restrictChar(charNum, input){
+      if(parseInt(input.length) > parseInt(charNum)){
+        input = input.substr(0, charNum)
+        return input + "..."
+      }
+      else{
+        return input
+      }
+        
+      }
+    },
     async joinSession(id) {
       const csrfToken = await getCSRF()
       await fetch(process.env.API_URL + '/sessions/' + id + '/', {
@@ -428,7 +438,6 @@ export default {
         this.removeSession([session, 'upcoming'])
       }
     },
-  },
 }
 </script>
 <style scoped>
