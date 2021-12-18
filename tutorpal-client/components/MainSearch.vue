@@ -67,21 +67,21 @@
                   <div class="text-block-21">
                     <strong class="bold-text-3"
                       >{{
-                        tutor.user !== undefined ? tutor.user.first_name : ''
+                        tutor.user !== undefined ? restrictChar(30, tutor.user.first_name) : ''
                       }}
                       {{
-                        tutor.user !== undefined ? tutor.user.last_name : ''
+                        tutor.user !== undefined ? restrictChar(30, tutor.user.last_name) : ''
                       }}</strong
                     >
                   </div>
                   <div class="text-block-21-copy">
-                    Subject: {{ tutor.subjects }}
+                    Subject: {{ restrictChar(60, tutor.subjects) }}
                   </div>
                   <div class="text-block-21-copy-2">
                     Price: ${{ tutor.rates }} hourly
                   </div>
                   <div class="text-block-21-copy-2">
-                    Degree: {{ tutor.education }}
+                    Degree: {{ restrictChar(30, tutor.education) }}
                   </div>
                   <div class="text-block-21-copy-2">
                     Education: {{ tutor.school }}, GPA of
@@ -91,7 +91,7 @@
                     Reviews: {{ tutor.average_reviews }} Stars
                   </div>
                   <div class="text-block-21-copy-2">
-                    Occupation: {{ tutor.occupation }}
+                    Occupation: {{ restrictChar(30, tutor.occupation) }}
                   </div>
                 </div>
               </router-link>
@@ -146,7 +146,16 @@ export default {
   methods: {
     submitSearch() {
       this.$router.push("/search/"+this.q);
-    }
+    },
+    restrictChar(charNum, input){
+      if(parseInt(input.length) > parseInt(charNum)){
+        input = input.substr(0, charNum)
+        return input + "..."
+      }
+      else{
+        return input
+      }
+    },
   }
 }
 </script>
