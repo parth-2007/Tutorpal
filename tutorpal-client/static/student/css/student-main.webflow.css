@@ -8739,6 +8739,13 @@
     }
 }
 
+@media screen and (max-width: 1200px) and (min-width: 1000px) {
+    .div-block-54 {
+        min-width: 70vw;
+        max-width: 90vw;
+    }
+}
+
 @media screen and (max-width: 991px) {
     .name_profile_pic {
         margin-left: 0px;
@@ -8800,7 +8807,7 @@
         margin-left: 10px;
     }
     .text-block-21-copy-2 {
-        margin-left: 20px;
+        margin-left: 10px;
     }
     .tabs-menu-2 {
         width: 60%;

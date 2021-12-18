@@ -160,7 +160,7 @@
                 </p>
               </div>
               <div v-if="trending.unfetched === undefined" class="trending">
-                <div v-for="tutor of trending" :key="tutor.id" id="trending">
+                <div v-for="tutor of trending" :key="tutor.id" style="min-width: 50vw; max-width: 100vw" id="trending">
                   <router-link
                     :to="'/tutors/' + tutor.id"
                     class="link-block-2 w-inline-block"
