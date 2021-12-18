@@ -407,7 +407,6 @@ export default {
         this.success = ""
       }
       else if(counter===14){
-        this.success = "You have successfully created a student account!"
         this.errors.global = ''
       }
     },
@@ -460,6 +459,10 @@ export default {
           this.success = "You have successfully created a student account!"
           this.$router.push('/checkemail')
         }
+      }
+      else{
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+        this.success = ""
       }
     },
   },
