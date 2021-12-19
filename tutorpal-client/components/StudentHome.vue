@@ -201,7 +201,7 @@
                         Education: {{ restrictChar(20, `${tutor.school}, GPA of ${tutor.gpa}`) }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Reviews: <div v-html="(reviewHtml.filter(e => e.key === parseInt(tutor.id))).html"></div>
+                        Reviews: {{tutor.averageReviews}}
                       </div>
                       <div style="" class="text-block-21-copy-2">
                         Occupation: {{ restrictChar(15, tutor.occupation) }}

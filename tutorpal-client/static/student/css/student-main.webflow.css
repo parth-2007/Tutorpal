@@ -7463,8 +7463,7 @@
     display: -ms-flexbox;
     display: flex;
     min-height: 50px;
-    max-height: 180px;
-    min-width: 65vw;
+    max-height: 150px;
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
@@ -7521,7 +7520,7 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    margin-left: 20px;
+    margin-left: 40px;
     -webkit-box-align: center;
     -webkit-align-items: center;
     -ms-flex-align: center;
@@ -8695,7 +8694,7 @@
         font-size: 14px;
     }
     .text-block-21-copy-2 {
-        margin-left: 20px;
+        margin-left: 60px;
     }
     .tabs-content {
         width: 100%;
@@ -8741,13 +8740,14 @@
     }
 }
 
-@media screen and (max-width: 1300px) and (min-width: 1150px) {
+@media screen and (max-width: 1200px) and (min-width: 1000px) {
     .div-block-54 {
-        min-width: 100vw;
+        min-width: 70vw;
+        max-width: 100vw;
     }
 }
 
-@media screen and (max-width: 1150px) {
+@media screen and (max-width: 991px) {
     .name_profile_pic {
         margin-left: 0px;
     }
@@ -8798,8 +8798,7 @@
         padding-left: 20px;
     }
     .div-block-54 {
-        min-width: 100vw;
-        max-width: 120vw;
+        width: 600px;
     }
     .text-block-21-copy {
         display: -webkit-box;
@@ -8809,7 +8808,7 @@
         margin-left: 10px;
     }
     .text-block-21-copy-2 {
-        margin-left: 20px;
+        margin-left: 10px;
     }
     .tabs-menu-2 {
         width: 60%;
@@ -8974,7 +8973,7 @@
         padding-right: 10px;
     }
     .div-block-54 {
-        min-width: 130vw;
+        width: auto;
         margin-right: 0px;
     }
     .bold-text-3 {
@@ -9039,11 +9038,7 @@
         margin-left: 10%;
     }
 }
-@media screen and (max-width: 580px) and (min-width: 480px) {
-    .div-block-54 {
-        min-width: 200vw;
-    }
-}
+
 @media screen and (max-width: 479px) {
     .navbar-2 {
         margin-top: 10px;
@@ -9178,7 +9173,7 @@
         padding-left: 10px;
     }
     .div-block-54 {
-        min-width: 200vw;
+        width: 600px;
     }
     .text-block-21-copy-2 {
         margin-left: 20px;
