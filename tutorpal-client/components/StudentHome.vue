@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
       <body id="body" style="min-height: 100vh" class="body">
         <div class="div-block-55">
@@ -200,9 +201,9 @@
                         Education: {{ restrictChar(20, `${tutor.school}, GPA of ${tutor.gpa}`) }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Reviews: {{ tutor.averageReviews }} Stars
+                        Reviews: <div v-html="(reviewHtml.filter(e => e.key === parseInt(tutor.id))).html"></div>
                       </div>
-                      <div class="text-block-21-copy-2">
+                      <div style="" class="text-block-21-copy-2">
                         Occupation: {{ restrictChar(15, tutor.occupation) }}
                       </div>
                     </div>
@@ -332,12 +333,14 @@ export default {
   data() {
     return {
       clicked: false,
-      q: ''
+      reviewHtml: [],
+      q: '',
     }
   },
   async fetch() {
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
+    this.getStars()
   },
   head() {
     return {
@@ -357,6 +360,11 @@ export default {
           rel: 'stylesheet',
           type: 'text/css',
           href: '/student/css/student-main.webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
         },
       ],
     }
@@ -392,6 +400,31 @@ export default {
     },
     submitSearch() {
       this.$router.push("/search/"+this.q);
+    },
+    async getStars() {
+      const trending = this.trending;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const reviewData = []
+      trending.forEach(function(x){
+        const rating = x.averageReviews;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+        }
+        reviewData.push({'key': parseInt(x.id), 'html':output})
+      })
+      this.reviewHtml = reviewData;
+      console.log(this.reviewHtml.filter(e => e.key===1)[0].html)
+
     },
     restrictChar(charNum, input){
       if(parseInt(input.length) > parseInt(charNum)){
