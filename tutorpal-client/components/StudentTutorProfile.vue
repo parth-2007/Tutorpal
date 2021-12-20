@@ -624,6 +624,7 @@ export default {
       else{
         counter+=1
       }
+      if (counter === 5){
       let rhours = Math.floor(hours)
       const minutes = (hours - rhours) * 60
       let rminutes = Math.round(minutes)
@@ -662,37 +663,36 @@ export default {
         parent_emailed: false,
         accessable: false,
       }
-      if (counter === 5){
-        const csrfToken = await getCSRF()
-        this.addSession([sessionData, 'pendingOnTutor'])
-        await fetch(process.env.API_URL + '/sessions/', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sessionData),
-        }).then((res) => {
-          if (res.status === 400) {
-            this.errors.global =
-              'Oops! Something went wrong, please check your inputs again.'
-            this.success = ''
-          } else if (res.status === 500) {
-            this.errors.global = 'There seems to be an internal error, we are working on the issue.'
-            this.success=''
-          } else if (res.status === 201 || res.status === 200) {
-            this.success = 'Thank you for successfully creating a session. Good luck!'
-            this.errors.global = ''
-            this.subjects = ''
-            this.free = false
-            this.description = ''
-            this.duration = ''
-            this.date_startTime = ''
-            this.predictedprice=""
-          }
-        })
-      }
+      const csrfToken = await getCSRF()
+      this.addSession([sessionData, 'pendingOnTutor'])
+      await fetch(process.env.API_URL + '/sessions/', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'X-CSRFToken': csrfToken.success,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sessionData),
+      }).then((res) => {
+        if (res.status === 400) {
+          this.errors.global =
+            'Oops! Something went wrong, please check your inputs again.'
+          this.success = ''
+        } else if (res.status === 500) {
+          this.errors.global = 'There seems to be an internal error, we are working on the issue.'
+          this.success=''
+        } else if (res.status === 201 || res.status === 200) {
+          this.success = 'Thank you for successfully creating a session. Good luck!'
+          this.errors.global = ''
+          this.subjects = ''
+          this.free = false
+          this.description = ''
+          this.duration = ''
+          this.date_startTime = ''
+          this.predictedprice=""
+        }
+      })
+    }
     else{
       this.errors.global ='Oops! Something went wrong, please check your inputs again.'
       this.success =""
