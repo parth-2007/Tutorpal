@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
       <div style="margin-left: 40px; margin-right: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
@@ -88,7 +89,7 @@
                     {{ tutor.gpa }}
                   </div>
                   <div class="text-block-21-copy-2">
-                    Reviews: {{ tutor.average_reviews }} Stars
+                    Reviews: <div style="width: 90px; margin-top: 10%; margin-left: 10px;" :id="tutor.id"></div>
                   </div>
                   <div class="text-block-21-copy-2">
                     Occupation: {{ restrictChar(30, tutor.occupation) }}
@@ -146,6 +147,27 @@ export default {
   methods: {
     submitSearch() {
       this.$router.push("/search/"+this.q);
+    },
+    async getStars() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.tutordata.forEach((value,index ) => {
+        const rating = value.averageReviews;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        document.getElementById(value.id).innerHTML = output;
+      });
+
     },
     restrictChar(charNum, input){
       if(parseInt(input.length) > parseInt(charNum)){

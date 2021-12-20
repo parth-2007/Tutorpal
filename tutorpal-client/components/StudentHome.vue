@@ -404,7 +404,7 @@ export default {
       this.$router.push("/search/"+this.q);
     },
     async getStars() {
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       this.trending.forEach((value,index ) => {
         const rating = value.averageReviews;
         let output = '';
