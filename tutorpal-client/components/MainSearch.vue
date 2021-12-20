@@ -152,7 +152,7 @@ export default {
     async getStars() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       this.tutordata.results.forEach((value,index ) => {
-        const rating = value.averageReviews;
+        const rating = value.average_reviews;
         let output = '';
         let i = ""
         for (i = rating; i >= 1; i--){
