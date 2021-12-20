@@ -400,6 +400,15 @@ export default {
     logoutclick() {
       this.clicked = !this.clicked
     },
+    restrictChar(charNum, input){
+      if(parseInt(input.length) > parseInt(charNum)){
+        input = input.substr(0, charNum)
+        return input + "..."
+      }
+      else{
+        return input
+      }
+    },
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
@@ -423,17 +432,6 @@ export default {
         document.getElementById(value.id).innerHTML = output;
       });
 
-    },
-    restrictChar(charNum, input){
-      if(parseInt(input.length) > parseInt(charNum)){
-        input = input.substr(0, charNum)
-        return input + "..."
-      }
-      else{
-        return input
-      }
-        
-      }
     },
     async joinSession(id) {
       const csrfToken = await getCSRF()
@@ -469,6 +467,7 @@ export default {
         this.removeSession([session, 'upcoming'])
       }
     },
+  }
 }
 </script>
 <style scoped>
