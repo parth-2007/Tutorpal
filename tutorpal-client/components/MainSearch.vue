@@ -8,7 +8,7 @@
         <meta charset="utf-8" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
-      <div style="margin-left: 40px; margin-right: 40px; margin-top: 20px">
+      <div style="margin-left: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
           ><img
             src="../static/student/images/logo.jpg"
