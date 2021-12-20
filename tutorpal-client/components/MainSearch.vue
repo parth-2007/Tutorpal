@@ -142,8 +142,9 @@ export default {
     )
     .then((res) => res.json())
     .catch(() => ({ error: 'client error' }))
-      this.tutordata = tutorData
-    },
+    this.tutordata = tutorData
+    this.getStars()
+  },
   methods: {
     submitSearch() {
       this.$router.push("/search/"+this.q);
