@@ -201,9 +201,9 @@
                         Education: {{ restrictChar(20, `${tutor.school}, GPA of ${tutor.gpa}`) }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Reviews: <div style="width: 90px; margin-top: 10%; margin-left: 10px;" :id="tutor.id"></div>
+                        Reviews: <div style="width: 90px; margin-top: 10%;" :id="tutor.id"></div>
                       </div>
-                      <div style="" class="text-block-21-copy-2">
+                      <div style="margin-left: 15px;" class="text-block-21-copy-2">
                         Occupation: {{ restrictChar(15, tutor.occupation) }}
                       </div>
                     </div>

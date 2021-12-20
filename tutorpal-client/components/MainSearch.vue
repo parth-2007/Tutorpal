@@ -94,6 +94,13 @@
                   <div class="text-block-21-copy-2">
                     Occupation: {{ restrictChar(30, tutor.occupation) }}
                   </div>
+                  <img
+                    src="../static/student/images/verified.png"
+                    width="35"
+                    height="35"
+                    v-if="tutor.linkedIn!==''"
+                    style="margin-top: auto; margin-bottom: auto; margin-left: 5px;"
+                  />
                 </div>
               </router-link>
             </div>
