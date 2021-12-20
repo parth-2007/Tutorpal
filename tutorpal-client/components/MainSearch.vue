@@ -7,7 +7,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <div style="margin-left: 40px; margin-top: 20px">
+      <div style="margin-left: 40px; margin-right: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
           ><img
             src="../static/student/images/logo.jpg"
@@ -53,7 +53,6 @@
               <router-link
                 :to="'/tutors/' + tutor.id"
                 class="link-block-2 w-inline-block"
-                style="margin-right: 40px;"
               >
                 <div style="line-height: 14px" class="div-block-54">
                   <img
