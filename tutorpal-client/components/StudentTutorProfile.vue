@@ -12,6 +12,7 @@
           media="print"
           onload="this.media='all'"
         />
+       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
       <body>
         <div id="main">
@@ -292,7 +293,9 @@
                 >Teaching Experience: </strong
               >{{ data.teach_exp }} years<br />
               <strong>Average Review:</strong>
-              {{ data.average_reviews }} Stars, {{reviewNum}} Review(s)<br /><strong>Occupation: </strong
+              <strong v-html="html"></strong>
+              <strong style="font-size: 11px; margin: 0px; padding: 0px; font-weight: normal;">(Based on {{reviewNum}} Review(s))</strong>
+              <br /><strong>Occupation: </strong
               >{{ data.occupation }}<br /><strong>Gender: </strong
               >{{ data.gender }}<br />
               <strong>Price: </strong>${{ data.rates }} hourly <br /><strong
@@ -377,8 +380,8 @@
                       {{ review.student.user.first_name }}
                       {{ review.student.user.last_name }}
                     </div>
-                    <div class="text-block-34">
-                      Review: <strong>{{ review.stars }} Stars</strong>
+                    <div  class="text-block-34">
+                      Review: <strong :id="review.id"></strong>
                     </div>
                   </div>
                   <p class="paragraph-9">{{ review.description }}</p>
@@ -416,6 +419,7 @@ export default {
       reviewError:"",
       reviewSuccess:"",
       reviewNum:"",
+      html: '',
       errors: {
         global: '',
         description: '',
@@ -425,7 +429,7 @@ export default {
       }
     }
   },
-  async fetch() {
+  async mounted(){
     this.data = await fetch(
       process.env.API_URL + '/tutors/' + this.$route.params.id + '/',
       {
@@ -433,6 +437,21 @@ export default {
       }
     ).then((res) => res.json())
     await this.fetchUser()
+    const rating = this.data.average_reviews;
+    let output = '';
+    let i = ""
+    for (i = rating; i >= 1; i--){
+      output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    }
+    /* eslint-disable */
+    if (i == 0.5){
+      output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    } 
+    /* eslint-enable */
+    for (i = (5 - rating); i >= 1; i--){
+      output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    }
+    this.html = output;
   },
   head() {
     return {
@@ -477,6 +496,7 @@ export default {
     }).then((res) => res.json())
     await this.fetchSessions('pendingOnTutor')
     this.reviewNum=this.reviews.results.length;
+    this.getStars()
   },
   methods: {
     ...mapGetters(['getUser', 'getPendingOnTutor']),
@@ -498,6 +518,27 @@ export default {
       this.predictedprice =
         'Predicted Class Amount: $' +
         Math.floor((this.data.rates / 60) * parseInt(this.duration) * 100) / 100
+    },
+    async getStars() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.reviews.results.forEach((value,index ) => {
+        const rating = value.stars;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        document.getElementById(value.id).innerHTML = output;
+      });
+
     },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()

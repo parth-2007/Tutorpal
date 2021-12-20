@@ -7475,6 +7475,26 @@
     text-decoration: none;
 }
 
+.div-block-54-copy {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    min-height: 50px;
+    max-height: 150px;
+    min-width: 880px;
+    max-width: 1200px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding: 0px 10px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-decoration: none;
+}
+
 .image-5 {
     margin-top: 3px;
     margin-left: 0px;

@@ -53,6 +53,7 @@
               <router-link
                 :to="'/tutors/' + tutor.id"
                 class="link-block-2 w-inline-block"
+                style="margin-right: 40px;"
               >
                 <div style="line-height: 14px" class="div-block-54">
                   <img

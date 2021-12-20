@@ -166,7 +166,7 @@
                     :to="'/tutors/' + tutor.id"
                     class="link-block-2 w-inline-block"
                   >
-                    <div style="line-height: 14px" class="div-block-54">
+                    <div style="line-height: 14px" class="div-block-54-copy">
                       <img
                         :src="
                           tutor.user !== undefined ? tutor.user.profilePic : ''
@@ -201,7 +201,7 @@
                         Education: {{ restrictChar(20, `${tutor.school}, GPA of ${tutor.gpa}`) }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Reviews: {{tutor.averageReviews}}
+                        Reviews: <div style="width: 90px; margin-top: 10%;" :id="tutor.id"></div>
                       </div>
                       <div style="" class="text-block-21-copy-2">
                         Occupation: {{ restrictChar(15, tutor.occupation) }}
@@ -340,6 +340,8 @@ export default {
   async fetch() {
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
+  },
+  mounted(){
     this.getStars()
   },
   head() {
@@ -402,28 +404,24 @@ export default {
       this.$router.push("/search/"+this.q);
     },
     async getStars() {
-      const trending = this.trending;
       await new Promise(resolve => setTimeout(resolve, 1000));
-      const reviewData = []
-      trending.forEach(function(x){
-        const rating = x.averageReviews;
+      this.trending.forEach((value,index ) => {
+        const rating = value.averageReviews;
         let output = '';
         let i = ""
         for (i = rating; i >= 1; i--){
-          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
         }
         /* eslint-disable */
         if (i == 0.5){
-          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
         } 
         /* eslint-enable */
         for (i = (5 - rating); i >= 1; i--){
-          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
         }
-        reviewData.push({'key': parseInt(x.id), 'html':output})
-      })
-      this.reviewHtml = reviewData;
-      console.log(this.reviewHtml.filter(e => e.key===1)[0].html)
+        document.getElementById(value.id).innerHTML = output;
+      });
 
     },
     restrictChar(charNum, input){
