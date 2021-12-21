@@ -105,6 +105,7 @@
             margin-top: 20px;
           "
           class="form-control"
+          maxlength="1023"
           placeholder="Send a message"
           @keyup.enter="handleFormSubmit()"
         />
