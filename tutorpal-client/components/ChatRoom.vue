@@ -62,7 +62,7 @@
                 {{ otherUser ? otherUser.firstName : '' }}
               </p>
               <!-- eslint-disable-next-line -->
-              <div v-for="chatMsg in chatMsgs">
+              <div ref="chatcont" v-for="chatMsg in chatMsgs">
                 <div :key="chatMsg ? chatMsg.id : null">
                   <div
                     :class="
@@ -247,7 +247,8 @@ export default {
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'end' })
       }
-      el.scrollTop = el.scrollHeight;
+      const chatcont = this.$refs.chatcont
+      chatcont.scrollTop = chatcont.scrollHeight;
     },
     addChatMsg(msg) {
       this.chatMsgs.push(msg)
