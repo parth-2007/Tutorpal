@@ -247,6 +247,7 @@ export default {
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'end' })
       }
+      el.scrollTop = el.scrollHeight;
     },
     addChatMsg(msg) {
       this.chatMsgs.push(msg)
