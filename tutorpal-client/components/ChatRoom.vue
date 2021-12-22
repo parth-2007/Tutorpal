@@ -62,8 +62,8 @@
                 {{ otherUser ? otherUser.firstName : '' }}
               </p>
               <!-- eslint-disable-next-line -->
-              <div ref="chatcont" v-for="chatMsg in chatMsgs">
-                <div :key="chatMsg ? chatMsg.id : null">
+              <div v-for="chatMsg in chatMsgs">
+                <div ref="chatcont" :key="chatMsg ? chatMsg.id : null">
                   <div
                     :class="
                       (chatMsg ? chatMsg.author : null) == user.id
