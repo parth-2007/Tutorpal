@@ -57,7 +57,7 @@ def register_student(request):
         user = User(**user_data)
         user.set_password(password)
         if pfp is not None:
-            if pfp.size > 100000: # 100kb
+            if pfp.size > 1000 * 1000 * 5: # 5mb
                 return Response(data={'error': 'image size too big'}, status=status.HTTP_400_BAD_REQUEST)
             user.profile_pic = pfp
         student = Student(**student_data)
