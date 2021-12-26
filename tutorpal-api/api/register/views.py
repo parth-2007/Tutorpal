@@ -209,7 +209,10 @@ def update_tutor(request):
     user_data = json.loads(user_data)
     profile_pic = request.FILES.get('profile_pic', None)
     if profile_pic is not None:
-        user_data['profile_pic'] = profile_pic
+        if profile_pic.size > 1000 * 1000 * 5: # 5mb
+                return Response(data={'error': 'image size too big'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user_data['profile_pic'] = profile_pic
 
     tutor_obj = request.user.tutor
     user_obj = request.user
@@ -237,7 +240,10 @@ def update_student(request):
     user_data = json.loads(user_data)
     profile_pic = request.FILES.get('profile_pic', None)
     if profile_pic is not None:
-        user_data['profile_pic'] = profile_pic
+        if profile_pic.size > 1000 * 1000 * 5: # 5mb
+                return Response(data={'error': 'image size too big'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user_data['profile_pic'] = profile_pic
 
     student_obj = request.user.student
     user_obj = request.user
