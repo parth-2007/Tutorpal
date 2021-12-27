@@ -51,7 +51,7 @@ class ChatConsumer(AsyncConsumer):
         # front_dict = json.loads(front_text)
         # message = front_dict.get("message")
         tzname = self.scope['cookies'].get("tz_name")
-        if message is not None and len(message.replace(" ", "")) > 0:
+        if message is not None and len(message.replace(" ", "")) > 0 and len(message) <= 1024:
             # loaded_dict_data = json.loads(front_text)
             # msg = loaded_dict_data.get('message')
             me_user_obj = self.me_user_obj
@@ -88,6 +88,17 @@ class ChatConsumer(AsyncConsumer):
                         "text": json.dumps(myResponse)
                     }
                 )
+        elif len(message) > 1024:
+            myResponse = {
+                'error': 'message greater than 1024 chars'
+            }
+            await self.channel_layer.group_send(
+                self.chat_room,
+                {
+                    "type": "chat_message",
+                    "text": json.dumps(myResponse)
+                }
+            )
 
     async def chat_message(self, event):
         await self.send({

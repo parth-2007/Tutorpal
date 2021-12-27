@@ -39,7 +39,7 @@ class Message(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(
         Room, related_name="messages", on_delete=models.CASCADE)
-    message = models.CharField(max_length=128)
+    message = models.CharField(max_length=1024)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
     tutor_read = models.BooleanField(default=False)
     student_read = models.BooleanField(default=False)

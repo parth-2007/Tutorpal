@@ -229,14 +229,29 @@ class SessionViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         if self.request.data.get('accepted', False):
-            tutor = self.request.user.tutor
-            tutor_pk = self.request.user.tutor_pk
-            student = self.session.student
-            student_pk = self.session.student_pk
-            Room.objects.get_or_create(
-                tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
-            if self.session.free:
-                return serializer.save(student_paid=True, tutor_paid=True, accepted=True)
+            if self.request.user.has_tutor:
+                tutor = self.request.user.tutor
+                tutor_pk = self.request.user.tutor_pk
+                student = self.session.student
+                student_pk = self.session.student_pk
+                Room.objects.get_or_create(
+                    tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
+                email = student.user.email
+                if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+                    domain = 'https://www.tutorpal.org/'
+                elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+                    domain = 'https://beta.tutorpal.org/'
+                else:
+                    domain = get_current_site(self.request).domain
+                subject = 'Your class request has been accepted'
+                message = render_to_string('session/emails/accepted.html', {
+                    'tutor_user': tutor.user,
+                    'domain': domain,
+                    'student_user': student.user
+                })
+                send_mail(subject, message, settings.EMAIL_FROM, [email])
+                if self.session.free:
+                    return serializer.save(student_paid=True, tutor_paid=True, accepted=True)
         if self.request.data.get('canceled', False):
             # current_site = get_current_site(self.request)
             subject = 'Your tutoring session has been canceled'
