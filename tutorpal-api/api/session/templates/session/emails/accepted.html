@@ -1,0 +1,8 @@
+{% autoescape off %}
+Hi {{ student_user.first_name }} {{ student_user.last_name }},
+{{ tutor_user.first_name }} {{ tutor_user.last_name }} accepted your request.
+Go to https://{{ domain }}/payments to see the class.
+
+Thank you,
+The TutorPal Team
+{% endautoescape %}
