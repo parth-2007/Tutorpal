@@ -721,6 +721,7 @@ export default {
         else if(counter===19){
           this.errors.global = ''
         }
+        console.log(this.gpa, this.teachExp, this.profExp)
     },
     async handleSubmit() {
       this.validateData()
