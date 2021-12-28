@@ -381,7 +381,6 @@ export default {
         'tutor.gender',
         'tutor.subjects',
         'tutor.rates',
-        'tutor.gpa',
         'tutor.school',
         'tutor.education'
       ]
@@ -468,11 +467,11 @@ export default {
         counter+=1
       }
 
-      if (counter!==16){
+      if (counter!==15){
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
         this.success = ""
       }
-      else if(counter===16){
+      else if(counter===15){
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }
