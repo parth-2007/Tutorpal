@@ -714,11 +714,11 @@ export default {
           counter+=1
         }
       
-        if (counter!==19){
+        if (counter!==18){
           this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
           this.success = ""
         }
-        else if(counter===19){
+        else if(counter===18){
           this.errors.global = ''
         }
         console.log(this.gpa, this.teachExp, this.profExp)
