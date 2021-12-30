@@ -12,8 +12,9 @@
           media="print"
           onload="this.media='all'"
         />
+       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
-      <body>
+      <body v-if="response === 200">
         <div id="main">
           <div
             style="z-index: 25"
@@ -292,7 +293,9 @@
                 >Teaching Experience: </strong
               >{{ data.teach_exp }} years<br />
               <strong>Average Review:</strong>
-              {{ data.average_reviews }} Stars<br /><strong>Occupation: </strong
+              <strong v-html="html"></strong>
+              <strong style="font-size: 11px; margin: 0px; padding: 0px; font-weight: normal;">(Based on {{reviewNum}} Review(s))</strong>
+              <br /><strong>Occupation: </strong
               >{{ data.occupation }}<br /><strong>Gender: </strong
               >{{ data.gender }}<br />
               <strong>Price: </strong>${{ data.rates }} hourly <br /><strong
@@ -319,7 +322,7 @@
             >
           </div>
           <div class="div-block-56">
-            <h1 class="heading-11">Reviews</h1>
+            <h1 class="heading-11">Reviews ({{this.reviewNum}})</h1>
             <div style="margin-bottom: 20px; font-family: Poppins;">
                   <select
                     ref="select"
@@ -344,7 +347,7 @@
                     id="description"
                     placeholder="Enter Description"
                     rows="3"
-                    maxlength="1000"
+                    maxlength="1500"
                   ></textarea>
                   <button
                     @click="createReview(data.id)"
@@ -353,6 +356,9 @@
                   >
                     Post Review
                   </button>
+                  <p style="color: #008000; font-size: 16px; margin-top: 5px; margin-bottom: 5px;">{{ reviewSuccess }}</p>
+                  <p style="color: hsla(0, 100%, 64%, 1)">{{reviewError}}</p>
+
             </div>
             <div v-if="reviews !== []">
               <div
@@ -374,8 +380,8 @@
                       {{ review.student.user.first_name }}
                       {{ review.student.user.last_name }}
                     </div>
-                    <div class="text-block-34">
-                      Review: <strong>{{ review.stars }} Stars</strong>
+                    <div  class="text-block-34">
+                      Review: <strong :id="review.id"></strong>
                     </div>
                   </div>
                   <p class="paragraph-9">{{ review.description }}</p>
@@ -385,6 +391,7 @@
           </div>
         </div>
       </body>
+      <div v-else-if="response === 404"><NotFound/></div>
     </html>
   </client-only>
 </template>
@@ -410,6 +417,11 @@ export default {
       success: "",
       reviewDescription: '',
       q: '',
+      reviewError:"",
+      reviewSuccess:"",
+      reviewNum:"",
+      html: '',
+      response: '',
       errors: {
         global: '',
         description: '',
@@ -419,14 +431,29 @@ export default {
       }
     }
   },
-  async fetch() {
+  async mounted(){
     this.data = await fetch(
       process.env.API_URL + '/tutors/' + this.$route.params.id + '/',
       {
         credentials: 'include',
       }
-    ).then((res) => res.json())
+    ).then((res) => res.json(this.response = res.status))
     await this.fetchUser()
+    const rating = this.data.average_reviews;
+    let output = '';
+    let i = ""
+    for (i = rating; i >= 1; i--){
+      output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    }
+    /* eslint-disable */
+    if (i == 0.5){
+      output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    } 
+    /* eslint-enable */
+    for (i = (5 - rating); i >= 1; i--){
+      output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    }
+    this.html = output;
   },
   head() {
     return {
@@ -470,6 +497,8 @@ export default {
       credentials: 'include',
     }).then((res) => res.json())
     await this.fetchSessions('pendingOnTutor')
+    this.reviewNum=this.reviews.results.length;
+    this.getStars()
   },
   methods: {
     ...mapGetters(['getUser', 'getPendingOnTutor']),
@@ -492,9 +521,31 @@ export default {
         'Predicted Class Amount: $' +
         Math.floor((this.data.rates / 60) * parseInt(this.duration) * 100) / 100
     },
+    async getStars() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.reviews.results.forEach((value,index ) => {
+        const rating = value.stars;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        document.getElementById(value.id).innerHTML = output;
+      });
+
+    },
     async createReview(tutorId) {
       const csrfToken = await getCSRF()
-      await fetch(process.env.API_URL + '/reviews/', {
+      if(this.reviewDescription!==""){
+        await fetch(process.env.API_URL + '/reviews/', {
         credentials: 'include',
         method: 'POST',
         headers: {
@@ -508,21 +559,27 @@ export default {
           tutor: tutorId,
         }),
       }).then((res) => {
-        let error = null
-        if (res.status === 403) {
-          error = 'You have already posted a review for this tutor.'
-        } else if (res.status === 500) {
-          error = 'Please check your inputs and make sure they are not empty.'
-        } else if (res.status === 404) {
-          error =
-            'We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
+        if (res.status === 200 || res.status === 201){
+          this.reviewSuccess="Your review was posted successfully!"
+          this.reviewError=""
         }
-        if (error) {
-          alert(error)
+        else if (res.status === 403) {
+          this.reviewError = 'You have already posted a review for this tutor.'
+          this.reviewSuccess=""
+        } else if (res.status === 500) {
+          this.reviewError = 'Please check your inputs and make sure they are not empty.'
+        } else if (res.status === 404) {
+          this.reviewError ='We are dealing with some issues, please try again at a later time. Sorry for the inconvenience.'
+          this.reviewSuccess=""
         }
         this.reviewDescription = ''
-        this.stars = undefined
+        this.stars = 5
       })
+      }
+      else{
+        this.reviewError="Please write a description and provide insight on this tutor for other students on this platform."
+        this.success=""
+      }
     },
     async createroom() {
       const room = {
@@ -542,7 +599,7 @@ export default {
         body: JSON.stringify(room),
       })
     },
-    async addSessionHandler() {
+       async addSessionHandler() {
       const requiredFields = [
         'description',
         'subjects',
@@ -569,6 +626,29 @@ export default {
       else{
         counter+=1
       }
+      let yourDate = new Date()
+      yourDate.setDate(yourDate.getDate() - 1)
+      const offset = yourDate.getTimezoneOffset()
+      yourDate = new Date(yourDate.getTime() - (offset*60*1000))
+      yourDate = yourDate.toISOString().split('T')[0].slice(0, 10)
+      let dateFrom = yourDate;
+      const dateTo = "2023/12/31"
+      let dateCheck = sessionDate
+      dateCheck = [dateCheck.slice(0, 4), "/", dateCheck.slice(5, 7), "/", dateCheck.slice(8, 10)].join('');
+      dateFrom = [dateFrom.slice(0, 4), "/", dateFrom.slice(5, 7), "/", dateFrom.slice(8, 10)].join('');
+      const from = Date.parse(dateFrom);
+      const to   = Date.parse(dateTo);
+      const check = Date.parse(dateCheck );
+      if(dateCheck!=="//"){
+        if((check > from && check < to)){     
+          counter+=1
+          this.errors.date_startTime=""
+          console.log("Works!")
+        }
+        else{
+          this.errors.date_startTime="The date you are selecting has either already passed or is occurring after a few years."
+        }
+      }
       let rhours = Math.floor(hours)
       const minutes = (hours - rhours) * 60
       let rminutes = Math.round(minutes)
@@ -583,7 +663,6 @@ export default {
       let endTime = add([startTime, sessionDuration])
       endTime = str(endTime)
       endTime = endTime.substring(0, 5)
-      console.log(sessionDate)
       const sessionData = {
         student_pk: this.user.studentPk,
         tutor: parseInt(this.$route.params.id),
@@ -608,7 +687,7 @@ export default {
         parent_emailed: false,
         accessable: false,
       }
-      if (counter === 5){
+      if (counter === 6){
         const csrfToken = await getCSRF()
         this.addSession([sessionData, 'pendingOnTutor'])
         await fetch(process.env.API_URL + '/sessions/', {
@@ -639,11 +718,7 @@ export default {
           }
         })
       }
-    else{
-      this.errors.global ='Oops! Something went wrong, please check your inputs again.'
-      this.success =""
     }
-  },
 },
 }
 </script>
@@ -669,4 +744,5 @@ export default {
   font-family: Poppins;
   font-size: 12px;
 }
+
 </style>

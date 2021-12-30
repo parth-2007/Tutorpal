@@ -294,17 +294,16 @@ export default {
     ...mapGetters(['getUser']),
     ...mapActions(['fetchUser']),
     handleFile(e) {
-      // decrease file size before processing
       const image = e.target.files || e.dataTransfer.files
       this.src = URL.createObjectURL(e.target.files[0])
       this.profilePic = image.length > 0 ? image : null
-      if (e.target.files[0].size > 100000) {
+      if (e.target.files[0].size > 5000000) {
         this.errors.profilePic =
-          'File size is too high! Please upload a file less than 100 Kilobytes'
+          'File size is too high! Please upload a file less than 5 Megabytes'
         this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
       } else {
         this.errors.profilePic = ''
-        this.errors.global=''
+        this.errors.global='';
       }
     },
     checkErrors() {
@@ -338,6 +337,7 @@ export default {
         this.errors.toc = 'Please read and agree to the Terms of Condition'
       } else {
         this.errors.global = ''
+        this.errors.toc=""
         counter+=1
       }
       const birthday = new Date(this.birthDate)
@@ -348,8 +348,8 @@ export default {
       else if(age>70){
         this.errors.birthDate = "Sorry but our platform doesn't accept students above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
       }
-      else if(age<15){
-        this.errors.birthDate = "You must be at least 15 years old to register as a tutor."
+      else if(age<6){
+        this.errors.birthDate = "You must be at least 6 years old to register as a tutor."
       }
       else if(isNaN(age)){
         this.errors.birthDate = "We're not detecting a birthdate here..."
@@ -406,7 +406,6 @@ export default {
         this.success = ""
       }
       else if(counter===14){
-        this.success = "You have successfully created a student account!"
         this.errors.global = ''
       }
     },
@@ -459,6 +458,10 @@ export default {
           this.success = "You have successfully created a student account!"
           this.$router.push('/checkemail')
         }
+      }
+      else{
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+        this.success = ""
       }
     },
   },

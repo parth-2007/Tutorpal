@@ -239,7 +239,7 @@
             such Content (including in digital form). You represent and warrant
             that you have proper authorization for the worldwide transfer and
             processing among TutorPal, its affiliates, and third-party providers
-            of any content that you may provide on the Site.<br /><br />10.
+            of any content that you may provide on the Site. TutorPal will not be held responsible if any tutor or student shares Copyrighted or inappropriate material on the platform, as we cannot control everything that occurs on our platform.<br /><br />10.
             Terms of transacting business<br />
             Users must pay all costs associated with the services through
             TutorPal. These costs include but are not limited to: (a) a tutor’s

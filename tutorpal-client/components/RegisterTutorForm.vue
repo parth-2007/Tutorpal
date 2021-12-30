@@ -99,7 +99,7 @@
             <div class="text-block-5">
               PayPal Email Address (Put the email address you would like to
               accept payments from. This is a crucial part of being a tutor on our platform unless you are a volunteer tutor. If left blank, this will be set to your
-              default email address.)
+              default email address. If you are underage, you can use your parent's paypal email instead. )
             </div>
           </div>
           <div class="w-col w-col-6">
@@ -634,7 +634,6 @@ export default {
           'lastName',
           'gender',
           'subjects',
-          'gpa',
           'education',
           'school',
           'rates',
@@ -698,15 +697,31 @@ export default {
           this.errors.confirmPassword = ''
           counter+=1
         }
+        
+        if(parseInt(this.profExp) < 0 || parseInt(this.profExp) > 50){
+          this.errors.profExp="Sorry but we aren't allowing for more than 50 or negative years in professional experience"
+        }
+        else{
+          this.errors.profExp=""
+          counter+=1
+        }
 
+        if(parseInt(this.teachExp) < 0 || parseInt(this.teachExp) > 50){
+          this.errors.teachExp="Sorry but we aren't allowing for more than 50 or negative years in teaching experience"
+        }
+        else{
+          this.errors.teachExp=""
+          counter+=1
+        }
+      
         if (counter!==18){
           this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
           this.success = ""
         }
         else if(counter===18){
-          this.success = "You have successfully created a tutor account!"
           this.errors.global = ''
         }
+        console.log(this.gpa, this.teachExp, this.profExp)
     },
     async handleSubmit() {
       this.validateData()
@@ -775,6 +790,10 @@ export default {
           this.success = "You have successfully created a tutor account!"
           this.$router.push('/checkemail')
         }
+      }
+      else{
+        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+        this.success = ""
       }
     },
   },

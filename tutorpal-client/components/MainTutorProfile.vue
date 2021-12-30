@@ -7,6 +7,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
       <body>
         <div id="main">
@@ -89,7 +90,9 @@
                 >Teaching Experience: </strong
               >{{ data.teach_exp }} years<br />
               <strong>Average Review:</strong>
-              {{ data.average_reviews }} Stars<br /><strong>Occupation: </strong
+              <strong v-html="html"></strong>
+              <strong style="font-size: 11px; margin: 0px; padding: 0px; font-weight: normal;">(Based on {{reviewNum}} Review(s))</strong>
+              <br /><strong>Occupation: </strong
               >{{ data.occupation }}<br /><strong>Gender: </strong
               >{{ data.gender }}<br />
               <strong>Price: </strong>${{ data.rates }} hourly <br /><strong
@@ -106,7 +109,7 @@
             </p>
           </div>
           <div class="div-block-56">
-            <h1 class="heading-11">Reviews</h1>
+            <h1 class="heading-11">Reviews ({{this.reviewNum}})</h1>
             <div v-if="reviews !== []">
               <div
                 v-for="review in reviews.results"
@@ -127,8 +130,8 @@
                       {{ review.student.user.first_name }}
                       {{ review.student.user.last_name }}
                     </div>
-                    <div class="text-block-34">
-                      Review: <strong>{{ review.stars }} Stars</strong>
+                    <div  class="text-block-34">
+                      Review: <strong :id="review.id"></strong>
                     </div>
                   </div>
                   <p class="paragraph-9">{{ review.description }}</p>
@@ -148,6 +151,8 @@ export default {
       data: [],
       reviews: [],
       q: '',
+      reviewNum: "",
+      html: '',
     }
   },
   async fetch() {
@@ -163,6 +168,23 @@ export default {
         credentials: 'include',
       }
     ).then((res) => res.json())
+    this.reviewNum=this.reviews.results.length;
+    const rating = this.data.average_reviews;
+    let output = '';
+    let i = ""
+    for (i = rating; i >= 1; i--){
+      output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    }
+    /* eslint-disable */
+    if (i == 0.5){
+      output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    } 
+    /* eslint-enable */
+    for (i = (5 - rating); i >= 1; i--){
+      output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+    }
+    this.html = output;
+    this.getStars()
   },
   head() {
     return {
@@ -189,6 +211,26 @@ export default {
   methods: {
     submitSearch() {
       this.$router.push('/search/' + this.q)
+    },
+    async getStars() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.reviews.results.forEach((value,index ) => {
+        const rating = value.stars;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        document.getElementById(value.id).innerHTML = output;
+      });
     },
   },
 }

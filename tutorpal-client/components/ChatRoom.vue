@@ -63,7 +63,7 @@
               </p>
               <!-- eslint-disable-next-line -->
               <div v-for="chatMsg in chatMsgs">
-                <div :key="chatMsg ? chatMsg.id : null">
+                <div ref="chatcont" :key="chatMsg ? chatMsg.id : null">
                   <div
                     :class="
                       (chatMsg ? chatMsg.author : null) == user.id
@@ -105,6 +105,7 @@
             margin-top: 20px;
           "
           class="form-control"
+          maxlength="1023"
           placeholder="Send a message"
           @keyup.enter="handleFormSubmit()"
         />
@@ -246,6 +247,8 @@ export default {
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'end' })
       }
+      const chatcont = this.$refs.chatcont
+      chatcont.scrollTop = chatcont.scrollHeight;
     },
     addChatMsg(msg) {
       this.chatMsgs.push(msg)

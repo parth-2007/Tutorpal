@@ -227,7 +227,7 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',

@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
       <body id="body" style="min-height: 100vh" class="body">
         <div class="div-block-55">
@@ -160,12 +161,12 @@
                 </p>
               </div>
               <div v-if="trending.unfetched === undefined" class="trending">
-                <div v-for="tutor of trending" :key="tutor.id" id="trending">
+                <div v-for="tutor of trending" :key="tutor.id" style="min-width: 50vw; max-width: 100vw" id="trending">
                   <router-link
                     :to="'/tutors/' + tutor.id"
                     class="link-block-2 w-inline-block"
                   >
-                    <div style="line-height: 14px" class="div-block-54">
+                    <div style="line-height: 14px" class="div-block-54-copy">
                       <img
                         :src="
                           tutor.user !== undefined ? tutor.user.profilePic : ''
@@ -180,15 +181,15 @@
                       <div class="text-block-21">
                         <strong class="bold-text-3"
                           >{{
-                            tutor.user !== undefined ? tutor.user.firstName : ''
+                            tutor.user !== undefined ? restrictChar(17, tutor.user.firstName) : ''
                           }}
                           {{
-                            tutor.user !== undefined ? tutor.user.lastName : ''
+                            tutor.user !== undefined ? restrictChar(17, tutor.user.lastName) : ''
                           }}</strong
                         >
                       </div>
                       <div class="text-block-21-copy">
-                        Subject: {{ tutor.subjects }}
+                        Subject: {{ restrictChar(20, tutor.subjects) }}
                       </div>
                       <div class="text-block-21-copy-2">
                         Price: ${{ tutor.rates }} hourly
@@ -197,14 +198,13 @@
                         Degree: {{ tutor.education }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Education: <text v-if="tutor.education !== 'High School' || tutor.major !== '' ">{{ tutor.major }} at</text> {{ tutor.school }}, GPA
-                        of {{ tutor.gpa }}
+                        Education: {{ restrictChar(20, `${tutor.school}, GPA of ${tutor.gpa}`) }}
                       </div>
                       <div class="text-block-21-copy-2">
-                        Reviews: {{ tutor.averageReviews }} Stars
+                        Reviews: <div style="width: 90px; margin-top: 10%;" :id="tutor.id"></div>
                       </div>
-                      <div class="text-block-21-copy-2">
-                        Occupation: {{ tutor.occupation }}
+                      <div style="margin-left: 15px;" class="text-block-21-copy-2">
+                        Occupation: {{ restrictChar(15, tutor.occupation) }}
                       </div>
                     </div>
                   </router-link>
@@ -333,12 +333,16 @@ export default {
   data() {
     return {
       clicked: false,
-      q: ''
+      reviewHtml: [],
+      q: '',
     }
   },
   async fetch() {
     await this.fetchTrending()
     await this.fetchSessions('startedSessions')
+  },
+  mounted(){
+    this.getStars()
   },
   head() {
     return {
@@ -358,6 +362,11 @@ export default {
           rel: 'stylesheet',
           type: 'text/css',
           href: '/student/css/student-main.webflow.css',
+        },
+        {
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
         },
       ],
     }
@@ -391,8 +400,38 @@ export default {
     logoutclick() {
       this.clicked = !this.clicked
     },
+    restrictChar(charNum, input){
+      if(parseInt(input.length) > parseInt(charNum)){
+        input = input.substr(0, charNum)
+        return input + "..."
+      }
+      else{
+        return input
+      }
+    },
     submitSearch() {
       this.$router.push("/search/"+this.q);
+    },
+    async getStars() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.trending.forEach((value,index ) => {
+        const rating = value.averageReviews;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        document.getElementById(value.id).innerHTML = output;
+      });
+
     },
     async joinSession(id) {
       const csrfToken = await getCSRF()
@@ -428,7 +467,7 @@ export default {
         this.removeSession([session, 'upcoming'])
       }
     },
-  },
+  }
 }
 </script>
 <style scoped>

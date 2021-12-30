@@ -6,6 +6,7 @@
     >
       <head>
         <meta charset="utf-8" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
       <div style="margin-left: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
@@ -67,32 +68,39 @@
                   <div class="text-block-21">
                     <strong class="bold-text-3"
                       >{{
-                        tutor.user !== undefined ? tutor.user.first_name : ''
+                        tutor.user !== undefined ? restrictChar(30, tutor.user.first_name) : ''
                       }}
                       {{
-                        tutor.user !== undefined ? tutor.user.last_name : ''
+                        tutor.user !== undefined ? restrictChar(30, tutor.user.last_name) : ''
                       }}</strong
                     >
                   </div>
                   <div class="text-block-21-copy">
-                    Subject: {{ tutor.subjects }}
+                    Subject: {{ restrictChar(60, tutor.subjects) }}
                   </div>
                   <div class="text-block-21-copy-2">
                     Price: ${{ tutor.rates }} hourly
                   </div>
                   <div class="text-block-21-copy-2">
-                    Degree: {{ tutor.education }}
+                    Degree: {{ restrictChar(30, tutor.education) }}
                   </div>
                   <div class="text-block-21-copy-2">
-                    Education: {{ tutor.major }} at {{ tutor.school }}, GPA of
+                    Education: {{ tutor.school }}, GPA of
                     {{ tutor.gpa }}
                   </div>
                   <div class="text-block-21-copy-2">
-                    Reviews: {{ tutor.average_reviews }} Stars
+                    Reviews: <div style="width: 90px; margin-top: 10%; margin-left: 10px;" :id="tutor.id"></div>
                   </div>
                   <div class="text-block-21-copy-2">
-                    Occupation: {{ tutor.occupation }}
+                    Occupation: {{ restrictChar(30, tutor.occupation) }}
                   </div>
+                  <img
+                    src="../static/student/images/verified.png"
+                    width="35"
+                    height="35"
+                    v-if="tutor.linkedIn!==''"
+                    style="margin-top: auto; margin-bottom: auto; margin-left: 5px;"
+                  />
                 </div>
               </router-link>
             </div>
@@ -141,12 +149,43 @@ export default {
     )
     .then((res) => res.json())
     .catch(() => ({ error: 'client error' }))
-      this.tutordata = tutorData
-    },
+    this.tutordata = tutorData
+    this.getStars()
+  },
   methods: {
     submitSearch() {
       this.$router.push("/search/"+this.q);
-    }
+    },
+    async getStars() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.tutordata.results.forEach((value,index ) => {
+        const rating = value.average_reviews;
+        let output = '';
+        let i = ""
+        for (i = rating; i >= 1; i--){
+          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        /* eslint-disable */
+        if (i == 0.5){
+          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        } 
+        /* eslint-enable */
+        for (i = (5 - rating); i >= 1; i--){
+          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        }
+        document.getElementById(value.id).innerHTML = output;
+      });
+
+    },
+    restrictChar(charNum, input){
+      if(parseInt(input.length) > parseInt(charNum)){
+        input = input.substr(0, charNum)
+        return input + "..."
+      }
+      else{
+        return input
+      }
+    },
   }
 }
 </script>

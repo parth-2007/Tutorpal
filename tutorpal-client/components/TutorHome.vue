@@ -209,6 +209,17 @@
                         >Deny</a
                       >
                     </div>
+                    <router-link
+                      to="/inbox"
+                      style="
+                        font-family: Poppins;
+                        font-size: 14px;
+                        color: #41a8d3;
+                        margin-top: 10px;
+                        text-decoration: underline;
+                      "
+                      >Message this student</router-link
+                    >
                   </div>
                 </div>
                 <a
