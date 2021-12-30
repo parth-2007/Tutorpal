@@ -99,7 +99,7 @@
             <div class="text-block-5">
               PayPal Email Address (Put the email address you would like to
               accept payments from. This is a crucial part of being a tutor on our platform unless you are a volunteer tutor. If left blank, this will be set to your
-              default email address.)
+              default email address. If you are underage, you can use your parent's paypal email instead. )
             </div>
           </div>
           <div class="w-col w-col-6">
