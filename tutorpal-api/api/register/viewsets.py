@@ -16,9 +16,10 @@ from django.db.models import F, FloatField, ExpressionWrapper
 
 class UserViewSet(viewsets.GenericViewSet,
                   mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.DestroyModelMixin,
-                  mixins.ListModelMixin):
+                #   mixins.UpdateModelMixin,
+                #   mixins.ListModelMixin,
+                #   mixins.DestroyModelMixin
+                  ):
     queryset = User.objects.all()
     serializer_class = UserViewingSerializer
     permission_classes = [DRYPermissions]
@@ -73,7 +74,7 @@ class UserViewSet(viewsets.GenericViewSet,
 
 class TutorViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
-                   mixins.ListModelMixin,
+                #    mixins.ListModelMixin,
                    mixins.DestroyModelMixin):
     queryset = Tutor.objects.all().select_related('user')
     serializer_class = TutorViewingSerializer
@@ -161,7 +162,7 @@ class TutorReviews(viewsets.GenericViewSet):
 
 class StudentViewSet(viewsets.GenericViewSet,
                      mixins.RetrieveModelMixin,
-                     mixins.ListModelMixin,
+                    #  mixins.ListModelMixin,
                      mixins.DestroyModelMixin):
     queryset = Student.objects.all().select_related('user')
     # serializer_class = StudentViewingSerializer

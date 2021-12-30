@@ -25,47 +25,46 @@ urlpatterns = [
     path('', include('session.urls')),
     path('', include('chat.urls')),
     path('', include('main.urls')),
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 ]
 
 # urlpatterns = [path(r'api/', include(urlpatterns))]
 
+if settings.DEBUG and os.environ.get('RUN_ENV', 'local') == 'local':
+    from rest_framework import permissions
+    import debug_toolbar
+    from drf_yasg.views import get_schema_view
+    from drf_yasg import openapi
+
+    schema_view = get_schema_view(
+        openapi.Info(
+            title="API Docs",
+            default_version='v1',
+            description="The API Docs",
+            # terms_of_service="https://www.google.com/policies/terms/",
+            # contact=openapi.Contact(email="contact@snippets.local"),
+            # license=openapi.License(name="BSD License"),
+        ),
+        public=True,
+        permission_classes=(permissions.AllowAny,),
+    )
+    urlpatterns += [
+        re_path(r'^swagger(?P<format>\.json|\.yaml)$',
+                schema_view.without_ui(cache_timeout=0), name='schema-json'),
+        re_path(r'^swagger/$', schema_view.with_ui('swagger',
+                                                   cache_timeout=0), name='schema-swagger-ui'),
+        re_path(r'^redoc/$', schema_view.with_ui('redoc',
+                                                 cache_timeout=0), name='schema-redoc'),
+        path('__debug__/', include(debug_toolbar.urls)),
+        path('admin/', admin.site.urls),
+        path('api-auth/', include('rest_framework.urls')),
+    ]
+
+
 if os.environ.get('RUN_ENV', 'local') == 'local':
-    urlpatterns = [path(r'api/', include(urlpatterns))]
-
-# if settings.DEBUG and os.environ.get('RUN_ENV', 'local') != 'aws':
-#     from rest_framework import permissions
-#     import debug_toolbar
-#     from drf_yasg.views import get_schema_view
-#     from drf_yasg import openapi
-
-#     schema_view = get_schema_view(
-#         openapi.Info(
-#             title="API Docs",
-#             default_version='v1',
-#             description="The API Docs",
-#             # terms_of_service="https://www.google.com/policies/terms/",
-#             # contact=openapi.Contact(email="contact@snippets.local"),
-#             # license=openapi.License(name="BSD License"),
-#         ),
-#         public=True,
-#         permission_classes=(permissions.AllowAny,),
-#     )
-#     urlpatterns += [
-#         re_path(r'^swagger(?P<format>\.json|\.yaml)$',
-#                 schema_view.without_ui(cache_timeout=0), name='schema-json'),
-#         re_path(r'^swagger/$', schema_view.with_ui('swagger',
-#                                                    cache_timeout=0), name='schema-swagger-ui'),
-#         re_path(r'^redoc/$', schema_view.with_ui('redoc',
-#                                                  cache_timeout=0), name='schema-redoc'),
-#         path('__debug__/', include(debug_toolbar.urls)),
-#         path('admin/', admin.site.urls),
-#         path('api-auth/', include('rest_framework.urls')),
-#     ]
-#     urlpatterns = [path(r'api/', include(urlpatterns))]
-#     urlpatterns += [
-#         re_path(r'^media/(?P<path>.*)$', serve,
-#                 {'document_root': settings.MEDIA_ROOT}),
-#         re_path(r'^static/(?P<path>.*)$', serve,
-#                 {'document_root': settings.STATIC_ROOT}),
-#     ]
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve,
+                {'document_root': settings.MEDIA_ROOT}),
+        re_path(r'^static/(?P<path>.*)$', serve,
+                {'document_root': settings.STATIC_ROOT}),
+    ]

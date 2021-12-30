@@ -59,8 +59,9 @@ INSTALLED_APPS = [
     'dry_rest_permissions',
     'storages'
 ]
-# if DEBUG and os.environ.get('RUN_ENV', 'local') != 'aws':
-#     INSTALLED_APPS += ['drf_yasg', 'debug_toolbar']
+
+if DEBUG and os.environ.get('RUN_ENV', 'local') == 'local':
+    INSTALLED_APPS += ['drf_yasg', 'debug_toolbar']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -78,8 +79,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'session.middleware.timezonemiddleware',
 ]
-# if DEBUG:
-#     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+if DEBUG and os.environ.get('RUN_ENV', 'local') == 'local':
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -122,10 +123,10 @@ CORS_ALLOW_CREDENTIALS = True
 if os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev':
     CSRF_COOKIE_DOMAIN = ".tutorpal.org"
     SESSION_COOKIE_DOMAIN = ".tutorpal.org"
-    CSRF_COOKIE_SAMESITE = 'None'
-    SESSION_COOKIE_SAMESITE = 'None'
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'lax'
+SESSION_COOKIE_SAMESITE = 'lax'
 
 ROOT_URLCONF = 'api.urls'
 
