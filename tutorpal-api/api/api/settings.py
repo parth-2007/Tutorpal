@@ -117,7 +117,7 @@ if os.environ.get('RUN_ENV', 'local') == 'aws_dev':
         'https://www.beta.tutorpal.org',
     ]
 else:
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+    CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 CORS_ALLOW_CREDENTIALS = True
 
 if os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev':

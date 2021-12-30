@@ -137,11 +137,23 @@ class TutorOwnerSerializer(serializers.ModelSerializer):
         ]
 
     extra_kwargs = {
-        # 'average_reviews': {'read_only': True, "required": False, 'allow_null': True},
-        # 'free_tutoring_given': {'read_only': True, "required": False, 'allow_null': True},
+        'average_reviews': {'read_only': True},
+        'free_tutoring_given': {'read_only': True},
         'linkedIn': {"required": False, 'allow_null': True},
         'user': {'write_only': True}
     }
+
+    def validate(self, attrs):
+        prof_exp = attrs.get('prof_exp')
+        teach_exp = attrs.get('teach_exp')
+        gpa = attrs.get('gpa')
+        if prof_exp > 50 or prof_exp < 0:
+            raise serializers.ValidationError('prof_exp must be in between 0 and 50')
+        if teach_exp > 50 or teach_exp < 0:
+            raise serializers.ValidationError('teach_exp must be in between 0 and 50')
+        if gpa > 6 or gpa < 0:
+            raise serializers.ValidationError('teach_exp must be in between 0 and 6')
+        return super().validate(attrs)
 
 
 class TutorViewingSerializer(serializers.ModelSerializer):

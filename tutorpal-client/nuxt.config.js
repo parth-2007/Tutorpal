@@ -59,6 +59,11 @@ export default {
     API_URL: process.env.API_URL || 'https://api.tutorpal.org',
   },
 
+  server: {
+    port: 3000,
+    host: '127.0.0.1',
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   // build: {
   // proxy: {
