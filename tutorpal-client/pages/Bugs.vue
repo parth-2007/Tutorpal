@@ -88,7 +88,8 @@
                 Submit
               </button>
             </form>
-            <p style="color: chartreuse">
+            <br />
+            <p style="color: chartreuse" id="form-response">
               {{ response }}
             </p>
           </div>
@@ -143,6 +144,12 @@ export default {
         this.errors.level = 'Please put a description here'
         return
       }
+      if (this.description.length > 1024) {
+        this.errors.level = 'Description length too long'
+        return
+      }
+      this.errors.level = null
+      this.errors.description = null
       e.preventDefault()
       const csrfToken = await getCSRF()
       await fetch(process.env.API_URL + '/bugs/', {

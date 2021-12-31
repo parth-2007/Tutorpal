@@ -18,7 +18,7 @@
       <body v-else style="min-height: 100vh" class="registerbody">
         <div style="height: 150vh" class="registersection">
           <div
-            style="font-family: Poppins; width: 500px; overflow-y: auto;"
+            style="font-family: Poppins; width: 500px; overflow-y: auto"
             class="registerdiv-block"
           >
             <div style="margin-top: 15px" class="registerdiv-block-4">
@@ -35,6 +35,7 @@
                 <form
                   method="post"
                   enctype="multipart/form-data"
+                  @submit="handleSubmit"
                 >
                   <div class="row">
                     <div class="col">
@@ -188,7 +189,7 @@
                         required
                       />
                     </div>
-                    <p style="color: hsla(0, 100%, 64%, 1); margin-left: 15px;">
+                    <p style="color: hsla(0, 100%, 64%, 1); margin-left: 15px">
                       {{ errors.birthDate }}
                     </p>
                   </div>
@@ -215,15 +216,24 @@
                   <p style="color: hsla(0, 100%, 64%, 1)">
                     {{ errors.global }}
                   </p>
-                  <p style="margin-top: 10px; font-family: Poppins; font-size: 16px;color: #008000;">{{success}}</p>
+                  <p
+                    style="
+                      margin-top: 10px;
+                      font-family: Poppins;
+                      font-size: 16px;
+                      color: #008000;
+                    "
+                  >
+                    {{ success }}
+                  </p>
+                  <button
+                    style="margin-bottom: 20px"
+                    class="btn btn-primary"
+                    type="submit"
+                  >
+                    Register
+                  </button>
                 </form>
-                <button
-                  style="margin-bottom: 20px"
-                  class="btn btn-primary"
-                  @click="handleSubmit"
-                >
-                  Register
-                </button>
               </div>
             </div>
           </div>
@@ -258,9 +268,9 @@ export default {
         parentEmail: '',
         birthDate: '',
         global: '',
-        toc: ''
+        toc: '',
       },
-      success:"",
+      success: '',
       src: 'https://image.flaticon.com/icons/png/512/149/149071.png',
     }
   },
@@ -300,10 +310,11 @@ export default {
       if (e.target.files[0].size > 5000000) {
         this.errors.profilePic =
           'File size is too high! Please upload a file less than 5 Megabytes'
-        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+        this.errors.global =
+          'There seems to be a problem with your request, scroll up to see whats wrong.'
       } else {
         this.errors.profilePic = ''
-        this.errors.global='';
+        this.errors.global = ''
       }
     },
     checkErrors() {
@@ -330,33 +341,32 @@ export default {
           this.errors[field] = 'This field is required'
         } else {
           this.errors[field] = ''
-          counter+=1
+          counter += 1
         }
       })
       if (!this.toc) {
         this.errors.toc = 'Please read and agree to the Terms of Condition'
       } else {
         this.errors.global = ''
-        this.errors.toc=""
-        counter+=1
+        this.errors.toc = ''
+        counter += 1
       }
       const birthday = new Date(this.birthDate)
       const age = Math.floor((Date.now() - birthday) / 31557600000)
-      if(age<0){
-        this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
-      }
-      else if(age>70){
-        this.errors.birthDate = "Sorry but our platform doesn't accept students above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
-      }
-      else if(age<6){
-        this.errors.birthDate = "You must be at least 6 years old to register as a tutor."
-      }
-      else if(isNaN(age)){
+      if (age < 0) {
+        this.errors.birthDate =
+          "Hmmm...our data shows us you haven't been born yet"
+      } else if (age > 70) {
+        this.errors.birthDate =
+          "Sorry but our platform doesn't accept students above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
+      } else if (age < 6) {
+        this.errors.birthDate =
+          'You must be at least 6 years old to register as a tutor.'
+      } else if (isNaN(age)) {
         this.errors.birthDate = "We're not detecting a birthdate here..."
-      }
-      else {
-        counter+=1
-        this.errors.birthDate = ""
+      } else {
+        counter += 1
+        this.errors.birthDate = ''
       }
       const emailValidation =
         /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
@@ -364,20 +374,20 @@ export default {
         this.errors.email = 'Invalid email'
       } else {
         this.errors.email = ''
-        counter+=1
+        counter += 1
       }
       if (!emailValidation.test(this.parentEmail)) {
         this.errors.parentEmail = 'Invalid parent email'
       } else {
         this.errors.parentEmail = ''
-        counter+=1
+        counter += 1
       }
       if (!this.password.length > 5) {
         this.errors.password =
           'The Password length must be greater than 5 characters'
       } else {
         this.errors.password = ''
-        counter+=1
+        counter += 1
       }
       if (this.password !== this.confirmPassword) {
         this.errors.password =
@@ -387,31 +397,31 @@ export default {
       } else {
         this.errors.password = ''
         this.errors.confirmPassword = ''
-        counter+=1
+        counter += 1
       }
       if (this.firstName.length < 1) {
         this.errors.firstName = 'Invalid first name'
       } else {
         this.errors.firstName = ''
-        counter+=1
+        counter += 1
       }
       if (this.lastName.length < 1) {
         this.errors.lastName = 'Invalid last name'
       } else {
         this.errors.lastName = ''
-        counter+=1
+        counter += 1
       }
-      if (counter!==14){
-        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
-        this.success = ""
-      }
-      else if(counter===14){
+      if (counter !== 14) {
+        this.errors.global =
+          'There seems to be a problem with your request, scroll up to see whats wrong.'
+        this.success = ''
+      } else if (counter === 14) {
         this.errors.global = ''
       }
     },
     async handleSubmit(e) {
-      this.validateData()
       e.preventDefault()
+      this.validateData()
       if (!this.checkErrors()) {
         const formData = new FormData()
         const user = {
@@ -444,24 +454,27 @@ export default {
         )
           .then((res) => {
             if (res.status >= 400 && res.status < 600) {
-             this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+              this.errors.global =
+                'There seems to be a problem with your request, scroll up to see whats wrong.'
             }
             return res.json()
           })
           .catch(() => {
-            this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+            this.errors.global =
+              'There seems to be a problem with your request, scroll up to see whats wrong.'
           })
         if (data && data.error) {
           this.errors.global = data.error
-          this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
+          this.errors.global =
+            'There seems to be a problem with your request, scroll up to see whats wrong.'
         } else {
-          this.success = "You have successfully created a student account!"
+          this.success = 'You have successfully created a student account!'
           this.$router.push('/checkemail')
         }
-      }
-      else{
-        this.errors.global = "There seems to be a problem with your request, scroll up to see whats wrong."
-        this.success = ""
+      } else {
+        this.errors.global =
+          'There seems to be a problem with your request, scroll up to see whats wrong.'
+        this.success = ''
       }
     },
   },

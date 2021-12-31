@@ -6,7 +6,10 @@
     >
       <head>
         <meta charset="utf-8" />
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          rel="stylesheet"
+        />
       </head>
       <div style="margin-left: 40px; margin-top: 20px">
         <router-link to="/" class="link-block-3 w-inline-block"
@@ -23,8 +26,11 @@
             sizes="200px"
             alt=""
         /></router-link>
-        <div class="search" style="margin-left: 0px; padding-left: 0px;">
-          <div style="margin-left: 0px; padding-left: 0px;" class="homestuff w-form">
+        <div class="search" style="margin-left: 0px; padding-left: 0px">
+          <div
+            style="margin-left: 0px; padding-left: 0px"
+            class="homestuff w-form"
+          >
             <img
               src="../static/student/images/search-1.png"
               loading="lazy"
@@ -32,24 +38,24 @@
               height="25"
               srcset="
                 ../static/student/images/search-1.png 500w,
-                ../static/student/images/search-1.png       512w
+                ../static/student/images/search-1.png 512w
               "
               sizes="(max-width: 767px) 25px, (max-width: 991px) 3vw, (max-width: 1919px) 25px, 1vw"
               alt=""
               class="homeimage-2"
             /><input
-                class="homesearch-3 w-input"
-                placeholder="Search by subject"
-                id="search"
-                v-model="q"
-                @keyup.enter="submitSearch()"
+              class="homesearch-3 w-input"
+              placeholder="Search by subject"
+              id="search"
+              v-model="q"
+              @keyup.enter="submitSearch()"
             />
           </div>
-          <div style="margin-top: 20px;">
+          <div style="margin-top: 20px">
             <div
               v-for="tutor in tutordata.results"
               :key="tutor.id"
-              id="posts"
+              class="tutors"
             >
               <router-link
                 :to="'/tutors/' + tutor.id"
@@ -57,7 +63,9 @@
               >
                 <div style="line-height: 14px" class="div-block-54">
                   <img
-                    :src="tutor.user !== undefined ? tutor.user.profile_pic : ''"
+                    :src="
+                      tutor.user !== undefined ? tutor.user.profile_pic : ''
+                    "
                     loading="lazy"
                     width="38"
                     height="38"
@@ -68,10 +76,14 @@
                   <div class="text-block-21">
                     <strong class="bold-text-3"
                       >{{
-                        tutor.user !== undefined ? restrictChar(30, tutor.user.first_name) : ''
+                        tutor.user !== undefined
+                          ? restrictChar(30, tutor.user.first_name)
+                          : ''
                       }}
                       {{
-                        tutor.user !== undefined ? restrictChar(30, tutor.user.last_name) : ''
+                        tutor.user !== undefined
+                          ? restrictChar(30, tutor.user.last_name)
+                          : ''
                       }}</strong
                     >
                   </div>
@@ -89,7 +101,11 @@
                     {{ tutor.gpa }}
                   </div>
                   <div class="text-block-21-copy-2">
-                    Reviews: <div style="width: 90px; margin-top: 10%; margin-left: 10px;" :id="tutor.id"></div>
+                    Reviews:
+                    <div
+                      style="width: 90px; margin-top: 10%; margin-left: 10px"
+                      :id="tutor.id"
+                    ></div>
                   </div>
                   <div class="text-block-21-copy-2">
                     Occupation: {{ restrictChar(30, tutor.occupation) }}
@@ -98,8 +114,12 @@
                     src="../static/student/images/verified.png"
                     width="35"
                     height="35"
-                    v-if="tutor.linkedIn!==''"
-                    style="margin-top: auto; margin-bottom: auto; margin-left: 5px;"
+                    v-if="tutor.linkedIn !== ''"
+                    style="
+                      margin-top: auto;
+                      margin-bottom: auto;
+                      margin-left: 5px;
+                    "
                   />
                 </div>
               </router-link>
@@ -147,45 +167,46 @@ export default {
         credentials: 'include',
       }
     )
-    .then((res) => res.json())
-    .catch(() => ({ error: 'client error' }))
+      .then((res) => res.json())
+      .catch(() => ({ error: 'client error' }))
     this.tutordata = tutorData
     this.getStars()
   },
   methods: {
     submitSearch() {
-      this.$router.push("/search/"+this.q);
+      this.$router.push('/search/' + this.q)
     },
     async getStars() {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      this.tutordata.results.forEach((value,index ) => {
-        const rating = value.average_reviews;
-        let output = '';
-        let i = ""
-        for (i = rating; i >= 1; i--){
-          output+=('<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      this.tutordata.results.forEach((value, index) => {
+        const rating = value.average_reviews
+        let output = ''
+        let i = ''
+        for (i = rating; i >= 1; i--) {
+          output +=
+            '<i class="fa fa-star" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;'
         }
         /* eslint-disable */
-        if (i == 0.5){
-          output+=('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
-        } 
-        /* eslint-enable */
-        for (i = (5 - rating); i >= 1; i--){
-          output+=('<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;');
+        if (i == 0.5) {
+          output +=
+            '<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;'
         }
-        document.getElementById(value.id).innerHTML = output;
-      });
-
+        /* eslint-enable */
+        for (i = 5 - rating; i >= 1; i--) {
+          output +=
+            '<i class="fa fa-star-o" aria-hidden="true" style="color: gold; font-size: 16px;"></i>&nbsp;'
+        }
+        document.getElementById(value.id).innerHTML = output
+      })
     },
-    restrictChar(charNum, input){
-      if(parseInt(input.length) > parseInt(charNum)){
+    restrictChar(charNum, input) {
+      if (parseInt(input.length) > parseInt(charNum)) {
         input = input.substr(0, charNum)
-        return input + "..."
-      }
-      else{
+        return input + '...'
+      } else {
         return input
       }
     },
-  }
+  },
 }
 </script>

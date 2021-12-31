@@ -154,7 +154,17 @@ ASGI_APPLICATION = "api.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-# Add a prod db here later
+# if os.environ.get('RUN_ENV', 'local') == "test":
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': os.environ.get('DATABASE_TEST_NAME', 'tutorpal_test'),
+#             'USER': os.environ.get('DATABASE_USER', ''),
+#             'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+#             'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+#             'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
+#         }
+#     }
 if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     DATABASES = {
         'default': {
@@ -177,7 +187,7 @@ elif os.environ.get('DEV_DB_NAME', None) and os.environ.get('RUN_ENV', 'local') 
             'PORT': int(os.environ['DEV_DB_PORT']),
         }
     }
-elif os.environ.get('DATABASE_NAME', None):
+elif os.environ.get('DATABASE_NAME', None) and os.environ.get('RUN_ENV', 'local') == 'local':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 // TODO
-// Login
 // Show trending tutors
 // Show starting classes
 // Show upcoming classes

@@ -10,7 +10,10 @@
           rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
       </head>
       <div v-if="user.isStudent">
         <Loader />
@@ -82,7 +85,11 @@
                   <p style="color: hsla(0, 100%, 64%, 1); font-family: Poppins">
                     {{ errors.password }}
                   </p>
-                  <button class="homebutton-11 w-button" @click="submitHandler">
+                  <button
+                    class="homebutton-11 w-button"
+                    @click="submitHandler"
+                    type="submit"
+                  >
                     Continue
                   </button>
                 </form>
@@ -105,7 +112,23 @@
             >
           </div>
         </div>
-        <a style="position: fixed; bottom: 0px; right: 10px; font-family: Poppins; color: red; text-decoration: none; display: flex; align-items: center; justify-content: center;" href="https://www.youtube.com/channel/UCTbysqe_AM_eY9N3eVpiY6A" target="_blank"><i class="fa fa-youtube-play" style="font-size:36px;"></i><a style="margin-left: 10px; text-decoration: none;">Tutorials</a></a>
+        <a
+          style="
+            position: fixed;
+            bottom: 0px;
+            right: 10px;
+            font-family: Poppins;
+            color: red;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+          href="https://www.youtube.com/channel/UCTbysqe_AM_eY9N3eVpiY6A"
+          target="_blank"
+          ><i class="fa fa-youtube-play" style="font-size: 36px"></i
+          ><a style="margin-left: 10px; text-decoration: none">Tutorials</a></a
+        >
       </body>
     </html>
   </client-only>
@@ -189,6 +212,9 @@ export default {
           body: formData,
         })
           .then((res) => {
+            if (res.error === 'this email is taken') {
+              this.errors.email = 'this email is taken'
+            }
             if (res.status >= 400 && res.status < 600) {
               this.errors.global = 'Something went wrong :('
             }

@@ -39,7 +39,7 @@
             improve the platform. We will work on these suggestions immediately.
             If you would like to report a bug, please do so
             <router-link to="/bugs">here</router-link>
-            <form>
+            <form @submit="feedbackhandler">
               <div style="margin-top: 20px" class="outcastmb-3">
                 <label for="feedback" class="form-label">Feedback</label>
                 <textarea
@@ -50,14 +50,21 @@
                   rows="3"
                 ></textarea>
               </div>
+              <p style="color: hsla(0, 100%, 64%, 1)">
+                {{ errors }}
+              </p>
               <button
-                @submit="feedbackhandler()"
                 class="btn btn-primary"
                 style="margin-top: 10px"
+                type="submit"
               >
                 Submit
               </button>
             </form>
+            <br />
+            <p style="color: chartreuse" id="form-response">
+              {{ response }}
+            </p>
           </div>
         </div>
       </body>
@@ -71,6 +78,8 @@ export default {
   data() {
     return {
       text: '',
+      errors: null,
+      response: null,
     }
   },
   head() {
@@ -98,6 +107,14 @@ export default {
   methods: {
     async feedbackhandler(e) {
       e.preventDefault()
+      if (!this.text) {
+        return
+      }
+      if (this.text.length > 1024) {
+        this.errors = 'text too long'
+        return
+      }
+      this.errors = null
       await fetch(process.env.API_URL + '/feedback/', {
         method: 'POST',
         credentials: 'include',
@@ -107,6 +124,7 @@ export default {
         },
         body: JSON.stringify({ text: this.text }),
       })
+      this.response = 'Successfully submitted feedback'
     },
   },
 }

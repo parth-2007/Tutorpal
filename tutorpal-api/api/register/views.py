@@ -117,14 +117,13 @@ def register_tutor(request):
         return Response(data={'error': 'this email is taken'}, status=status.HTTP_400_BAD_REQUEST)
 
     email = user.email
-    current_site = get_current_site(request)
     subject = 'Confirm Your Email for TutorPal'
     if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
         url = f'https://www.tutorpal.org/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
     elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
         url = f'https://beta.tutorpal.org/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
     else:
-        url = f'http://{current_site.domain}/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
+        url = f'http://localhost:3000/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
     message = render_to_string('register/emails/confirm_email.html', {
         'user': user,
         'url': url
@@ -160,14 +159,13 @@ def reset_password(request):
     except (AttributeError, User.DoesNotExist):
         return Response(data="Invalid email", status=status.HTTP_400_BAD_REQUEST)
 
-    current_site = get_current_site(request)
     subject = 'Confirm Your Email for TutorPal'
     if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
         url = f'https://www.tutorpal.org/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
     elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
         url = f'https://beta.tutorpal.org/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
     else:
-        url = f'http://{current_site.domain}/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
+        url = f'http://localhost:3000/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
     message = render_to_string('register/emails/confirm_email.html', {
         'user': user,
         'url': url
@@ -260,3 +258,16 @@ def update_student(request):
     user_serializer.save()
 
     return Response({'success': 'successfully updated tutor'})
+
+
+@api_view()
+def get_register_url_for_user(request, email):
+    user = User.objects.get(email=email)
+    url = f'http://127.0.0.1:3000/activate-account/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}/'
+    return Response({'url': url})
+
+@api_view()
+def get_forgot_password_url_for_user(request, email):
+    user = User.objects.get(email=email)
+    url = f'http://127.0.0.1:3000/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{password_reset_token.make_token(user)}/'
+    return Response({'url': url})
