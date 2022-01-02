@@ -140,7 +140,7 @@
             </div>
           </div>
         </div>
-        <div style="display: flex; justify-content: center; padding: 20px;">
+        <div v-if="show" style="display: flex; justify-content: center; padding: 20px;">
           <div id="container" ref="container">
             <div id="header">
               <div id="monthDisplay">{{monthDisplay}}</div>
@@ -175,6 +175,7 @@ export default {
       calendarData: [],
       q: '',
       clicked: false,
+      show: false
     }
   },
   head() {
@@ -214,6 +215,8 @@ export default {
     }).then((res) => res.json())
     this.calendarData = data.results;
     this.calendar()
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    this.show = true;
   },
   computed: {
     logout() {
