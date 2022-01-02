@@ -117,7 +117,7 @@
             </div>
           </div>
         </div>
-        <div v-if="show" style="display: flex; justify-content: center; padding: 20px;">
+        <div :style="showFunction" style="display: flex; justify-content: center; padding: 20px;">
           <div id="container" ref="container">
             <div id="header">
               <div id="monthDisplay">{{monthDisplay}}</div>
@@ -198,6 +198,11 @@ export default {
     logout() {
       return {
         display: this.clicked ? 'flex' : 'none',
+      }
+    },
+    showFunction() {
+      return {
+        display: this.show ? 'flex' : 'none',
       }
     },
     ...mapGetters({ tutor: 'getTutor' }),
