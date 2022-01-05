@@ -475,9 +475,11 @@ export default {
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }
+      console.log(counter)
     },
     async handleSubmit() {
       this.validateData()
+      console.log(this.errors)
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
