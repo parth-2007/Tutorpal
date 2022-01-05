@@ -475,11 +475,10 @@ export default {
         this.success = "You have successfully updated your account info!"
         this.errors.global = ''
       }
-      console.log(counter)
     },
     async handleSubmit() {
       this.validateData()
-      console.log(this.errors)
+      console.log(!objectsEqual(this.tutor, this.getTutor()), !objectsEqual(this.user, this.getUser()))
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
