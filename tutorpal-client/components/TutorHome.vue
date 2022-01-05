@@ -194,7 +194,7 @@
                       Remember, you only have 24 hours from since this request
                       was sent to accept or deny.
                     </div>
-                    <div class="tutordiv-block-52">
+                    <div style="margin-bottom: 20px;" class="tutordiv-block-52">
                       <a
                         @click="accept(session.id, session)"
                         style="z-index: 5"
@@ -215,7 +215,6 @@
                         font-family: Poppins;
                         font-size: 14px;
                         color: #41a8d3;
-                        margin-top: 10px;
                         text-decoration: underline;
                       "
                       >Message this student</router-link

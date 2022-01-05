@@ -367,7 +367,7 @@ export default {
     checkErrors() {
       let isError = false
       Object.keys(this.errors).forEach((key) => {
-        if (this.errors[key].length > 0) {
+        if (this.errors[key]) {
           isError = true
         }
       })
@@ -419,7 +419,6 @@ export default {
         this.errors.paypalEmail = ''
         counter+=1
       }
-
       if(parseInt(this.tutor.profExp) < 0 || parseInt(this.tutor.profExp) > 50){
         this.errors.profExp="Sorry but we aren't allowing for more than 50 or negative years in professional experience"
       }
@@ -452,7 +451,6 @@ export default {
         counter+=1
         this.errors.birthDate = ""
       }
-
       if(this.tutor.gpa>6 || this.tutor.gpa<0){
         this.errors.gpa = "Our site is only allowing for GPAS on the 4.0, 5.0, and 6.0 scale. Anything higher than that or lower than 0 is not accepted."
       }
@@ -477,15 +475,12 @@ export default {
       }
     },
     async handleSubmit() {
-      console.log("loading")
       this.validateData()
-      console.log(!this.checkErrors(), this.errors)
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
           !objectsEqual(this.user, this.getUser()))
       ) {
-        console.log('step 1')
         const csrfToken = await getCSRF()
         if (this.tutor.linkedIn !== '') {
           let httpCheck = this.tutor.linkedIn.substr(0, 8)
@@ -495,7 +490,7 @@ export default {
           }
         }
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
-          console.log('step 2')
+          console.log('loading')
           const formData = new FormData()
           if (this.profilePic) {
             formData.append('profile_pic', this.profilePic[0])
