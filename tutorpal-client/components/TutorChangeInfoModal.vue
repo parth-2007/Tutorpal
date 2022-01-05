@@ -478,12 +478,13 @@ export default {
     },
     async handleSubmit() {
       this.validateData()
-      console.log(!objectsEqual(this.tutor, this.getTutor()), !objectsEqual(this.user, this.getUser()))
+      console.log(!this.checkErrors(), this.errors)
       if (
         !this.checkErrors() &&
         (!objectsEqual(this.tutor, this.getTutor()) ||
           !objectsEqual(this.user, this.getUser()))
       ) {
+        console.log('step 1')
         const csrfToken = await getCSRF()
         if (this.tutor.linkedIn !== '') {
           let httpCheck = this.tutor.linkedIn.substr(0, 8)
@@ -493,6 +494,7 @@ export default {
           }
         }
         if (csrfToken.success !== null && csrfToken.success !== undefined) {
+          console.log('step 2')
           const formData = new FormData()
           if (this.profilePic) {
             formData.append('profile_pic', this.profilePic[0])
