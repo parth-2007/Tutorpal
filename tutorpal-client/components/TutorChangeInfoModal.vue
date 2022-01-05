@@ -477,6 +477,7 @@ export default {
       }
     },
     async handleSubmit() {
+      console.log("loading")
       this.validateData()
       console.log(!this.checkErrors(), this.errors)
       if (
