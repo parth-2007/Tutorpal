@@ -193,12 +193,7 @@
           <button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button>
         </div>
         <div style="margin-top: 0px;">
-          <iframe
-            style="width: 100vw; height: 100vh; float:left;"
-            allow="camera;microphone"
-            :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
-            ref="meeting"
-          ></iframe>
+          <div style="width: 100vw; height: 99vh; float: left;" ref="meeting"></div>
           <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
         </div>
       </body>
@@ -289,7 +284,12 @@ export default {
   async mounted() {
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
+    const script2 = document.createElement('script')
+    script2.src = "https://meet.jit.si/external_api.js"
     document.body.appendChild(script)
+    document.body.appendChild(script2)
+    script2.addEventListener('load', this.setLoaded)
+
     this.session = await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -349,11 +349,16 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
+      const domain = 'meet.jit.si';
+      const options = {
+          roomName: this.session.call_url,
+          parentNode: this.$refs.meeting
+      };
+      new JitsiMeetExternalAPI(domain, options);
       await new Promise(resolve => setTimeout(resolve, 2000));
-      const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-          boardCode: code,
+          boardCode: this.session.call_url,
       });
     },
     /* eslint-enable */

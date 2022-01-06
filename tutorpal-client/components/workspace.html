@@ -1,0 +1,15 @@
+<html>
+    <h1>Hello</h1>
+    <div id="meet"></div>
+    <script src='https://meet.jit.si/external_api.js'></script>
+</html>
+<script>
+    const domain = 'meet.jit.si';
+    const options = {
+        roomName: 'JitsiMeetAPIExample',
+        width: 700,
+        height: 700,
+        parentNode: document.querySelector('#meet')
+    };
+    const api = new JitsiMeetExternalAPI(domain, options);
+</script>
