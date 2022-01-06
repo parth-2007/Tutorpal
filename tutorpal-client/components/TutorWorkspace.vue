@@ -329,7 +329,6 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
-    this.setLoaded()
   },
   methods: {
     dateToString,
