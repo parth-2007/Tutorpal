@@ -242,10 +242,7 @@ export default {
   },
   beforeDestroy() {
     const b = document.getElementsByTagName('iframe')
-    Array.from(b).forEach(child => {
-      document.body.removeChild(child)
-      console.log(child)
-    });
+    document.body.removeChild(b[1])
   },
   computed: {
     logout() {
