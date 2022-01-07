@@ -1,3 +1,4 @@
+-
 <template>
   <client-only>
     <html
@@ -193,13 +194,14 @@
           <button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button>
         </div>
         <div style="margin-top: 0px;">
-          <div style="width: 100vw; height: 99vh; float: left;" ref="meeting"></div>
+          <div style="float: left;" ref="meeting"></div>
           <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
         </div>
       </body>
     </html>
   </client-only>
 </template>
+-
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { sub, str } from 'timelite/time'
@@ -237,6 +239,10 @@ export default {
         },
       ],
     }
+  },
+  beforeDestroy() {
+    const b = document.getElementsByTagName('iframe')[0]
+    document.body.removeChild(b)
   },
   computed: {
     logout() {
@@ -289,43 +295,6 @@ export default {
     document.body.appendChild(script)
     document.body.appendChild(script2)
     script2.addEventListener('load', this.setLoaded)
-
-    this.session = await fetch(
-      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
-      {
-        credentials: 'include',
-      }
-    ).then((res) => {
-      if (res.status === 500) {
-        this.$router.push('/')
-      }
-      return res.json()
-    })
-    const time = new Date()
-    let yourDate = new Date()
-    yourDate = new Date(yourDate.getTime() - (yourDate.getTimezoneOffset()*60*1000))
-    const todayDate = yourDate.toISOString().split('T')[0]
-
-    let hours = time.getHours()
-    let minutes = time.getMinutes()
-    let seconds = time.getSeconds()
-    if (hours < 10) {
-      hours = '0' + hours.toString()
-    } else if (minutes < 10) {
-      minutes = '0' + minutes.toString()
-    } else if (seconds < 10) {
-      seconds = '0' + seconds.toString()
-    }
-    const now = hours + ':' + minutes + ':' + seconds
-    const hms = str(sub([this.session.time_end, now]))
-    const a = hms.split(':')
-    const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-    if (todayDate === this.session.date){
-      this.timerCount = timerSeconds
-    }
-    else {
-      this.timerCount = 0;
-    }
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
@@ -348,17 +317,58 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
+      this.session = await fetch(
+        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+        {
+          credentials: 'include',
+        }
+      ).then((res) => {
+        if (res.status === 500) {
+          this.$router.push('/')
+        }
+        return res.json()
+      })
       const domain = 'meet.jit.si';
-      const options = {
+     const options = {
           roomName: this.session.call_url,
-          parentNode: this.$refs.meeting
+          parentNode: this.$refs.meeting,
+          height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
+      this.$refs.meeting.style.width= "100vw"
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
       });
+      let yourDate = new Date()
+      yourDate = new Date(yourDate.getTime() - (yourDate.getTimezoneOffset()*60*1000))
+      const todayDate = yourDate.toISOString().split('T')[0]
+
+      let hours = yourDate.getHours()
+      let minutes = yourDate.getMinutes()
+      let seconds = yourDate.getSeconds()
+
+      if (hours < 10) {
+        hours = '0' + hours.toString()
+      } else if (minutes < 10) {
+        minutes = '0' + minutes.toString()
+      } else if (seconds < 10) {
+        seconds = '0' + seconds.toString()
+      }
+      const now = hours + ':' + minutes + ':' + seconds
+
+      let hms = (sub([this.session.time_end, now]))
+      hms = str(hms)
+      const a = hms.split('')
+
+      const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
+      if (todayDate === this.session.date){
+        this.timerCount = timerSeconds
+      }
+      else {
+        this.timerCount = 0;
+      }
     },
     /* eslint-enable */
     async updateModalValue() {

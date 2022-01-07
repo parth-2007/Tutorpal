@@ -1,3 +1,4 @@
+-
 <template>
   <client-only>
     <html
@@ -121,13 +122,14 @@
         </div>
         <div style="background-color: white;"><button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button></div>
         <div style="margin-top: 0px;">
-          <div style="width: 100vw; height: 99vh; float: left;" ref="meeting"></div>
+          <div style="float: left;" ref="meeting"></div>
           <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
         </div>
       </body>
     </html>
   </client-only>
 </template>
+-
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
@@ -170,6 +172,11 @@ export default {
     },
     ...mapGetters({ user: 'getUser' }),
   },
+  beforeDestroy() {
+    const b = document.getElementsByTagName('iframe')
+    document.body.removeChild(b)
+
+  },
   async mounted() {
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
@@ -178,17 +185,6 @@ export default {
     document.body.appendChild(script)
     document.body.appendChild(script2)
     script2.addEventListener('load', this.setLoaded)
-    this.session = await fetch(
-      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
-      {
-        credentials: 'include',
-      }
-    ).then((res) => {
-      if (res.status === 500) {
-        this.$router.push('/')
-      }
-      return res.json()
-    })
     await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -225,12 +221,25 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
+      this.session = await fetch(
+        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+        {
+          credentials: 'include',
+        }
+      ).then((res) => {
+        if (res.status === 500) {
+          this.$router.push('/')
+        }
+        return res.json()
+      })
       const domain = 'meet.jit.si';
       const options = {
-          roomName: 'Tutorpal Session',
-          parentNode: this.$refs.meeting
+          roomName: this.session.call_url,
+          parentNode: this.$refs.meeting,
+          height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
+      this.$refs.meeting.style.width= "100vw"
       await new Promise(resolve => setTimeout(resolve, 2000));
       const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
