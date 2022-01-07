@@ -244,6 +244,7 @@ export default {
     const b = document.getElementsByTagName('iframe')
     Array.from(b).forEach(child => {
       document.body.removeChild(child)
+      console.log(child)
     });
   },
   computed: {
