@@ -244,6 +244,7 @@ export default {
     const b = document.getElementsByTagName('iframe')
     console.log(b)
     document.body.removeChild(b[1])
+    document.body.removeChild(b[0])
   },
   computed: {
     logout() {
