@@ -173,8 +173,11 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   beforeDestroy() {
-    const b = document.getElementsByTagName('iframe')
-    document.body.removeChild(b[1])
+    Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
+      function(item) {
+        item.remove();
+        // or item.parentNode.removeChild(item); for older browsers (Edge-)
+    });
   },
   async mounted() {
     const script = document.createElement('script')

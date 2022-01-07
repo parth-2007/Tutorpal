@@ -241,8 +241,10 @@ export default {
     }
   },
   beforeDestroy() {
-    const b = document.getElementsByTagName('iframe')
-    document.body.removeChild(b[1])
+    Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
+      function(item) {
+        item.remove();
+    });
   },
   computed: {
     logout() {
