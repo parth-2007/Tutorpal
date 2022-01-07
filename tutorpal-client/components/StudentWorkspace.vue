@@ -173,9 +173,9 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   beforeDestroy() {
-    const b = document.getElementsByTagName('iframe')[0]
+    const b = document.getElementsByTagName('iframe')
     console.log(b)
-    document.body.removeChild(b)
+    document.body.removeChild(b[0])
 
   },
   async mounted() {
