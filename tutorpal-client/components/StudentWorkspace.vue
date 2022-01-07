@@ -174,9 +174,9 @@ export default {
   },
   beforeDestroy() {
     const b = document.getElementsByTagName('iframe')
-    console.log(b)
-    document.body.removeChild(b[1])
-    document.body.removeChild(b[2])
+    Array.from(b).forEach(child => {
+      document.body.removeChild(child)
+    });
   },
   async mounted() {
     const script = document.createElement('script')
