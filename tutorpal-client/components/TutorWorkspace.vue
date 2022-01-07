@@ -194,7 +194,7 @@
           <button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button>
         </div>
         <div style="margin-top: 0px;">
-          <div style="float: left;" ref="meeting"></div>
+          <div style="float: left; width: 100vw;" ref="meeting"></div>
           <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
         </div>
       </body>
@@ -241,8 +241,9 @@ export default {
     }
   },
   beforeDestroy() {
-    const b = document.getElementsByTagName('iframe')[0]
-    document.body.removeChild(b)
+    const b = document.getElementsByTagName('iframe')
+    console.log(b[1])
+    document.body.removeChild(b[1])
   },
   computed: {
     logout() {
@@ -329,13 +330,12 @@ export default {
         return res.json()
       })
       const domain = 'meet.jit.si';
-     const options = {
-          roomName: this.session.call_url,
-          parentNode: this.$refs.meeting,
-          height: window.innerHeight,
+      const options = {
+        roomName: this.session.call_url,
+        parentNode: this.$refs.meeting,
+        height: window.innerHeight-15,
       };
       new JitsiMeetExternalAPI(domain, options);
-      this.$refs.meeting.style.width= "100vw"
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',

@@ -173,7 +173,8 @@ export default {
     ...mapGetters({ user: 'getUser' }),
   },
   beforeDestroy() {
-    const b = document.getElementsByTagName('iframe')
+    const b = document.getElementsByTagName('iframe')[0]
+    console.log(b)
     document.body.removeChild(b)
 
   },
@@ -239,7 +240,6 @@ export default {
           height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
-      this.$refs.meeting.style.width= "100vw"
       await new Promise(resolve => setTimeout(resolve, 2000));
       const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
