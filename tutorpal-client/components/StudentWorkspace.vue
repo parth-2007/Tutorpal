@@ -176,7 +176,6 @@ export default {
     Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
       function(item) {
         item.remove();
-        // or item.parentNode.removeChild(item); for older browsers (Edge-)
     });
   },
   async mounted() {
@@ -238,7 +237,7 @@ export default {
       const options = {
           roomName: this.session.call_url,
           parentNode: this.$refs.meeting,
-          height: window.innerHeight,
+          height: window.innerHeight-15,
       };
       new JitsiMeetExternalAPI(domain, options);
       await new Promise(resolve => setTimeout(resolve, 2000));

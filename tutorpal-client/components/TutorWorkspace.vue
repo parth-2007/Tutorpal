@@ -336,7 +336,8 @@ export default {
         parentNode: this.$refs.meeting,
         height: window.innerHeight-15,
       };
-      new JitsiMeetExternalAPI(domain, options);
+      let api = new JitsiMeetExternalAPI(domain, options);
+     
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
