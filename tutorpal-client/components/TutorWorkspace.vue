@@ -336,21 +336,20 @@ export default {
         parentNode: this.$refs.meeting,
         height: window.innerHeight-15,
       };
-      let api = new JitsiMeetExternalAPI(domain, options);
+      new JitsiMeetExternalAPI(domain, options);
      
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
       });
+      const time = new Date()
       let yourDate = new Date()
       yourDate = new Date(yourDate.getTime() - (yourDate.getTimezoneOffset()*60*1000))
       const todayDate = yourDate.toISOString().split('T')[0]
-
-      let hours = yourDate.getHours()
-      let minutes = yourDate.getMinutes()
-      let seconds = yourDate.getSeconds()
-
+      let hours = time.getHours()
+      let minutes = time.getMinutes()
+      let seconds = time.getSeconds()
       if (hours < 10) {
         hours = '0' + hours.toString()
       } else if (minutes < 10) {
@@ -359,11 +358,8 @@ export default {
         seconds = '0' + seconds.toString()
       }
       const now = hours + ':' + minutes + ':' + seconds
-
-      let hms = (sub([this.session.time_end, now]))
-      hms = str(hms)
-      const a = hms.split('')
-
+      const hms = str(sub([this.session.time_end, now]))
+      const a = hms.split(':')
       const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
       if (todayDate === this.session.date){
         this.timerCount = timerSeconds
