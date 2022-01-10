@@ -367,6 +367,7 @@ export default {
       else {
         this.timerCount = 0;
       }
+      this.timerCount = 0;
     },
     /* eslint-enable */
     async updateModalValue() {
