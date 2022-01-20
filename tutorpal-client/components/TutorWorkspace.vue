@@ -41,14 +41,10 @@
             class="tutordiv-block-23"
           >
             <div
-              v-if="session.student_joined === true && buttonShow === true"
+              v-if="session.student_joined === true"
               class="tutordiv-block-25"
             >
-              <strong
-                >You have {{ dateToString(timerDisplay) }} left in this class,
-                are you sure you want to end it?</strong
-              >
-              <br />Clicking "confirm" will confirm to us that this class has
+              Clicking "confirm" will confirm to us that this class has
               been finished. You will be paid shortly after. Thank you for
               tutoring with TutorPal!
               <br>
@@ -73,14 +69,6 @@
               allowing you to end it. If there are any issues, please contact us
               at info@tutorpal.org. We are very sorry for the inconvienence.
             </div>
-            <div
-              v-else-if="buttonShow === false"
-              style="margin-left: 10px; margin-top: 10px; margin-right: 10px"
-            >
-              You are only allowed to end this class during the last five minutes
-              of the meeting. We suggest continuing with the meeting until the
-              last five minutes. Thank you.
-            </div>
             <button
               @click="updateModalValue()"
               style="
@@ -93,6 +81,7 @@
             >
               Cancel
             </button>
+            <p style="color: hsla(0, 100%, 64%, 1); margin-top: 10px; margin-left: 20px;">{{message}}</p>
           </div>
         </div>
         <div id="main">
@@ -177,7 +166,7 @@
             float: right;
           "
         >
-          <strong>Countdown Timer: {{ dateToString(timerDisplay) }}</strong>
+          <strong>Duration: {{ convertTime(session.time_start) }} - {{ convertTime(session.time_end) }}</strong>
           <button
             @click="updateModalValue()"
             class="tutorbutton-10-copy-copy w-button"
@@ -204,9 +193,10 @@
 -
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { sub, str } from 'timelite/time'
 import getCSRF from '../utils/getCSRF'
 import dateToString from '../utils/dateToString'
+import convertTime from '../utils/convertTime'
+
 export default {
   data() {
     return {
@@ -215,7 +205,7 @@ export default {
       session: [],
       timerCount: '',
       timerDisplay: '',
-      buttonShow: false,
+      message: ''
     }
   },
   head() {
@@ -262,32 +252,6 @@ export default {
       pastSessions: 'getPastSessions',
       startedSessions: 'getStartedSessions',
     }),
-  },
-  watch: {
-    timerCount: {
-      handler(value) {
-        if (value > 0) {
-          setTimeout(() => {
-            this.timerCount--
-            if (value === 300 || value < 300) {
-              this.buttonShow = true;
-            }
-          }, 1000)
-        } else if (value === 300) {
-            alert(
-              'You can now end this class. There are still five minutes remaining in your meeting.'
-            )
-            this.buttonShow = true;
-        } else if (value === 0) {
-            alert("This meeting's time is up, please end the meeting shortly.")
-            this.buttonShow = true;
-        }
-        const t = new Date(1970, 0, 1)
-        t.setSeconds(value)
-        this.timerDisplay = t.toString()
-      },
-      immediate: true,
-    },
   },
   async mounted() {
     const script = document.createElement('script')
@@ -343,31 +307,6 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
       });
-      const time = new Date()
-      let yourDate = new Date()
-      yourDate = new Date(yourDate.getTime() - (yourDate.getTimezoneOffset()*60*1000))
-      const todayDate = yourDate.toISOString().split('T')[0]
-      let hours = time.getHours()
-      let minutes = time.getMinutes()
-      let seconds = time.getSeconds()
-      if (hours < 10) {
-        hours = '0' + hours.toString()
-      } else if (minutes < 10) {
-        minutes = '0' + minutes.toString()
-      } else if (seconds < 10) {
-        seconds = '0' + seconds.toString()
-      }
-      const now = hours + ':' + minutes + ':' + seconds
-      const hms = str(sub([this.session.time_end, now]))
-      const a = hms.split(':')
-      const timerSeconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
-      if (todayDate === this.session.date){
-        this.timerCount = timerSeconds
-      }
-      else {
-        this.timerCount = 0;
-      }
-      this.timerCount = 0;
     },
     /* eslint-enable */
     async updateModalValue() {
@@ -395,10 +334,16 @@ export default {
             'Content-Type': 'application/json',
           },
         }
-      ).then(() => {
-        this.removeSession([this.session, 'startedSessions'])
-        this.addSession([this.session, 'pastSessions'])
-        this.$router.push('/')
+      ).then((res) => {
+        if (res.status === 500) {
+          this.message="There seems to be an issue with ending the class, we believe it is because you are attempting to end this class too early. You are only allowed to end classes in the last 5 minutes, not any earlier."
+        }
+        else if(res.status === 200 || res.status === 201){
+          this.removeSession([this.session, 'startedSessions'])
+          this.addSession([this.session, 'pastSessions'])
+          this.$router.push('/')
+        }
+        console.log(res.status)
       })
     },
     ...mapActions([
@@ -408,6 +353,7 @@ export default {
       'addSession',
     ]),
     ...mapGetters(['getPastSessions', 'getStartedSessions']),
+    convertTime,
   },
 }
 </script>
