@@ -442,8 +442,8 @@ export default {
       if(age<0){
         this.errors.birthDate = "Hmmm...our data shows us you haven't been born yet"
       }
-      else if(age>70){
-        this.errors.birthDate = "Sorry but our platform doesn't accept tutors above the age of 70 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
+      else if(age>100){
+        this.errors.birthDate = "Sorry but our platform doesn't accept tutors above the age of 100 for technical reasons. If you like, you can contact our support team: info@tutorpal.org"
       }
       else if(age<15){
         this.errors.birthDate = "You must be at least 15 years old to register as a tutor."
