@@ -85,8 +85,7 @@
                     Degree: {{ restrictChar(30, tutor.education) }}
                   </div>
                   <div class="text-block-21-copy-2">
-                    Education: {{ tutor.school }}, GPA of
-                    {{ tutor.gpa }}
+                    Education: {{ tutor.school }}
                   </div>
                   <div class="text-block-21-copy-2">
                     Reviews: <div style="width: 90px; margin-top: 10%; margin-left: 10px;" :id="tutor.id"></div>
