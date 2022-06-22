@@ -84,7 +84,7 @@
                 v-if="data.education !== 'High School' || data.major !== ''"
                 >{{ data.major }} at</text
               >
-              {{ data.school }}, GPA of {{ data.gpa }}<br /><strong
+              {{ data.school }} <br /><strong
                 >Professional Experience: </strong
               >{{ data.prof_exp }} years<br /><strong
                 >Teaching Experience: </strong
