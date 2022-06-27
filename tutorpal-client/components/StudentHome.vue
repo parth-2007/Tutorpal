@@ -8,6 +8,20 @@
         <meta charset="utf-8" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
+      <div style="font-family: Poppins; padding-top: 8px; " :style="updatemodal">
+        <h3 style="text-align: center; font-size: 14px; width: 100%;">{{message}}<span style="margin-left:10px; font-size: 14px;" class="badge bg-secondary">New</span>
+        <img
+          style="float:right;  cursor: pointer;"
+          @click="updatemodalvalue()"
+          src="../static/student/images/close-1.png"
+          width="16"
+          alt=""
+        />
+        </h3>
+      </div>
+      <div style="font-family: Poppins;" class="d-grid gap-2">
+        <router-link to="/seminars" class="btn btn-primary" type="button">Join Ongoing Seminar</router-link>
+      </div>
       <body id="body" style="min-height: 100vh" class="body">
         <div class="div-block-55">
           <div class="section">
@@ -333,6 +347,7 @@ export default {
   data() {
     return {
       clicked: false,
+      clicked1: false,
       reviewHtml: [],
       q: '',
     }
@@ -377,6 +392,11 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
+    updatemodal() {
+      return {
+        display: this.clicked1 ? 'flex' : 'none',
+      }
+    },
     ...mapGetters({
       user: 'getUser',
       started: 'getStartedSessions',
@@ -408,6 +428,9 @@ export default {
       else{
         return input
       }
+    },
+    updatemodalvalue() {
+      this.clicked1 = !this.clicked1
     },
     submitSearch() {
       this.$router.push("/search/"+this.q);

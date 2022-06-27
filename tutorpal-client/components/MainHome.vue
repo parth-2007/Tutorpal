@@ -20,7 +20,6 @@
         />
         </h3>
       </div>
-
       <div style="margin-top: 0px;" class="homesection-2">
         <div class="homediv-block-5">
           <div class="homediv-block-3-copy">
