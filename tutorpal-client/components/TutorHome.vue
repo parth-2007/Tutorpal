@@ -7,7 +7,7 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <div style="font-family: Poppins;" class="d-grid gap-2">
+      <div v-if="showButton === true" style="font-family: Poppins;" class="d-grid gap-2">
         <router-link to="/seminars" class="btn btn-primary" type="button">Join Current Seminar</router-link>
       </div>
       <body id="body" style="min-height: 100vh" class="tutorbody">
