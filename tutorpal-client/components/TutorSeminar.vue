@@ -100,7 +100,7 @@
             </button>
           </div>
           <div v-else style="height: 87.8vh; font-family: Poppins; padding: 15px;">
-            <h1 style="font-size: 200px; color:#808080;"><strong>OOPS!</strong></h1>
+            <h1 style="font-size: 200px; color:black;"><strong>OOPS!</strong></h1>
               It seems you are trying to join a seminar that either hasn't started or has already ended. Please be patient and thank you for using TutorPal!
               <br><br><p style="font-size: 20px;" >Our seminar timings are:</p> <p style="font-size: 16px;"> <strong>Veer's Physics Seminar </strong> - 2 to 3 pm PT Mondays <br> <strong>Anirudh's Competition Math Seminar</strong> - 2 to 3 pm PT Wednesdays</p>
           </div>

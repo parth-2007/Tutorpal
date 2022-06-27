@@ -349,6 +349,7 @@ export default {
       clicked: false,
       clicked1: false,
       reviewHtml: [],
+      message: '',
       q: '',
     }
   },

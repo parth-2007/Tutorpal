@@ -349,6 +349,7 @@ export default {
     await this.fetchUser()
     await this.fetchSessions('upcoming')
     await this.fetchSessions('pendingOnTutor')
+    console.log(this.user.id)
     this.countPendingRequests = this.requests.length;
   },
   head() {
