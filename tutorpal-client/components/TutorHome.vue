@@ -345,6 +345,7 @@ export default {
       clicked: false,
       requests1: [],
       next: '',
+      showButton: false,
       countPendingRequests: 0,
     }
   },
@@ -353,6 +354,21 @@ export default {
     await this.fetchSessions('upcoming')
     await this.fetchSessions('pendingOnTutor')
     console.log(this.user.id)
+    const range = ["1:45", "3:15"];
+    const value = (new Date().toLocaleTimeString()).substring(0, 4)
+    const dayOfWeekName = new Date().toLocaleString(
+      'default', {weekday: 'long'}
+    );
+
+    /* eslint-disable */
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday" && this.user.id===59){
+      this.showButton = true;
+    }
+    else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday" && this.user.id===85){
+      this.showButton = true;
+    }
+
+    /* eslint-enable */
     this.countPendingRequests = this.requests.length;
   },
   head() {

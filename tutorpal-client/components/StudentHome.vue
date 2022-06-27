@@ -8,18 +8,11 @@
         <meta charset="utf-8" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
       </head>
-      <div style="font-family: Poppins; padding-top: 8px; " :style="updatemodal">
+      <div style="font-family: Poppins; padding-top: 8px;">
         <h3 style="text-align: center; font-size: 14px; width: 100%;">{{message}}<span style="margin-left:10px; font-size: 14px;" class="badge bg-secondary">New</span>
-        <img
-          style="float:right;  cursor: pointer;"
-          @click="updatemodalvalue()"
-          src="../static/student/images/close-1.png"
-          width="16"
-          alt=""
-        />
         </h3>
       </div>
-      <div style="font-family: Poppins;" class="d-grid gap-2">
+      <div v-if="showButton===true" style="font-family: Poppins;" class="d-grid gap-2">
         <router-link to="/seminars" class="btn btn-primary" type="button">Join Ongoing Seminar</router-link>
       </div>
       <body id="body" style="min-height: 100vh" class="body">
@@ -394,11 +387,6 @@ export default {
         display: this.clicked1 ? 'flex' : 'none',
       }
     },
-    updatemodal() {
-      return {
-        display: this.clicked ? 'flex' : 'none',
-      }
-    },
     ...mapGetters({
       user: 'getUser',
       started: 'getStartedSessions',
@@ -409,7 +397,7 @@ export default {
   async created() {
     await this.fetchSessions('upcoming')
     await this.fetchUser()
-    const range = ["2:00", "3:00"];
+    const range = ["1:55", "3:05"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}
@@ -442,7 +430,6 @@ export default {
     }
 
     /* eslint-enable */
-    console.log(this.message, this.showButton)
   },
   methods: {
     ...mapActions([
@@ -464,9 +451,6 @@ export default {
       else{
         return input
       }
-    },
-    updatemodalvalue() {
-      this.clicked = !this.clicked
     },
     submitSearch() {
       this.$router.push("/search/"+this.q);
