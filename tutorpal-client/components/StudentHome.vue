@@ -346,10 +346,11 @@ import getCSRF from '../utils/getCSRF'
 export default {
   data() {
     return {
-      clicked: false,
       clicked1: false,
+      clicked: false,
       reviewHtml: [],
       message: '',
+      showButton: false,
       q: '',
     }
   },
@@ -390,12 +391,12 @@ export default {
   computed: {
     logout() {
       return {
-        display: this.clicked ? 'flex' : 'none',
+        display: this.clicked1 ? 'flex' : 'none',
       }
     },
     updatemodal() {
       return {
-        display: this.clicked1 ? 'flex' : 'none',
+        display: this.clicked ? 'flex' : 'none',
       }
     },
     ...mapGetters({
@@ -453,7 +454,7 @@ export default {
     ...mapGetters(['getStartedSessions', 'getUser', 'getUpcoming']),
     convertTime,
     logoutclick() {
-      this.clicked = !this.clicked
+      this.clicked1 = !this.clicked1
     },
     restrictChar(charNum, input){
       if(parseInt(input.length) > parseInt(charNum)){
@@ -465,7 +466,7 @@ export default {
       }
     },
     updatemodalvalue() {
-      this.clicked1 = !this.clicked1
+      this.clicked = !this.clicked
     },
     submitSearch() {
       this.$router.push("/search/"+this.q);
