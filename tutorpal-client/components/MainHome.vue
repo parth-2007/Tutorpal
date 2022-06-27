@@ -9,7 +9,18 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
-      
+      <div style="font-family: Poppins; padding-top: 8px; " :style="updatemodal">
+        <h3 style="text-align: center; font-size: 14px; width: 100%;">{{message}}<span style="margin-left:10px; font-size: 14px;" class="badge bg-secondary">New</span>
+        <img
+          style="float:right;  cursor: pointer;"
+          @click="updatemodalvalue()"
+          src="../static/student/images/close-1.png"
+          width="16"
+          alt=""
+        />
+        </h3>
+      </div>
+
       <div style="margin-top: 0px;" class="homesection-2">
         <div class="homediv-block-5">
           <div class="homediv-block-3-copy">
@@ -224,6 +235,7 @@
           </div>
         </div>
       </div>
+      
       <div class="homediv-block-19">
         <p class="homeparagraph-6">
           TutorPal is the most reliable tutoring platform, designed to help and
@@ -268,7 +280,9 @@
 export default {
   data(){
     return {
-      q: ''
+      q: '',
+      clicked: true,
+      message: 'Tune in on Mondays and Wednesdays to join our free Physics and Math Seminars!'
     }
   },
   head() {
@@ -281,10 +295,54 @@ export default {
       ]
     }
   },
+  computed: {
+    updatemodal() {
+      return {
+        display: this.clicked ? 'flex' : 'none',
+      }
+    },
+  },
   methods: {
     submitSearch() {
       this.$router.push("/search/"+this.q);
+    },
+    updatemodalvalue() {
+      this.clicked = !this.clicked
+    },
+  },
+  created(){
+    const range = ["2:00", "3:00"];
+    const value = (new Date().toLocaleTimeString()).substring(0, 4)
+    const dayOfWeekName = new Date().toLocaleString(
+      'default', {weekday: 'long'}
+    );
+
+    /* eslint-disable */
+    if(dayOfWeekName === "Sunday"){
+      this.message = "Stay tuned in tommorow, because we will be hosting a free Physics seminar, only on Mondays!"
+    } 
+
+    if(dayOfWeekName === "Tuesday"){
+      this.message = "Stay tuned in tommorow, because we will be hosting a free Competitive Math seminar, only on Wednesdays!"
+    } 
+
+    if(dayOfWeekName === "Monday"){
+      this.message = "Today on TutorPal, our tutors will be hosting a free Physics (beginner to intermediate) seminar to prepare you for future courses. Register as a student to join!"
+    } 
+
+    if(dayOfWeekName === "Wednesday"){
+      this.message = "Today on TutorPal, our tutors will be hosting a free Competition Math (intermediate to advanced) seminar to prepare you for future contests. Register as a student to join!"
+    } 
+
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
+      this.message = "A free Physics seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
     }
+    else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
+      this.message = "A free Competition Math seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
+    }
+
+    console.log(this.message)
+    /* eslint-enable */
   }
 }
 </script>
