@@ -408,6 +408,40 @@ export default {
   async created() {
     await this.fetchSessions('upcoming')
     await this.fetchUser()
+    const range = ["2:00", "3:00"];
+    const value = (new Date().toLocaleTimeString()).substring(0, 4)
+    const dayOfWeekName = new Date().toLocaleString(
+      'default', {weekday: 'long'}
+    );
+
+    /* eslint-disable */
+    if(dayOfWeekName === "Sunday"){
+      this.message = "Stay tuned in tommorow, because we will be hosting a free Physics seminar, only on Mondays!"
+    } 
+
+    if(dayOfWeekName === "Tuesday"){
+      this.message = "Stay tuned in tommorow, because we will be hosting a free Competitive Math seminar, only on Wednesdays!"
+    } 
+
+    if(dayOfWeekName === "Monday"){
+      this.message = "Today on TutorPal, our tutors will be hosting a free Physics (beginner to intermediate) seminar to prepare you for future courses. Register as a student to join!"
+    } 
+
+    if(dayOfWeekName === "Wednesday"){
+      this.message = "Today on TutorPal, our tutors will be hosting a free Competition Math (intermediate to advanced) seminar to prepare you for future contests. Register as a student to join!"
+    } 
+
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
+      this.message = "A free Physics seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
+      this.showButton = true;
+    }
+    else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
+      this.message = "A free Competition Math seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
+      this.showButton = true;
+    }
+
+    /* eslint-enable */
+    console.log(this.message, this.showButton)
   },
   methods: {
     ...mapActions([

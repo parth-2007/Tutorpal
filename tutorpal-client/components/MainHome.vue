@@ -340,7 +340,6 @@ export default {
       this.message = "A free Competition Math seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
     }
 
-    console.log(this.message)
     /* eslint-enable */
   }
 }
