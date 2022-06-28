@@ -406,19 +406,19 @@ export default {
 
     /* eslint-disable */
     if(dayOfWeekName === "Sunday"){
-      this.message = "Stay tuned in tommorow, because Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar, only on Mondays from 2 - 3 pm!"
+      this.message = "Tomorrow on Monday, 2 - 3 pm, Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar!"
     } 
 
     if(dayOfWeekName === "Tuesday"){
-      this.message = "Stay tuned in tommorow, because MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics seminar, only on Wednesdays from 2 - 3 pm!"
+      this.message = "Tomorrow on Wednesday, 2 - 3 pm, MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics seminar!"
     } 
 
     if(dayOfWeekName === "Monday"){
-      this.message = "Today on TutorPal, Physics Coach and Tutor, Veer Chopra, will be hosting a free Advanced Physics (beginner to intermediate) seminar to prepare you for future courses from 2 - 3 pm."
+      this.message = "Today on TutorPal, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar to prepare you for future courses from 2 - 3 pm."
     } 
 
     if(dayOfWeekName === "Wednesday"){
-      this.message = "Today on TutorPal, MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics (intermediate to advanced) seminar to prepare you for future contests from 2 - 3 pm"
+      this.message = "Today on TutorPal, MathCounts Coach and Tutor, Anirudh Nayak, will be teaching a free Competitive Mathematics (intermediate to advanced) seminar to prepare you for future contests from 2 - 3 pm"
     } 
 
     if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
