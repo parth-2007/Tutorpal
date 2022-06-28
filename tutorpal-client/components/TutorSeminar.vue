@@ -85,7 +85,7 @@
             </div>
           </div>
         </div>
-          <span style="font-family: Poppins; font-size: 30px; color: black; margin-top: 8px; z-index: 0; margin-left: 23vw;"><strong>{{message}}</strong></span>
+          <span style="font-family: Poppins; text-align:center; font-size: 30px; color: black; margin-top: 8px; z-index: 0; margin-left: 23vw;"><strong>{{message}}</strong></span>
           <div v-if="showBody == true" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
             <div style="padding-top: 50px;" class="carousel-inner">
               <div class="carousel-item active">

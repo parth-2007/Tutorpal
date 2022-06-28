@@ -9,16 +9,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
-      <div style="font-family: Poppins; padding-top: 8px; " :style="updatemodal">
-        <h3 style="text-align: center; font-size: 14px; width: 100%;">{{message}}<span style="margin-left:10px; font-size: 14px;" class="badge bg-secondary">New</span>
-        <img
-          style="float:right;  cursor: pointer;"
-          @click="updatemodalvalue()"
-          src="../static/student/images/close-1.png"
-          width="16"
-          alt=""
-        />
-        </h3>
+      <div style="font-family: Poppins; padding: 8px; font-size:24px; background-color: #41a8d3" id="scroll-container">
+        <div style="height: 100%; white-space: nowrap; color: white; " id="scroll-text"><strong>{{message}}</strong></div>
       </div>
       <div style="margin-top: 0px;" class="homesection-2">
         <div class="homediv-block-5">
@@ -280,7 +272,6 @@ export default {
   data(){
     return {
       q: '',
-      clicked: true,
       message: 'Tune in on Mondays and Wednesdays to join our free Physics and Math Seminars!'
     }
   },
@@ -294,19 +285,9 @@ export default {
       ]
     }
   },
-  computed: {
-    updatemodal() {
-      return {
-        display: this.clicked ? 'flex' : 'none',
-      }
-    },
-  },
   methods: {
     submitSearch() {
       this.$router.push("/search/"+this.q);
-    },
-    updatemodalvalue() {
-      this.clicked = !this.clicked
     },
   },
   created(){
@@ -344,3 +325,44 @@ export default {
   }
 }
 </script>
+<style scoped>
+#scroll-container {
+  overflow: hidden;
+}
+
+#scroll-text {
+  /* animation properties */
+  -moz-transform: translateX(140%);
+  -webkit-transform: translateX(140%);
+  transform: translateX(140%);
+  
+  -moz-animation: my-animation 15s linear infinite;
+  -webkit-animation: my-animation 15s linear infinite;
+  animation: my-animation 15s linear infinite;
+}
+
+/* for Firefox */
+@-moz-keyframes my-animation {
+  from { -moz-transform: translateX(140%); }
+  to { -moz-transform: translateX(-140%); }
+}
+
+/* for Chrome */
+@-webkit-keyframes my-animation {
+  from { -webkit-transform: translateX(140%); }
+  to { -webkit-transform: translateX(-140%); }
+}
+
+@keyframes my-animation {
+  from {
+    -moz-transform: translateX(140%);
+    -webkit-transform: translateX(140%);
+    transform: translateX(140%);
+  }
+  to {
+    -moz-transform: translateX(-140%);
+    -webkit-transform: translateX(-140%);
+    transform: translateX(-140%);
+  }
+}
+</style>

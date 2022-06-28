@@ -8,13 +8,13 @@
         <meta charset="utf-8" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
-      <div style="font-family: Poppins;">
-        <div style="padding: 6px; font-size: 14px; text-align: center;" class="alert alert-success" role="alert">
+      <div id="scroll-container" style="font-family: Poppins;">
+        <div id="scroll-text" style="padding: 8px; font-size: 24px; height: 100%; white-space: nowrap; " class="alert alert-success" role="alert">
           {{message}}
         </div>
       </div>
       <div v-if="showButton===true" style="font-family: Poppins;" class="d-grid gap-2">
-        <router-link to="/seminars" class="btn btn-primary" type="button">Join Ongoing Seminar</router-link>
+        <router-link style="margin-top: 0px;" to="/seminars" class="btn btn-primary" type="button">Join Ongoing Seminar</router-link>
       </div>
       <body id="body" style="min-height: 100vh" class="body">
         <div class="div-block-55">
@@ -414,19 +414,19 @@ export default {
     } 
 
     if(dayOfWeekName === "Monday"){
-      this.message = "Today on TutorPal, our tutors will be hosting a free Physics (beginner to intermediate) seminar to prepare you for future courses. Register as a student to join!"
+      this.message = "Today on TutorPal, our tutors will be hosting a free Physics (beginner to intermediate) seminar to prepare you for future courses."
     } 
 
     if(dayOfWeekName === "Wednesday"){
-      this.message = "Today on TutorPal, our tutors will be hosting a free Competition Math (intermediate to advanced) seminar to prepare you for future contests. Register as a student to join!"
+      this.message = "Today on TutorPal, our tutors will be hosting a free Competition Math (intermediate to advanced) seminar to prepare you for future contests."
     } 
 
     if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
-      this.message = "A free Physics seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
+      this.message = "A free Physics seminar is IN PROGRESS from 2 - 3 pm, click the button underneath to join!";
       this.showButton = true;
     }
     else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
-      this.message = "A free Competition Math seminar is IN PROGRESS from 2 - 3 pm, register as a student to join!";
+      this.message = "A free Competition Math seminar is IN PROGRESS from 2 - 3 pm, click the button underneath to join!";
       this.showButton = true;
     }
 
@@ -525,5 +525,45 @@ export default {
   color: white;
   font-family: Poppins;
   font-size: 14px;
+}
+
+#scroll-container {
+  overflow: hidden;
+}
+
+#scroll-text {
+  /* animation properties */
+  -moz-transform: translateX(140%);
+  -webkit-transform: translateX(140%);
+  transform: translateX(140%);
+  
+  -moz-animation: my-animation 15s linear infinite;
+  -webkit-animation: my-animation 15s linear infinite;
+  animation: my-animation 15s linear infinite;
+}
+
+/* for Firefox */
+@-moz-keyframes my-animation {
+  from { -moz-transform: translateX(140%); }
+  to { -moz-transform: translateX(-140%); }
+}
+
+/* for Chrome */
+@-webkit-keyframes my-animation {
+  from { -webkit-transform: translateX(140%); }
+  to { -webkit-transform: translateX(-140%); }
+}
+
+@keyframes my-animation {
+  from {
+    -moz-transform: translateX(140%);
+    -webkit-transform: translateX(140%);
+    transform: translateX(140%);
+  }
+  to {
+    -moz-transform: translateX(-140%);
+    -webkit-transform: translateX(-140%);
+    transform: translateX(-140%);
+  }
 }
 </style>
