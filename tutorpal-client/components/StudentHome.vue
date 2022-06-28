@@ -343,7 +343,7 @@ export default {
       clicked1: false,
       clicked: false,
       reviewHtml: [],
-      message: '',
+      message: 'Tune in on Mondays and Wednesdays at 2 - 3 pm to join our free Advanced Physics and Competitive Mathematics Seminars hosted by Physics and MathCounts coaches, Veer Chopra, and Anirudh Nayak!',
       showButton: false,
       q: '',
     }
@@ -406,27 +406,27 @@ export default {
 
     /* eslint-disable */
     if(dayOfWeekName === "Sunday"){
-      this.message = "Stay tuned in tommorow, because Physics Coach and Tutor, Veer Chopra will be hosting a free Physics seminar, only on Mondays from 2 - 3 pm!"
+      this.message = "Stay tuned in tommorow, because Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar, only on Mondays from 2 - 3 pm!"
     } 
 
     if(dayOfWeekName === "Tuesday"){
-      this.message = "Stay tuned in tommorow, because MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Math seminar, only on Wednesdays from 2 - 3 pm!"
+      this.message = "Stay tuned in tommorow, because MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics seminar, only on Wednesdays from 2 - 3 pm!"
     } 
 
     if(dayOfWeekName === "Monday"){
-      this.message = "Today on TutorPal, Physics Coach and Tutor, Veer Chopra, will be hosting a free Physics (beginner to intermediate) seminar to prepare you for future courses from 2 - 3 pm."
+      this.message = "Today on TutorPal, Physics Coach and Tutor, Veer Chopra, will be hosting a free Advanced Physics (beginner to intermediate) seminar to prepare you for future courses from 2 - 3 pm."
     } 
 
     if(dayOfWeekName === "Wednesday"){
-      this.message = "Today on TutorPal, MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competition Math (intermediate to advanced) seminar to prepare you for future contests from 2 - 3 pm"
+      this.message = "Today on TutorPal, MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics (intermediate to advanced) seminar to prepare you for future contests from 2 - 3 pm"
     } 
 
     if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
-      this.message = "A free Physics seminar is IN PROGRESS from 2 - 3 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
+      this.message = "A free Advanced Physics seminar is IN PROGRESS from 2 - 3 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
       this.showButton = true;
     }
     else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
-      this.message = "A free Competition Math seminar is IN PROGRESS by Marshall's MathCounts coach, Anirudh Nayak from 2 - 3 pm, click the button underneath to join!";
+      this.message = "A free Competitive Mathematics seminar is IN PROGRESS by Marshall's MathCounts coach, Anirudh Nayak from 2 - 3 pm, click the button underneath to join!";
       this.showButton = true;
     }
 
