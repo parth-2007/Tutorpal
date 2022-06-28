@@ -8,8 +8,8 @@
         <meta charset="utf-8" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
-      <div id="scroll-container" style="font-family: Poppins;">
-        <div id="scroll-text" style="padding: 8px; font-size: 24px; height: 100%; white-space: nowrap; " class="alert alert-success" role="alert">
+      <div class="alert alert-success" role="alert" id="scroll-container" style="font-family: Poppins;">
+        <div id="scroll-text" style="padding: 8px; font-size: 20px; height: 100%; white-space: nowrap; ">
           {{message}}
         </div>
       </div>
@@ -533,9 +533,9 @@ export default {
 
 #scroll-text {
   /* animation properties */
-  -moz-transform: translateX(140%);
-  -webkit-transform: translateX(140%);
-  transform: translateX(140%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
   
   -moz-animation: my-animation 15s linear infinite;
   -webkit-animation: my-animation 15s linear infinite;
@@ -544,21 +544,21 @@ export default {
 
 /* for Firefox */
 @-moz-keyframes my-animation {
-  from { -moz-transform: translateX(140%); }
+  from { -moz-transform: translateX(100%); }
   to { -moz-transform: translateX(-140%); }
 }
 
 /* for Chrome */
 @-webkit-keyframes my-animation {
-  from { -webkit-transform: translateX(140%); }
+  from { -webkit-transform: translateX(100%); }
   to { -webkit-transform: translateX(-140%); }
 }
 
 @keyframes my-animation {
   from {
-    -moz-transform: translateX(140%);
-    -webkit-transform: translateX(140%);
-    transform: translateX(140%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
   }
   to {
     -moz-transform: translateX(-140%);

@@ -332,9 +332,9 @@ export default {
 
 #scroll-text {
   /* animation properties */
-  -moz-transform: translateX(140%);
-  -webkit-transform: translateX(140%);
-  transform: translateX(140%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
   
   -moz-animation: my-animation 15s linear infinite;
   -webkit-animation: my-animation 15s linear infinite;
@@ -343,21 +343,21 @@ export default {
 
 /* for Firefox */
 @-moz-keyframes my-animation {
-  from { -moz-transform: translateX(140%); }
+  from { -moz-transform: translateX(100%); }
   to { -moz-transform: translateX(-140%); }
 }
 
 /* for Chrome */
 @-webkit-keyframes my-animation {
-  from { -webkit-transform: translateX(140%); }
+  from { -webkit-transform: translateX(100%); }
   to { -webkit-transform: translateX(-140%); }
 }
 
 @keyframes my-animation {
   from {
-    -moz-transform: translateX(140%);
-    -webkit-transform: translateX(140%);
-    transform: translateX(140%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
   }
   to {
     -moz-transform: translateX(-140%);
