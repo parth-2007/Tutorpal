@@ -414,11 +414,11 @@ export default {
     } 
 
     if(dayOfWeekName === "Monday"){
-      this.message = "Today on TutorPal, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar to prepare you for future courses from 2 - 3 pm."
+      this.message = "Today at 2 - 3 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar!"
     } 
 
     if(dayOfWeekName === "Wednesday"){
-      this.message = "Today on TutorPal, MathCounts Coach and Tutor, Anirudh Nayak, will be teaching a free Competitive Mathematics (intermediate to advanced) seminar to prepare you for future contests from 2 - 3 pm"
+      this.message = "Today at 2 - 3 pm, MathCounts Coach and Tutor, Anirudh Nayak, will be teaching a free Competitive Mathematics (intermediate to advanced) seminar!"
     } 
 
     if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
@@ -545,13 +545,13 @@ export default {
 /* for Firefox */
 @-moz-keyframes my-animation {
   from { -moz-transform: translateX(100%); }
-  to { -moz-transform: translateX(-140%); }
+  to { -moz-transform: translateX(-150%); }
 }
 
 /* for Chrome */
 @-webkit-keyframes my-animation {
   from { -webkit-transform: translateX(100%); }
-  to { -webkit-transform: translateX(-140%); }
+  to { -webkit-transform: translateX(-150%); }
 }
 
 @keyframes my-animation {
@@ -561,9 +561,9 @@ export default {
     transform: translateX(100%);
   }
   to {
-    -moz-transform: translateX(-140%);
-    -webkit-transform: translateX(-140%);
-    transform: translateX(-140%);
+    -moz-transform: translateX(-150%);
+    -webkit-transform: translateX(-150%);
+    transform: translateX(-150%);
   }
 }
 </style>
