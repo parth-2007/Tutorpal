@@ -4,6 +4,7 @@ from . import views as v
 
 router = DefaultRouter()
 router.register(r'sessions', v.SessionViewSet)
+router.register(r'seminars', v.SeminarViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

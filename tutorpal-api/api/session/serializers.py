@@ -1,6 +1,40 @@
-from .models import Session
+from .models import Session, Seminar
 from rest_framework import serializers
-from register.serializers import StudentViewingSerializer, TutorViewingSerializer
+from register.serializers import StudentViewingSerializer, TutorViewingSerializer, NestedTutorSerializer
+
+
+# one for not in the seminar as a student
+class StudentSeminarSerializer(serializers.ModelSerializer):
+    tutor = NestedTutorSerializer(read_only=True)
+    number_students = serializers.SerializerMethodField()
+
+    def get_number_students(self, seminar):
+        return seminar.students.count()
+
+    class Meta:
+        model = Seminar
+        fields = [
+            'id', 'tutor', 'date', 'time_start', 'time_end',
+            'duration', 'description', 'subjects',
+            'call_url', 'number_students'
+        ]
+        read_only_fields = fields
+
+
+class TutorSeminarSerializer(serializers.ModelSerializer):
+    number_students = serializers.SerializerMethodField()
+
+    def get_number_students(self, seminar):
+        return seminar.students.count()
+
+    class Meta:
+        model = Seminar
+        fields = [
+            'id', 'tutor', 'date', 'time_start', 'time_end',
+            'duration', 'description', 'subjects',
+            'call_url', 'number_students'
+        ]
+        read_only_fields = ['tutor']
 
 
 class StudentSessionSerializer(serializers.ModelSerializer):

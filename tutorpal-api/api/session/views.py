@@ -1,28 +1,92 @@
-from django.core import exceptions
-from django.http import request
-from .models import Session
-from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.request import HttpRequest
-from dry_rest_permissions.generics import DRYPermissions
-from rest_framework.decorators import action, api_view
-from rest_framework.permissions import IsAuthenticated
-from django.db.models.query import QuerySet
-from register.models import Tutor, Student
-from datetime import datetime, timedelta
-from django.utils import timezone
-import random
-import math
-from chat.models import Room
-# from django.db.models import F, ExpressionWrapper, DateTimeField
-from .payments import send_payout, refund_order, capture_order
-# email
-from django.core.mail import send_mail, send_mass_mail
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-from django.conf import settings
 import os
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, send_mass_mail
+from .payments import send_payout, refund_order, capture_order
+from chat.models import Room
+from register.permissions import IsStudent
+import math
+import random
+from django.utils import timezone
+from datetime import datetime, timedelta
+from register.models import Tutor, Student
+from django.db.models.query import QuerySet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, api_view
+from dry_rest_permissions.generics import DRYPermissions
+from rest_framework.request import HttpRequest
+from rest_framework.response import Response
+from rest_framework import viewsets, status
+from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer, StudentSeminarSerializer, TutorSeminarSerializer
+from .models import Session, Seminar
+from django.core import exceptions
+# from django.db.models import F, ExpressionWrapper, DateTimeField
+# email
+
+
+class SeminarViewSet(viewsets.ModelViewSet):
+    queryset = Seminar.objects.all()
+    permission_classes = [DRYPermissions]
+
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated and self.request.user.has_tutor:
+            print(self.request.user.has_tutor)
+            return TutorSeminarSerializer
+        print('here')
+        return StudentSeminarSerializer
+
+    def perform_create(self, serializer):
+        data = self.request.data
+        tutor = self.request.user.tutor
+        start = datetime.strptime(data.get("time_start"), "%H:%M")
+        end = datetime.strptime(data.get("time_end"), "%H:%M")
+        duration = end - start
+        letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        result_str = ''.join(random.choice(letters) for i in range(30))
+        serializer.save(tutor=tutor,
+                        tutor_pk=self.request.user.tutor_pk,
+                        date=data.get('date'),
+                        time_start=data.get('time_start'),
+                        time_end=data.get('time_end'),
+                        duration=duration,
+                        description=data.get('description'),
+                        subjects=data.get('subjects'),
+                        call_url=result_str)
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def my_seminars(self, request):
+        if request.user.has_tutor:
+            queryset = Seminar.objects.filter(
+                tutor_pk=self.request.user.tutor_pk)
+        else:
+            queryset = Seminar.objects.filter(
+                student_pk=self.request.user.student_pk)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            if request.user.has_tutor:
+                serializer_class = TutorSeminarSerializer(page, many=True)
+            else:
+                serializer_class = StudentSeminarSerializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        if request.user.has_tutor:
+            serializer_class = TutorSeminarSerializer(page, many=True)
+        else:
+            serializer_class = StudentSeminarSerializer(page, many=True)
+        return Response(serializer_class.data)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsStudent])
+    def register(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        seminar.students.add(request.user.student)
+        seminar.save()
+        return Response(data={'success': 'added student'}, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsStudent])
+    def unregister(self, request, pk):
+        Seminar.objects.get(pk=pk).students.remove(request.user.student)
+        return Response(data={'success': 'removed student'}, status=status.HTTP_200_OK)
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -70,7 +134,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                         'tutor', 'tutor__user').get(pk=pk)
             else:
                 if not hasattr(self, 'session'):
-                   self.session = Session.objects.get(pk=pk) 
+                    self.session = Session.objects.get(pk=pk)
             return self.session
         else:
             return super().get_object()
@@ -315,7 +379,7 @@ def finish_session(request, id):
             tutor.save()
             # paypal fees and round
             payout_price = math.floor(
-                ((float(session.price) * 0.9651) - 0.49) * 100) / 100
+                ((float(session.price) * 0.9151) - 0.49) * 100) / 100
             if payout_price > 0:
                 payout = send_payout(email=tutor.paypal_email if len(
                     tutor.paypal_email) > 0 else tutor.user.email, price=payout_price, session_id=session.id)

@@ -163,31 +163,13 @@ class TutorViewingSerializer(serializers.ModelSerializer):
     extra_kwargs = {'verified': {'read_only': True}, 'average_reviews': {
         'read_only': True}, 'free_tutoring_given': {'read_only': True}}
 
-    # def update(self, instance, validated_data):
-    #     instance.qualifications = validated_data.get(
-    #         'qualifications', instance.qualifications)
-    #     instance.what_you_teach = validated_data.get(
-    #         'what_you_teach', instance.what_you_teach)
-    #     instance.subjects = validated_data.get('subjects', instance.subjects)
-    #     instance.birth_date = validated_data.get(
-    #         'birth_date', instance.birth_date)
-    #     instance.bio = validated_data.get('bio', instance.bio)
-    #     instance.rates = validated_data.get('rates', instance.rates)
-    #     instance.occupation = validated_data.get(
-    #         'occupation', instance.occupation)
-    #     instance.linkedIn = validated_data.get('linkedIn', instance.linkedIn)
-    #     instance.prof_exp = validated_data.get('prof_exp', instance.prof_exp)
-    #     instance.teach_exp = validated_data.get(
-    #         'teach_exp', instance.teach_exp)
-    #     instance.education = validated_data.get(
-    #         'education', instance.education)
-    #     instance.school = validated_data.get('school', instance.school)
-    #     instance.gpa = validated_data.get('gpa', instance.gpa)
-    #     instance.major = validated_data.get('major', instance.major)
-    #     instance.gender = validated_data.get('gender', instance.gender)
-    #     instance.tutor_type = validated_data.get(
-    #         'tutor_type', instance.tutor_type)
-    #     instance.availability = validated_data.get(
-    #         'availability', instance.availability)
-    #     instance.save()
-    #     return instance
+
+class NestedTutorSerializer(serializers.ModelSerializer):
+    user = UserViewingSerializer(read_only=True)
+
+    class Meta:
+        model = Tutor
+        fields = [
+            'id', 'user', 'verified'
+        ]
+        read_only_fields = fields

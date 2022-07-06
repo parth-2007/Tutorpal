@@ -3,7 +3,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import User, Student, Tutor
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.timezone import now
 from rest_framework.decorators import api_view
@@ -139,7 +139,7 @@ def register_tutor(request):
 @api_view()
 def activate_account(request, uidb64, token):
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)
@@ -185,7 +185,7 @@ def password_reset(request, uidb64, token):
         return Response(data="New password not provided", status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         return Response(data="Invalid credentials provided", status=status.HTTP_400_BAD_REQUEST)

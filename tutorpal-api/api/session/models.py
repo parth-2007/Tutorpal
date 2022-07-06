@@ -72,3 +72,42 @@ class Session(models.Model):
     @authenticated_users
     def has_create_permission(request):
         return request.user.has_student
+
+
+class Seminar(models.Model):
+    students = models.ManyToManyField(Student)
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
+    tutor_pk = models.IntegerField()
+
+    date = models.DateField(help_text="YYYY-MM-DD")
+    time_start = models.TimeField()
+    time_end = models.TimeField()
+    duration = models.DurationField(blank=True)
+
+    description = models.TextField(max_length=500, blank=True)
+    subjects = models.CharField(max_length=64, blank=True)
+
+    call_url = models.CharField(max_length=30, blank=True)
+
+    @staticmethod
+    def has_read_permission(request):
+        return True
+
+    def has_object_read_permission(self, request):
+        return True
+
+    @staticmethod
+    @authenticated_users
+    def has_write_permission(request):
+        return request.user.is_authenticated
+
+    @authenticated_users
+    def has_object_write_permission(self, request):
+        if request.user.has_tutor:
+            return self.tutor_pk == request.user.tutor_pk
+        return False
+
+    @staticmethod
+    @authenticated_users
+    def has_create_permission(request):
+        return request.user.has_tutor
