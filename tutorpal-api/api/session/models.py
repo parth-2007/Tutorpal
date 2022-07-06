@@ -89,6 +89,9 @@ class Seminar(models.Model):
 
     call_url = models.CharField(max_length=30, blank=True)
 
+    started = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
+
     @staticmethod
     def has_read_permission(request):
         return True

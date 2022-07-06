@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail, send_mass_mail
 from .payments import send_payout, refund_order, capture_order
 from chat.models import Room
-from register.permissions import IsStudent
+from register.permissions import IsStudent, IsTutor
 import math
 import random
 from django.utils import timezone
@@ -87,6 +87,26 @@ class SeminarViewSet(viewsets.ModelViewSet):
     def unregister(self, request, pk):
         Seminar.objects.get(pk=pk).students.remove(request.user.student)
         return Response(data={'success': 'removed student'}, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsTutor])
+    def start(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        if seminar.tutor_pk == request.user.tutor_pk:
+            seminar.started = True
+            seminar.save()
+            return Response(data={'success': 'started seminar'}, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'error': 'invalid seminar'}, status=status.HTTP_403_FORBIDDEN)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsTutor])
+    def finish(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        if seminar.tutor_pk == request.user.tutor_pk:
+            seminar.finished = True
+            seminar.save()
+            return Response(data={'success': 'finished seminar'}, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'error': 'invalid seminar'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class SessionViewSet(viewsets.ModelViewSet):

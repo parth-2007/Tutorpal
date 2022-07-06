@@ -16,7 +16,7 @@ class StudentSeminarSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'tutor', 'date', 'time_start', 'time_end',
             'duration', 'description', 'subjects',
-            'call_url', 'number_students'
+            'call_url', 'number_students', 'started', 'finished'
         ]
         read_only_fields = fields
 
@@ -32,7 +32,7 @@ class TutorSeminarSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'tutor', 'date', 'time_start', 'time_end',
             'duration', 'description', 'subjects',
-            'call_url', 'number_students'
+            'call_url', 'number_students', 'started', 'finished'
         ]
         read_only_fields = ['tutor']
 
