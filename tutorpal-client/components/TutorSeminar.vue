@@ -215,6 +215,10 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: "uihesiutfhiujhiwujheriujqio13784o1-098iy",
       });
+      setInterval(function myTimer(){
+        wt.resetZoom()
+      }, 1000);
+
     },
     /* eslint-enable */
     ...mapActions([
