@@ -93,7 +93,7 @@ export default {
   methods: {
     onEnter() {
       if(parseFloat(this.amount) < 1.00){
-        this.message = "Sorry, the amount must be at least $2 as transactions and payment fees will take away from the final donation."
+        this.message = "Sorry, the amount must be at least $1 as transactions and payment fees will take away from the final donation."
        }
        else if(isNaN(parseFloat(this.amount)) || parseFloat(this.amount) <= 0){
         this.message = "The amount you have entered must be a positive number."
@@ -115,7 +115,7 @@ export default {
           createOrder: function(data, actions) {
               console.log("transaction complete")
               return actions.order.create({
-                purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.amount)}}]
+                purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
               });
           },
 
