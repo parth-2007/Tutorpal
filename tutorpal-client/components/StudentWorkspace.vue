@@ -120,6 +120,19 @@
             </div>
           </div>
         </div>
+        <h1
+          style="
+            font-family: Poppins;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            font-size: 20px;
+            color: black;
+            float: right;
+          "
+        >
+          <strong>Duration: {{ convertTime(session.time_start) }} - {{ convertTime(session.time_end) }}</strong>
+        </h1>
         <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
           <div style="margin-top:25px;" class="carousel-inner">
             <div class="carousel-item active">
@@ -141,6 +154,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
+import convertTime from '../utils/convertTime'
 
 export default {
   data() {
@@ -249,6 +263,7 @@ export default {
     },
     /* eslint-enable */
     ...mapActions(['fetchUser']),
+    convertTime,
   },
 }
 </script>

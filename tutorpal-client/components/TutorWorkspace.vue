@@ -188,8 +188,8 @@
               <div style="height: 100vh;" ref="container" id="wt-container"></div>
             </div>
           </div>
-          <button style="height:20px; margin-top: 15px; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
+          <button style="height:20px; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 15px;">Whiteboard</span>
           </button>
         </div>
       </body>
