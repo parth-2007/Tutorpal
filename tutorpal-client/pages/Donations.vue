@@ -112,19 +112,28 @@ export default {
             label: 'pay',
             height: 40,
           },
-          createOrder: (data, actions) => {
-            if(this.message === "Click the below buttons to proceed with paying your donation."){
+          createOrder: function(data, actions) {
+            if(this.message ===  "Click the below buttons to proceed with paying your donation."){
+              console.log("transaction complete")
               return actions.order.create({
                 purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.amount)}}]
               });
             }
           },
-          onApprove: (data, actions) => {
-            return actions.order.capture().then(function(orderData) {
-              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-              this.message = "Thank you for your payment!";
-            });
-          },
+
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(orderData) {
+            
+            // Full available details
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+            // Show a success message within this page, e.g.
+            this.message = "Thank you for your donation!"
+            console.log("success")
+            // Or go to another URL:  actions.redirect('thank_you.html');
+            
+          });
+        },
           onError: () => {
             this.$router.push('/donations')
           },
