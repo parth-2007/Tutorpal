@@ -92,6 +92,7 @@ export default {
   },
   methods: {
     onEnter() {
+      console.log(this.amount)
       if(parseFloat(this.amount) < 1.00){
         this.message = "Sorry, the amount must be at least $1 as transactions and payment fees will take away from the final donation."
        }
@@ -113,7 +114,7 @@ export default {
             height: 40,
           },
           createOrder: function(data, actions) {
-              console.log(parseFloat(this.amount))
+              console.log(this.amount)
               return actions.order.create({
                 purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
               });
