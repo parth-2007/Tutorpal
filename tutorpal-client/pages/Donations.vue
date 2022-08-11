@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     onEnter() {
-      if(parseFloat(this.amount) < 2.00){
+      if(parseFloat(this.amount) < 1.00){
         this.message = "Sorry, the amount must be at least $2 as transactions and payment fees will take away from the final donation."
        }
        else if(isNaN(parseFloat(this.amount)) || parseFloat(this.amount) <= 0){
@@ -113,12 +113,10 @@ export default {
             height: 40,
           },
           createOrder: function(data, actions) {
-            if(this.message ===  "Click the below buttons to proceed with paying your donation."){
               console.log("transaction complete")
               return actions.order.create({
                 purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.amount)}}]
               });
-            }
           },
 
         onApprove: function(data, actions) {
