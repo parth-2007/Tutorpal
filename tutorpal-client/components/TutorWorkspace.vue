@@ -180,9 +180,9 @@
           </button>
         </h1>
         <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
-          <div style="margin-top:25px;" class="carousel-inner">
-            <div class="carousel-item active">
-              <div ref="meeting"></div>
+          <div class="carousel-inner">
+            <div style="padding: 0px; margin: 0px;" class="carousel-item active">
+              <div style="margin-top: -15px;" ref="meeting"></div>
             </div>
             <div class="carousel-item">
               <div style="height: 100vh;" ref="container" id="wt-container"></div>
