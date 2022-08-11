@@ -122,13 +122,13 @@ export default {
             });
           },
           onApprove: (data, actions) => {
+            this.message = "Thank you for your donation!"
             return actions.order.capture().then(function(orderData) {
               
               // Full available details
               console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
               // Show a success message within this page, e.g.
-              this.message = "Thank you for your donation!"
               console.log("success")
               // Or go to another URL:  actions.redirect('thank_you.html');
               

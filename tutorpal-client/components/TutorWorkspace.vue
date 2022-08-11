@@ -179,12 +179,18 @@
             End this Class
           </button>
         </h1>
-        <div style="background-color: white;">
-          <button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button>
-        </div>
-        <div style="margin-top: 0px;">
-          <div style="float: left; width: 100vw;" ref="meeting"></div>
-          <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
+        <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+          <div style="padding-top: 50px;" class="carousel-inner">
+            <div class="carousel-item active">
+              <div style="height: 100vh;" ref="meeting"></div>
+            </div>
+            <div class="carousel-item">
+              <div style="height: 100vh;" ref="container" id="wt-container"></div>
+            </div>
+          </div>
+          <button style="height:20px; margin-top: 15px; width: 100%; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
+          </button>
         </div>
       </body>
     </html>
@@ -270,17 +276,6 @@ export default {
     logoutclick() {
       this.clicked = !this.clicked
     },
-    whiteboardHandler(){
-      const whiteboard = this.$refs.container
-      if(whiteboard.style.visibility==="hidden"){
-        whiteboard.style.visibility = "visible"
-        this.$refs.meeting.style.width= "41vw"
-      }
-      else if(whiteboard.style.visibility==="visible"){
-        whiteboard.style.visibility = "hidden"
-        this.$refs.meeting.style.width= "100vw"
-      }
-    },
     /* eslint-disable */
     async setLoaded() {
       this.session = await fetch(
@@ -298,7 +293,6 @@ export default {
       const options = {
         roomName: this.session.call_url,
         parentNode: this.$refs.meeting,
-        height: window.innerHeight-15,
       };
       new JitsiMeetExternalAPI(domain, options);
      
@@ -307,6 +301,9 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
       });
+      setInterval(function myTimer(){
+        wt.resetZoom()
+      }, 1000);
     },
     /* eslint-enable */
     async updateModalValue() {
