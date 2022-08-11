@@ -113,30 +113,32 @@ export default {
             label: 'pay',
             height: 40,
           },
-          createOrder: function(data, actions) {
-              console.log(this.amount)
-              return actions.order.create({
-                purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
-              });
+          /* eslint-disable */
+
+          createOrder: (data, actions) => {
+            console.log(this.amount)
+            return actions.order.create({
+              purchase_units: [{"amount":{"currency_code":"USD","value":parseFloat(this.amount)}}]
+            });
           },
+          onApprove: (data, actions) => {
+            return actions.order.capture().then(function(orderData) {
+              
+              // Full available details
+              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function(orderData) {
-            
-            // Full available details
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-
-            // Show a success message within this page, e.g.
-            this.message = "Thank you for your donation!"
-            console.log("success")
-            // Or go to another URL:  actions.redirect('thank_you.html');
-            
-          });
-        },
+              // Show a success message within this page, e.g.
+              this.message = "Thank you for your donation!"
+              console.log("success")
+              // Or go to another URL:  actions.redirect('thank_you.html');
+              
+            });
+          },
           onError: () => {
             this.$router.push('/donations')
           },
         })
+        /* eslint-enable */
         .render(this.$refs.paypal)
       }
   },
