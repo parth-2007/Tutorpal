@@ -113,7 +113,7 @@ export default {
             height: 40,
           },
           createOrder: function(data, actions) {
-              console.log("transaction complete")
+              console.log(parseFloat(this.amount))
               return actions.order.create({
                 purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
               });
