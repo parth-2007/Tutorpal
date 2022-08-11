@@ -356,7 +356,7 @@ export default {
     await this.fetchSessions('upcoming')
     await this.fetchSessions('pendingOnTutor')
     console.log(this.user.id)
-    const range = ["1:45", "3:15"];
+    const range = ["2:50", "4:10"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}

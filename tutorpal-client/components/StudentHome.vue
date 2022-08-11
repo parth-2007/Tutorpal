@@ -13,7 +13,7 @@
           {{message}}
         </div>
       </div>
-      <div v-if="showButton===true" style="font-family: Poppins;" class="d-grid gap-2">
+      <div v-if="showButton===true" style="font-family: Poppins;">
         <router-link style="margin-top: 0px;" to="/seminars" class="btn btn-primary" type="button">Join Ongoing Seminar</router-link>
       </div>
       <body id="body" style="min-height: 100vh" class="body">
