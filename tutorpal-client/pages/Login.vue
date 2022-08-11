@@ -38,6 +38,13 @@
               class="homelink-2-copy w--current"
               >login</router-link
             >
+            <router-link
+              style="z-index: 2"
+              to="/donations"
+              aria-current="page"
+              class="homelink-2-copy w--current"
+              >donate</router-link
+            >
           </div>
           <router-link
             style="z-index: 2"

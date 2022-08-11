@@ -26,6 +26,7 @@
           /></router-link>
           <div class="homediv-block-4">
             <router-link to="/login" class="homelink-2-copy">login</router-link>
+            <router-link to="/donations" class="homelink-2-copy">donate</router-link>
           </div>
           <router-link
             to="/register"

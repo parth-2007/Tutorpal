@@ -109,6 +109,8 @@
                     >Volunteering</router-link>
                   <router-link to="/calendar" class="nav-link-4 w-nav-link w--current"
                     >Calendar</router-link>
+                    <router-link to="/donations" class="nav-link-4 w-nav-link"
+                      >Donate</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
