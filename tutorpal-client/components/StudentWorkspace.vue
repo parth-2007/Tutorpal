@@ -121,7 +121,7 @@
           </div>
         </div>
         <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
-          <div class="carousel-inner">
+          <div style="margin-top:25px;" class="carousel-inner">
             <div class="carousel-item active">
               <div ref="meeting"></div>
             </div>
@@ -234,7 +234,7 @@ export default {
       const options = {
           roomName: this.session.call_url,
           parentNode: this.$refs.meeting,
-          height: window.innerHeight-15,
+          height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
       await new Promise(resolve => setTimeout(resolve, 2000));

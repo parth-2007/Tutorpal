@@ -293,7 +293,7 @@ export default {
       const options = {
         roomName: this.session.call_url,
         parentNode: this.$refs.meeting,
-        height: window.innerHeight-15,
+        height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
      
