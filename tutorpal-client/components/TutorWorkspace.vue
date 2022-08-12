@@ -180,7 +180,7 @@
             End this Class
           </button>
         </h1>
-        <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+        <div style="z-index: -1;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
           <div class="carousel-inner">
             <div style="padding: 0px; margin: 0px;" class="carousel-item active">
               <div style="margin-top: -15px;" ref="meeting"></div>
@@ -190,7 +190,7 @@
             </div>
           </div>
           <button style="height:20px; margin-top: 15px; color: black; float:left; width: 200px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-              <span class="btn btn-outline-primary" style="border-radius: 20px; width: 200px; margin: 15px; padding-bottom: 10px;">Whiteboard</span>
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 15px; padding-bottom: 10px;">Whiteboard</span>
           </button>
         </div>
       </body>
