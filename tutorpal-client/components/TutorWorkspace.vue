@@ -174,6 +174,7 @@
               background-color: #bb0a1e;
               margin-left: 30px;
               font-size: 16px;
+              z-index: 100;
             "
           >
             End this Class
@@ -189,7 +190,7 @@
             </div>
           </div>
           <button style="height:20px; margin-top: 15px; color: black; float:left; width: 200px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 15px; padding-bottom: 10px;">Whiteboard</span>
+              <span class="btn btn-outline-primary" style="border-radius: 20px; width: 200px; margin: 15px; padding-bottom: 10px;">Whiteboard</span>
           </button>
         </div>
       </body>
