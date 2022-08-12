@@ -274,7 +274,7 @@ export default {
   data(){
     return {
       q: '',
-      message: 'Tune in on Mondays and Wednesdays at 2 - 3 pm to join our free Advanced Physics and Competitive Mathematics Seminars hosted by Physics and MathCounts coaches, Veer Chopra, and Anirudh Nayak!'
+      message: 'Tune in on Thursdays at 3 - 4 pm to join our free Advanced Physics Seminars hosted by Physics coach, Veer Chopra.',
     }
   },
   head() {
