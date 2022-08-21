@@ -186,6 +186,9 @@ export default {
     }
     else if(this.tutor.freeTutoringGiven.split(" ").length == 2){
       this.hours = this.tutor.freeTutoringGiven.split(" ")[1].substr(0.2);
+      const dayHours = parseInt(this.tutor.freeTutoringGiven.split(" ")[0]) * 24;
+      const regHours = parseInt(this.hours)
+      this.hours = toString(dayHours + regHours)
     }
     console.log(this.hours, typeof this.hours)
     this.day = date.getDate();
