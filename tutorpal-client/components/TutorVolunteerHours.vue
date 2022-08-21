@@ -182,6 +182,7 @@ export default {
     let date = new Date()
     date = new Date(date.getTime() - (date.getTimezoneOffset()*60*1000))
     this.hours = this.tutor.freeTutoringGiven.substr(0,2)
+    console.log(this.tutor.freeTutoringGiven)
     this.day = date.getDate();
     if(this.day < 10){
       this.day = "0" + this.day
