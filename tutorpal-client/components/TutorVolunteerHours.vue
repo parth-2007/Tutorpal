@@ -181,14 +181,10 @@ export default {
     await this.fetchUser()
     let date = new Date()
     date = new Date(date.getTime() - (date.getTimezoneOffset()*60*1000))
-    if(this.tutor.freeTutoringGiven.split(" ").length === 1){
-      this.hours = this.tutor.freeTutoringGiven.substr(0,2)
-    }
-    else if(this.tutor.freeTutoringGiven.split(" ").length == 2){
-      this.hours = this.tutor.freeTutoringGiven.split(" ")[1].substr(0.2);
-      const dayHours = parseInt(this.tutor.freeTutoringGiven.split(" ")[0]) * 24;
-      const regHours = parseInt(this.hours)
-      this.hours = toString(dayHours + regHours)
+    if (this.tutor.freeTutoringGiven.split(' ').length > 1) {
+      this.hours = parseInt(this.tutor.freeTutoringGiven.split(" ")[0]) * 24 + parseInt(this.tutor.freeTutoringGiven.split(" ")[1].split(':')[0]) 
+    } else {
+      this.hours = parseInt(this.tutor.freeTutoringGiven.split(':')[0])
     }
     console.log(this.hours, typeof this.hours)
     this.day = date.getDate();
