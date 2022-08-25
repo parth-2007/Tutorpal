@@ -109,6 +109,8 @@
                     >Volunteering</router-link>
                   <router-link to="/calendar" class="nav-link-4 w-nav-link"
                     >Calendar</router-link>
+                  <router-link to="/donations" class="nav-link-4 w-nav-link"
+                    >Donate</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -179,7 +181,12 @@ export default {
     await this.fetchUser()
     let date = new Date()
     date = new Date(date.getTime() - (date.getTimezoneOffset()*60*1000))
-    this.hours = this.tutor.freeTutoringGiven.substr(0,2)
+    if (this.tutor.freeTutoringGiven.split(' ').length > 1) {
+      this.hours = parseInt(this.tutor.freeTutoringGiven.split(" ")[0]) * 24 + parseInt(this.tutor.freeTutoringGiven.split(" ")[1].split(':')[0]) 
+    } else {
+      this.hours = parseInt(this.tutor.freeTutoringGiven.split(':')[0])
+    }
+    console.log(this.hours, typeof this.hours)
     this.day = date.getDate();
     if(this.day < 10){
       this.day = "0" + this.day

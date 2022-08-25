@@ -112,6 +112,8 @@
                     >Volunteering</router-link>
                   <router-link to="/calendar" class="nav-link-4 w-nav-link"
                     >Calendar</router-link>
+                    <router-link to="/donations" class="nav-link-4 w-nav-link"
+                      >Donate</router-link>
                 </nav>
                 <div class="tutormenu-button-2 w-nav-button">
                   <div class="tutoricon-2 w-icon-nav-menu"></div>
@@ -354,7 +356,7 @@ export default {
     await this.fetchSessions('upcoming')
     await this.fetchSessions('pendingOnTutor')
     console.log(this.user.id)
-    const range = ["1:45", "3:15"];
+    const range = ["2:50", "4:10"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}

@@ -120,10 +120,31 @@
             </div>
           </div>
         </div>
-        <div style="background-color: white;"><button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button></div>
-        <div style="margin-top: 0px;">
-          <div style="float: left;" ref="meeting"></div>
-          <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
+        <h1
+          style="
+            font-family: Poppins;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            font-size: 20px;
+            color: black;
+            float: right;
+          "
+        >
+          <strong>Duration: {{ convertTime(session.time_start) }} - {{ convertTime(session.time_end) }}</strong>
+        </h1>
+        <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+          <div style="margin-top:25px;" class="carousel-inner">
+            <div class="carousel-item active">
+              <div ref="meeting"></div>
+            </div>
+            <div class="carousel-item">
+              <div style="height: 100vh;" ref="container" id="wt-container"></div>
+            </div>
+          </div>
+          <button style="height:20px; margin-top: 15px; color: black; float:left; padding-bottom: 15px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
+          </button>
         </div>
       </body>
     </html>
@@ -133,6 +154,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
+import convertTime from '../utils/convertTime'
 
 export default {
   data() {
@@ -209,17 +231,6 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    whiteboardHandler(){
-      const whiteboard = this.$refs.container
-      if(whiteboard.style.visibility==="hidden"){
-        whiteboard.style.visibility = "visible"
-        this.$refs.meeting.style.width= "41vw"
-      }
-      else if(whiteboard.style.visibility==="visible"){
-        whiteboard.style.visibility = "hidden"
-        this.$refs.meeting.style.width= "100vw"
-      }
-    },
     /* eslint-disable */
     async setLoaded() {
       this.session = await fetch(
@@ -237,7 +248,7 @@ export default {
       const options = {
           roomName: this.session.call_url,
           parentNode: this.$refs.meeting,
-          height: window.innerHeight-15,
+          height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -246,9 +257,13 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: code,
       });
+      setInterval(function myTimer(){
+        wt.resetZoom()
+      }, 1000);
     },
     /* eslint-enable */
     ...mapActions(['fetchUser']),
+    convertTime,
   },
 }
 </script>

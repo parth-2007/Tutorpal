@@ -17,6 +17,7 @@
           <div class="homediv-block-3-copy">
             <div class="homediv-block-4">
               <router-link to="/login" class="homelink-2">login</router-link>
+              <router-link to="/donations" class="homelink-2">donate</router-link>
             </div>
             <router-link to="/register" class="homebutton w-button">register</router-link>
           </div>
@@ -262,6 +263,7 @@
           <div class="homecolumn-11 w-col w-col-3">
             <router-link to="/feedback" class="homelink-3">User Feedback</router-link>
           </div>
+          
         </div>
       </div>
     </html>
@@ -272,7 +274,7 @@ export default {
   data(){
     return {
       q: '',
-      message: 'Tune in on Mondays and Wednesdays at 2 - 3 pm to join our free Advanced Physics and Competitive Mathematics Seminars hosted by Physics and MathCounts coaches, Veer Chopra, and Anirudh Nayak!'
+      message: 'Tune in on Thursdays at 3 - 4 pm to join our free Advanced Physics Seminars hosted by Physics coach, Veer Chopra.',
     }
   },
   head() {
@@ -291,35 +293,26 @@ export default {
     },
   },
   created(){
-    const range = ["2:00", "3:00"];
+    const range = ["2:55", "4:00"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}
     );
 
     /* eslint-disable */
-    if(dayOfWeekName === "Sunday"){
-      this.message = "Tomorrow on Monday, 2 - 3 pm, Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar. Register as a student to join!"
-    } 
-
-    if(dayOfWeekName === "Tuesday"){
-      this.message = "Tomorrow on Wednesday, 2 - 3 pm, MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics seminar. Register as a student to join!"
-    } 
-
-    if(dayOfWeekName === "Monday"){
-      this.message = "Today at 2 - 3 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar. Register as a student to join!"
-    } 
-
     if(dayOfWeekName === "Wednesday"){
-      this.message = "Today at 2 - 3 pm, MathCounts Coach and Tutor, Anirudh Nayak, will be teaching a free Competitive Mathematics (intermediate to advanced) seminar. Register as a student to join!"
+      this.message = "Tomorrow on Thursday, 3 - 4 pm, Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar!"
     } 
 
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
-      this.message = "A free Advanced Physics seminar is IN PROGRESS from 2 - 3 pm by Physics Coach and esteemed tutor, Veer Chopra. Register as a student to join!";
+    if(dayOfWeekName === "Thursday"){
+      this.message = "Today at 3 - 4 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar!"
+    } 
+
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Thursday"){
+      this.message = "A free Advanced Physics seminar is IN PROGRESS from 3 - 4 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
+      this.showButton = true;
     }
-    else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
-      this.message = "A free Competitive Mathematics seminar is IN PROGRESS from 2 - 3 pm by Marshall MathCounts Coach and Tutor, Anirudh Nayak, register as a student to join!";
-    }
+
 
     /* eslint-enable */
   }

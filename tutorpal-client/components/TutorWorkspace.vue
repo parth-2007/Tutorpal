@@ -174,17 +174,24 @@
               background-color: #bb0a1e;
               margin-left: 30px;
               font-size: 16px;
+              z-index: 100;
             "
           >
             End this Class
           </button>
         </h1>
-        <div style="background-color: white;">
-          <button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button>
-        </div>
-        <div style="margin-top: 0px;">
-          <div style="float: left; width: 100vw;" ref="meeting"></div>
-          <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
+        <div style="z-index: -1;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+          <div class="carousel-inner">
+            <div style="padding: 0px; margin: 0px;" class="carousel-item active">
+              <div style="margin-top: -15px;" ref="meeting"></div>
+            </div>
+            <div class="carousel-item">
+              <div style="height: 100vh;" ref="container" id="wt-container"></div>
+            </div>
+          </div>
+          <button style="height:20px; margin-top: 15px; color: black; float:left; width: 200px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 15px; padding-bottom: 10px;">Whiteboard</span>
+          </button>
         </div>
       </body>
     </html>
@@ -270,17 +277,6 @@ export default {
     logoutclick() {
       this.clicked = !this.clicked
     },
-    whiteboardHandler(){
-      const whiteboard = this.$refs.container
-      if(whiteboard.style.visibility==="hidden"){
-        whiteboard.style.visibility = "visible"
-        this.$refs.meeting.style.width= "41vw"
-      }
-      else if(whiteboard.style.visibility==="visible"){
-        whiteboard.style.visibility = "hidden"
-        this.$refs.meeting.style.width= "100vw"
-      }
-    },
     /* eslint-disable */
     async setLoaded() {
       this.session = await fetch(
@@ -298,7 +294,7 @@ export default {
       const options = {
         roomName: this.session.call_url,
         parentNode: this.$refs.meeting,
-        height: window.innerHeight-15,
+        height: window.innerHeight,
       };
       new JitsiMeetExternalAPI(domain, options);
      
@@ -307,6 +303,9 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: this.session.call_url,
       });
+      setInterval(function myTimer(){
+        wt.resetZoom()
+      }, 1000);
     },
     /* eslint-enable */
     async updateModalValue() {

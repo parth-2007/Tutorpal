@@ -142,21 +142,16 @@ export default {
     }
   },
   created(){
-    const range = ["1:45", "3:15"];
+    const range = ["2:50", "4:10"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}
     );
-    console.log(dayOfWeekName); 
 
     /* eslint-disable */
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Thursday"){
       this.showBody = true;
       this.message = "Welcome to Veer's Physics Seminar!";
-    }
-    else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
-      this.showBody = true;
-      this.message = "Welcome to Anirudh's Competition Math Seminar!";
     }
     /* eslint-enable */
 
@@ -215,6 +210,10 @@ export default {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: "uihesiutfhiujhiwujheriujqio13784o1-098iy",
       });
+      setInterval(function myTimer(){
+        wt.resetZoom()
+      }, 1000);
+
     },
     /* eslint-enable */
     ...mapActions([

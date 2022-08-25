@@ -13,7 +13,7 @@
           {{message}}
         </div>
       </div>
-      <div v-if="showButton===true" style="font-family: Poppins;" class="d-grid gap-2">
+      <div v-if="showButton===true" style="font-family: Poppins; margin: 0px;" class="d-grid gap-2">
         <router-link style="margin-top: 0px;" to="/seminars" class="btn btn-primary" type="button">Join Ongoing Seminar</router-link>
       </div>
       <body id="body" style="min-height: 100vh" class="body">
@@ -138,6 +138,8 @@
                     >Payments</router-link>
                   <router-link to="/calendar" class="nav-link-4 w-nav-link"
                     >Calendar</router-link>
+                  <router-link to="/donations" class="nav-link-4 w-nav-link"
+                    >Donate</router-link>
                 </nav>
                 <div class="menu-button-2 w-nav-button">
                   <div class="icon-2 w-icon-nav-menu"></div>
@@ -343,7 +345,7 @@ export default {
       clicked1: false,
       clicked: false,
       reviewHtml: [],
-      message: 'Tune in on Mondays and Wednesdays at 2 - 3 pm to join our free Advanced Physics and Competitive Mathematics Seminars hosted by Physics and MathCounts coaches, Veer Chopra, and Anirudh Nayak!',
+      message: 'Tune in on Thursdays at 3 - 4 pm to join our free Advanced Physics Seminars hosted by Physics coach, Veer Chopra.',
       showButton: false,
       q: '',
     }
@@ -398,35 +400,23 @@ export default {
   async created() {
     await this.fetchSessions('upcoming')
     await this.fetchUser()
-    const range = ["1:55", "3:05"];
+    const range = ["2:55", "4:00"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}
     );
 
     /* eslint-disable */
-    if(dayOfWeekName === "Sunday"){
-      this.message = "Tomorrow on Monday, 2 - 3 pm, Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar!"
-    } 
-
-    if(dayOfWeekName === "Tuesday"){
-      this.message = "Tomorrow on Wednesday, 2 - 3 pm, MathCounts Coach and Tutor, Anirudh Nayak, will be hosting a free Competitive Mathematics seminar!"
-    } 
-
-    if(dayOfWeekName === "Monday"){
-      this.message = "Today at 2 - 3 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar!"
-    } 
-
     if(dayOfWeekName === "Wednesday"){
-      this.message = "Today at 2 - 3 pm, MathCounts Coach and Tutor, Anirudh Nayak, will be teaching a free Competitive Mathematics (intermediate to advanced) seminar!"
+      this.message = "Tomorrow on Thursday, 3 - 4 pm, Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar!"
     } 
 
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Monday"){
-      this.message = "A free Advanced Physics seminar is IN PROGRESS from 2 - 3 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
-      this.showButton = true;
-    }
-    else if(value >= range[0] && value <= range[1] && dayOfWeekName === "Wednesday"){
-      this.message = "A free Competitive Mathematics seminar is IN PROGRESS by Marshall's MathCounts coach, Anirudh Nayak from 2 - 3 pm, click the button underneath to join!";
+    if(dayOfWeekName === "Thursday"){
+      this.message = "Today at 3 - 4 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar!"
+    } 
+
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Thursday"){
+      this.message = "A free Advanced Physics seminar is IN PROGRESS from 3 - 4 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
       this.showButton = true;
     }
 
