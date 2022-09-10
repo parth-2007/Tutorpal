@@ -161,7 +161,6 @@ ASGI_APPLICATION = "api.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-# Add a prod db here later
 if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     DATABASES = {
         'default': {
@@ -202,6 +201,16 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
+#         'USER': os.environ.get('DATABASE_USER', ''),
+#         'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+#         'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+#         'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

@@ -1,6 +1,7 @@
 from django.db import models
 from register.models import Tutor, Student
 from dry_rest_permissions.generics import authenticated_users
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -75,13 +76,11 @@ class Session(models.Model):
 
 
 class Seminar(models.Model):
-    students = models.ManyToManyField(Student)
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
     tutor_pk = models.IntegerField()
+    student_number = models.IntegerField(default=0)
 
-    date = models.DateField(help_text="YYYY-MM-DD")
-    time_start = models.TimeField()
-    time_end = models.TimeField()
+    times = ArrayField(models.DateTimeField())
     duration = models.DurationField(blank=True)
 
     description = models.TextField(max_length=500, blank=True)
@@ -89,8 +88,14 @@ class Seminar(models.Model):
 
     call_url = models.CharField(max_length=30, blank=True)
 
-    started = models.BooleanField(default=False)
-    finished = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)  # seminar is going on
+
+    payouts = models.IntegerField(default=0)
+    sessions_completed = models.IntegerField(default=0)
+
+    price = models.DecimalField(
+        blank=True, max_digits=10, decimal_places=2, default=0)
+    free = models.BooleanField(default=False)
 
     @staticmethod
     def has_read_permission(request):
@@ -114,3 +119,9 @@ class Seminar(models.Model):
     @authenticated_users
     def has_create_permission(request):
         return request.user.has_tutor
+
+
+class StudentSeminar(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    seminar = models.ForeignKey(Seminar, on_delete=models.CASCADE)
+    payment_id = models.CharField(max_length=64, blank=True)

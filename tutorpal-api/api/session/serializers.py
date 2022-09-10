@@ -6,35 +6,32 @@ from register.serializers import StudentViewingSerializer, TutorViewingSerialize
 # one for not in the seminar as a student
 class StudentSeminarSerializer(serializers.ModelSerializer):
     tutor = NestedTutorSerializer(read_only=True)
-    number_students = serializers.SerializerMethodField()
-
-    def get_number_students(self, seminar):
-        return seminar.students.count()
 
     class Meta:
         model = Seminar
         fields = [
-            'id', 'tutor', 'date', 'time_start', 'time_end',
-            'duration', 'description', 'subjects',
-            'call_url', 'number_students', 'started', 'finished'
+            'id', 'tutor',
+            'times', 'duration',
+            'description', 'subjects',
+            'price', 'free',
+            'student_number', 'active', 'sessions_completed'
         ]
         read_only_fields = fields
 
 
 class TutorSeminarSerializer(serializers.ModelSerializer):
-    number_students = serializers.SerializerMethodField()
-
-    def get_number_students(self, seminar):
-        return seminar.students.count()
-
     class Meta:
         model = Seminar
         fields = [
-            'id', 'tutor', 'date', 'time_start', 'time_end',
-            'duration', 'description', 'subjects',
-            'call_url', 'number_students', 'started', 'finished'
+            'id', 'tutor_paid',
+            'times', 'duration',
+            'description', 'subjects',
+            'price', 'free',
+            'student_number', 'active',
+            'payouts', 'sessions_completed'
         ]
-        read_only_fields = ['tutor']
+        read_only_fields = ['tutor', 'tutor_paid',
+                            'payouts', 'sessions_completed']
 
 
 class StudentSessionSerializer(serializers.ModelSerializer):
