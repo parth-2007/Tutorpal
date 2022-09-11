@@ -222,6 +222,7 @@ export default {
   data() {
     return {
       message: '',
+      clicked: false,
       seminar: {
         startTime: "",
         startDate: "",
@@ -256,18 +257,15 @@ export default {
       ],
     }
   },
-
   computed: {
     logout() {
       return {
         display: this.clicked ? 'flex' : 'none',
       }
     },
-    ...mapGetters({
-      user: 'getUser',
-    }),
+    ...mapGetters({ tutor: 'getTutor' }),
+    ...mapGetters({ user: 'getUser' }),
   },
- 
   methods: {
     logoutclick() {
       this.clicked = !this.clicked
@@ -346,12 +344,8 @@ export default {
         }
       })
     },
-    /* eslint-disable */
-   
-    /* eslint-enable */
-    ...mapActions([
-      'fetchUser',
-    ]),
+    ...mapActions(['fetchTutor', 'fetchUser']),
+
   },
 }
 </script>
