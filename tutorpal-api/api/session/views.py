@@ -75,7 +75,6 @@ class SeminarViewSet(viewsets.ModelViewSet):
                         call_url=result_str,
                         price=price,
                         free=free,
-                        completed=False
                         )
 
     @action(detail=False, permission_classes=[IsAuthenticated])
@@ -203,7 +202,7 @@ class SeminarViewSet(viewsets.ModelViewSet):
                     seminar.active = False
                     seminar.sessions_completed = seminar.sessions_completed + 1
                     seminar.save()
-                    return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0'}, status=status.HTTP_200_OK)
+                    return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0 or there were no students'}, status=status.HTTP_200_OK)
             else:  # session was free
                 tutor = seminar.tutor
                 tutor.num_classes = tutor.num_classes + 1
@@ -544,3 +543,15 @@ def finish_session(request, id):
             return Response(data={'Success': 'Ended Session'}, status=status.HTTP_200_OK)
     else:
         return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)
+
+
+# @api_view()
+# def test_payout(request):
+#     print('making the request')
+#     payout_price = 1.59
+#     payout = send_payout(
+#         email="sb-ysvrf3397194@personal.example.com", price=payout_price, session_id='test1')
+#     if payout == 'success':  # payout was successful
+#         return Response(data={'Success': 'Sent payout'}, status=status.HTTP_200_OK)
+#     else:
+#         return Response(data={'Error': 'There has been an error sending a payout'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

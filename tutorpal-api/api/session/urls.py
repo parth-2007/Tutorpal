@@ -9,5 +9,6 @@ router.register(r'seminars', v.SeminarViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('capture_order/<int:id>/', v.api_capture_order),
-    path('finish_session/<int:id>/', v.finish_session)
+    path('finish_session/<int:id>/', v.finish_session),
+    # path('test_payout/', v.test_payout)
 ]

@@ -23,14 +23,14 @@ class TutorSeminarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seminar
         fields = [
-            'id', 'tutor_paid',
+            'id',
             'times', 'duration',
             'description', 'subjects',
             'price', 'free',
             'student_number', 'active',
             'payouts', 'sessions_completed'
         ]
-        read_only_fields = ['tutor', 'tutor_paid',
+        read_only_fields = ['tutor',
                             'payouts', 'sessions_completed']
 
 
