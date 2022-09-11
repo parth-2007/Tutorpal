@@ -212,7 +212,6 @@ export default {
 
     },
     async endSeminar(){
-      console.log("hi")
       const id = parseInt(this.$route.params.id)
       const csrfToken = await getCSRF()
       const data = await fetch(process.env.API_URL + '/seminars/' + id+'/finish/', {
@@ -221,8 +220,12 @@ export default {
         headers: {
           'X-CSRFToken': csrfToken.success,
         },
-      }).then((res) => res.json())
-      this.data = data
+       }).then((res) => {
+      if (res.status === 200 || res.status === 201) {
+        this.$router.push('/seminars')
+      }
+        return res.json()
+      })
     },
     /* eslint-enable */
     ...mapActions([
