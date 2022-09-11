@@ -141,6 +141,7 @@ class SeminarViewSet(viewsets.ModelViewSet):
             message = render_to_string('seminar/emails/started_seminar.html', {
                 'tutor_user': seminar.tutor.user,
                 'domain': domain,
+                'seminar_id': seminar.id
             })
             send_mail(subject, message, settings.EMAIL_FROM, list(emails))
             return Response(data={'success': 'started seminar'}, status=status.HTTP_200_OK)
