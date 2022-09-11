@@ -27,8 +27,8 @@ SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY', '$e3o-ktfsfbnk_5z5(gboe+8&@8o%*5y5)5!p^!i3ocb*f@$rr')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     ALLOWED_HOSTS = ['api.tutorpal.org', 'localhost']

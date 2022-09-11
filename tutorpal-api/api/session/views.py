@@ -154,41 +154,45 @@ class SeminarViewSet(viewsets.ModelViewSet):
         # check if able to end session
         if request.user.has_tutor and seminar.active and seminar.tutor_pk == request.user.tutor_pk:  # you need to be able to end it
             # the seminar was paid
-            if not seminar.payouts == 2 and not seminar.free and (seminar.payouts == 0 or (seminar.payouts == 1 and seminar.sessions_completed == len(seminar.times) - 1)):
-                payout_price = math.floor(
-                    ((float(seminar.student_number * seminar.price / 2) * 0.9151) - 0.49) * 100) / 100  # paypal fee is 3.49% + $0.49, our fee is 5%
-                tutor = seminar.tutor
-                tutor.num_classes = tutor.num_classes + 1
-                tutor.save()
-                # paypal fees and round
-                if payout_price > 0:
-                    payout = send_payout(email=tutor.paypal_email if len(
-                        tutor.paypal_email) > 0 else tutor.user.email, price=payout_price, session_id="seminar" + str(seminar.id))
-                    if payout == 'success':  # payout was successful
-                        seminar.payouts = seminar.payouts + 1
-                        seminar.active = False
-                        seminar.sessions_completed = seminar.sessions_completed + 1
-                        seminar.save()
-                        return Response(data={'Success': 'Sent payout and ended session'}, status=status.HTTP_200_OK)
+            end_time = seminar.times[seminar.sessions_completed]
+            if end_time - timezone.timedelta(minutes=5) > timezone.now():
+                if not seminar.payouts == 2 and not seminar.free and (seminar.payouts == 0 or (seminar.payouts == 1 and seminar.sessions_completed == len(seminar.times) - 1)):
+                    payout_price = math.floor(
+                        ((float(seminar.student_number * seminar.price / 2) * 0.9151) - 0.49) * 100) / 100  # paypal fee is 3.49% + $0.49, our fee is 5%
+                    tutor = seminar.tutor
+                    tutor.num_classes = tutor.num_classes + 1
+                    tutor.save()
+                    # paypal fees and round
+                    if payout_price > 0:
+                        payout = send_payout(email=tutor.paypal_email if len(
+                            tutor.paypal_email) > 0 else tutor.user.email, price=payout_price, session_id="seminar" + str(seminar.id))
+                        if payout == 'success':  # payout was successful
+                            seminar.payouts = seminar.payouts + 1
+                            seminar.active = False
+                            seminar.sessions_completed = seminar.sessions_completed + 1
+                            seminar.save()
+                            return Response(data={'Success': 'Sent payout and ended session'}, status=status.HTTP_200_OK)
+                        else:
+                            seminar.active = False
+                            seminar.sessions_completed = seminar.sessions_completed + 1
+                            seminar.save()
+                            return Response(data={'Error': 'There has been an error sending a payout, but the session was ended'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     else:
                         seminar.active = False
                         seminar.sessions_completed = seminar.sessions_completed + 1
                         seminar.save()
-                        return Response(data={'Error': 'There has been an error sending a payout, but the session was ended'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                else:
-                    seminar.active = False
+                        return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0 or there were no students'}, status=status.HTTP_200_OK)
+                else:  # session was free
+                    tutor = seminar.tutor
+                    tutor.num_classes = tutor.num_classes + 1
+                    tutor.free_tutoring_given = tutor.free_tutoring_given + seminar.duration
+                    tutor.save()
                     seminar.sessions_completed = seminar.sessions_completed + 1
+                    seminar.active = False
                     seminar.save()
-                    return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0 or there were no students'}, status=status.HTTP_200_OK)
-            else:  # session was free
-                tutor = seminar.tutor
-                tutor.num_classes = tutor.num_classes + 1
-                tutor.free_tutoring_given = tutor.free_tutoring_given + seminar.duration
-                tutor.save()
-                seminar.sessions_completed = seminar.sessions_completed + 1
-                seminar.active = False
-                seminar.save()
-                return Response(data={'Success': 'Ended Session'}, status=status.HTTP_200_OK)
+                    return Response(data={'Success': 'Ended Session'}, status=status.HTTP_200_OK)
+            else:
+                return Response(data={'Error': 'Ending session too early'}, status=status.HTTP_403_FORBIDDEN)
         else:
             return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)
 
