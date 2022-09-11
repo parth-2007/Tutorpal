@@ -9,7 +9,7 @@
         <meta charset="utf-8" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
       </head>
-      <body
+      <body v-if="this.showButton === true"
         id="body"
         style="background-color: rgba(65, 168, 211, 0.2)"
         class="tutorbody-5"
@@ -85,8 +85,7 @@
             </div>
           </div>
         </div>
-          <span style="font-family: Poppins; text-align:center; font-size: 30px; color: black; margin-top: 8px; z-index: 0; margin-left: 23vw;"><strong>{{message}}</strong></span>
-          <div v-if="showBody == true" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+          <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
             <div style="padding-top: 50px;" class="carousel-inner">
               <div class="carousel-item active">
                 <div style="height: 100vh;" ref="meeting"></div>
@@ -99,24 +98,23 @@
                 <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
             </button>
           </div>
-          <div v-else style="height: 87.8vh; font-family: Poppins; padding: 15px;">
-            <h1 style="font-size: 200px; color:black;"><strong>OOPS!</strong></h1>
-              It seems you are trying to join a seminar that either hasn't started or has already ended. Please be patient and thank you for using TutorPal!
-              <br><br><p style="font-size: 20px;" >Our seminar timings are:</p> <p style="font-size: 16px;"> <strong>Veer's Physics Seminar </strong> - 2 to 3 pm PT Mondays <br> <strong>Anirudh's Competition Math Seminar</strong> - 2 to 3 pm PT Wednesdays</p>
-          </div>
       </body>
+      <div v-if="this.showButton === false">
+        <Loader></Loader>
+      </div>
     </html>
   </client-only>
 </template>
--
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import loggedInFetch from '~/utils/loggedInFetch'
 
 export default {
   data() {
     return {
-      showBody: false,
-      message: '',
+      seminar: [],
+      url: "",
+      showButton: false,
     }
   },
   head() {
@@ -141,21 +139,29 @@ export default {
       ],
     }
   },
-  created(){
-    const range = ["2:50", "4:10"];
-    const value = (new Date().toLocaleTimeString()).substring(0, 4)
-    const dayOfWeekName = new Date().toLocaleString(
-      'default', {weekday: 'long'}
-    );
-
-    /* eslint-disable */
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Thursday"){
-      this.showBody = true;
-      this.message = "Welcome to Veer's Physics Seminar!";
+  async fetch() {
+    const id = parseInt(this.$route.params.id)
+    this.seminar = await fetch(process.env.API_URL + '/seminars/' + id + '/', {
+      credentials: 'include',
+    })
+    await this.fetchUser()
+    const data = await loggedInFetch('/seminars/'+id+'/join_seminar')
+    if(data.unauthenticated === true){
+      this.showButton = false;
+      console.log("Invalid User")
     }
-    /* eslint-enable */
-
-    
+    else{
+      const script = document.createElement('script')
+      script.src = "https://www.whiteboard.team/dist/api.js"
+      const script2 = document.createElement('script')
+      script2.src = "https://meet.jit.si/external_api.js"
+      document.body.appendChild(script)
+      document.body.appendChild(script2)
+      script2.addEventListener('load', this.setLoaded)
+      await this.fetchUser()
+      this.showButton = true;
+      this.url = data.url;
+    }
   },
   beforeDestroy() {
     Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
@@ -176,21 +182,7 @@ export default {
     },
     ...mapGetters({
       user: 'getUser',
-      pastSessions: 'getPastSessions',
-      startedSessions: 'getStartedSessions',
     }),
-  },
-  async mounted() {
-    if(this.showBody === true){
-      const script = document.createElement('script')
-      script.src = "https://www.whiteboard.team/dist/api.js"
-      const script2 = document.createElement('script')
-      script2.src = "https://meet.jit.si/external_api.js"
-      document.body.appendChild(script)
-      document.body.appendChild(script2)
-      script2.addEventListener('load', this.setLoaded)
-      await this.fetchUser()
-    }
   },
   methods: {
     logoutclick() {
@@ -200,7 +192,7 @@ export default {
     async setLoaded() {
       const domain = 'meet.jit.si';
       const options = {
-        roomName: "uihesiutfhiujhiwujheriujqio13784o1-098iy",
+        roomName: this.url,
         parentNode: this.$refs.meeting,
       };
       new JitsiMeetExternalAPI(domain, options);
@@ -208,7 +200,7 @@ export default {
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-          boardCode: "uihesiutfhiujhiwujheriujqio13784o1-098iy",
+          boardCode: this.url,
       });
       setInterval(function myTimer(){
         wt.resetZoom()

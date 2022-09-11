@@ -1,13 +1,17 @@
+
 <template>
   <client-only>
     <html
-      data-wf-page="5f405fbdac064904ad639864"
-      data-wf-site="5f3c2694b3e98672caad2a0f"
+      data-wf-page="5f600218af481481a99ffa6a"
+      data-wf-site="5f600218af4814e3759ffa69"
     >
       <head>
         <meta charset="utf-8" />
       </head>
-      <body id="body" style="min-height: 100vh" class="body-3">
+      <body
+        style="background-color: rgba(65, 168, 211, 0.2); min-height: 100vh"
+        id="body"
+      >
         <div id="main">
           <div class="div-block-55">
             <div class="section">
@@ -121,21 +125,19 @@
                       >Explore</router-link
                       ><router-link
                     to="/seminars"
-                    class="tutornav-link-4 w-nav-link"
+                    class="tutornav-link-4 w-nav-link w--current"
                     >Seminars
                   </router-link
-                    ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages<span v-if="user.unread > 0" class="badge">{{
-                        user.unread
-                      }}</span></router-link
+                    ><router-link
+                      to="/inbox"
+                      class="nav-link-4 w-nav-link"
+                      >Messages</router-link
                     ><router-link to="/requests" class="nav-link-4 w-nav-link"
                       >Requests</router-link
-                    ><router-link
-                      to="/payments"
-                      class="nav-link-4 w-nav-link w--current"
+                    ><router-link to="/payments" class="nav-link-4 w-nav-link"
                       >Payments</router-link
                     ><router-link to="/calendar" class="nav-link-4 w-nav-link"
-                      >Calendar</router-link>
+                    >Calendar</router-link>
                     <router-link to="/donations" class="nav-link-4 w-nav-link"
                       >Donate</router-link>
                   </nav>
@@ -159,42 +161,20 @@
                 >Need help? Send us an email</a
               >
             </div>
-            <h1 class="heading"><strong>Payment Information</strong></h1>
             <div class="div-block-65">
-              <div class="text-block-23">Payments</div>
+              <div class="text-block-23">My Seminars</div>
               <p class="paragraph">
-                These classes have been accepted by your tutor but you have not
-                paid yet. Please make sure to pay for your session before it has
-                started. Remember that you can cancel your class anytime, even
-                after paying.
+                View all of the seminars that you have already enrolled for, you will be joining all your seminars here:
               </p>
             </div>
-            <div v-if="paymentpending.unfetched === undefined" class="loop">
-              <div
-                v-for="session in paymentpending"
-                :key="session.id"
-                id="paypending"
-              >
-                <img
-                  @click="
-                    canceledHandler(
-                      session.id,
-                      session,
-                      'pendingOnStudentPayment'
-                    )
-                  "
-                  style="margin-top: 10px; cursor: pointer; margin-right: 10px"
-                  src="../static/student/images/close-1.png"
-                  align="right"
-                  width="15"
-                  alt=""
-                />
+            <div v-if="myseminars.unfetched === undefined">
+              <div v-for="seminar in myseminars.results" :key="seminar.id" class="loop">
                 <div class="i">
                   <div class="div-block-51-copy">
                     <img
                       :src="
-                        session.tutor !== undefined
-                          ? session.tutor.user.profilePic
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.profile_pic
                           : ''
                       "
                       loading="lazy"
@@ -205,67 +185,47 @@
                       class="image-15"
                     />
                     <p class="paragraph-2">
-                      <strong class="bold-text">Schedule<br /></strong>First
-                      Session: {{ session.date }}<br />Tutor:
+                      <strong class="bold-text">Schedule <br /></strong>First
+                      Seminar: {{ seminar.times[0].substring(0, 10) }}<br />Tutor:
                       {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.firstName
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.first_name
                           : ''
                       }}
                       {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.lastName
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.last_name
                           : ''
-                      }}<br />Duration: {{ convertTime(session.timeStart) }} -
-                      {{ convertTime(session.timeEnd) }} <br />Amount:
-                      <strong class="bold-text-7">${{ session.price }}</strong
-                      ><br />Trial: {{ session.free }}
+                      }}<br />Duration: {{seminar.duration}} 
+                      <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
                     </p>
                   </div>
                   <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong>
-                    <br />Topic: {{ session.subjects }}
-                    <br />Description: {{ session.description }}
+                    <strong class="bold-text">Class Information</strong>
+                    <br />Topic: {{ seminar.subjects }}
+                    <br />Description: {{ seminar.description }}
+                    <br />Amount: ${{seminar.price}}
+                    <br />Unpaid Class: {{ seminar.free }}
+                    <br>
+                    <router-link :to="'/seminarjoin/'+seminar.id"  style="margin-top: 15px;" class="btn btn-info">Join Class</router-link>
                   </p>
-                  <div class="text-block-27">
-                    You have not paid for this session yet. Please do as soon as
-                    possible.
-                  </div>
-                  <router-link
-                    :to="'/pay/' + session.id"
-                    class="button-10 w-button"
-                    >Pay Now</router-link
-                  >
                 </div>
               </div>
             </div>
-            <div class="div-block-65-copy">
-              <div class="text-block-23">Paid Classes</div>
+            <div class="div-block-65">
+              <div class="text-block-23">Discover Seminars</div>
               <p class="paragraph">
-                Congratulations! All your work is over, now you can sit back and
-                learn from your professional tutor.
+                View all of the seminars that our platform has to offer.
               </p>
             </div>
-            <div v-if="paymentfinished.unfetched === undefined">
-              <div
-                v-for="session in paymentfinished"
-                :key="session.id"
-                id="paid"
-              >
-                <img
-                  @click="canceledHandler(session.id, session, 'upcoming')"
-                  style="margin-top: 10px; cursor: pointer; margin-right: 10px"
-                  src="../static/student/images/close-1.png"
-                  align="right"
-                  width="15"
-                  alt=""
-                />
-                <div class="item-copy">
+            <div v-if="seminars.unfetched === undefined">
+              <div v-for="seminar in seminars.results" :key="seminar.id" class="loop">
+                <div class="i">
                   <div class="div-block-51-copy">
                     <img
                       :src="
-                        session.tutor !== undefined
-                          ? session.tutor.user.profilePic
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.profile_pic
                           : ''
                       "
                       loading="lazy"
@@ -276,31 +236,31 @@
                       class="image-15"
                     />
                     <p class="paragraph-2">
-                      <strong class="bold-text">Schedule<br /></strong>First
-                      Session: {{ session.date }}<br />Tutor:
+                      <strong class="bold-text">Schedule <br /></strong>First
+                      Seminar: {{ seminar.times[0].substring(0, 10) }}<br />Tutor:
                       {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.firstName
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.first_name
                           : ''
                       }}
                       {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.lastName
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.last_name
                           : ''
-                      }}<br />Duration: {{ convertTime(session.timeStart) }} -
-                      {{ convertTime(session.timeEnd) }} <br />Amount:
-                      <strong class="bold-text-7">${{ session.price }}</strong
-                      ><br />Trial: {{ session.free }}
+                      }}<br />Duration: {{seminar.duration}} 
+                      <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
                     </p>
                   </div>
                   <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong>
-                    <br />Topic: {{ session.subjects }}
-                    <br />Description: {{ session.description }}
+                    <strong class="bold-text">Class Information</strong>
+                    <br />Topic: {{ seminar.subjects }}
+                    <br />Description: {{ seminar.description }}
+                    <br />Amount: ${{seminar.price}}
+                    <br />Unpaid Class: {{ seminar.free }}
+                    <br>
+                    <button v-if="seminar.free === true" @click="registerClass(seminar.free, seminar.id)" style="margin-top: 15px;" class="btn btn-warning">Enroll</button>
+                    <router-link v-if="seminar.free === false" :to="'/seminarpay/' + seminar.id" style="margin-top: 15px;" class="btn btn-warning">Enroll</router-link>
                   </p>
-                  <div class="text-block-27-copy">
-                    Thank you for paying for your session!
-                  </div>
                 </div>
               </div>
             </div>
@@ -311,24 +271,38 @@
   </client-only>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import convertTime from '../utils/convertTime'
-import getCSRF from '../utils/getCSRF'
+import getCSRF from '~/utils/getCSRF'
 
 export default {
   data() {
     return {
       clicked: false,
-      q: ''
+      q:"",
+      seminars: [],
+      myseminars: [],
+      data: '',
     }
   },
   async fetch() {
-    await this.fetchSessions('upcoming')
+    await this.fetchUser();
+    this.seminars = await fetch(
+      process.env.API_URL + '/seminars/discover_seminars',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json(this.response = res.status))
+    this.myseminars = await fetch(
+      process.env.API_URL + '/seminars/my_seminars',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json(this.response = res.status))
   },
   head() {
     return {
-      show: false,
-      title: 'My Payments',
+      title: 'Inbox',
       link: [
         {
           rel: 'stylesheet',
@@ -354,19 +328,15 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
-    ...mapGetters({
-      user: 'getUser',
-      paymentpending: 'getPendingOnStudentPayment',
-      paymentfinished: 'getUpcoming',
-    }),
-  },
-  async created() {
-    await this.fetchSessions('pendingOnStudentPayment')
-    await this.fetchUser()
+    ...mapGetters({ user: 'getUser'}),
   },
   methods: {
-    ...mapGetters(['getUser', 'getPendingOnStudentPayment', 'getUpcoming']),
-    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession']),
+    ...mapActions([
+      'fetchUser',
+      'setUser',
+    ]),
+    ...mapGetters(['getUser']),
+    ...mapMutations(['setUser']),
     convertTime,
     logoutclick() {
       this.clicked = !this.clicked
@@ -374,37 +344,35 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    async canceledHandler(id, session, sessionType) {
-      const x = confirm('Please confirm that you wish to cancel this session.')
-      if (x === true) {
-        const csrfToken = await getCSRF()
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
-          method: 'PATCH',
+    async registerClass(free, id){
+      const csrfToken = await getCSRF()
+      if(free===true){
+        const data = await fetch(process.env.API_URL + '/seminars/'+id+'/register/', {
+          method: 'POST',
           credentials: 'include',
           headers: {
             'X-CSRFToken': csrfToken.success,
-            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            canceled: true,
-          }),
-        })
-        this.removeSession([session, sessionType])
+        }).then((res) => res.json())
+        this.data = data
+        alert("You have successfully enrolled yourself into this seminar!")
       }
     },
-  },
+
+  }
+    
 }
 </script>
 <style scoped>
-.badge {
-  position: absolute;
-  top: 11px;
-  right: 3px;
-  padding: 4px 7px;
+.tutorbadge {
+  margin-top: 5px;
+  float: right;
+  padding: 2px 8px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
   font-size: 14px;
+  margin-right: 15px;
 }
 </style>

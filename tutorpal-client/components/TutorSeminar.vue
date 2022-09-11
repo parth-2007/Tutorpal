@@ -130,7 +130,13 @@
             </div>
           </div>
           <div style="height: 100%; font-family: Poppins;">
-            <div style="padding: 15px; margin:20px; background-color: white; height: 100%; border-radius: 8px;">
+            <div style="margin-right: 20px; margin-left: 20px;" class="div-block-65">
+              <div class="text-block-23">Create Seminars</div>
+              <p class="paragraph">
+                You can create new seminars here by entering all the inputs to the best of your abilities:
+              </p>
+            </div>
+            <div style="padding: 15px; margin-left:20px; margin-right: 20px; background-color: white; height: 100%; border-radius: 8px;">
               <p style="color: #008000; font-size: 16px; margin-top: 10px;">{{ message }}</p>
               <h1>Class Schedule</h1>
               <div class="row">
@@ -207,7 +213,57 @@
                 <br>
               <button class="btn btn-primary" @click="seminarRequest" style="margin-top: 10px;" >Submit</button>
               </div>
-
+            <div style="margin-right: 20px; margin-left: 20px;" class="div-block-65">
+              <div class="text-block-23">My Seminars</div>
+              <p class="paragraph">
+                View all of the seminars that you have already started teaching for, you will be joining all your seminars here:
+              </p>
+            </div>
+            <div style="background-color: white; margin-left: 20px; margin-right: 20px;" v-if="myseminars.unfetched === undefined">
+              <div v-for="seminar in myseminars.results" :key="seminar.id" class="loop">
+                <div class="i">
+                  <div class="div-block-51-copy">
+                    <img
+                      :src="
+                        user !== undefined
+                          ? user.profilePic
+                          : ''
+                      "
+                      loading="lazy"
+                      width="75"
+                      height="75"
+                      sizes="100px"
+                      alt=""
+                      class="image-15"
+                    />
+                    <p class="paragraph-2">
+                      <strong class="bold-text">Schedule <br /></strong>First
+                      Seminar: {{ seminar.times[0].substring(0, 10) }}<br />Tutor:
+                      {{
+                        user !== undefined
+                          ? user.firstName
+                          : ''
+                      }}
+                      {{
+                        user !== undefined
+                          ? user.lastName
+                          : ''
+                      }}<br />Duration: {{seminar.duration}} 
+                      <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
+                    </p>
+                  </div>
+                  <p class="paragraph-2-copy">
+                    <strong class="bold-text">Class Information</strong>
+                    <br />Topic: {{ seminar.subjects }}
+                    <br />Description: {{ seminar.description }}
+                    <br />Amount: ${{seminar.price}}
+                    <br />Unpaid Class: {{ seminar.free }}
+                    <br>
+                    <router-link :to="'/seminarjoin/'+seminar.id"  style="margin-top: 15px;" class="btn btn-info">Join Class</router-link>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
       </body>
     </html>
@@ -216,6 +272,7 @@
 -
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import convertTime from '../utils/convertTime'
 import getCSRF from '~/utils/getCSRF'
 
 export default {
@@ -223,6 +280,7 @@ export default {
     return {
       message: '',
       clicked: false,
+      myseminars: [],
       seminar: {
         startTime: "",
         startDate: "",
@@ -234,6 +292,15 @@ export default {
       }
       
     }
+  },
+  async fetch() {
+    await this.fetchUser();
+    this.myseminars = await fetch(
+      process.env.API_URL + '/seminars/my_seminars',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json(this.response = res.status))
   },
   head() {
     return {
@@ -344,6 +411,7 @@ export default {
         }
       })
     },
+    convertTime,
     ...mapActions(['fetchTutor', 'fetchUser']),
 
   },
