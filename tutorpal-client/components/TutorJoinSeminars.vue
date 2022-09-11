@@ -158,7 +158,7 @@ export default {
     this.showButton = true;
     this.url = this.seminar.call_url;
     const csrfToken = await getCSRF()
-    const data = await fetch(process.env.API_URL + '/seminars/23/start/', {
+    const data = await fetch(process.env.API_URL + '/seminars/' + id + '/', {
       method: 'POST',
       credentials: 'include',
       headers: {
