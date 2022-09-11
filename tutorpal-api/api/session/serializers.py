@@ -2,8 +2,11 @@ from .models import Session, Seminar
 from rest_framework import serializers
 from register.serializers import StudentViewingSerializer, TutorViewingSerializer, NestedTutorSerializer
 
+import random
 
 # one for not in the seminar as a student
+
+
 class StudentSeminarSerializer(serializers.ModelSerializer):
     tutor = NestedTutorSerializer(read_only=True)
 
@@ -32,6 +35,35 @@ class TutorSeminarSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['tutor',
                             'payouts', 'sessions_completed']
+
+    def create(self, validated_data):
+        request = self.context['request']
+        data = request.data
+        tutor = request.user.tutor
+
+        # making url
+        letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        call_url = ''.join(random.choice(letters) for i in range(30))
+
+        # checking for prices
+        if data.get('free', False):
+            price = 0
+            free = True
+        else:
+            price = data.get('price')
+            free = False
+        if data.get('price', 0) == 0:
+            free = True
+
+        validated_data['tutor'] = tutor
+        validated_data['tutor_pk'] = tutor.pk
+        validated_data['free'] = free
+        validated_data['price'] = price
+        validated_data['call_url'] = call_url
+        return super().create(validated_data)
+
+    def save(self, **kwargs):
+        return super().save(**kwargs)
 
 
 class StudentSessionSerializer(serializers.ModelSerializer):

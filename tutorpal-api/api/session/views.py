@@ -21,7 +21,6 @@ from rest_framework import viewsets, status
 from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer, StudentSeminarSerializer, TutorSeminarSerializer
 from .models import Session, Seminar, StudentSeminar
 from django.core import exceptions
-from django.utils.timezone import make_aware
 # from django.db.models import F, ExpressionWrapper, DateTimeFielde
 
 
@@ -36,46 +35,48 @@ class SeminarViewSet(viewsets.ModelViewSet):
             return TutorSeminarSerializer
         return StudentSeminarSerializer
 
-    def perform_create(self, serializer):
-        # getting data
-        data = self.request.data
-        tutor = self.request.user.tutor
-        start_time = datetime.strptime(data.get("time_start"), "%H:%M")
-        end_time = datetime.strptime(data.get("time_end"), "%H:%M")
-        duration = end_time - start_time
-        dates = data.get("times")
+    # def perform_create(self, serializer):
+    #     # getting data
+    #     data = self.request.data
+    #     tutor = self.request.user.tutor
 
-        # format dates
-        times = []
-        for date in dates:
-            parsed_date = datetime.strptime(date, '%Y-%m-%d')
-            times.append(make_aware(datetime.combine(
-                parsed_date, start_time.time())))
+    #     duration = data.get("duration")
+    #     duration = datetime.strptime(data.get("duration"), "%H:%M")
+    #     duration = timedelta(hours=duration.hour, minutes=duration.minute)
+    #     print(type(duration), duration)
 
-        # making url
-        letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-        result_str = ''.join(random.choice(letters) for i in range(30))
+    #     str_times = data.get("times")
+    #     print(type(times), type(times[0]), times)
 
-        # checking for prices
-        if data.get('free', False):
-            price = 0
-            free = True
-        else:
-            price = data.get('price')
-            free = False
-        if data.get('price', 0) == 0:
-            free = True
+    #     # format dates
+    #     times = []
+    #     for time in str_times:
+    #         parsed_datetime = datetime.strptime(time, '%Y-%m-%dT%H:%M:%ST%Z')
 
-        serializer.save(tutor=tutor,
-                        tutor_pk=self.request.user.tutor_pk,
-                        times=times,
-                        duration=duration,
-                        description=data.get('description'),
-                        subjects=data.get('subjects'),
-                        call_url=result_str,
-                        price=price,
-                        free=free,
-                        )
+    #     # making url
+    #     letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    #     result_str = ''.join(random.choice(letters) for i in range(30))
+
+    #     # checking for prices
+    #     if data.get('free', False):
+    #         price = 0
+    #         free = True
+    #     else:
+    #         price = data.get('price')
+    #         free = False
+    #     if data.get('price', 0) == 0:
+    #         free = True
+
+    #     serializer.save(tutor=tutor,
+    #                     tutor_pk=self.request.user.tutor_pk,
+    #                     times=times,
+    #                     duration=duration,
+    #                     description=data.get('description'),
+    #                     subjects=data.get('subjects'),
+    #                     call_url=result_str,
+    #                     price=price,
+    #                     free=free,
+    #                     )
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def my_seminars(self, request):

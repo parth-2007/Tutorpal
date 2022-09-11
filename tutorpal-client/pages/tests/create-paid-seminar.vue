@@ -23,12 +23,14 @@ export default {
           'X-CSRFToken': csrfToken.success,
         },
         body: JSON.stringify({
-          times: ['2022-09-16', '2022-09-23', '2022-09-30'],
-          time_start: '20:05',
-          time_end: '21:05',
+          times: [
+            '2022-09-16T20:05:00-07:00', // yyyy-mm-ddThh:mm:ss-psttoutc
+            '2022-09-23T20:05:00-07:00',
+            '2022-09-30T20:05:00-07:00',
+          ],
+          duration: '01:00:00',
           description: 'test',
           subjects: 'sdfsd',
-          call_url: 'sdfsf',
           free: false,
           price: 2.5,
         }),
