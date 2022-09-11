@@ -274,7 +274,7 @@ export default {
   data(){
     return {
       q: '',
-      message: 'Tune in on Thursdays at 3 - 4 pm to join our free Advanced Physics Seminars hosted by Physics coach, Veer Chopra.',
+      message: 'Tune in on Sundays at 5:30 - 6:30 pm to join our Advanced Physics Seminars hosted by Physics coach, Veer Chopra.',
     }
   },
   head() {
@@ -293,24 +293,23 @@ export default {
     },
   },
   created(){
-    const range = ["2:55", "4:00"];
+    const range = ["5:30", "6:30"];
     const value = (new Date().toLocaleTimeString()).substring(0, 4)
     const dayOfWeekName = new Date().toLocaleString(
       'default', {weekday: 'long'}
     );
 
     /* eslint-disable */
-    if(dayOfWeekName === "Wednesday"){
-      this.message = "Tomorrow on Thursday, 3 - 4 pm, Physics Coach and Tutor, Veer Chopra will be hosting a free Advanced Physics seminar!"
+    if(dayOfWeekName === "Saturday"){
+      this.message = "Tomorrow, Sunday, 5:30 - 6:30 pm, Physics Coach and Tutor, Veer Chopra will be hosting a Advanced Physics seminar!"
     } 
 
-    if(dayOfWeekName === "Thursday"){
-      this.message = "Today at 3 - 4 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a free Advanced Physics (beginner to intermediate) seminar!"
+    if(dayOfWeekName === "Sunday"){
+      this.message = "Today, 5:30 - 6:30 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a Advanced Physics (beginner to intermediate) seminar!"
     } 
 
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Thursday"){
-      this.message = "A free Advanced Physics seminar is IN PROGRESS from 3 - 4 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
-      this.showButton = true;
+    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Sunday"){
+      this.message = "A Advanced Physics seminar is IN PROGRESS from 5:30 - 6:30 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
     }
 
 

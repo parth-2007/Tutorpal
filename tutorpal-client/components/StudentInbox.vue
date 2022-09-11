@@ -124,6 +124,11 @@
                       aria-current="page"
                       class="nav-link-4 w-nav-link"
                       >Explore</router-link
+                      ><router-link
+                    to="/seminars"
+                    class="tutornav-link-4 w-nav-link"
+                    >Seminars
+                  </router-link
                     ><router-link
                       to="/inbox"
                       class="nav-link-4 w-nav-link w--current"
