@@ -35,49 +35,6 @@ class SeminarViewSet(viewsets.ModelViewSet):
             return TutorSeminarSerializer
         return StudentSeminarSerializer
 
-    # def perform_create(self, serializer):
-    #     # getting data
-    #     data = self.request.data
-    #     tutor = self.request.user.tutor
-
-    #     duration = data.get("duration")
-    #     duration = datetime.strptime(data.get("duration"), "%H:%M")
-    #     duration = timedelta(hours=duration.hour, minutes=duration.minute)
-    #     print(type(duration), duration)
-
-    #     str_times = data.get("times")
-    #     print(type(times), type(times[0]), times)
-
-    #     # format dates
-    #     times = []
-    #     for time in str_times:
-    #         parsed_datetime = datetime.strptime(time, '%Y-%m-%dT%H:%M:%ST%Z')
-
-    #     # making url
-    #     letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    #     result_str = ''.join(random.choice(letters) for i in range(30))
-
-    #     # checking for prices
-    #     if data.get('free', False):
-    #         price = 0
-    #         free = True
-    #     else:
-    #         price = data.get('price')
-    #         free = False
-    #     if data.get('price', 0) == 0:
-    #         free = True
-
-    #     serializer.save(tutor=tutor,
-    #                     tutor_pk=self.request.user.tutor_pk,
-    #                     times=times,
-    #                     duration=duration,
-    #                     description=data.get('description'),
-    #                     subjects=data.get('subjects'),
-    #                     call_url=result_str,
-    #                     price=price,
-    #                     free=free,
-    #                     )
-
     @action(detail=False, permission_classes=[IsAuthenticated])
     def my_seminars(self, request):
         if request.user.has_tutor:
@@ -86,6 +43,24 @@ class SeminarViewSet(viewsets.ModelViewSet):
         else:
             queryset = Seminar.objects.filter(
                 studentseminar__student=request.user.student)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            if request.user.has_tutor:
+                serializer_class = TutorSeminarSerializer(page, many=True)
+            else:
+                serializer_class = StudentSeminarSerializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        if request.user.has_tutor:
+            serializer_class = TutorSeminarSerializer(page, many=True)
+        else:
+            serializer_class = StudentSeminarSerializer(page, many=True)
+        return Response(serializer_class.data)
+
+    @action(detail=False, permission_classes=[IsStudent])
+    def discover_seminars(self, request):
+        queryset = Seminar.objects.exclude(
+            studentseminar__student=request.user.student)
         page = self.paginate_queryset(queryset)
         if page is not None:
             if request.user.has_tutor:
