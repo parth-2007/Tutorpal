@@ -157,6 +157,15 @@ export default {
     await this.fetchUser()
     this.showButton = true;
     this.url = this.seminar.call_url;
+    const csrfToken = await getCSRF()
+    const data = await fetch(process.env.API_URL + '/seminars/23/start/', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'X-CSRFToken': csrfToken.success,
+      },
+    }).then((res) => res.json())
+    this.data = data
   },
   beforeDestroy() {
     Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
