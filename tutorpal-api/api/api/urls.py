@@ -14,9 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
-from django.views.static import serve
-from django.conf import settings
+from django.urls import path, include
 import os
 
 
@@ -25,12 +23,12 @@ urlpatterns = [
     path('', include('session.urls')),
     path('', include('chat.urls')),
     path('', include('main.urls')),
-    path('admin/', admin.site.urls),
 ]
 
 # urlpatterns = [path(r'api/', include(urlpatterns))]
 
 if os.environ.get('RUN_ENV', 'local') == 'local':
+    urlpatterns += path('admin/', admin.site.urls),
     urlpatterns = [path(r'api/', include(urlpatterns))]
 
 # if settings.DEBUG and os.environ.get('RUN_ENV', 'local') != 'aws':
