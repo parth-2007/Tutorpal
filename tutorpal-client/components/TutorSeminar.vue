@@ -54,7 +54,7 @@
                       <div id="name" class="tutortext-block-18">
                         {{ user.firstName }} {{ user.lastName }}
                       </div>
-                      <div class="tutortext-block-20">User</div>
+                      <div class="tutortext-block-20">Tutor</div>
                     </div>
                     <nav :style="logout" class="tutornavigation-dropdown-2">
                       <div class="tutordropdown-pointer-2">
@@ -85,24 +85,129 @@
             </div>
           </div>
         </div>
-          <span style="font-family: Poppins; text-align:center; font-size: 30px; color: black; margin-top: 8px; z-index: 0; margin-left: 23vw;"><strong>{{message}}</strong></span>
-          <div v-if="showBody == true" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
-            <div style="padding-top: 50px;" class="carousel-inner">
-              <div class="carousel-item active">
-                <div style="height: 100vh;" ref="meeting"></div>
-              </div>
-              <div class="carousel-item">
-                <div style="height: 100vh;" ref="container" id="wt-container"></div>
+        <div class="tutordiv-block-6">
+            <div
+              data-collapse="none"
+              data-animation="default"
+              data-duration="400"
+              role="banner"
+              class="tutornavbar-2 w-nav"
+            >
+              <div class="tutorcontainer-2 w-container">
+                <nav role="navigation" class="tutornav-menu-3 w-nav-menu">
+                  <router-link
+                    to="/"
+                    class="tutornav-link-4 w-nav-link"
+                    >Requests
+                  </router-link>
+                  <router-link
+                    to="/seminars"
+                    class="tutornav-link-4 w-nav-link w--current"
+                    >Seminars
+                  </router-link
+                  ><router-link to="/inbox" class="tutornav-link-4 w-nav-link"
+                    >Messages
+                    <span v-if="user.unread > 0" class="tutorbadge">{{
+                      user.unread
+                    }}</span> </router-link
+                  ><router-link
+                    to="/payments"
+                    class="tutornav-link-4 w-nav-link"
+                    >Payments</router-link>
+                  <router-link
+                    to="/volunteering"
+                    class="tutornav-link-4 w-nav-link"
+                    >Volunteering</router-link>
+                  <router-link to="/calendar" class="nav-link-4 w-nav-link"
+                    >Calendar</router-link>
+                  <router-link to="/donations" class="nav-link-4 w-nav-link"
+                    >Donate</router-link>
+                </nav>
+                <div class="tutormenu-button-2 w-nav-button">
+                  <div class="tutoricon-2 w-icon-nav-menu"></div>
+                </div>
               </div>
             </div>
-            <button style="height:20px; margin-top: 15px; width: 100%; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
-            </button>
           </div>
-          <div v-else style="height: 87.8vh; font-family: Poppins; padding: 15px;">
-            <h1 style="font-size: 200px; color:black;"><strong>OOPS!</strong></h1>
-              It seems you are trying to join a seminar that either hasn't started or has already ended. Please be patient and thank you for using TutorPal!
-              <br><br><p style="font-size: 20px;" >Our seminar timings are:</p> <p style="font-size: 16px;"> <strong>Veer's Physics Seminar </strong> - 2 to 3 pm PT Mondays <br> <strong>Anirudh's Competition Math Seminar</strong> - 2 to 3 pm PT Wednesdays</p>
+          <div style="height: 100%; font-family: Poppins;">
+            <div style="padding: 15px; margin:20px; background-color: white; height: 100%; border-radius: 8px;">
+              <p style="color: #008000; font-size: 16px; margin-top: 10px;">{{ message }}</p>
+              <h1>Class Schedule</h1>
+              <div class="row">
+                <div class="col">
+                  <label for="date-time" class="col-2 col-form-label">Start Date</label>
+                  <div class="col-10">
+                    <input
+                      class="form-control"
+                      type="date"
+                      required
+                      v-model="seminar.startDate"
+                    />
+                  </div>
+                </div>
+                <div style="padding-left: 0px" class="col">
+                  <label for="date-time" class="col-2 col-form-label">End Date</label>
+                  <div class="col-10">
+                    <input
+                      class="form-control"
+                      type="date"
+                      required
+                      v-model="seminar.endDate"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="date-time" class="col-2 col-form-label">Start Time</label>
+                  <div class="col-10">
+                    <input
+                      v-model="seminar.startTime"
+                      class="form-control"
+                      type="time"
+                      required
+                    />
+                  </div>
+                </div>
+                <div style="padding-left: 0px" class="col">
+                  <label for="date-time" class="col-2 col-form-label">Duration (min)</label>
+                  <div class="col-10">
+                    <input
+                      v-model="seminar.duration"
+                      class="form-control"
+                      type="number"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <h1 style="margin-top: 20px" >Class Description</h1>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Subjects</label>
+                <input v-model="seminar.subjects" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Physics">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea v-model="seminar.description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+              <h1 style="margin-top: 20px" >Class Payments</h1>
+                <div class="col-10">
+                  <input
+                    v-model="seminar.price"
+                    class="form-control"
+                    placeholder="Pricing per seminar"
+                    type="number"
+                    required
+                  />
+                </div>
+                <input style="margin-top: 25px;" v-model="seminar.free" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label style="margin-top: 20px;" class="form-check-label" for="flexCheckDefault">
+                  Free Seminar($0), No payments will be sent
+                </label>
+                <br>
+              <button class="btn btn-primary" @click="seminarRequest" style="margin-top: 10px;" >Submit</button>
+              </div>
+
           </div>
       </body>
     </html>
@@ -111,12 +216,22 @@
 -
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import getCSRF from '~/utils/getCSRF'
 
 export default {
   data() {
     return {
-      showBody: false,
       message: '',
+      seminar: {
+        startTime: "",
+        startDate: "",
+        endDate: "",
+        duration: "",
+        price: "",
+        description: "",
+        free: false,
+      }
+      
     }
   },
   head() {
@@ -141,80 +256,98 @@ export default {
       ],
     }
   },
-  created(){
-    const range = ["2:50", "4:10"];
-    const value = (new Date().toLocaleTimeString()).substring(0, 4)
-    const dayOfWeekName = new Date().toLocaleString(
-      'default', {weekday: 'long'}
-    );
 
-    /* eslint-disable */
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Thursday"){
-      this.showBody = true;
-      this.message = "Welcome to Veer's Physics Seminar!";
-    }
-    /* eslint-enable */
-
-    
-  },
-  beforeDestroy() {
-    Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
-      function(item) {
-        item.remove();
-    });
-  },
   computed: {
     logout() {
       return {
         display: this.clicked ? 'flex' : 'none',
       }
     },
-    updateModal() {
-      return {
-        display: this.clicked1 ? 'flex' : 'none',
-      }
-    },
     ...mapGetters({
       user: 'getUser',
-      pastSessions: 'getPastSessions',
-      startedSessions: 'getStartedSessions',
     }),
   },
-  async mounted() {
-    if(this.showBody === true){
-      const script = document.createElement('script')
-      script.src = "https://www.whiteboard.team/dist/api.js"
-      const script2 = document.createElement('script')
-      script2.src = "https://meet.jit.si/external_api.js"
-      document.body.appendChild(script)
-      document.body.appendChild(script2)
-      script2.addEventListener('load', this.setLoaded)
-      await this.fetchUser()
-    }
-  },
+ 
   methods: {
     logoutclick() {
       this.clicked = !this.clicked
     },
-    /* eslint-disable */
-    async setLoaded() {
-      const domain = 'meet.jit.si';
-      const options = {
-        roomName: "uihesiutfhiujhiwujheriujqio13784o1-098iy",
-        parentNode: this.$refs.meeting,
-      };
-      new JitsiMeetExternalAPI(domain, options);
-     
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const wt = new api.WhiteboardTeam(this.$refs.container, {
-          clientId: '322f4ec635688d506ad1bae2f1b21cb9',
-          boardCode: "uihesiutfhiujhiwujheriujqio13784o1-098iy",
-      });
-      setInterval(function myTimer(){
-        wt.resetZoom()
-      }, 1000);
-
+    addDays(date, days) {
+        const newDate = new Date(date);
+        newDate.setDate(date.getDate() + days);
+        return newDate
     },
+
+    recurringDates(startDate, endDate, interval) {
+        let date = startDate;
+        const dates = [];
+
+        while ((date = this.addDays(date, interval)) < endDate) {
+            dates.push(date);
+        }
+
+        return dates;
+    },
+    timeCalculations(){
+      const startDate = new Date(this.seminar.startDate);
+      startDate.setDate(startDate.getDate() - 7);
+      const endDate = new Date(this.seminar.endDate);
+      endDate.setDate(endDate.getDate() + 7);
+      const interval = 7;
+      const dates = this.recurringDates(startDate, endDate, interval);
+      const startTime = this.seminar.startTime
+      const timings = [];
+      dates.forEach(function(date) {
+          const todayDate = new Date(date).toISOString().slice(0, 10);
+          const newDate = date.toString()
+          const timeOffset = newDate.substring(30, 31)
+          const time = todayDate + "T" + startTime + ":00-0" + timeOffset+":00";
+          timings.push(time);
+      });
+      return timings
+    },
+    async seminarRequest(){
+      const timings = this.timeCalculations();
+      const sessionMinutes = this.seminar.duration;
+      let minutes = sessionMinutes % 60;
+      let hours = (sessionMinutes-minutes)/60;
+      if(hours < 10){
+        hours = "0" + hours.toString()
+      }
+
+      if(minutes < 10){
+        minutes = "0" + minutes.toString()
+      }
+      const sessionDuration = hours + ':' + minutes + ":00";
+      let totalPrice = this.seminar.price;
+      totalPrice = totalPrice*timings.length;
+      const csrfToken = await getCSRF()
+      await fetch(process.env.API_URL + '/seminars/', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken.success,
+        },
+        body: JSON.stringify({
+          times: timings,
+          duration: sessionDuration,
+          description: this.seminar.description,
+          subjects: this.seminar.subjects,
+          free: this.seminar.free,
+          price: totalPrice,
+        }),
+      }).then((res) => {
+        if(res.status===200 || res.status===201){
+          this.message="Thank you for successfully creating a seminar with us!"
+        }
+        else if(res.status===400 || res.status===500){
+          this.message="Oops! We believe there has been an error, please double-check all your fields"
+        }
+      })
+    },
+    /* eslint-disable */
+   
     /* eslint-enable */
     ...mapActions([
       'fetchUser',

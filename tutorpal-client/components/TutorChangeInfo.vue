@@ -113,6 +113,11 @@
                     aria-current="page"
                     class="tutornav-link-4 w-nav-link"
                     >Requests</router-link
+                    ><router-link
+                    to="/seminars"
+                    class="tutornav-link-4 w-nav-link w--current"
+                    >Seminars
+                  </router-link
                   ><router-link
                     to="/inbox"
                     class="tutornav-link-4 w-nav-link"
