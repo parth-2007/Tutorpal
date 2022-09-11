@@ -26,7 +26,7 @@ class TutorSeminarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seminar
         fields = [
-            'id',
+            'id', 'call_url',
             'times', 'duration',
             'description', 'subjects',
             'price', 'free',
