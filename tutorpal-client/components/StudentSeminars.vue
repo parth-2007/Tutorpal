@@ -355,7 +355,8 @@ export default {
           },
         }).then((res) => res.json())
         this.data = data
-        alert("You have successfully enrolled yourself into this seminar!")
+        alert("You have successfully enrolled yourself into this seminar!");
+        this.$router.push("/seminars/");
       }
     },
 
