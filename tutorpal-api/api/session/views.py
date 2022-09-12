@@ -1,28 +1,210 @@
-from django.core import exceptions
-from django.http import request
-from .models import Session
-from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.request import HttpRequest
-from dry_rest_permissions.generics import DRYPermissions
-from rest_framework.decorators import action, api_view
-from rest_framework.permissions import IsAuthenticated
-from django.db.models.query import QuerySet
-from register.models import Tutor, Student
-from datetime import datetime, timedelta
-from django.utils import timezone
-import random
-import math
-from chat.models import Room
-# from django.db.models import F, ExpressionWrapper, DateTimeField
-from .payments import send_payout, refund_order, capture_order
-# email
-from django.core.mail import send_mail, send_mass_mail
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-from django.conf import settings
 import os
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, send_mass_mail
+from .payments import send_payout, refund_order, capture_order
+from chat.models import Room
+from register.permissions import IsStudent, IsTutor
+import math
+import random
+from django.utils import timezone
+from datetime import datetime, timedelta
+from register.models import Tutor, Student
+from django.db.models.query import QuerySet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, api_view
+from dry_rest_permissions.generics import DRYPermissions
+from rest_framework.request import HttpRequest
+from rest_framework.response import Response
+from rest_framework import viewsets, status
+from .serializers import TutorSessionSerializer, StudentSessionSerializer, ReservedSerializer, StudentSeminarSerializer, TutorSeminarSerializer
+from .models import Session, Seminar, StudentSeminar
+from django.core import exceptions
+# from django.db.models import F, ExpressionWrapper, DateTimeFielde
+
+
+class SeminarViewSet(viewsets.ModelViewSet):
+    queryset = Seminar.objects.all()
+    permission_classes = [DRYPermissions]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return StudentSeminarSerializer
+        if self.request.user.is_authenticated and self.request.user.has_tutor:
+            return TutorSeminarSerializer
+        return StudentSeminarSerializer
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def my_seminars(self, request):
+        if request.user.has_tutor:
+            queryset = Seminar.objects.filter(
+                tutor_pk=self.request.user.tutor_pk)
+        else:
+            queryset = Seminar.objects.filter(
+                studentseminar__student=request.user.student)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            if request.user.has_tutor:
+                serializer_class = TutorSeminarSerializer(page, many=True)
+            else:
+                serializer_class = StudentSeminarSerializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        if request.user.has_tutor:
+            serializer_class = TutorSeminarSerializer(page, many=True)
+        else:
+            serializer_class = StudentSeminarSerializer(page, many=True)
+        return Response(serializer_class.data)
+
+    @action(detail=False, permission_classes=[IsStudent])
+    def discover_seminars(self, request):
+        queryset = Seminar.objects.exclude(
+            studentseminar__student=request.user.student)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            if request.user.has_tutor:
+                serializer_class = TutorSeminarSerializer(page, many=True)
+            else:
+                serializer_class = StudentSeminarSerializer(page, many=True)
+            return self.get_paginated_response(serializer_class.data)
+
+        if request.user.has_tutor:
+            serializer_class = TutorSeminarSerializer(page, many=True)
+        else:
+            serializer_class = StudentSeminarSerializer(page, many=True)
+        return Response(serializer_class.data)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsStudent])
+    def register(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        if seminar.sessions_completed == len(seminar.times):
+            return Response(data={'error': 'too late to register'}, status=status.HTTP_403_FORBIDDEN)
+        try:
+            StudentSeminar.objects.get(
+                student__pk=request.user.student_pk, seminar=seminar)
+            return Response(data={'error': 'already registered'}, status=status.HTTP_403_FORBIDDEN)
+        except StudentSeminar.DoesNotExist:
+            if seminar.free:
+                StudentSeminar.objects.create(
+                    student=request.user.student, seminar=seminar)
+                seminar.student_number = seminar.student_number + 1
+                seminar.save()
+                return Response(data={'success': 'added student'}, status=status.HTTP_200_OK)
+            else:
+                order_id = request.data.get('order_id', None)
+                if not order_id:
+                    return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'order id not given'})
+                seminar = Seminar.objects.get(pk=pk)
+                response = capture_order(order_id)
+                if int(response.status_code) == 201:
+                    # print(response.result.purchase_units[0].payments.captures[0].id)
+                    payment_id = response.result.purchase_units[0].payments.captures[0].id
+                    StudentSeminar.objects.create(
+                        student=request.user.student, seminar=seminar, payment_id=payment_id)
+                    seminar.student_number = seminar.student_number + 1
+                    seminar.save()
+                    return Response(status=status.HTTP_200_OK, data={'success': 'successfully processed payment and added student'})
+                else:
+                    return Response(status=status.HTTP_200_OK, data={'error': 'payment did not process correctly'})
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsStudent])
+    def unregister(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        student_seminar = StudentSeminar.objects.get(
+            student=request.user.student, seminar=seminar)
+        if seminar.payouts > 1 or seminar.sessions_completed == len(seminar.times):
+            return Response(data={'error': 'too late to unregister'}, status=status.HTTP_400_BAD_REQUEST)
+        if not seminar.free and seminar.price > 0:
+            payment_id = student_seminar.payment_id
+            refund_order(payment_id, seminar.price)
+        student_seminar.delete()
+        seminar.student_number = seminar.student_number - 1
+        seminar.save()
+        return Response(data={'success': 'removed student'}, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsTutor])
+    def start(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        if seminar.tutor_pk == request.user.tutor_pk:
+            seminar.active = True
+            seminar.save()
+            emails = StudentSeminar.objects.filter(
+                seminar=seminar).values_list('student__user__email', flat=True)
+            if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+                domain = 'https://www.tutorpal.org/'
+            elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+                domain = 'https://beta.tutorpal.org/'
+            else:
+                domain = get_current_site(self.request).domain
+            subject = 'Your seminar has started'
+            message = render_to_string('seminar/emails/started_seminar.html', {
+                'tutor_user': seminar.tutor.user,
+                'domain': domain,
+                'seminar_id': seminar.id
+            })
+            send_mail(subject, message, settings.EMAIL_FROM, list(emails))
+            return Response(data={'success': 'started seminar'}, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'error': 'invalid seminar'}, status=status.HTTP_403_FORBIDDEN)
+
+    @action(methods=['POST'], detail=True, permission_classes=[IsTutor])
+    def finish(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        # check if able to end session
+        if request.user.has_tutor and seminar.active and seminar.tutor_pk == request.user.tutor_pk:  # you need to be able to end it
+            # the seminar was paid
+            end_time = seminar.times[seminar.sessions_completed]
+            if end_time - timezone.timedelta(minutes=5) > timezone.now():
+                if not seminar.payouts == 2 and not seminar.free and (seminar.payouts == 0 or (seminar.payouts == 1 and seminar.sessions_completed == len(seminar.times) - 1)):
+                    payout_price = math.floor(
+                        ((float(seminar.student_number * seminar.price / 2) * 0.9151) - 0.49) * 100) / 100  # paypal fee is 3.49% + $0.49, our fee is 5%
+                    tutor = seminar.tutor
+                    tutor.num_classes = tutor.num_classes + 1
+                    tutor.save()
+                    # paypal fees and round
+                    if payout_price > 0:
+                        payout = send_payout(email=tutor.paypal_email if len(
+                            tutor.paypal_email) > 0 else tutor.user.email, price=payout_price, session_id="seminar" + str(seminar.id))
+                        if payout == 'success':  # payout was successful
+                            seminar.payouts = seminar.payouts + 1
+                            seminar.active = False
+                            seminar.sessions_completed = seminar.sessions_completed + 1
+                            seminar.save()
+                            return Response(data={'Success': 'Sent payout and ended session'}, status=status.HTTP_200_OK)
+                        else:
+                            seminar.active = False
+                            seminar.sessions_completed = seminar.sessions_completed + 1
+                            seminar.save()
+                            return Response(data={'Error': 'There has been an error sending a payout, but the session was ended'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    else:
+                        seminar.active = False
+                        seminar.sessions_completed = seminar.sessions_completed + 1
+                        seminar.save()
+                        return Response(data={'Error': 'Session was ended, no payout was sent because paypal fees dropped it to $0 or there were no students'}, status=status.HTTP_200_OK)
+                else:  # session was free
+                    tutor = seminar.tutor
+                    tutor.num_classes = tutor.num_classes + 1
+                    tutor.free_tutoring_given = tutor.free_tutoring_given + seminar.duration
+                    tutor.save()
+                    seminar.sessions_completed = seminar.sessions_completed + 1
+                    seminar.active = False
+                    seminar.save()
+                    return Response(data={'Success': 'Ended Session'}, status=status.HTTP_200_OK)
+            else:
+                return Response(data={'Error': 'Ending session too early'}, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)
+
+    @action(detail=True, permission_classes=[IsStudent])
+    def join_seminar(self, request, pk):
+        seminar = Seminar.objects.get(pk=pk)
+        try:
+            StudentSeminar.objects.get(
+                student=request.user.student, seminar=seminar)
+            return Response(data={'url': seminar.call_url}, status=status.HTTP_200_OK)
+        except StudentSeminar.DoesNotExist:
+            return Response(data={'error': 'you are not in this seminar'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -70,7 +252,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                         'tutor', 'tutor__user').get(pk=pk)
             else:
                 if not hasattr(self, 'session'):
-                   self.session = Session.objects.get(pk=pk) 
+                    self.session = Session.objects.get(pk=pk)
             return self.session
         else:
             return super().get_object()
@@ -286,7 +468,7 @@ def api_capture_order(request, id):
         response = capture_order(order_id)
         if int(response.status_code) == 201:
             session.student_paid = True
-            print(response.result.purchase_units[0].payments.captures[0].id)
+            # print(response.result.purchase_units[0].payments.captures[0].id)
             session.payment_id = response.result.purchase_units[0].payments.captures[0].id
             session.save()
             return Response(status=status.HTTP_200_OK, data={'success': 'successfully processed payment'})
@@ -315,7 +497,7 @@ def finish_session(request, id):
             tutor.save()
             # paypal fees and round
             payout_price = math.floor(
-                ((float(session.price) * 0.9651) - 0.49) * 100) / 100
+                ((float(session.price) * 0.9151) - 0.49) * 100) / 100
             if payout_price > 0:
                 payout = send_payout(email=tutor.paypal_email if len(
                     tutor.paypal_email) > 0 else tutor.user.email, price=payout_price, session_id=session.id)
@@ -342,3 +524,15 @@ def finish_session(request, id):
             return Response(data={'Success': 'Ended Session'}, status=status.HTTP_200_OK)
     else:
         return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)
+
+
+# @api_view()
+# def test_payout(request):
+#     print('making the request')
+#     payout_price = 1.59
+#     payout = send_payout(
+#         email="sb-ysvrf3397194@personal.example.com", price=payout_price, session_id='test1')
+#     if payout == 'success':  # payout was successful
+#         return Response(data={'Success': 'Sent payout'}, status=status.HTTP_200_OK)
+#     else:
+#         return Response(data={'Error': 'There has been an error sending a payout'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

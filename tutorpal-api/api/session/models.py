@@ -1,6 +1,7 @@
 from django.db import models
 from register.models import Tutor, Student
 from dry_rest_permissions.generics import authenticated_users
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -72,3 +73,55 @@ class Session(models.Model):
     @authenticated_users
     def has_create_permission(request):
         return request.user.has_student
+
+
+class Seminar(models.Model):
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
+    tutor_pk = models.IntegerField()
+    student_number = models.IntegerField(default=0)
+
+    times = ArrayField(models.DateTimeField())
+    duration = models.DurationField(blank=True)
+
+    description = models.TextField(max_length=500, blank=True)
+    subjects = models.CharField(max_length=64, blank=True)
+
+    call_url = models.CharField(max_length=30, blank=True)
+
+    active = models.BooleanField(default=False)  # seminar is going on
+
+    payouts = models.IntegerField(default=0)
+    sessions_completed = models.IntegerField(default=0)
+
+    price = models.DecimalField(
+        blank=True, max_digits=10, decimal_places=2, default=0)
+    free = models.BooleanField(default=False)
+
+    @staticmethod
+    def has_read_permission(request):
+        return True
+
+    def has_object_read_permission(self, request):
+        return True
+
+    @staticmethod
+    @authenticated_users
+    def has_write_permission(request):
+        return request.user.is_authenticated
+
+    @authenticated_users
+    def has_object_write_permission(self, request):
+        if request.user.has_tutor:
+            return self.tutor_pk == request.user.tutor_pk
+        return False
+
+    @staticmethod
+    @authenticated_users
+    def has_create_permission(request):
+        return request.user.has_tutor
+
+
+class StudentSeminar(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    seminar = models.ForeignKey(Seminar, on_delete=models.CASCADE)
+    payment_id = models.CharField(max_length=64, blank=True)

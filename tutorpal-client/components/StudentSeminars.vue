@@ -1,3 +1,4 @@
+
 <template>
   <client-only>
     <html
@@ -7,7 +8,10 @@
       <head>
         <meta charset="utf-8" />
       </head>
-      <body id="body" style="min-height: 100vh" class="body-3">
+      <body
+        style="background-color: rgba(65, 168, 211, 0.2); min-height: 100vh"
+        id="body"
+      >
         <div id="main">
           <div class="div-block-55">
             <div class="section">
@@ -54,7 +58,7 @@
                 <div class="div-block-43">
                   <div class="name_profile_pic">
                     <img
-                      :src="user !== undefined ? user.profilePic : ''"
+                      :src="user.profilePic"
                       id="image"
                       width="60"
                       height="60"
@@ -121,22 +125,19 @@
                       >Explore</router-link
                       ><router-link
                     to="/seminars"
-                    class="tutornav-link-4 w-nav-link"
+                    class="tutornav-link-4 w-nav-link w--current"
                     >Seminars
                   </router-link
-                    ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                    >Messages
-                    <span v-if="user.unread > 0" class="badge">{{
-                      user.unread
-                    }}</span> </router-link
                     ><router-link
-                      to="/requests"
-                      class="nav-link-4 w-nav-link w--current"
+                      to="/inbox"
+                      class="nav-link-4 w-nav-link"
+                      >Messages</router-link
+                    ><router-link to="/requests" class="nav-link-4 w-nav-link"
                       >Requests</router-link
                     ><router-link to="/payments" class="nav-link-4 w-nav-link"
                       >Payments</router-link
                     ><router-link to="/calendar" class="nav-link-4 w-nav-link"
-                      >Calendar</router-link>
+                    >Calendar</router-link>
                     <router-link to="/donations" class="nav-link-4 w-nav-link"
                       >Donate</router-link>
                   </nav>
@@ -160,40 +161,20 @@
                 >Need help? Send us an email</a
               >
             </div>
-            <h1 class="heading">Student Requests</h1>
             <div class="div-block-65">
-              <div class="text-block-23">Requests</div>
+              <div class="text-block-23">My Seminars</div>
               <p class="paragraph">
-                These are the requests you have sent to potential tutors who
-                have not accepted yet. Once the tutor has accepted, please check
-                the
-                <router-link to="/payments" class="link-3"
-                  >payments</router-link
-                >
-                page to pay for the class.
+                View all of the seminars that you have already enrolled for, you will be joining all your seminars here:
               </p>
             </div>
-            <div v-if="requests.unfetched === undefined">
-              <div
-                v-for="session in requests"
-                :key="session.id"
-                id="requests"
-                class="loop"
-              >
+            <div v-if="myseminars.unfetched === undefined">
+              <div v-for="seminar in myseminars.results" :key="seminar.id" class="loop">
                 <div class="i">
-                  <img
-                    @click="canceledHandler(session.id, session)"
-                    style="margin-top: 10px; cursor: pointer"
-                    src="../static/student/images/close-1.png"
-                    align="right"
-                    width="15"
-                    alt=""
-                  />
                   <div class="div-block-51-copy">
                     <img
                       :src="
-                        session.tutor !== undefined
-                          ? session.tutor.user.profilePic
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.profile_pic
                           : ''
                       "
                       loading="lazy"
@@ -205,30 +186,81 @@
                     />
                     <p class="paragraph-2">
                       <strong class="bold-text">Schedule <br /></strong>First
-                      Session: {{ session.date }}<br />Tutor:
+                      Seminar: {{ seminar.times[0].substring(0, 10) }}<br />Tutor:
                       {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.firstName
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.first_name
                           : ''
                       }}
                       {{
-                        session.tutor !== undefined
-                          ? session.tutor.user.lastName
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.last_name
                           : ''
-                      }}<br />Duration: {{ convertTime(session.timeStart) }} -
-                      {{ convertTime(session.timeEnd) }} <br />Amount: ${{
-                        session.price
-                      }}<br />Trial: {{ session.free }}
+                      }}<br />Duration: {{seminar.duration}} 
+                      <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
                     </p>
                   </div>
                   <p class="paragraph-2-copy">
-                    <strong class="bold-text">Student Information</strong>
-                    <br />Topic: {{ session.subjects }}
-                    <br />Description: {{ session.description }}
+                    <strong class="bold-text">Class Information</strong>
+                    <br />Topic: {{ seminar.subjects }}
+                    <br />Description: {{ seminar.description }}
+                    <br />Amount: ${{seminar.price}}
+                    <br />Unpaid Class: {{ seminar.free }}
+                    <br>
+                    <router-link :to="'/seminarjoin/'+seminar.id"  style="margin-top: 15px;" class="btn btn-info">Join Class</router-link>
                   </p>
-                  <div class="text-block-27">
-                    This tutor has not accepted your request yet.
+                </div>
+              </div>
+            </div>
+            <div class="div-block-65">
+              <div class="text-block-23">Discover Seminars</div>
+              <p class="paragraph">
+                View all of the seminars that our platform has to offer.
+              </p>
+            </div>
+            <div v-if="seminars.unfetched === undefined">
+              <div v-for="seminar in seminars.results" :key="seminar.id" class="loop">
+                <div class="i">
+                  <div class="div-block-51-copy">
+                    <img
+                      :src="
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.profile_pic
+                          : ''
+                      "
+                      loading="lazy"
+                      width="75"
+                      height="75"
+                      sizes="100px"
+                      alt=""
+                      class="image-15"
+                    />
+                    <p class="paragraph-2">
+                      <strong class="bold-text">Schedule <br /></strong>First
+                      Seminar: {{ seminar.times[0].substring(0, 10) }}<br />Tutor:
+                      {{
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.first_name
+                          : ''
+                      }}
+                      {{
+                        seminar.tutor !== undefined
+                          ? seminar.tutor.user.last_name
+                          : ''
+                      }}<br />Duration: {{seminar.duration}} 
+                      <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
+                    </p>
                   </div>
+                  <p class="paragraph-2-copy">
+                    <strong class="bold-text">Class Information</strong>
+                    <br />Topic: {{ seminar.subjects }}
+                    <br />Description: {{ seminar.description }}
+                    <br />Amount: ${{seminar.price}}
+                    <br />Unpaid Class: {{ seminar.free }}
+                    <br>
+                    <button v-if="seminar.free === true" @click="registerClass(seminar.free, seminar.id)" style="margin-top: 15px;" class="btn btn-warning">Enroll</button>
+                    <router-link v-if="seminar.free === false" :to="'/seminarpay/' + seminar.id" style="margin-top: 15px;" class="btn btn-warning">Enroll</router-link>
+                  </p>
                 </div>
               </div>
             </div>
@@ -239,22 +271,38 @@
   </client-only>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import convertTime from '../utils/convertTime'
-import getCSRF from '../utils/getCSRF'
+import getCSRF from '~/utils/getCSRF'
+
 export default {
   data() {
     return {
       clicked: false,
-      q: ''
+      q:"",
+      seminars: [],
+      myseminars: [],
+      data: '',
     }
   },
   async fetch() {
-    await this.fetchSessions('pendingOnTutor')
-    await this.fetchUser()
+    await this.fetchUser();
+    this.seminars = await fetch(
+      process.env.API_URL + '/seminars/discover_seminars',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json(this.response = res.status))
+    this.myseminars = await fetch(
+      process.env.API_URL + '/seminars/my_seminars',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => res.json(this.response = res.status))
   },
   head() {
     return {
+      title: 'Inbox',
       link: [
         {
           rel: 'stylesheet',
@@ -280,11 +328,15 @@ export default {
         display: this.clicked ? 'flex' : 'none',
       }
     },
-    ...mapGetters({ user: 'getUser', requests: 'getPendingOnTutor' }),
+    ...mapGetters({ user: 'getUser'}),
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchSessions', 'removeSession']),
-    ...mapGetters(['getUser', 'getPendingOnTutor']),
+    ...mapActions([
+      'fetchUser',
+      'setUser',
+    ]),
+    ...mapGetters(['getUser']),
+    ...mapMutations(['setUser']),
     convertTime,
     logoutclick() {
       this.clicked = !this.clicked
@@ -292,36 +344,35 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    async canceledHandler(id, session) {
-      const x = confirm('Please confirm that you wish to cancel this session.')
-      if (x === true) {
-        await fetch(process.env.API_URL + '/sessions/' + id + '/', {
-          method: 'PATCH',
+    async registerClass(free, id){
+      const csrfToken = await getCSRF()
+      if(free===true){
+        const data = await fetch(process.env.API_URL + '/seminars/'+id+'/register/', {
+          method: 'POST',
           credentials: 'include',
           headers: {
-            'X-CSRFToken': (await getCSRF()).success,
-            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken.success,
           },
-          body: JSON.stringify({
-            canceled: true,
-          }),
-        })
-        this.removeSession([session, 'pendingOnTutor'])
+        }).then((res) => res.json())
+        this.data = data
+        alert("You have successfully enrolled yourself into this seminar!")
       }
     },
-  },
+
+  }
+    
 }
 </script>
 <style scoped>
-.badge {
-  position: absolute;
-  top: 11px;
-  right: 3px;
-  padding: 4px 7px;
+.tutorbadge {
+  margin-top: 5px;
+  float: right;
+  padding: 2px 8px;
   border-radius: 1000px;
   background-color: red;
   color: white;
   font-family: Poppins;
   font-size: 14px;
+  margin-right: 15px;
 }
 </style>

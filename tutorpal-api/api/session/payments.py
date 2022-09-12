@@ -15,8 +15,10 @@ def send_payout(email, price, session_id):
 
     # Creating an environment
     if os.environ.get("RUN_ENV", 'local') == 'aws_prod':
-        environment = LiveEnvironment(client_id=client_id, client_secret=client_secret)
+        environment = LiveEnvironment(
+            client_id=client_id, client_secret=client_secret)
     else:
+        # print(client_id, client_secret)
         environment = SandboxEnvironment(
             client_id=client_id, client_secret=client_secret)
     client = PayPalHttpClient(environment)
@@ -67,7 +69,8 @@ class PayPalClient:
         """Set up and return PayPal Python SDK environment with PayPal access credentials.
            This sample uses SandboxEnvironment. In production, use LiveEnvironment."""
         if os.environ.get("RUN_ENV", 'local') == 'aws_prod':
-            self.environment = LiveEnvironment(client_id=self.client_id, client_secret=self.client_secret)
+            self.environment = LiveEnvironment(
+                client_id=self.client_id, client_secret=self.client_secret)
         else:
             self.environment = SandboxEnvironment(
                 client_id=self.client_id, client_secret=self.client_secret)

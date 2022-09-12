@@ -1,0 +1,11 @@
+rn: 
+- test registration (tutor and student)
+- make many students able to be in session in db
+
+
+for later:
+- update python version
+- update django version
+- api automated testing 
+- github actions
+- dockerize

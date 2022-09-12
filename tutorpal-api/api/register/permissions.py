@@ -1,6 +1,16 @@
 from rest_framework import permissions
 
 
+class IsStudent(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_student
+
+
+class IsTutor(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_tutor
+
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:

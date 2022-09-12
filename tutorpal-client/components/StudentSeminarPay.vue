@@ -1,8 +1,8 @@
 <template>
   <client-only>
     <html
-      data-wf-page="5f405fbdac064904ad639864"
-      data-wf-site="5f3c2694b3e98672caad2a0f"
+      data-wf-page="5f600218af481481a99ffa6a"
+      data-wf-site="5f600218af4814e3759ffa69"
     >
       <head>
         <meta charset="utf-8" />
@@ -67,27 +67,24 @@
                       data-delay="0"
                       class="dropdown-3 w-dropdown"
                     >
-                      <div
-                        @click="logoutclick()"
-                        class="dropdown-toggle-2-copy w-dropdown-toggle"
-                      >
+                      <div class="dropdown-toggle-2-copy w-dropdown-toggle">
                         <div id="name" class="text-block-18">
                           {{ user.firstName }} {{ user.lastName }}
                         </div>
                         <div class="text-block-20">Student</div>
                       </div>
-                      <nav :style="logout" class="navigation-dropdown-2">
+                      <nav class="navigation-dropdown-2 w-dropdown-list">
                         <div class="dropdown-pointer-2">
-                          <div class="dropdown-wrapper-2">
-                            <router-link
-                              to="/logout"
+                          <div style="width: 300px" class="dropdown-wrapper-2">
+                            <a
+                              href="#"
                               id="logout"
                               class="dropdown-link-2 w-inline-block"
                             >
                               <div class="nav-content-wrap-2">
                                 <div class="dropdown-title-2">Logout</div>
                               </div>
-                            </router-link>
+                            </a>
                             <router-link
                               to="/account"
                               class="dropdown-link-2 w-inline-block"
@@ -125,19 +122,20 @@
                     >Seminars
                   </router-link
                     ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages<span v-if="user.unread > 0" class="tutorbadge">{{
+                      >Messages
+                      <span v-if="user.unread > 0" class="badge">{{
                         user.unread
-                      }}</span></router-link
-                    ><router-link to="/requests" class="nav-link-4 w-nav-link"
-                      >Requests</router-link
+                      }}</span> </router-link
                     ><router-link
-                      to="/payments"
-                      class="nav-link-4 w-nav-link"
+                      to="/requests"
+                      class="nav-link-4 w-nav-link w--current"
+                      >Requests</router-link
+                    ><router-link to="/payments" class="nav-link-4 w-nav-link"
                       >Payments</router-link
-                    ><router-link to="/calendar" class="nav-link-4 w-nav-link w--current"
+                    ><router-link to="/calendar" class="nav-link-4 w-nav-link"
                       >Calendar</router-link>
                     <router-link to="/donations" class="nav-link-4 w-nav-link"
-                      >Donate</router-link>  
+                      >Donate</router-link>
                   </nav>
                   <div class="menu-button-2 w-nav-button">
                     <div class="icon-2 w-icon-nav-menu"></div>
@@ -146,24 +144,18 @@
               </div>
             </div>
           </div>
-        </div>
-        <div :styele="showFunction" style="display: flex; justify-content: center; padding: 20px;">
-          <div id="container" ref="container">
-            <div id="header">
-              <div id="monthDisplay">{{monthDisplay}}</div>
-            </div>
-
-            <div id="weekdays">
-              <div>Sunday</div>
-              <div>Monday</div>
-              <div>Tuesday</div>
-              <div>Wednesday</div>
-              <div>Thursday</div>
-              <div>Friday</div>
-              <div>Saturday</div>
-            </div>
-              <div id="calendar" ref="calendar">    
-          </div>
+          <div class="div-block-80">
+            <h1 style="text-align: center" class="heading-14">
+              Pay for your classes
+            </h1>
+            <p class="paragraph-11">
+              Pay here using either PayPal, PayPal Credit, or a Debit/Credit
+              card. Your payment will be sent to the tutor, 12 hours after the
+              class ends. Information pertaining to the purchase will be sent
+              through email. If you are not satisfied with your class, you may
+              apply for a refund request.<br />
+            </p>
+            <div style="margin-left: 20%; margin-right: 20%" ref="paypal"></div>
           </div>
         </div>
       </body>
@@ -172,22 +164,31 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import convertTime from '../utils/convertTime'
-// import getCSRF from '../utils/getCSRF'
+import getCSRF from '../utils/getCSRF'
 
 export default {
-  data(){
+  data() {
     return {
-      monthDisplay:'',
-      calendarData: [],
-      q: '',
-      clicked: false,
-      show: false
+      seminar: [],
+      index: '',
+      q: ''
     }
+  },
+  async fetch() {
+    const id = parseInt(this.$route.params.id)
+    this.seminar = await fetch(process.env.API_URL + '/seminars/' + id + '/', {
+      credentials: 'include',
+    }).then((res) => {
+      if (res.status === 500) {
+        this.$router.push('/payments')
+      }
+      return res.json()
+    })
+    await this.fetchUser()
   },
   head() {
     return {
-      title: 'My Calendar',
+      title: 'Pay',
       link: [
         {
           rel: 'stylesheet',
@@ -204,128 +205,82 @@ export default {
           type: 'text/css',
           href: '/student/css/student-main.webflow.css',
         },
-        {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/student/css/calendar.css',
-        },
       ],
     }
   },
-  async mounted(){
-    await this.fetchStudent()
-    await this.fetchUser()
-    const url =
-      process.env.API_URL + '/sessions/my_sessions'
-    const data = await fetch(url, {
-      credentials: 'include',
-    }).then((res) => res.json())
-    this.calendarData = data.results;
-    this.calendar()
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    this.show = true;
-  },
   computed: {
-    logout() {
-      return {
-        display: this.clicked ? 'flex' : 'none',
-      }
-    },
-    showFunction() {
-      return {
-        display: this.show ? 'flex' : 'none',
-      }
-    },
-    ...mapGetters({ student: 'getStudent' }),
-    ...mapGetters({ user: 'getUser' }),
+    ...mapGetters({
+      user: 'getUser',
+    }),
+  },
+  mounted() {
+    const script = document.createElement('script')
+    script.src = 'https://www.paypal.com/sdk/js?client-id=Ae0zJYc6uq0r19vdNLW2TedQ86i7_FTrS7s_3pwgU5ePOXriAibXuXssw_Nbc5jOg7JOUvU4e7q_LkaT&enable-funding=venmo&currency=USD'
+    script.addEventListener('load', this.setLoaded)
+    document.body.appendChild(script)
   },
   methods: {
     ...mapGetters(['getUser']),
-    ...mapActions(['fetchUser', 'fetchStudent']),
-    convertTime,
-    logoutclick() {
-      this.clicked = !this.clicked
-    },
+    ...mapActions([
+      'fetchUser',
+    ]),
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    calendar(){
-      const events = []
-      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const calendar = this.$refs.calendar
-      const dt = new Date();
-
-      const day = dt.getDate();
-      const month = dt.getMonth();
-      const year = dt.getFullYear();
-
-      const firstDayOfMonth = new Date(year, month, 1);
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      this.monthDisplay = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
-      const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-      });
-
-      calendar.innerHTML = '';
-
-      const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
-      this.calendarData.forEach(function(x){
-        if(x.accepted === true){
-          const splitDate = x.date.split('-');
-          if(splitDate.count === 0){
-              return null;
-          }
-
-          const year = splitDate[0];
-          const month = splitDate[1];
-          const day = splitDate[2]; 
-          const date = Number(month) + "/" + Number(day) + "/" + year
-          const title = "Class with " + x.tutor.user.first_name + ": " + convertTime(x.time_start) + " - " + convertTime(x.time_end)
-          /* eslint-disable */
-          events.push({
-            date: date,
-            title: title
-          })
-          /* eslint-enable */
-        }
-        
-      })
-      for(let i = 1; i <= paddingDays + daysInMonth; i++) {
-        const daySquare = document.createElement('div');
-        daySquare.classList.add('day');
-        const dayString = `${month + 1}/${i - paddingDays}/${year}`;
-        if (i > paddingDays) {
-          daySquare.innerText = i - paddingDays;
-          const eventForDay = events.filter(e => e.date === dayString);
-          if (i - paddingDays === day) {
-            daySquare.id = 'currentDay';
-          }
-
-          if (eventForDay.length!==0) {
-            const eventDiv = document.createElement('div');
-            eventForDay.forEach(function(x){
-              console.log(x)
-              eventDiv.innerHTML +=`<div style="margin-top: 10px;">${x.title}</div>`
+    setLoaded() {
+      window.paypal
+        .Buttons({
+          style: {
+            color: 'blue',
+            shape: 'pill',
+            label: 'pay',
+            height: 40,
+          },
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    currency_code: 'USD',
+                    value: parseFloat(this.seminar.price), // fix price
+                  },
+                },
+              ],
             })
-            eventDiv.classList.add('event');
-            daySquare.appendChild(eventDiv);
-            console.log(eventDiv)
-          }
-        } else {
-          daySquare.classList.add('padding');
-        }
-        calendar.appendChild(daySquare); 
-        this.$refs.container.style.display = "block";
-      }
-    }
+          },
+          onApprove: async (data, actions) => {
+            const csrfToken = await getCSRF()
+            const respData = await fetch(
+              process.env.API_URL + '/seminars/'+this.seminar.id+'/register/',
+              {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                  'X-CSRFToken': csrfToken.success,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  order_id: data.orderID,
+                }),
+              }
+            ).then((res) => res.json())
+            this.data = respData
+            return actions.order.capture().then(function (orderData) {
+              console.log(
+                'Capture result',
+                orderData,
+                JSON.stringify(orderData, null, 2)
+              )
+            })
+          },
+        })
+        .render(this.$refs.paypal)
+    },
   },
 }
 </script>
 <style scoped>
-.tutorbadge {
+.badge {
   position: absolute;
   top: 11px;
   right: 3px;

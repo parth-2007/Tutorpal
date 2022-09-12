@@ -98,16 +98,16 @@ else:
     CORS_ALLOWED_ORIGINS = [
         'http://localhost:8000',
         'http://127.0.0.1:8000',
-        'http://localhost:5500',
-        'http://127.0.0.1:5500',
+        'http://localhost:5000',
+        'http://127.0.0.1:5000',
         'http://localhost:3000',
         'http://127.0.0.1:3000',
     ]
 
 if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     CSRF_TRUSTED_ORIGINS = [
-        'https://www.tutorpal.org', 
-        'https://api.tutorpal.org', 
+        'https://www.tutorpal.org',
+        'https://api.tutorpal.org',
         'https://tutorpal.org'
     ]
 if os.environ.get('RUN_ENV', 'local') == 'aws_dev':
@@ -116,10 +116,18 @@ if os.environ.get('RUN_ENV', 'local') == 'aws_dev':
         'https://www.beta.tutorpal.org',
     ]
 else:
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'http://localhost:5000',
+        'http://127.0.0.1:5000',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ]
+
 CORS_ALLOW_CREDENTIALS = True
 
-if os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+if os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev' and not DEBUG:
     CSRF_COOKIE_DOMAIN = ".tutorpal.org"
     SESSION_COOKIE_DOMAIN = ".tutorpal.org"
     CSRF_COOKIE_SAMESITE = 'None'
@@ -153,7 +161,6 @@ ASGI_APPLICATION = "api.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-# Add a prod db here later
 if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
     DATABASES = {
         'default': {
@@ -194,6 +201,16 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
+#         'USER': os.environ.get('DATABASE_USER', ''),
+#         'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+#         'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+#         'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -265,8 +282,7 @@ REST_FRAMEWORK = {
     ] if DEBUG else ['rest_framework.renderers.JSONRenderer']
 }
 
-# Fix the s3 bucket later
-if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and (os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev'):
+if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and (os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev') and not DEBUG:
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_S3_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_S3_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_S3_STORAGE_BUCKET_NAME")
@@ -274,5 +290,5 @@ if os.environ.get("AWS_S3_ACCESS_KEY_ID", None) and (os.environ.get('RUN_ENV', '
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
     DEFAULT_FILE_STORAGE = 'api.s3storage.SecurityTokenWorkaroundS3Boto3Storage'
-    AWS_QUERYSTRING_AUTH = False # adds long querystring, remove in prod
+    AWS_QUERYSTRING_AUTH = False  # adds long querystring
     AWS_S3_SIGNATURE_VERSION = 's3v4'
