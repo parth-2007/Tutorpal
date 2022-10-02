@@ -1,7 +1,7 @@
 from .models import User, Student, Tutor, Review
 from rest_framework import serializers
-from django.db.models import Count, Q
-from chat.models import Message
+# from django.db.models import Count, Q
+# from chat.models import Message  # remove
 # from typing import Dict, Any
 # from django.conf import settings
 
@@ -48,7 +48,7 @@ class UserOwnerSerializer(serializers.ModelSerializer):
     # is_tutor = serializers.SerializerMethodField('has_tutor')
     is_student = serializers.BooleanField(source='has_student', read_only=True)
     is_tutor = serializers.BooleanField(source='has_tutor', read_only=True)
-    unread = serializers.SerializerMethodField()
+    # unread = serializers.SerializerMethodField()  # and this
 
     def has_student(self, user: User) -> bool:
         return user.has_student
@@ -56,24 +56,25 @@ class UserOwnerSerializer(serializers.ModelSerializer):
     def has_tutor(self, user: User) -> bool:
         return user.has_tutor
 
-    def get_unread(self, user: User) -> int:
-        if user.has_tutor:
-            unread_count = Message.objects.filter(room__tutor_pk=user.tutor_pk).exclude(author=user).aggregate(
-                unread=Count('pk', filter=Q(tutor_read=False))
-            )
-            return unread_count.get('unread')
-        elif user.has_student:
-            unread_count = Message.objects.filter(room__student_pk=user.student_pk).exclude(author=user).aggregate(
-                unread=Count('pk', filter=Q(student_read=False))
-            )
-            return unread_count.get('unread')
+    # delete all
+    # def get_unread(self, user: User) -> int:
+    #     if user.has_tutor:
+    #         unread_count = Message.objects.filter(room__tutor_pk=user.tutor_pk).exclude(author=user).aggregate(
+    #             unread=Count('pk', filter=Q(tutor_read=False))
+    #         )
+    #         return unread_count.get('unread')
+    #     elif user.has_student:
+    #         unread_count = Message.objects.filter(room__student_pk=user.student_pk).exclude(author=user).aggregate(
+    #             unread=Count('pk', filter=Q(student_read=False))
+    #         )
+    #         return unread_count.get('unread')
 
     class Meta:
         model = User
         fields = [
             'id', 'email', 'is_student', 'is_tutor',
             'first_name', 'last_name', 'profile_pic', 'password',
-            'student_pk', 'tutor_pk', 'unread'
+            'student_pk', 'tutor_pk',  # 'unread'  # and this
         ]
         extra_kwargs = {'password': {'write_only': True}, 'student_pk': {
             'read_only': True}, 'tutor_pk': {'read_only': True}}

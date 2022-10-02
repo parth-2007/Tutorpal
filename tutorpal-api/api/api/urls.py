@@ -21,7 +21,7 @@ import os
 urlpatterns = [
     path('', include('register.urls')),
     path('', include('session.urls')),
-    path('', include('chat.urls')),
+    # path('', include('chat.urls')),  # remove
     path('', include('main.urls')),
 ]
 

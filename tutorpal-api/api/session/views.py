@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, send_mass_mail
 from .payments import send_payout, refund_order, capture_order
-from chat.models import Room
+# from chat.models import Room  # remove
 from register.permissions import IsStudent, IsTutor
 import math
 import random
@@ -416,8 +416,9 @@ class SessionViewSet(viewsets.ModelViewSet):
                 tutor_pk = self.request.user.tutor_pk
                 student = self.session.student
                 student_pk = self.session.student_pk
-                Room.objects.get_or_create(
-                    tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
+                # remove
+                # Room.objects.get_or_create(
+                #     tutor=tutor, tutor_pk=tutor_pk, student=student, student_pk=student_pk)
                 email = student.user.email
                 if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
                     domain = 'https://www.tutorpal.org/'
