@@ -121,11 +121,6 @@
                     class="tutornav-link-4 w-nav-link"
                     >Seminars
                   </router-link
-                    ><router-link to="/inbox" class="nav-link-4 w-nav-link"
-                      >Messages
-                      <span v-if="user.unread > 0" class="badge">{{
-                        user.unread
-                      }}</span> </router-link
                     ><router-link
                       to="/requests"
                       class="nav-link-4 w-nav-link w--current"

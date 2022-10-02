@@ -128,10 +128,6 @@
                     class="tutornav-link-4 w-nav-link w--current"
                     >Seminars
                   </router-link
-                    ><router-link
-                      to="/inbox"
-                      class="nav-link-4 w-nav-link"
-                      >Messages</router-link
                     ><router-link to="/requests" class="nav-link-4 w-nav-link"
                       >Requests</router-link
                     ><router-link to="/payments" class="nav-link-4 w-nav-link"
