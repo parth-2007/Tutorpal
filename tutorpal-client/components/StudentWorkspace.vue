@@ -233,6 +233,7 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
+      console.log("Successfully loaded scripts")
       this.session = await fetch(
         process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
         {
