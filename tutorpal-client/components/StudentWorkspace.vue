@@ -140,7 +140,6 @@
                 style="width: 100vw; height: 95vh;"
                 allow="camera;microphone"
                 :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
-                ref="meeting"
               ></iframe>
             </div>
             <div class="carousel-item">

@@ -48,7 +48,7 @@
             </div>
           </div>
         </div>
-        <div class="div-block-65">
+        <div stryle="margin-top: 25px;" class="div-block-65">
           <div class="text-block-23">Discover Seminars</div>
           <p class="paragraph">
             View all of the seminars that our platform has to offer.

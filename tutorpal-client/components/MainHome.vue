@@ -17,7 +17,7 @@
           <div class="homediv-block-3-copy">
             <div class="homediv-block-4">
               <router-link to="/login" class="homelink-2">login</router-link>
-              <router-link to="/seminars" class="homelink-2">donate</router-link>
+              <router-link to="/seminars" class="homelink-2">seminars</router-link>
               <router-link to="/donations" class="homelink-2">donate</router-link>
             </div>
             <router-link to="/register" class="homebutton w-button">register</router-link>
