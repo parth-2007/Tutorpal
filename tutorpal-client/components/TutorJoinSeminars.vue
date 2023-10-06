@@ -153,11 +153,8 @@ export default {
     await this.fetchUser()
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
-    const script2 = document.createElement('script')
-    script2.src = "https://meet.jit.si/external_api.js"
     document.body.appendChild(script)
-    document.body.appendChild(script2)
-    script2.addEventListener('load', this.setLoaded)
+    this.setLoaded()
     await this.fetchUser()
     this.showButton = true;
     this.url = this.seminar.call_url;

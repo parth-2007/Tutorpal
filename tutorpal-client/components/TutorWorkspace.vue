@@ -267,11 +267,8 @@ export default {
   async mounted() {
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
-    const script2 = document.createElement('script')
-    script2.src = "https://meet.jit.si/external_api.js"
     document.body.appendChild(script)
-    document.body.appendChild(script2)
-    script2.addEventListener('load', this.setLoaded)
+    this.setLoaded()
     await this.fetchUser()
     await this.fetchSessions('pastSessions')
     await this.fetchSessions('startedSessions')
@@ -294,13 +291,6 @@ export default {
         }
         return res.json()
       })
-      const domain = 'meet.jit.si';
-      const options = {
-        roomName: this.session.call_url,
-        parentNode: this.$refs.meeting,
-        height: window.innerHeight,
-      };
-      new JitsiMeetExternalAPI(domain, options);
      
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {

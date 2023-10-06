@@ -207,11 +207,8 @@ export default {
   async mounted() {
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
-    const script2 = document.createElement('script')
-    script2.src = "https://meet.jit.si/external_api.js"
     document.body.appendChild(script)
-    document.body.appendChild(script2)
-    script2.addEventListener('load', this.setLoaded)
+    this.setLoaded()
     await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
