@@ -6,6 +6,9 @@
     <div v-else-if="user.isTutor">
       <TutorSeminar></TutorSeminar>
     </div>
+    <div v-else>
+      <MainSeminars></MainSeminars>
+     </div>
   </div>
   <div v-else>
     <Loader></Loader>

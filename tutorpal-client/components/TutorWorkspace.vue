@@ -183,7 +183,12 @@
         <div style="z-index: -1;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
           <div class="carousel-inner">
             <div style="padding: 0px; margin: 0px;" class="carousel-item active">
-              <div style="margin-top: -15px;" ref="meeting"></div>
+              <iframe
+                style="width: 100vw; height: 95vh;"
+                allow="camera;microphone"
+                :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
+                ref="meeting"
+              ></iframe>
             </div>
             <div class="carousel-item">
               <div style="height: 100vh;" ref="container" id="wt-container"></div>

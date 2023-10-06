@@ -88,7 +88,12 @@
           <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
             <div style="padding-top: 50px;" class="carousel-inner">
               <div class="carousel-item active">
-                <div style="height: 100vh;" ref="meeting"></div>
+                <iframe
+                  style="width: 100vw; height: 95vh;"
+                  allow="camera;microphone"
+                  :src="'https://meet.jit.si/TutorpalSession' + this.url"
+                  ref="meeting"
+                ></iframe>
               </div>
               <div class="carousel-item">
                 <div style="height: 100vh;" ref="container" id="wt-container"></div>

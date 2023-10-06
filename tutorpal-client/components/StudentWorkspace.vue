@@ -1,3 +1,4 @@
+-
 <template>
   <client-only>
     <html
@@ -119,23 +120,46 @@
             </div>
           </div>
         </div>
-        <div style="background-color: white;"><button class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;" @click="whiteboardHandler()">Whiteboard</button></div>
-        <div style="margin-top: 0px;">
-          <iframe
-            style="width: 100vw; height: 100vh; float:left;"
-            allow="camera;microphone"
-            :src="'https://meet.jit.si/TutorpalSession' + session.call_url + 'jwt=eyJhbGciOiJSUzI1NiIsImtpZCI6IjlhNTE5MDc0NmU5M2JhZTI0OWIyYWE3YzJhYTRlMzA2M2UzNDFlYzciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiUGFydGggU2F4ZW5hIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0pKSnlXOEExM1hURWxnUC1OMmhPN1hJR0dha1RVR3k4ZFJfYV9wSjlER3lJdz1zOTYtYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9tZWV0LWppdC1zaS02NmNiZCIsImF1ZCI6Im1lZXQtaml0LXNpLTY2Y2JkIiwiYXV0aF90aW1lIjoxNjk2Mzk3MzEyLCJ1c2VyX2lkIjoidGlaalV2S2pIZWhDNmlZYTl1anBNbG1wWFhmMSIsInN1YiI6InRpWmpVdktqSGVoQzZpWWE5dWpwTWxtcFhYZjEiLCJpYXQiOjE2OTYzOTczMTIsImV4cCI6MTY5NjQwMDkxMiwiZW1haWwiOiJzYXhlbmFwYXJ0aDAwN0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwOTY2MTEyNjU2MTU2NTUxMDMyNiJdLCJlbWFpbCI6WyJzYXhlbmFwYXJ0aDAwN0BnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.Z1ZdyqAr76HqgJxh2tcPQrNl9tEWh8pZItZVQLATYhrQA2sj3cMW_CjZ80ghIPwgYDLKumgKLzgKQxNvofhvvT0s26hCOkqAieeVsh0M-zKIo3IPBBAIGoe_3dMRq9lMV4MfGFCmT6hcYFzOVVubrREbnm5O0tnOSO33q5aDh58hZJgLcwYKHLRisM_Sd06VfQI4hxxQkPNpjZBJkRtVTl7E-8WBZb4tsF047GGVudtDvdXHbxhH9q7jYBk29Go7xltNgCX1jg-0AiyOMu91KVtcZ97tdo7uYcsH_z7-ltqg1f3OgMAnFEAgONT_yb5O88_ebYqkGB9HosC9BXUC9Q'"
-            ref="meeting"
-          ></iframe>
-          <div style="width: 58vw; height: 100vh; float: right; visibility: hidden; margin-left: 0px; position: absolute; margin-left: 41vw;" ref="container" id="wt-container"></div>
+        <h1
+          style="
+            font-family: Poppins;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            font-size: 20px;
+            color: black;
+            float: right;
+          "
+        >
+          <strong>Duration: {{ convertTime(session.time_start) }} - {{ convertTime(session.time_end) }}</strong>
+        </h1>
+        <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+          <div style="margin-top:25px;" class="carousel-inner">
+            <div class="carousel-item active">
+              <iframe
+                style="width: 100vw; height: 95vh;"
+                allow="camera;microphone"
+                :src="'https://meet.jit.si/TutorpalSession' + session.call_url"
+                ref="meeting"
+              ></iframe>
+            </div>
+            <div class="carousel-item">
+              <div style="height: 100vh;" ref="container" id="wt-container"></div>
+            </div>
+          </div>
+          <button style="height:20px; margin-top: 15px; color: black; float:left; padding-bottom: 15px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
+          </button>
         </div>
       </body>
     </html>
   </client-only>
 </template>
+-
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import getCSRF from '../utils/getCSRF'
+import convertTime from '../utils/convertTime'
 
 export default {
   data() {
@@ -175,21 +199,20 @@ export default {
     },
     ...mapGetters({ user: 'getUser' }),
   },
+  beforeDestroy() {
+    Array.prototype.slice.call(document.getElementsByTagName('iframe')).forEach(
+      function(item) {
+        item.remove();
+    });
+  },
   async mounted() {
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
+    const script2 = document.createElement('script')
+    script2.src = "https://meet.jit.si/external_api.js"
     document.body.appendChild(script)
-    this.session = await fetch(
-      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
-      {
-        credentials: 'include',
-      }
-    ).then((res) => {
-      if (res.status === 500) {
-        this.$router.push('/')
-      }
-      return res.json()
-    })
+    document.body.appendChild(script2)
+    script2.addEventListener('load', this.setLoaded)
     await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -205,7 +228,6 @@ export default {
       }
     )
     await this.fetchUser()
-    this.setLoaded()
   },
   methods: {
     logoutclick() {
@@ -214,28 +236,39 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    whiteboardHandler(){
-      const whiteboard = this.$refs.container
-      if(whiteboard.style.visibility==="hidden"){
-        whiteboard.style.visibility = "visible"
-        this.$refs.meeting.style.width= "41vw"
-      }
-      else if(whiteboard.style.visibility==="visible"){
-        whiteboard.style.visibility = "hidden"
-        this.$refs.meeting.style.width= "100vw"
-      }
-    },
     /* eslint-disable */
     async setLoaded() {
+      this.session = await fetch(
+        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+        {
+          credentials: 'include',
+        }
+      ).then((res) => {
+        if (res.status === 500) {
+          this.$router.push('/')
+        }
+        return res.json()
+      })
+      const domain = 'meet.jit.si';
+      const options = {
+          roomName: this.session.call_url,
+          parentNode: this.$refs.meeting,
+          height: window.innerHeight,
+      };
+      new JitsiMeetExternalAPI(domain, options);
       await new Promise(resolve => setTimeout(resolve, 2000));
       const code = this.session.call_url
       const wt = new api.WhiteboardTeam(this.$refs.container, {
           clientId: '322f4ec635688d506ad1bae2f1b21cb9',
           boardCode: code,
       });
+      setInterval(function myTimer(){
+        wt.resetZoom()
+      }, 1000);
     },
     /* eslint-enable */
     ...mapActions(['fetchUser']),
+    convertTime,
   },
 }
 </script>
@@ -258,5 +291,3 @@ export default {
   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
 }
 </style>
- 
-

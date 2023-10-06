@@ -17,6 +17,7 @@
           <div class="homediv-block-3-copy">
             <div class="homediv-block-4">
               <router-link to="/login" class="homelink-2">login</router-link>
+              <router-link to="/seminars" class="homelink-2">donate</router-link>
               <router-link to="/donations" class="homelink-2">donate</router-link>
             </div>
             <router-link to="/register" class="homebutton w-button">register</router-link>
@@ -300,17 +301,7 @@ export default {
     );
 
     /* eslint-disable */
-    if(dayOfWeekName === "Saturday"){
-      this.message = "Tomorrow, Sunday, 5:30 - 6:30 pm, Physics Coach and Tutor, Veer Chopra will be hosting a Advanced Physics seminar!"
-    } 
-
-    if(dayOfWeekName === "Sunday"){
-      this.message = "Today, 5:30 - 6:30 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a Advanced Physics (beginner to intermediate) seminar!"
-    } 
-
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Sunday"){
-      this.message = "A Advanced Physics seminar is IN PROGRESS from 5:30 - 6:30 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
-    }
+    this.message = "TutorPal is proud to announce that we have placed top 10 GLOBALLY in the BlueOcean Entrepeunership competition!"
 
 
     /* eslint-enable */
