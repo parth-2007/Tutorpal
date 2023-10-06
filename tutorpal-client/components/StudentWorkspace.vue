@@ -136,7 +136,9 @@
         <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
           <div style="margin-top:25px;" class="carousel-inner">
             <div class="carousel-item active">
-              <div ref="meeting"></div>
+              <div style="height: 100vh;">
+                <div style="height: 100%" ref="meeting"></div>
+              </div>
             </div>
             <div class="carousel-item">
               <div style="height: 100vh;" ref="container" id="wt-container"></div>
