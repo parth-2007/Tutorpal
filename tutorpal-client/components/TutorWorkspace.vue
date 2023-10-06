@@ -290,7 +290,7 @@ export default {
         }
         return res.json()
       })
-      const api = new JitsiMeetExternalAPI("8x8.vc", {
+      new JitsiMeetExternalAPI("8x8.vc", {
         roomName: this.session.call_url,
         parentNode: document.querySelector('#jaas-container'),
         // Make sure to include a JWT if you intend to record,
