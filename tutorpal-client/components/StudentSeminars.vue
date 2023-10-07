@@ -345,10 +345,20 @@ export default {
         return minutes + " minutes"
       }
       else if (parseInt(hours) > 1){
-        return hours + " hours and " + minutes + " minutes"
+        if(parseInt(minutes) == 0){
+          return hours + " hours"
+        }
+        else{
+          return hours + " hours and " + minutes + " minutes"
+        }
       }
       else if (parseInt(hours) < 2){
-        return hours + " hour and " + minutes + " minutes"
+        if(parseInt(minutes) == 0){
+          return hours + " hour"
+        }
+        else{
+          return hours + " hour and " + minutes + " minutes"
+        }
       }
     },
     async registerClass(free, id){

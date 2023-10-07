@@ -56,7 +56,7 @@
         </div>
         <div v-if="seminars.unfetched === undefined">
           <div v-for="seminar in seminars.results" :key="seminar.id" class="loop">
-            <div class="i">
+            <div style="margin-left: 40px; margin-right: 40px;" class="i">
               <div class="div-block-51-copy">
                 <img
                   :src="
@@ -94,7 +94,7 @@
                 <br />Amount: ${{seminar.price}}
                 <br />Unpaid Class: {{ seminar.free }}
                 <br>
-                <router-link :to="'/register-student/'" style="margin-top: 15px;" class="btn btn-warning">Enroll</router-link>
+                <router-link :to="'/login/'" style="margin-top: 15px;" class="btn btn-info">Enroll</router-link>
               </p>
             </div>
           </div>
