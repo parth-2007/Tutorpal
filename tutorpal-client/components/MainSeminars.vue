@@ -48,7 +48,7 @@
             </div>
           </div>
         </div>
-        <div stryle="padding-top: 25px;" class="div-block-65">
+        <div style="margin-top: 25px;" class="div-block-65">
           <div class="text-block-23">Discover Seminars</div>
           <p class="paragraph">
             View all of the seminars that our platform has to offer.
@@ -94,8 +94,7 @@
                 <br />Amount: ${{seminar.price}}
                 <br />Unpaid Class: {{ seminar.free }}
                 <br>
-                <button v-if="seminar.free === true" @click="registerClass(seminar.free, seminar.id)" style="margin-top: 15px;" class="btn btn-warning">Enroll</button>
-                <router-link v-if="seminar.free === false" :to="'/seminarpay/' + seminar.id" style="margin-top: 15px;" class="btn btn-warning">Enroll</router-link>
+                <router-link :to="'/register-student/'" style="margin-top: 15px;" class="btn btn-warning">Enroll</router-link>
               </p>
             </div>
           </div>

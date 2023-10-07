@@ -201,7 +201,6 @@
                     <br />Topic: {{ seminar.subjects }}
                     <br />Description: {{ seminar.description }}
                     <br />Amount: ${{seminar.price}}
-                    <br />Unpaid Class: {{ seminar.free }}
                     <br>
                     <router-link :to="'/seminarjoin/'+seminar.id"  style="margin-top: 15px;" class="btn btn-info">Join Class</router-link>
                   </p>
@@ -252,7 +251,6 @@
                     <br />Topic: {{ seminar.subjects }}
                     <br />Description: {{ seminar.description }}
                     <br />Amount: ${{seminar.price}}
-                    <br />Unpaid Class: {{ seminar.free }}
                     <br>
                     <button v-if="seminar.free === true" @click="registerClass(seminar.free, seminar.id)" style="margin-top: 15px;" class="btn btn-warning">Enroll</button>
                     <router-link v-if="seminar.free === false" :to="'/seminarpay/' + seminar.id" style="margin-top: 15px;" class="btn btn-warning">Enroll</router-link>
@@ -339,6 +337,16 @@ export default {
     },
     submitSearch() {
       this.$router.push("/search/"+this.q);
+    },
+    convertDuration (duration){
+      hours = duration.substring(0, 2)
+      minutes = duration.substring(3, 5)
+      if (parseInt(hours) > 1){
+        return hours + " hours and " + minutes + " minutes"
+      }
+      else if (parseInt(hours) < 1){
+        return hours + " hour and " + minutes + " minutes"
+      }
     },
     async registerClass(free, id){
       const csrfToken = await getCSRF()

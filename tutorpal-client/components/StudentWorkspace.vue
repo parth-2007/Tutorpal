@@ -134,17 +134,15 @@
           <strong>Duration: {{ convertTime(session.time_start) }} - {{ convertTime(session.time_end) }}</strong>
         </h1>
         <div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
-          <div style="margin-top:25px;" class="carousel-inner">
+          <div style="padding-top: 50px;" class="carousel-inner">
             <div class="carousel-item active">
-              <div style="height: 100vh;">
-                <div style="height: 100%" ref="meeting"></div>
-              </div>
+              <div style="height: 100%;" ref="meeting"></div>
             </div>
             <div class="carousel-item">
               <div style="height: 100vh;" ref="container" id="wt-container"></div>
             </div>
           </div>
-          <button style="height:20px; margin-top: 15px; color: black; float:left; padding-bottom: 15px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+          <button style="height:20px; margin-top: 15px; width: 100%; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
               <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
           </button>
         </div>

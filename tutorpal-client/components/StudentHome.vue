@@ -397,27 +397,6 @@ export default {
   async created() {
     await this.fetchSessions('upcoming')
     await this.fetchUser()
-    const range = ["5:30", "6:30"];
-    const value = (new Date().toLocaleTimeString()).substring(0, 4)
-    const dayOfWeekName = new Date().toLocaleString(
-      'default', {weekday: 'long'}
-    );
-
-    /* eslint-disable */
-    if(dayOfWeekName === "Saturday"){
-      this.message = "Tomorrow, Sunday, 5:30 - 6:30 pm, Physics Coach and Tutor, Veer Chopra will be hosting a Advanced Physics seminar!"
-    } 
-
-    if(dayOfWeekName === "Sunday"){
-      this.message = "Today, 5:30 - 6:30 pm, Physics Coach and Tutor, Veer Chopra, will be teaching a Advanced Physics (beginner to intermediate) seminar!"
-    } 
-
-    if (value >= range[0] && value <= range[1] && dayOfWeekName === "Sunday"){
-      this.message = "A Advanced Physics seminar is IN PROGRESS from 5:30 - 6:30 pm by Physics Coach Veer Chopra! Click the button underneath to join!";
-      this.showButton = true;
-    }
-
-    /* eslint-enable */
   },
   methods: {
     ...mapActions([
