@@ -54,7 +54,7 @@
             View all of the seminars that our platform has to offer.
           </p>
         </div>
-        <div v-if="seminars.unfetched === undefined">
+        <div style="padding-bottom: 30px;" v-if="seminars.unfetched === undefined">
           <div v-for="seminar in seminars.results" :key="seminar.id" class="loop">
             <div style="margin-left: 40px; margin-right: 40px;" class="i">
               <div class="div-block-51-copy">
@@ -83,7 +83,7 @@
                     seminar.tutor !== undefined
                       ? seminar.tutor.user.last_name
                       : ''
-                  }}<br />Duration: {{seminar.duration}} 
+                  }}<br />Duration: {{convertDuration(seminar.duration)}} 
                   <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
                 </p>
               </div>
@@ -152,6 +152,29 @@ export default {
     convertTime,
     submitSearch() {
       this.$router.push("/search/"+this.q);
+    },
+    convertDuration(duration){
+      const hours = duration.substring(1, 2)
+      const minutes = duration.substring(3, 5)
+      if(parseInt(hours) == 0){
+        return minutes + " minutes"
+      }
+      else if (parseInt(hours) > 1){
+        if(parseInt(minutes) == 0){
+          return hours + " hours"
+        }
+        else{
+          return hours + " hours and " + minutes + " minutes"
+        }
+      }
+      else if (parseInt(hours) < 2){
+        if(parseInt(minutes) == 0){
+          return hours + " hour"
+        }
+        else{
+          return hours + " hour and " + minutes + " minutes"
+        }
+      }
     },
 
   }
