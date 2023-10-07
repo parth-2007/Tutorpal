@@ -339,12 +339,15 @@ export default {
       this.$router.push("/search/"+this.q);
     },
     convertDuration(duration){
-      const hours = duration.substring(0, 2)
+      const hours = duration.substring(1, 2)
       const minutes = duration.substring(3, 5)
-      if (parseInt(hours) > 1){
+      if(parseInt(hours) == 0){
+        return minutes + " minutes"
+      }
+      else if (parseInt(hours) > 1){
         return hours + " hours and " + minutes + " minutes"
       }
-      else if (parseInt(hours) < 1){
+      else if (parseInt(hours) < 2){
         return hours + " hour and " + minutes + " minutes"
       }
     },

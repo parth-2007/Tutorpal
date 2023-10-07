@@ -119,11 +119,12 @@ export default {
   },
   async fetch() {
     this.seminars = await fetch(
-      process.env.API_URL + '/seminars/discover_seminars',
+      process.env.API_URL + '/seminars/',
       {
         credentials: 'include',
       }
     ).then((res) => res.json(this.response = res.status))
+    console.log(this.seminars)
   },
   head() {
     return {
