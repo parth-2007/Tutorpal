@@ -181,7 +181,7 @@
           </button>
         </h1>
         <div style="z-index: -1;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
-            <div style="padding-top: 50px;" class="carousel-inner">
+            <div class="carousel-inner">
               <div class="carousel-item active">
                 <div style="height: 100vh;" ref="meeting"></div>
               </div>
