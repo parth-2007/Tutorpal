@@ -316,13 +316,6 @@
             <a @click="updatemodalvalue()" class="button-9 w-button"
               >Schedule a class</a
             >
-            <a
-              href="/inbox"
-              style="margin-left: 20px; cursor: pointer"
-              @click="createroom()"
-              class="button-9 w-buttion"
-              >Send a message</a
-            >
           </div>
           <div class="div-block-56">
             <h1 class="heading-11">Reviews ({{this.reviewNum}})</h1>

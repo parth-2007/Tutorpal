@@ -342,7 +342,7 @@ export default {
       clicked1: false,
       clicked: false,
       reviewHtml: [],
-      message: 'Tune in on Sundays at 5:30 - 6:30 pm to join our Advanced Physics Seminars hosted by Physics coach, Veer Chopra.',
+      message: 'We are excited to announce that TutorPal was one of the TOP 10 GLOBAL finalists for the BlueOcean Entrepeunership competition!',
       showButton: false,
       q: '',
     }

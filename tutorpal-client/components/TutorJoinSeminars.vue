@@ -89,7 +89,7 @@
           <div style="margin-top: 30px;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
             <div style="padding-top: 50px;" class="carousel-inner">
               <div class="carousel-item active">
-                <div style="height: 100vh;" ref="meeting"></div>
+                <div style="height: 100%;" ref="meeting"></div>
               </div>
               <div class="carousel-item">
                 <div style="height: 100vh;" ref="container" id="wt-container"></div>
@@ -150,7 +150,7 @@ export default {
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
     const script2 = document.createElement('script')
-    script2.src = "https://meet.jit.si/external_api.js"
+    script2.src = "https://8x8.vc/vpaas-magic-cookie-e1cf7aa7d58942b78fdf25a47d3490ca/external_api.js"
     document.body.appendChild(script)
     document.body.appendChild(script2)
     script2.addEventListener('load', this.setLoaded)
@@ -194,12 +194,13 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
-      const domain = 'meet.jit.si';
-      const options = {
+      new JitsiMeetExternalAPI("8x8.vc", {
         roomName: this.url,
         parentNode: this.$refs.meeting,
-      };
-      new JitsiMeetExternalAPI(domain, options);
+        // Make sure to include a JWT if you intend to record,
+        // make outbound calls or use any other premium features!
+        // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtZTFjZjdhYTdkNTg5NDJiNzhmZGYyNWE0N2QzNDkwY2EvMGRhMTE3LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2OTY2MzEzMDksImV4cCI6MTY5NjYzODUwOSwibmJmIjoxNjk2NjMxMzA0LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZTFjZjdhYTdkNTg5NDJiNzhmZGYyNWE0N2QzNDkwY2EiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTA5NjYxMTI2NTYxNTY1NTEwMzI2IiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.e6xefyb_Xn1DqS1ulFF37u4cA-_uonMelo1tbuEZ4E2BIA0qnmXoAyM6lclPrt-INwAl152fq44kqtjXhgpSH7XA3A0qcEWPRPvnBs8huJdG0tFcLKgOhnS1SW_5N2nYy-8cefHgBgc2E5YkWmtC9ouuRppFy-hCU7AUwZZWaovHqHwRJQpTHtioxik7Tvux8sZJ3DnXMcbas2mq8cAzK_St4gE6Dmg4CfmOueIcY-gkiQnRDzPm92jwbJLxRoQXUC7GgzIpXRqQ518hcca1Nm-NxcFt-Fx4vZE0HUtRWe5atB1dou3-MnI7N6XgQ6eJFLTH3-PPsm3AsCo5aYxQqA"
+      });
      
       await new Promise(resolve => setTimeout(resolve, 2000));
       const wt = new api.WhiteboardTeam(this.$refs.container, {
