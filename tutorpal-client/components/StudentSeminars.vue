@@ -338,9 +338,9 @@ export default {
     submitSearch() {
       this.$router.push("/search/"+this.q);
     },
-    convertDuration (duration){
-      hours = duration.substring(0, 2)
-      minutes = duration.substring(3, 5)
+    convertDuration(duration){
+      const hours = duration.substring(0, 2)
+      const minutes = duration.substring(3, 5)
       if (parseInt(hours) > 1){
         return hours + " hours and " + minutes + " minutes"
       }

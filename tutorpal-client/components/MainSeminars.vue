@@ -118,7 +118,6 @@ export default {
     }
   },
   async fetch() {
-    await this.fetchUser();
     this.seminars = await fetch(
       process.env.API_URL + '/seminars/discover_seminars',
       {
