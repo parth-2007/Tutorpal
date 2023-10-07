@@ -201,13 +201,6 @@ export default {
     });
   },
   async mounted() {
-    const script = document.createElement('script')
-    script.src = "https://www.whiteboard.team/dist/api.js"
-    const script2 = document.createElement('script')
-    script2.src = "https://8x8.vc/vpaas-magic-cookie-e1cf7aa7d58942b78fdf25a47d3490ca/external_api.js"
-    document.body.appendChild(script)
-    document.body.appendChild(script2)
-    script2.addEventListener('load', this.setLoaded)
     await fetch(
       process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
       {
@@ -222,6 +215,24 @@ export default {
         }),
       }
     )
+    this.session = await fetch(
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => {
+      if (res.status === 500) {
+        this.$router.push('/')
+      }
+      return res.json()
+    })
+    const script = document.createElement('script')
+    script.src = "https://www.whiteboard.team/dist/api.js"
+    const script2 = document.createElement('script')
+    script2.src = "https://8x8.vc/vpaas-magic-cookie-e1cf7aa7d58942b78fdf25a47d3490ca/external_api.js"
+    document.body.appendChild(script)
+    document.body.appendChild(script2)
+    script2.addEventListener('load', this.setLoaded)
     await this.fetchUser()
   },
   methods: {
@@ -233,17 +244,6 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
-      this.session = await fetch(
-        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
-        {
-          credentials: 'include',
-        }
-      ).then((res) => {
-        if (res.status === 500) {
-          this.$router.push('/')
-        }
-        return res.json()
-      })
       console.log("Successfully loaded scripts")
       new JitsiMeetExternalAPI("8x8.vc", {
         roomName: this.session.call_url,
