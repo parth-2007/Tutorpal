@@ -261,6 +261,17 @@ export default {
     }),
   },
   async mounted() {
+    this.session = await fetch(
+      process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
+      {
+        credentials: 'include',
+      }
+    ).then((res) => {
+      if (res.status === 500) {
+        this.$router.push('/')
+      }
+      return res.json()
+    })
     const script = document.createElement('script')
     script.src = "https://www.whiteboard.team/dist/api.js"
     const script2 = document.createElement('script')
@@ -279,17 +290,6 @@ export default {
     },
     /* eslint-disable */
     async setLoaded() {
-      this.session = await fetch(
-        process.env.API_URL + '/sessions/' + this.$route.params.id + '/',
-        {
-          credentials: 'include',
-        }
-      ).then((res) => {
-        if (res.status === 500) {
-          this.$router.push('/')
-        }
-        return res.json()
-      })
       new JitsiMeetExternalAPI("8x8.vc", {
         roomName: this.session.call_url,
         parentNode: this.$refs.meeting,
