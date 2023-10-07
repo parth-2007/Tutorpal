@@ -33,8 +33,8 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 if os.environ.get('RUN_ENV', 'aws_prod') == 'local':
     print("hosts - local")
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-# elif os.environ.get('RUN_ENV', 'aws_prod') == 'aws_dev':
-#     ALLOWED_HOSTS = ['devapi.tutorpal.org', 'localhost']
+elif os.environ.get('RUN_ENV', 'aws_prod') == 'aws_dev':
+    ALLOWED_HOSTS = ['devapi.tutorpal.org', 'localhost']
 else:
     print("hosts - prod (default)")
     ALLOWED_HOSTS = ['api.tutorpal.org', 'localhost']
@@ -100,7 +100,7 @@ if os.environ.get('RUN_ENV', 'aws_prod') == 'local':
 #         'https://beta.tutorpal.org',
 #         'https://www.beta.tutorpal.org',
 #     ]
-else: # assume prod
+else:  # assume prod
     print("cors - prod (default)")
     CORS_ALLOWED_ORIGINS = [
         'https://tutorpal.org',
@@ -168,9 +168,16 @@ WSGI_APPLICATION = 'api.wsgi.application'
 ASGI_APPLICATION = "api.asgi.application"
 
 
+# old dev db
+# "DEV_DB_HOST": "13.57.225.15",
+# "DEV_DB_PORT": "5432",
+# "DEV_DB_NAME": "tutorpaldev",
+# "DEV_DB_USER": "tutorpaladmin",
+# "DEV_DB_PASSWORD": "L#iaB%5hPNV!bg"
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+if os.environ.get('RDS_HOSTNAME', None) and (os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev'):
     print("db init - prod")
     DATABASES = {
         'default': {
@@ -182,17 +189,6 @@ if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') =
             'PORT': os.environ['RDS_PORT'],
         }
     }
-# elif os.environ.get('DEV_DB_NAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': os.environ['DEV_DB_NAME'],
-#             'USER': os.environ['DEV_DB_USER'],
-#             'PASSWORD': os.environ['DEV_DB_PASSWORD'],
-#             'HOST': os.environ['DEV_DB_HOST'],
-#             'PORT': int(os.environ['DEV_DB_PORT']),
-#         }
-#     }
 elif os.environ.get('DATABASE_NAME', None):
     print("db init - local")
     DATABASES = {
@@ -213,16 +209,6 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
-#         'USER': os.environ.get('DATABASE_USER', ''),
-#         'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
-#         'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-#         'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

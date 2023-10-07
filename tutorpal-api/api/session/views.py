@@ -196,9 +196,13 @@ class SeminarViewSet(viewsets.ModelViewSet):
         else:
             return Response(data={'Error': 'You cannot end this session'}, status=status.HTTP_403_FORBIDDEN)
 
-    @action(detail=True, permission_classes=[IsStudent])
+    @action(detail=True)
     def join_seminar(self, request, pk):
         seminar = Seminar.objects.get(pk=pk)
+        if seminar.free:
+            return Response(data={'url': seminar.call_url}, status=status.HTTP_200_OK)
+        if not request.user.has_student:
+            return Response(data={'error': 'you are not in this seminar'}, status=status.HTTP_403_FORBIDDEN)
         try:
             StudentSeminar.objects.get(
                 student=request.user.student, seminar=seminar)
