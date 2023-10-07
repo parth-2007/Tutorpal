@@ -192,7 +192,7 @@
                         seminar.tutor !== undefined
                           ? seminar.tutor.user.last_name
                           : ''
-                      }}<br />Duration: {{seminar.duration}} 
+                      }}<br />Duration: {{convertDuration(seminar.duration)}} 
                       <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
                     </p>
                   </div>
@@ -242,7 +242,7 @@
                         seminar.tutor !== undefined
                           ? seminar.tutor.user.last_name
                           : ''
-                      }}<br />Duration: {{seminar.duration}} 
+                      }}<br />Duration: {{convertDuration(seminar.duration)}} 
                       <br />Start Time: {{convertTime(seminar.times[0].substring(11, 18))}}
                     </p>
                   </div>

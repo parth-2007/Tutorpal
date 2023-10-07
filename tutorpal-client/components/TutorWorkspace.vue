@@ -182,15 +182,15 @@
         </h1>
         <div style="z-index: -1;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
           <div class="carousel-inner">
-            <div style="padding: 0px; margin: 0px;" class="carousel-item active">
-              <div style="height: 100%; margin-top: -15px;" ref="meeting"></div>
+            <div class="carousel-item active">
+              <div style="height: 100vh;" ref="meeting"></div>
             </div>
             <div class="carousel-item">
               <div style="height: 100vh;" ref="container" id="wt-container"></div>
             </div>
           </div>
-          <button style="height:20px; margin-top: 15px; color: black; float:left; width: 200px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 15px; padding-bottom: 10px;">Whiteboard</span>
+          <button style="height:20px; margin-top: 15px; width: 100%; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
           </button>
         </div>
       </body>

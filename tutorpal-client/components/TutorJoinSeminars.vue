@@ -89,14 +89,14 @@
           <div style="margin-top: 30px;" id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
             <div style="padding-top: 50px;" class="carousel-inner">
               <div class="carousel-item active">
-                <div style="height: 100%;" ref="meeting"></div>
+                <div style="height: 100vh;" ref="meeting"></div>
               </div>
               <div class="carousel-item">
                 <div style="height: 100vh;" ref="container" id="wt-container"></div>
               </div>
             </div>
-            <button style="height:20px; width: 150px; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px; float: left;">Whiteboard</span>
+            <button style="height:20px; margin-top: 15px; width: 100%; color: black; float:left;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="btn btn-outline-primary" style="border-radius: 20px; margin: 10px;">Whiteboard</span>
             </button>
           </div>
       </body>
