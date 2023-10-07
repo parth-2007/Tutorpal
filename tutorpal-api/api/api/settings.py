@@ -30,12 +30,14 @@ SECRET_KEY = os.environ.get(
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
-    ALLOWED_HOSTS = ['api.tutorpal.org', 'localhost']
-elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
+if os.environ.get('RUN_ENV', 'aws_prod') == 'local':
+    print("hosts - local")
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+elif os.environ.get('RUN_ENV', 'aws_prod') == 'aws_dev':
     ALLOWED_HOSTS = ['devapi.tutorpal.org', 'localhost']
 else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    print("hosts - prod (default)")
+    ALLOWED_HOSTS = ['api.tutorpal.org', 'localhost']
 
 
 # Application definition
@@ -51,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'register.apps.RegisterConfig',
-    'chat',
+    # 'chat',  # remove
     'session',
     'corsheaders',
     # 'channels',
@@ -83,19 +85,32 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+if os.environ.get('RUN_ENV', 'aws_prod') == 'local':
+    print("cors - local")
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'http://localhost:5000',
+        'http://127.0.0.1:5000',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ]
+# elif os.environ.get('RUN_ENV', 'aws_prod') == 'aws_dev':
+#     CORS_ALLOWED_ORIGINS = [
+#         'https://beta.tutorpal.org',
+#         'https://www.beta.tutorpal.org',
+#     ]
+else:  # assume prod
+    print("cors - prod (default)")
     CORS_ALLOWED_ORIGINS = [
         'https://tutorpal.org',
         'https://api.tutorpal.org',
         'https://www.tutorpal.org',
     ]
-elif os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-    CORS_ALLOWED_ORIGINS = [
-        'https://beta.tutorpal.org',
-        'https://www.beta.tutorpal.org',
-    ]
-else:
-    CORS_ALLOWED_ORIGINS = [
+
+if os.environ.get('RUN_ENV', 'aws_prod') == 'local':
+    print("csrf - local")
+    CSRF_TRUSTED_ORIGINS = [
         'http://localhost:8000',
         'http://127.0.0.1:8000',
         'http://localhost:5000',
@@ -103,37 +118,31 @@ else:
         'http://localhost:3000',
         'http://127.0.0.1:3000',
     ]
-
-if os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+# if os.environ.get('RUN_ENV', 'aws_prod') == 'aws_dev':
+#     CSRF_TRUSTED_ORIGINS = [
+#         'https://beta.tutorpal.org',
+#         'https://www.beta.tutorpal.org',
+#     ]
+else:
+    print("csrf - prod (default)")
     CSRF_TRUSTED_ORIGINS = [
         'https://www.tutorpal.org',
         'https://api.tutorpal.org',
         'https://tutorpal.org'
     ]
-if os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-    CSRF_TRUSTED_ORIGINS = [
-        'https://beta.tutorpal.org',
-        'https://www.beta.tutorpal.org',
-    ]
-else:
-    CSRF_TRUSTED_ORIGINS = [
-        'http://localhost:8000',
-        'http://127.0.0.1:8000',
-        'http://localhost:5000',
-        'http://127.0.0.1:5000',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-    ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-if os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev' and not DEBUG:
+if os.environ.get('RUN_ENV', 'aws_prod') == 'aws_prod' and not DEBUG:
+    print("cookie init - prod")
     CSRF_COOKIE_DOMAIN = ".tutorpal.org"
     SESSION_COOKIE_DOMAIN = ".tutorpal.org"
     CSRF_COOKIE_SAMESITE = 'None'
     SESSION_COOKIE_SAMESITE = 'None'
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+else:
+    print("cookie init - local")
 
 ROOT_URLCONF = 'api.urls'
 
@@ -159,9 +168,17 @@ WSGI_APPLICATION = 'api.wsgi.application'
 ASGI_APPLICATION = "api.asgi.application"
 
 
+# old dev db
+# "DEV_DB_HOST": "13.57.225.15",
+# "DEV_DB_PORT": "5432",
+# "DEV_DB_NAME": "tutorpaldev",
+# "DEV_DB_USER": "tutorpaladmin",
+# "DEV_DB_PASSWORD": "L#iaB%5hPNV!bg"
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_prod':
+if os.environ.get('RDS_HOSTNAME', None) and (os.environ.get('RUN_ENV', 'local') == 'aws_prod' or os.environ.get('RUN_ENV', 'local') == 'aws_dev'):
+    print("db init - prod")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -172,18 +189,8 @@ if os.environ.get('RDS_HOSTNAME', None) and os.environ.get('RUN_ENV', 'local') =
             'PORT': os.environ['RDS_PORT'],
         }
     }
-elif os.environ.get('DEV_DB_NAME', None) and os.environ.get('RUN_ENV', 'local') == 'aws_dev':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['DEV_DB_NAME'],
-            'USER': os.environ['DEV_DB_USER'],
-            'PASSWORD': os.environ['DEV_DB_PASSWORD'],
-            'HOST': os.environ['DEV_DB_HOST'],
-            'PORT': int(os.environ['DEV_DB_PORT']),
-        }
-    }
 elif os.environ.get('DATABASE_NAME', None):
+    print("db init - local")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -195,22 +202,13 @@ elif os.environ.get('DATABASE_NAME', None):
         }
     }
 else:
+    print("db init - default")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ.get('DATABASE_NAME', 'tutorpal'),
-#         'USER': os.environ.get('DATABASE_USER', ''),
-#         'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
-#         'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-#         'PORT': int(os.environ.get('DATABASE_PORT', '5432')),
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
